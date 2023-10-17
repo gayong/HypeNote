@@ -1,0 +1,7 @@
+jwt:
+  time:
+    access: 3600000
+    refresh: 7200000
+  secret:
+    access: thisIsASuperSecretKeyForJwtAccessToken12345678901234567890
+    refresh: thisIsASuperSecretKeyForJwtRefreshToken12345678901234567890

@@ -1,0 +1,31 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/study?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+    username: root
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  profiles:
+    active: local
+    include: oauth, app
+
+  jpa:
+    database: mysql
+    hibernate:
+      ddl-auto: update
+  redis:
+    host: ec2-43-201-114-96.ap-northeast-2.compute.amazonaws.com
+    port: 6379
+    password: 1234
+
+server:
+  error:
+    include-stacktrace: never
+  error.whitelabel.enabled: true
+
+spring.mvc.static-path-pattern: /static/**
+springdoc.swagger-ui.path: /swagger-ui.html
+
+logging:
+  level:
+    org.springframework.security : DEBUG
+    org.springframework.jdbc.core : DEBUG
