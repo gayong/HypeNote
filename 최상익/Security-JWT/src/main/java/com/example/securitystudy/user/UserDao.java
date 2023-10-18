@@ -33,6 +33,20 @@ public class UserDao {
         return user;
     }
 
+    public User save(User user) {
+        String query = "UPDATE user SET name = ?, nickname = ?, email = ? WHERE id = ?";
+        Object[] params = new Object[]{user.getName(), user.getNickname(), user.getEmail(), user.getId()};
+
+        int updatedRows = jdbcTemplate.update(query, params);
+
+        if (updatedRows < 1) {
+            throw new EmptyResultDataAccessException("No User found with id: " + user.getId(), 1);
+        }
+
+        return selectById(user.getId());
+    }
+
+
     public User selectByEmail(String email) {
         String selectByEmailQuery = "select id, name, nickname,email, password, introduce, role, provider, provider_id, status from user where email = ? and status = 1";
         Object[] selectByEmailParams = new Object[]{email};

@@ -1,6 +1,7 @@
 package com.example.securitystudy.user;
 
 import com.example.securitystudy.user.entity.User;
+import com.example.securitystudy.user.repository.UserRepository;
 import com.example.securitystudy.util.BaseException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

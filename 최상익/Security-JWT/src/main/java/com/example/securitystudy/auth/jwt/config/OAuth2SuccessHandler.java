@@ -1,10 +1,8 @@
 package com.example.securitystudy.auth.jwt.config;
 
-import com.example.securitystudy.auth.AuthService;
+import com.example.securitystudy.auth.service.AuthService;
 import com.example.securitystudy.auth.jwt.JwtTokenProvider;
 import com.example.securitystudy.auth.model.PrincipalDetails;
-import com.example.securitystudy.util.BaseResponse;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;

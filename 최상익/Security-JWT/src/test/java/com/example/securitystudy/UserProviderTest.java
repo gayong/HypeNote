@@ -1,10 +1,7 @@
 package com.example.securitystudy;
 
-import com.example.securitystudy.user.UserDao;
 import com.example.securitystudy.user.UserProvider;
-import com.example.securitystudy.user.UserService;
 import com.example.securitystudy.util.BaseException;
-import com.example.securitystudy.util.BaseResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
