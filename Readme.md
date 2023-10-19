@@ -2,7 +2,7 @@
 
 - **2023.10.09 ~ 2023.11.17(7주)**
 
-<a name="tableContents"></a>
+<a name="tableContents">11</a>
 
 <br/>
 
@@ -17,8 +17,6 @@
 7. <a href="#contents">🖥️ 화면 소개</a>
 8. <a href="#developers">👥 팀원 소개</a>
 9. <a href="#divisionOfDuties">💡 업무 분장</a>
-
-
 
 <br>
 
