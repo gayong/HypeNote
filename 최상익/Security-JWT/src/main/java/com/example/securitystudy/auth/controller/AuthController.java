@@ -4,10 +4,11 @@ import com.example.securitystudy.auth.dto.*;
 import com.example.securitystudy.auth.jwt.JwtTokenProvider;
 import com.example.securitystudy.auth.model.PrincipalDetails;
 import com.example.securitystudy.auth.service.AuthService;
-import com.example.securitystudy.user.service.UserService;
 import com.example.securitystudy.user.entity.User;
+import com.example.securitystudy.user.service.UserService;
 import com.example.securitystudy.util.BaseException;
 import com.example.securitystudy.util.BaseResponse;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,21 +42,25 @@ public class AuthController {
         this.authService = authService;
     }
 
+    @Tag(name = "계정", description = "인증")
     @PostMapping("/signup")
-    public BaseResponse<String> join(@RequestBody PostSignupReq postUserReq) throws BaseException {
+    @Operation(summary = "회원가입")
+    public BaseResponse<String> join(@RequestBody PostSignupReq postUserReq) {
 
         String encodedPassword = passwordEncoder.encode(postUserReq.getPassword());
         User user = new User(postUserReq.getUsername(), postUserReq.getNickname(),
                 postUserReq.getEmail(), encodedPassword, "ROLE_USER", "none", "none", 1);
         try {
             userService.createUser(user);
-            return new BaseResponse("회원가입에 성공하였습니다.");
+            return new BaseResponse<>("회원가입에 성공하였습니다.");
         } catch (BaseException e) {
-            return new BaseResponse(e.getStatus());
+            return new BaseResponse<>(e.getStatus());
         }
     }
 
+    @Tag(name = "계정", description = "인증")
     @PostMapping("/signin")
+    @Operation(summary = "로그인")
     public BaseResponse<PostSigninRes> loginAuto(@RequestBody PostSigninReq postLoginReq) {
         System.out.println("postLoginReq = " + postLoginReq.getEmail() + postLoginReq.getPassword());
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(postLoginReq.getEmail(), postLoginReq.getPassword());
@@ -73,7 +78,9 @@ public class AuthController {
         return new BaseResponse<>(new PostSigninRes(accessToken, ""));
     }
 
+    @Tag(name = "계정", description = "인증")
     @PostMapping("/signin/auto")
+    @Operation(summary = "자동 로그인 / 리프레쉬 토큰 사용")
     public BaseResponse<PostSigninAutoRes> login(@RequestBody PostSigninAutoReq postLoginReq) {
 
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(postLoginReq.getEmail(), postLoginReq.getPassword());
@@ -91,7 +98,9 @@ public class AuthController {
         return new BaseResponse<>(new PostSigninAutoRes(accessToken, refreshToken));
     }
 
+    @Tag(name = "계정", description = "인증")
     @PostMapping("/logout")
+    @Operation(summary = "로그아웃")
     public BaseResponse<String> logout(HttpServletRequest request) {
         // 현재 사용자의 인증 정보를 가져옵니다.
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -107,7 +116,9 @@ public class AuthController {
         return new BaseResponse<>("이미 로그아웃 상태입니다.");
     }
 
+    @Tag(name = "계정", description = "인증")
     @PutMapping("/update")
+    @Operation(summary = "멤버 정보 수정")
     public BaseResponse<String> updateUser(@RequestBody PutUpdateReq updateUserReq, HttpServletRequest request) {
         try {
             String token = request.getHeader("Authorization");
@@ -124,14 +135,55 @@ public class AuthController {
 
             return new BaseResponse<>("유저 정보가 성공적으로 업데이트 되었습니다.");
         } catch (BaseException e) {
-            return new BaseResponse(e.getStatus());
+            return new BaseResponse<>(e.getStatus());
         }
     }
 
     // 비밀번호 재설정
-    // 회원 탈퇴
 
-    @Tag(name = "소셜 로그인", description = "소셜 로그인.")
+    @Tag(name = "계정", description = "인증")
+    @DeleteMapping("/delete")
+    @Operation(summary = "회원 탈퇴")
+    public BaseResponse<String> deleteUser(HttpServletRequest request) {
+        try {
+            String token = request.getHeader("Authorization");
+            String accessToken = token.substring(7);
+            String userId = jwtTokenProvider.getUseridFromAcs(accessToken);
+
+            userService.deleteUser(Long.parseLong(userId));
+
+            return new BaseResponse<>("회원 탈퇴가 성공적으로 완료되었습니다.");
+        } catch (Exception e) {
+            return new BaseResponse<>(e.getMessage());
+        }
+    }
+
+    @Tag(name = "계정", description = "인증")
+    @PutMapping("/password")
+    @Operation(summary = "비밀번호 변경")
+    public BaseResponse<String> changePassword(@RequestBody PasswordChangeRequestDto passwordChangeRequest, HttpServletRequest request) {
+        try {
+            String token = request.getHeader("Authorization");
+            String accessToken = token.substring(7);
+            String userId = jwtTokenProvider.getUseridFromAcs(accessToken);
+
+            // 현재 비밀번호가 맞는지 확인
+            User user = userService.findById(Long.parseLong(userId));
+            if (!passwordEncoder.matches(passwordChangeRequest.getCurrentPassword(), user.getPassword())) {
+                return new BaseResponse<>("현재 비밀번호가 틀립니다.");
+            }
+
+            // 새로운 비밀번호로 업데이트
+            userService.updatePassword(Long.parseLong(userId), passwordEncoder.encode(passwordChangeRequest.getNewPassword()));
+
+            return new BaseResponse<>("비밀번호 변경이 성공적으로 완료되었습니다.");
+        } catch (Exception e) {
+            return new BaseResponse<>(e.getMessage());
+        }
+    }
+
+
+    @Tag(name = "소셜 로그인", description = "소셜 로그인")
     @GetMapping("/oauth2/success")
     public BaseResponse<PostSigninAutoRes> loginSuccess(@RequestParam("accessToken") String accessToken, @RequestParam("refreshToken") String refreshToken) {
         PostSigninAutoRes postLoginRes = new PostSigninAutoRes(accessToken, refreshToken);

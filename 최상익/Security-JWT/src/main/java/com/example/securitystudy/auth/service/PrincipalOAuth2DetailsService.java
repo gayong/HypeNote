@@ -2,8 +2,8 @@ package com.example.securitystudy.auth.service;
 
 import com.example.securitystudy.auth.model.PrincipalDetails;
 import com.example.securitystudy.user.UserProvider;
-import com.example.securitystudy.user.service.UserService;
 import com.example.securitystudy.user.entity.User;
+import com.example.securitystudy.user.service.UserService;
 import com.example.securitystudy.util.BaseException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

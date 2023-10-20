@@ -1,9 +1,8 @@
 package com.example.securitystudy.auth.jwt;
 
 import com.example.securitystudy.auth.model.PrincipalDetails;
-import com.example.securitystudy.user.entity.User;
 import com.example.securitystudy.user.UserProvider;
-
+import com.example.securitystudy.user.entity.User;
 import com.example.securitystudy.util.BaseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

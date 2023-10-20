@@ -3,13 +3,12 @@ package com.example.securitystudy.user.service;
 import com.example.securitystudy.user.UserDao;
 import com.example.securitystudy.user.UserProvider;
 import com.example.securitystudy.user.entity.User;
+import com.example.securitystudy.user.repository.UserRepository;
 import com.example.securitystudy.util.BaseException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-
-import java.util.Optional;
 
 import static com.example.securitystudy.util.BaseResponseStatus.*;
 
@@ -19,11 +18,13 @@ public class UserService {
 
     private final UserProvider userProvider;
     private final UserDao userDao;
+    private final UserRepository userRepository;
 
     @Autowired
-    public UserService( UserProvider userProvider, UserDao userDao) {
+    public UserService( UserProvider userProvider, UserDao userDao, UserRepository userRepository) {
         this.userProvider = userProvider;
         this.userDao = userDao;
+        this.userRepository = userRepository;
     }
 
     public User createUser(User user) throws BaseException {
@@ -32,7 +33,6 @@ public class UserService {
         try {
             return this.userDao.insertUser(user);
         } catch (Exception e) {
-            e.printStackTrace();
             throw new BaseException(DATABASE_ERROR);
         }
 
@@ -60,6 +60,16 @@ public class UserService {
         }
 
         return user;
+    }
+
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
+    }
+
+    public void updatePassword(Long id, String newPassword) {
+        User user = userRepository.findById(id).orElseThrow(() -> new UsernameNotFoundException("User not found with id : " + id));
+        user.setPassword(newPassword);
+        userRepository.save(user);
     }
 
 }

@@ -36,3 +36,9 @@ out/
 
 ### VS Code ###
 .vscode/
+
+
+# Ignore application-{}.yml
+application-app.yml
+application-db.yml
+application-oauth.yml

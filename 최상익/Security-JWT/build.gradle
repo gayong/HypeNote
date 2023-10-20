@@ -29,10 +29,16 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
-    // db
+    // Mysql
     runtimeOnly 'mysql:mysql-connector-java'
+
+    // Redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'io.lettuce:lettuce-core'
+
+    // 몽고DB
+    implementation ('org.springframework.boot:spring-boot-starter-data-mongodb-reactive')
+
 
     // jwt
     implementation('javax.xml.bind:jaxb-api')

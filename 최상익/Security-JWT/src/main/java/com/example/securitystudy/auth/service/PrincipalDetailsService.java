@@ -2,7 +2,6 @@ package com.example.securitystudy.auth.service;
 
 import com.example.securitystudy.auth.model.PrincipalDetails;
 import com.example.securitystudy.user.UserProvider;
-import com.example.securitystudy.util.BaseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
