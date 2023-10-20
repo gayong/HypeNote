@@ -8,3 +8,6 @@ COPY ${JAR_FILE} gateway.jar
 EXPOSE 8080
 #서버 명령어
 ENTRYPOINT ["java", "-jar", "/gateway.jar"]
+
+#Testing Line
+#인식 -> Not yet
