@@ -9,3 +9,4 @@ server:
   error.whitelabel.enabled: true
 
 spring.mvc.static-path-pattern: /static/**
+springdoc.swagger-ui.path: /swagger-ui.html
