@@ -1,0 +1,4 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://admin:y1ApaHzl5lnaKpnX@cluster0.kd0ywun.mongodb.net/study?retryWrites=true&w=majority
