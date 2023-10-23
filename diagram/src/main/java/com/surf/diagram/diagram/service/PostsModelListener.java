@@ -13,7 +13,9 @@ public class PostsModelListener extends AbstractMongoEventListener<Diagram> {
 
     @Override
     public void onBeforeConvert(BeforeConvertEvent<Diagram> event) {
-        event.getSource().setId(sequenceGenerator.generateSequence(Diagram.SEQUENCE_NAME));
+        if (event.getSource().getId() == null) {
+            event.getSource().setId(sequenceGenerator.generateSequence(Diagram.SEQUENCE_NAME));
+        }
     }
 
 }

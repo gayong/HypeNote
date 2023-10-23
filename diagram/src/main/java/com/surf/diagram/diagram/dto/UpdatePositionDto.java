@@ -4,11 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateDiagramDto {
-    private String title;
-    private String content;
+public class UpdatePositionDto {
+    private Long x;
+    private Long y;
+    private Long z;
 }
