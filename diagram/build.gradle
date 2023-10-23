@@ -32,6 +32,15 @@ dependencies {
 	// 웹소켓
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
+	//  swagger
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
+
+	// google
+	implementation 'com.google.cloud:google-cloud-language:2.29.0'
+	implementation 'com.google.auth:google-auth-library-oauth2-http:1.18.0'
+
+
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
