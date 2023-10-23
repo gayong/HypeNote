@@ -1,0 +1,11 @@
+spring:
+  profiles:
+    active: local
+    include: db
+
+server:
+  error:
+    include-stacktrace: never
+  error.whitelabel.enabled: true
+
+spring.mvc.static-path-pattern: /static/**
