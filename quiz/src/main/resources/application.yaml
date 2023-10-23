@@ -8,4 +8,4 @@ server:
     include-stacktrace: never
   error.whitelabel.enabled: true
 
-spring.mvc.static-path-pattern: /static/**
+#spring.mvc.static-path-pattern: /static/**
