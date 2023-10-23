@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateDiagramDto {
+public class UpdateDiagramDto {
     private String title;
-    private String content;
 }
