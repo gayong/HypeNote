@@ -29,7 +29,7 @@ public class Diagram {
     private Long x;
     private Long y;
     private Long z;
-
+    private Long parentId;
     private List<Diagram> children;
 
     public void setId(Long id) {

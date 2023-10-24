@@ -112,8 +112,38 @@ public class DiagramController {
 
 
 
+//    @PostMapping("/parent/{parentid}")
+//    @Operation(summary = "자식 다이어그램 삽입")
+//    public ResponseEntity<String> createDiagramWithParent(@PathVariable("parentid") Long parentid, @RequestBody CreateDiagramWithParentDto dto) {
+//        Optional<Diagram> optionalParent = diagramRepository.findById(parentid);
+//
+//        if (optionalParent.isPresent()) {
+//            Diagram parent = optionalParent.get();
+//
+//            // 요청으로부터 필요한 정보를 추출하여 Diagram 객체(자식)을 생성합니다.
+//            Diagram child = Diagram.builder()
+//                    .title(dto.getTitle())
+//                    .content(dto.getContent())
+//                    .build();
+//
+//            // 자식 다이어그램을 부모의 children 리스트에 추가합니다.
+//            List<Diagram> children = parent.getChildren();
+//            if (children == null) {
+//                children = new ArrayList<>();
+//                parent.setChildren(children);
+//            }
+//            children.add(child);
+//
+//            // MongoDB에 변경된 Diagram 객체(부모)을 저장합니다.
+//            diagramRepository.save(parent);
+//
+//            return ResponseEntity.ok("자식 다이어그램 삽입");
+//        } else {
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
     @PostMapping("/parent/{parentid}")
-    @Operation(summary = "자식 다이어그램 삽입")
+    @Operation(summary = "부모 노드 참조")
     public ResponseEntity<String> createDiagramWithParent(@PathVariable("parentid") Long parentid, @RequestBody CreateDiagramWithParentDto dto) {
         Optional<Diagram> optionalParent = diagramRepository.findById(parentid);
 
@@ -124,23 +154,37 @@ public class DiagramController {
             Diagram child = Diagram.builder()
                     .title(dto.getTitle())
                     .content(dto.getContent())
+                    .parentId((parentid))
                     .build();
 
-            // 자식 다이어그램을 부모의 children 리스트에 추가합니다.
-            List<Diagram> children = parent.getChildren();
-            if (children == null) {
-                children = new ArrayList<>();
-                parent.setChildren(children);
-            }
-            children.add(child);
+            // MongoDB에 변경된 Diagram 객체(자식)을 저장합니다.
+            diagramRepository.save(child);
 
-            // MongoDB에 변경된 Diagram 객체(부모)을 저장합니다.
-            diagramRepository.save(parent);
-
-            return ResponseEntity.ok("자식 다이어그램 삽입");
+            return ResponseEntity.ok("부모 노드 참조");
         } else {
             return ResponseEntity.notFound().build();
         }
     }
+
+//    @PostMapping("/parent/{parentid}/{childid}")
+//    @Operation(summary = "부모 노드 참조 추가")
+//    public ResponseEntity<String> addPArent(@PathVariable("parentid") Long parentid, @PathVariable("childid") Long childid,) {
+//        Optional<Diagram> optionalParent = diagramRepository.findById(parentid);
+//
+//        if (optionalParent.isPresent()) {
+//            Diagram parent = optionalParent.get();
+//
+//            Optional<Diagram> optionalChild = diagramRepository.findById(childid);
+//            Diagram child = optionalChild.get();
+//            child.setParentId();
+//
+//            // MongoDB에 변경된 Diagram 객체(자식)을 저장합니다.
+//            diagramRepository.save(child);
+//
+//            return ResponseEntity.ok("부모 노드 참조");
+//        } else {
+//            return ResponseEntity.notFound().build();
+//        }
+//    }
 
 }
