@@ -82,8 +82,9 @@ public class QuizRoomController {
 
         targetRoom.memberEntrance(body);
 
-        targetRoom.setRoomCnt(targetRoom.getRoomCnt() + 1);
 
+        targetRoom.setRoomCnt(targetRoom.getRoomCnt() + 1);
+        quizroomService.save(targetRoom);
         List<QuizRoom> listRoom = quizroomService.findAll();
 
         messageTemplate.convertAndSend("/sub/quizroom/info/" + roomId, targetRoom);
@@ -104,6 +105,7 @@ public class QuizRoomController {
             if (member.getUserId().equals(body.getUserId())) {
                 targetRoom.memberExit(body);
                 targetRoom.setRoomCnt(targetRoom.getRoomCnt() - 1);
+                quizroomService.save(targetRoom);
                 check = true;
                 break;
             }
@@ -139,10 +141,11 @@ public class QuizRoomController {
         QuizRoom targetRoom = quizroomService.findById(roomId).orElseThrow();
 
         targetRoom.readyMember(body);
-        QuizRoom updatedTargetRoom = quizroomService.findById(roomId).orElseThrow();
-        updatedTargetRoom.setReady(updatedTargetRoom.getReady() + 1);
-
-        messageTemplate.convertAndSend("/sub/quizroom/info/" + roomId, updatedTargetRoom);
+        System.out.println("targetRoom = " + targetRoom.getUsers());
+        System.out.println("body = " + body);
+        targetRoom.setReady(targetRoom.getReady() + 1);
+        quizroomService.save(targetRoom);
+        messageTemplate.convertAndSend("/sub/quizroom/info/" + roomId, targetRoom);
     }
 
     @MessageMapping("/quizroom/unready/{roomId}")
@@ -151,11 +154,12 @@ public class QuizRoomController {
             @Payload Member body) {
 
         QuizRoom targetRoom = quizroomService.findById(roomId).orElseThrow();
-
+        System.out.println("targetRoom = " + targetRoom);
+        System.out.println("body = " + body);
         targetRoom.unreadyMember(body);
 
         targetRoom.setReady(targetRoom.getReady() - 1);
-
+        quizroomService.save(targetRoom);
         messageTemplate.convertAndSend("/sub/quizroom/info/" + roomId, targetRoom);
     }
 
