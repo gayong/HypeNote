@@ -12,10 +12,10 @@ RUN npm install
 COPY . .
 
 # 빌드
-RUN npm run build
+RUN yarn build
 
 # 포트 3000으로 노출
 EXPOSE 3000
 
 # 앱 실행
-CMD [ "npm", "run", "start" ]
+CMD [ "yarn", "start" ]
