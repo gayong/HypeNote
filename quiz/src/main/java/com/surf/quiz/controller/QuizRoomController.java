@@ -37,11 +37,14 @@ public class QuizRoomController {
 
     @PostMapping("/quizroom")
     @Operation(summary = "방 생성")
-    public QuizRoom createRoom(@RequestBody CreateRoomDto createRoomDto) {
+    public QuizRoom createQuizRoom(@RequestBody CreateRoomDto createRoomDto) {
         QuizRoom quizroomToBeCreated = QuizRoom.builder()
                 .roomName(createRoomDto.getRoomName())
                 .quizCnt(createRoomDto.getQuizCount())
                 .createdDate(LocalDateTime.now())
+                .sharePages(createRoomDto.getSharePages())
+                .pages(createRoomDto.getPages())
+                .single(createRoomDto.isSingle())
                 .build();
 
         QuizRoom createdQuizroom = quizroomService.save(quizroomToBeCreated);
@@ -52,20 +55,20 @@ public class QuizRoomController {
 
     @GetMapping("/quizroom/{id}")
     @Operation(summary = "단일 방 탐색")
-    public Optional<QuizRoom> searchRoom(@PathVariable Long id) {
+    public Optional<QuizRoom> findQuizRoom(@PathVariable Long id) {
         return quizroomService.findById(id);
     }
 
     @GetMapping("/quizroom")
     @Operation(summary = "전체 방 탐색")
-    public List<QuizRoom> searchAllRoom() {
+    public List<QuizRoom> findQuizRooms() {
         return quizroomService.findAll();
     }
 
 
     @MessageMapping("/quizroom/entrance/{roomId}")
     @Operation(summary = "방 입장")
-    public void entranceRoom(
+    public void inQuizRoom(
             @DestinationVariable Long roomId,
             @Payload Member body) {
 
@@ -93,7 +96,7 @@ public class QuizRoomController {
     }
 
     @MessageMapping("/quizroom/exit/{roomId}")
-    public void exitRoom(
+    public void outQuizRoom(
             @DestinationVariable Long roomId,
             @Payload Member body) {
 

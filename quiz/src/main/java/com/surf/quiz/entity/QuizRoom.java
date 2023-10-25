@@ -41,6 +41,9 @@ public class QuizRoom {
     @CreatedDate
     private LocalDateTime createdDate;
 
+    List<Integer> pages;
+    List<Integer> sharePages;
+    boolean single;
 
     List<Member> users = new ArrayList<>();
 
