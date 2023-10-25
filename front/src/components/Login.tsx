@@ -36,7 +36,7 @@ export default function Login() {
 
             <div>
               <div className="flex items-center justify-between">
-                <Label text="password" />
+                <Label text="Password" />
               </div>
               <div className="mt-2">
                 <Input text="Password" />
@@ -47,6 +47,17 @@ export default function Login() {
               <Button text="로그인" onClick={handleLogin}></Button>
             </div>
           </form>
+
+          <div className="relative my-3">
+            <div className="relative flex items-center">
+              <div className="my-4 bg-gray-600 h-[1px] w-full "></div>
+            </div>
+            <div className="absolute flex justify-center w-full top-1/2 transform -translate-y-1/2">
+              <span className="bg-[#faf5ef] px-2">Or continue with</span>
+            </div>
+          </div>
+
+          <Button text="구글 로그인" onClick={handleLogin}></Button>
 
           <p className="mt-10 text-center text-sm text-gray-500">
             Not a member?{" "}
