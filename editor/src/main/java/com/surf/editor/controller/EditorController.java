@@ -2,6 +2,7 @@ package com.surf.editor.controller;
 
 import com.surf.editor.common.response.ApiResponse;
 import com.surf.editor.dto.request.EditorWriteRequest;
+import com.surf.editor.dto.response.EditorCheckResponse;
 import com.surf.editor.service.EditorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -50,6 +51,19 @@ public class EditorController {
                 .message("게시판 글 삭제")
                 .status(OK.value())
                 .data(null)
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @GetMapping("/{editorId}")
+    public ResponseEntity<ApiResponse> editorCheck(@PathVariable String editorId){
+        EditorCheckResponse editorCheckResponse = editorService.editorCheck(editorId);
+
+        ApiResponse apiResponse = ApiResponse.builder()
+                .message("게시글 조회")
+                .status(OK.value())
+                .data(editorCheckResponse)
                 .build();
 
         return ResponseEntity.ok(apiResponse);

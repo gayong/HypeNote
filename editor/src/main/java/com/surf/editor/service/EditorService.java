@@ -2,6 +2,7 @@ package com.surf.editor.service;
 
 import com.surf.editor.domain.Editor;
 import com.surf.editor.dto.request.EditorWriteRequest;
+import com.surf.editor.dto.response.EditorCheckResponse;
 import com.surf.editor.repository.EditorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -36,5 +37,17 @@ public class EditorService {
         if(byId.isPresent()){
             editorRepository.delete(byId.get());
         }
+    }
+
+    public EditorCheckResponse editorCheck(String editorId) {
+        Optional<Editor> byId = editorRepository.findById(editorId);
+
+        EditorCheckResponse editorCheckResponse = EditorCheckResponse.builder()
+                .id(byId.get().getId())
+                .title(byId.get().getTitle())
+                .content(byId.get().getContent())
+                .build();
+
+        return editorCheckResponse;
     }
 }
