@@ -9,4 +9,6 @@ public class EditorCreateResponse {
     private String id;
     private String title;
     private String content;
+
+
 }

@@ -1,13 +1,11 @@
 package com.surf.editor.controller;
 
 import com.surf.editor.common.response.ApiResponse;
+import com.surf.editor.dto.request.EditorWriteRequest;
 import com.surf.editor.service.EditorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.OK;
 
@@ -24,6 +22,19 @@ public class EditorController {
 
         ApiResponse apiResponse = ApiResponse.builder()
                 .message("게시판 작성")
+                .status(OK.value())
+                .data(null)
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @PostMapping("/write/{editorId}")
+    public ResponseEntity<ApiResponse> editorWrite(@PathVariable String editorId, @RequestBody EditorWriteRequest editorWriteRequest){
+        editorService.editorWrite(editorId,editorWriteRequest);
+
+        ApiResponse apiResponse = ApiResponse.builder()
+                .message("게시판 글 쓰기")
                 .status(OK.value())
                 .data(null)
                 .build();

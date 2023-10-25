@@ -28,4 +28,9 @@ public class Editor {
                 .title(title)
                 .build();
     }
+
+    public void write(String title, String content){
+        this.title = title;
+        this.content = content;
+    }
 }
