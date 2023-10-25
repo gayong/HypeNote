@@ -107,6 +107,9 @@ public class QuizRoomController {
 
         for (Member member : targetRoom.getUsers()) {
             if (member.getUserId().equals(body.getUserId())) {
+                if (member.isReady()) {
+                targetRoom.setReady(targetRoom.getReady() - 1);
+                }
                 targetRoom.memberExit(body);
                 targetRoom.setRoomCnt(targetRoom.getRoomCnt() - 1);
                 quizroomService.save(targetRoom);
