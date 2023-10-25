@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Button from "./ui/Button";
 import Input from "./ui/Input";
-import logoImg from "../../public/assets/logo.png";
+import logoImg from "../../public/assets/logo_blue.png";
 import Label from "./ui/Label";
 
 export default function Login() {
