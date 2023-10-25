@@ -21,6 +21,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -76,26 +77,32 @@ public class QuizController {
 
         // 퀴즈 완료 상태 설정
         quiz.setComplete(false);
-
+        quizRepository.save(quiz);
         messageTemplate.convertAndSend("/sub/quiz/" + roomId, quiz);
     }
 
 
 
-    private Map<String, List<String>> userAnswers = new HashMap<>();
+
     @MessageMapping("/answer/{roomId}/{userId}")
     public void receiveAnswer(@DestinationVariable String roomId, @DestinationVariable String userId, @Payload List<String> answers) {
+        Map<String, List<String>> userAnswers = new HashMap<>();
         userAnswers.put(userId, answers);
-        if (isQuizFinished(roomId)) {
-            Optional<Quiz> optionalQuiz = quizRepository.findByRoomId(roomId);
+        System.out.println("roomId = " + roomId);
+        if (isQuizFinished(roomId, userAnswers)) {
+            Optional<Quiz> optionalQuiz = quizRepository.findByRoomId(Integer.parseInt(roomId));
+            System.out.println("optionalQuiz = " + optionalQuiz);
             Quiz quiz = optionalQuiz.get();
             quiz.setComplete(true);
             messageTemplate.convertAndSend("/sub/quiz/" + roomId, quiz);
         }
     }
 
-    public boolean isQuizFinished(String roomId) {
-        List<Member> userIds = quizroomService.getUsersByRoomId(Long.parseLong(roomId));
+    public boolean isQuizFinished(String roomId, Map<String, List<String>> userAnswers) {
+        List<Member> members = quizroomService.getUsersByRoomId(Long.parseLong(roomId));
+        List<String> userIds = members.stream()
+                .map(member -> Long.toString(member.getUserId()))
+                .collect(Collectors.toList());
         return userIds.containsAll(userAnswers.keySet());
     }
 }
