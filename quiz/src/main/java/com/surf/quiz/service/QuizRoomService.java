@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -52,6 +53,15 @@ public class QuizRoomService {
     public void terminate(Long roomId) {
         // MongoDB에서 특정 ID를 가진 데이터만 삭제합니다.
         quizRepo.deleteById(roomId);
+    }
+
+    public List<Member> getUsersByRoomId(Long roomId) {
+        Optional<QuizRoom> optional = quizRepo.findById(roomId);
+        if (optional.isPresent()) {
+            return optional.get().getUsers();
+        } else {
+            throw new NoSuchElementException("No QuizRoom for ID: " + roomId);
+        }
     }
 
 
