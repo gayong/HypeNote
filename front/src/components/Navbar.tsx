@@ -21,9 +21,9 @@ export default function Navbar() {
               // onclick="openSidebar()"
             ></i>
           </div>
-          <div className="my-2 bg-gray-600 h-[1px]"></div>
+          {/* <div className="my-2 bg-gray-600 h-[1px]"></div> */}
         </div>
-        <div className="p-2.5 flex items-center rounded-md px-4 duration-300 cursor-pointer bg-gray-700 text-white">
+        <div className="p-2.5 flex items-center rounded-md px-4 duration-300 cursor-pointer bg-white-700 text-white">
           <i className="bi bi-search text-sm"></i>
           <input
             type="text"
