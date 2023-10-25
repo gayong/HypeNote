@@ -5,7 +5,7 @@ ARG JAR_FILE=build/libs/*.jar
 #복사
 COPY ${JAR_FILE} discovery.jar
 #Port번호
-EXPOSE 8082
+EXPOSE 8761
 #서버 명령어
 ENTRYPOINT ["java", "-jar", "/discovery.jar"]
 
