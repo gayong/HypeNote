@@ -3,11 +3,14 @@ package com.surf.editor.service;
 import com.surf.editor.domain.Editor;
 import com.surf.editor.dto.request.EditorWriteRequest;
 import com.surf.editor.dto.response.EditorCheckResponse;
+import com.surf.editor.dto.response.EditorSearchResponse;
 import com.surf.editor.repository.EditorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -49,5 +52,24 @@ public class EditorService {
                 .build();
 
         return editorCheckResponse;
+    }
+
+    public EditorSearchResponse editorSearch(String search) {
+        List<Editor> byTitleContainingOrContentContaining = editorRepository.findByTitleContainingOrContentContaining(search, search);
+        List<EditorSearchResponse.Editors> editors = new ArrayList<>();
+
+        for (Editor editor : byTitleContainingOrContentContaining) {
+
+            editors.add(
+                    EditorSearchResponse.Editors.builder()
+                    .title(editor.getTitle())
+                    .content(editor.getContent())
+                    .build());
+        }
+        EditorSearchResponse editorList = EditorSearchResponse.builder()
+                .editorsList(editors)
+                .build();
+
+        return editorList;
     }
 }

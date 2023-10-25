@@ -3,6 +3,7 @@ package com.surf.editor.controller;
 import com.surf.editor.common.response.ApiResponse;
 import com.surf.editor.dto.request.EditorWriteRequest;
 import com.surf.editor.dto.response.EditorCheckResponse;
+import com.surf.editor.dto.response.EditorSearchResponse;
 import com.surf.editor.service.EditorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -64,6 +65,19 @@ public class EditorController {
                 .message("게시글 조회")
                 .status(OK.value())
                 .data(editorCheckResponse)
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @GetMapping()
+    public ResponseEntity<ApiResponse> editorSearch(@RequestParam(value = "search")String search){
+        EditorSearchResponse editorSearchResponse = editorService.editorSearch(search);
+
+        ApiResponse apiResponse = ApiResponse.builder()
+                .message("게시글 검색")
+                .status(OK.value())
+                .data(editorSearchResponse)
                 .build();
 
         return ResponseEntity.ok(apiResponse);
