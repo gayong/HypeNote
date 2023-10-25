@@ -42,4 +42,17 @@ public class EditorController {
         return ResponseEntity.ok(apiResponse);
     }
 
+    @DeleteMapping("/{editorId}")
+    public ResponseEntity<ApiResponse> editorDelete(@PathVariable String editorId){
+        editorService.editorDelete(editorId);
+
+        ApiResponse apiResponse = ApiResponse.builder()
+                .message("게시판 글 삭제")
+                .status(OK.value())
+                .data(null)
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
 }

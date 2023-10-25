@@ -29,4 +29,12 @@ public class EditorService {
             editorRepository.save(byId.get());
         }
     }
+
+    public void editorDelete(String editorId) {
+        Optional<Editor> byId = editorRepository.findById(editorId);
+
+        if(byId.isPresent()){
+            editorRepository.delete(byId.get());
+        }
+    }
 }
