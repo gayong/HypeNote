@@ -19,4 +19,5 @@ public class Quiz {
     private String question;
     ExampleDto example;
     private String answer;
+    private boolean complete;
 }
