@@ -5,7 +5,7 @@ ARG JAR_FILE=build/libs/*.jar
 #복사
 COPY ${JAR_FILE} config.jar
 #Port번호
-EXPOSE 8081
+EXPOSE 8888
 #서버 명령어
 ENTRYPOINT ["java", "-jar", "/config.jar"]
 
