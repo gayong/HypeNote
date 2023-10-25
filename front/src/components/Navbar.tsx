@@ -22,6 +22,7 @@ export default function Navbar() {
             ></i>
           </div>
           {/* <div className="my-2 bg-gray-600 h-[1px]"></div> */}
+          <br />
         </div>
         <div className="p-2.5 flex items-center rounded-md px-4 duration-300 cursor-pointer bg-[#FFFFFF] text-black">
           <i className="bi bi-search text-sm"></i>
