@@ -45,6 +45,7 @@ public class QuizRoomController {
                 .sharePages(createRoomDto.getSharePages())
                 .pages(createRoomDto.getPages())
                 .single(createRoomDto.isSingle())
+                .inviteUsers(createRoomDto.getInviteUsers())
                 .build();
 
         QuizRoom createdQuizroom = quizroomService.save(quizroomToBeCreated);
@@ -66,7 +67,7 @@ public class QuizRoomController {
     }
 
 
-    @MessageMapping("/quizroom/entrance/{roomId}")
+    @MessageMapping("/quizroom/in/{roomId}")
     @Operation(summary = "방 입장")
     public void inQuizRoom(
             @DestinationVariable Long roomId,
@@ -95,7 +96,7 @@ public class QuizRoomController {
         // 100 밀리초 후에 지정된 메시지(listRoom)를 "/sub/quizroom/roomList" 주제로 구독 중인 클라이언트들에게 전송하는 작업을 예약
     }
 
-    @MessageMapping("/quizroom/exit/{roomId}")
+    @MessageMapping("/quizroom/out/{roomId}")
     public void outQuizRoom(
             @DestinationVariable Long roomId,
             @Payload Member body) {

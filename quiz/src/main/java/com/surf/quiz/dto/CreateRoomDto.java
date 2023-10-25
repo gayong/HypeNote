@@ -14,5 +14,5 @@ public class CreateRoomDto {
     boolean single;
     List<Integer> pages;
     List<Integer> sharePages;
-
+    List<Long> inviteUsers;
 }

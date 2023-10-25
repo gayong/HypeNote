@@ -5,7 +5,6 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 
@@ -45,14 +44,12 @@ public class QuizRoom {
     List<Integer> sharePages;
     boolean single;
 
+    List<Long> inviteUsers;
     List<Member> users = new ArrayList<>();
 
 
     public void setId(Long id) {
         this.id = id;
-    }
-    public void setUsers(List<Member> users) {
-        this.users = users;
     }
     public void memberExit(Member outMember) {
         users.removeIf(e -> e.getUserId().equals(outMember.getUserId()));
