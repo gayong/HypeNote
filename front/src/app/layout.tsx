@@ -11,6 +11,9 @@ export const metadata: Metadata = {
     template: "한입노트(Hype Note)",
   },
   description: "한번에 모든 걸 해결 할 수 있는 나만의 한입 노트!",
+  icons: {
+    icon: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
@@ -22,12 +25,9 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <header>
-          <div>
-            <Navbar />
-          </div>
-          <h1>안농</h1>
+          <Navbar />
         </header>
-        {children}
+        <div className="pl-80">{children}</div>
       </body>
     </html>
   );
