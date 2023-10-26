@@ -34,7 +34,7 @@ public class QuizRoom {
     private int quizCnt;
 
     // false == 대기, true == 실행
-    private boolean roomStatus = false;
+    private boolean roomStatus;
 
     @CreatedDate
     private LocalDateTime createdDate;
@@ -53,6 +53,9 @@ public class QuizRoom {
     }
 
     public void memberIn(Member inMember) {
+        if (this.users == null) {
+            this.users = new ArrayList<>();
+        }
         users.add(inMember);
     }
     public void memberOut(Member outMember) {

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -86,11 +87,12 @@ public class QuizRoomController {
         if (!quizRoom.getInviteUsers().contains(body.getUserId())) {
             return;
         }
-
-        for (Member member : members) {
-            if (body.getUserId().equals(member.getUserId())) {
-                messageTemplate.convertAndSend("/sub/quizroom/detail/" + roomId, quizRoom);
-                return;
+        if (members != null) {
+            for (Member member : members) {
+                if (body.getUserId().equals(member.getUserId())) {
+                    messageTemplate.convertAndSend("/sub/quizroom/detail/" + roomId, quizRoom);
+                    return;
+                }
             }
         }
 
@@ -149,22 +151,22 @@ public class QuizRoomController {
 
 
     @MessageMapping("/quizroom/ready/{roomId}")
-    public void ready(@DestinationVariable Long roomId, @Payload Long userId) {
+    public void ready(@DestinationVariable Long roomId, @Payload Map<String, Object> userId) {
 
         QuizRoom quizRoom = quizroomService.findById(roomId).orElseThrow();
-
-        quizRoom.memberReady(userId);
+        Long id = ((Number) userId.get("userId")).longValue();
+        quizRoom.memberReady(id);
         quizRoom.setReadyCnt(quizRoom.getReadyCnt() + 1);
         quizroomService.save(quizRoom);
         messageTemplate.convertAndSend("/sub/quizroom/detail/" + roomId, quizRoom);
     }
 
     @MessageMapping("/quizroom/unready/{roomId}")
-    public void unready(@DestinationVariable Long roomId, @Payload Long userId) {
+    public void unready(@DestinationVariable Long roomId, @Payload Map<String, Object> userId) {
 
         QuizRoom quizRoom = quizroomService.findById(roomId).orElseThrow();
-
-        quizRoom.memberUnready(userId);
+        Long id = ((Number) userId.get("userId")).longValue();
+        quizRoom.memberUnready(id);
         quizRoom.setReadyCnt(quizRoom.getReadyCnt() - 1);
         quizroomService.save(quizRoom);
         messageTemplate.convertAndSend("/sub/quizroom/detail/" + roomId, quizRoom);
