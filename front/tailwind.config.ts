@@ -23,6 +23,8 @@ const config: Config = {
       line_primary: "rgb(107 114 128)",
       secondary: "#faf5ef",
       transparent: "transparent",
+      dark_primary: "#4F4F4F",
+      dark_background: "#424242",
     },
   },
   plugins: [],
