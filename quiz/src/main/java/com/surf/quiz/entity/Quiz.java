@@ -6,7 +6,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -16,9 +19,14 @@ import java.util.Map;
 @Getter
 @Setter
 @NoArgsConstructor
+@Document(collection = "quiz")
 public class Quiz {
-    @Indexed(unique = true)
-    String quizId;
+    @Transient
+    public static final String SEQUENCE_NAME = "quiz_sequence";
+
+
+    @Id
+    private Long id;
     int roomId;
     @CreatedDate
     private LocalDateTime createdDate;

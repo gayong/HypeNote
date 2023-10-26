@@ -8,9 +8,9 @@ import java.util.Optional;
 
 @Repository
 public interface QuizRepository extends MongoRepository<Quiz, String> {
-    Quiz save(Quiz quiz);
-    void delete(Quiz quiz);
-    Optional<Quiz> findByRoomId(int  roomId);
+//    Quiz save(Quiz quiz);
+//    void delete(Quiz quiz);
+    Optional<Quiz> findByRoomId(int roomId);
 }
 
 
