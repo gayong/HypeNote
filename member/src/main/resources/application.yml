@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: server_member
+
+eureka:
+
+  instance:
+    instance-id: member-service-${server.port}
+
+  client:
+    service-url:
+      defaultZone: http://discovery:8761/eureka
+
+server:
+  port: 8083
