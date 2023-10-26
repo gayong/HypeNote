@@ -59,6 +59,7 @@ public class EditorService {
 
             editors.add(
                     EditorSearchResponse.Editors.builder()
+                    .id(editor.getId())
                     .title(editor.getTitle())
                     .content(editor.getContent())
                     .build());

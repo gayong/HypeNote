@@ -13,6 +13,7 @@ public class EditorSearchResponse {
     @Getter
     @Builder(toBuilder = true)
     public static class Editors{
+        private String id;
         private String title;
         private String content;
     }
