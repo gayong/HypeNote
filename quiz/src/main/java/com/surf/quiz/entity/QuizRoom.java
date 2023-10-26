@@ -1,6 +1,7 @@
 package com.surf.quiz.entity;
 
 
+import com.surf.quiz.dto.UserDto;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
@@ -44,7 +45,7 @@ public class QuizRoom {
 
     private boolean single;
 
-    private List<Long> inviteUsers;
+    private List<UserDto> inviteUsers;
     private List<Member> users = new ArrayList<>();
 
 
@@ -59,20 +60,20 @@ public class QuizRoom {
         users.add(inMember);
     }
     public void memberOut(Member outMember) {
-        users.removeIf(e -> e.getUserId().equals(outMember.getUserId()));
+        users.removeIf(e -> e.getUserPk().equals(outMember.getUserPk()));
     }
 
 
     public void memberReady(Long userId) {
         for (Member member : users) {
-            if (member.getUserId().equals(userId)) {
+            if (member.getUserPk().equals(userId)) {
                 member.setReady(true);
             }
         }
     }
     public void memberUnready(Long userId) {
         for (Member member : users) {
-            if (member.getUserId().equals(userId)) {
+            if (member.getUserPk().equals(userId)) {
                 member.setReady(false);
             }
         }

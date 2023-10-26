@@ -11,9 +11,9 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "user")
 public class Member {
 
-    private Long userId;
+    private Long userPk;
     private String userName;
-    
+
     // True == 방장, False == 일반
     private boolean host;
 

@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 public class QuizResult {
 
     private Long quizId;
-    private Long userId;
+    private Long userPk;
     private Long totals;
     private Long Correct;
     private LocalDateTime examDone;

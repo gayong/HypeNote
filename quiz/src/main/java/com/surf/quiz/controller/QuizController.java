@@ -105,7 +105,7 @@ public class QuizController {
     public boolean isQuizFinished(String roomId, Map<String, List<String>> userAnswers) {
         List<Member> members = quizroomService.getUsersByRoomId(Long.parseLong(roomId));
         Set<String> userIds = members.stream()
-                .map(member -> Long.toString(member.getUserId()))
+                .map(member -> Long.toString(member.getUserPk()))
                 .collect(Collectors.toSet());
         return userIds.containsAll(userAnswers.keySet());
     }

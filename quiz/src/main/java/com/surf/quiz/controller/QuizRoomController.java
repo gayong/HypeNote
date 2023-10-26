@@ -2,6 +2,8 @@ package com.surf.quiz.controller;
 
 
 import com.surf.quiz.dto.CreateRoomDto;
+import com.surf.quiz.dto.SearchMemberDto;
+import com.surf.quiz.dto.UserDto;
 import com.surf.quiz.entity.Member;
 import com.surf.quiz.entity.QuizRoom;
 import com.surf.quiz.service.QuizRoomService;
@@ -16,9 +18,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -40,22 +40,51 @@ public class QuizRoomController {
 
 
     @PostMapping("/quizroom")
+    @Operation(summary = "멤버 탐색")
+    public CreateRoomDto searchMember(@RequestBody SearchMemberDto SearchMemberDto) {
+        CreateRoomDto roomDto = new CreateRoomDto();
+        roomDto.setRoomName(SearchMemberDto.getRoomName());
+        roomDto.setQuizCnt(SearchMemberDto.getQuizCnt());
+        roomDto.setPages(SearchMemberDto.getPages());
+        roomDto.setSharePages(SearchMemberDto.getSharePages());
+        roomDto.setSingle(SearchMemberDto.isSingle());
+
+        List<UserDto> inviteUsers = new ArrayList<>();
+        UserDto user1 = new UserDto();
+        user1.setUserPk(1L);
+        user1.setUserName("csi");
+        inviteUsers.add(user1);
+
+        UserDto user2 = new UserDto();
+        user2.setUserPk(2L);
+        user2.setUserName("isc");
+        inviteUsers.add(user2);
+
+        roomDto.setInviteUsers(inviteUsers);
+
+        return roomDto;
+    }
+
+
+    @PostMapping("/quizroom/invite")
     @Operation(summary = "방 생성")
     public QuizRoom createQuizRoom(@RequestBody CreateRoomDto createRoomDto) {
         QuizRoom createQuizRoom = QuizRoom.builder()
                 .roomName(createRoomDto.getRoomName())
-                .quizCnt(createRoomDto.getQuizCount())
+                .quizCnt(createRoomDto.getQuizCnt())
                 .createdDate(LocalDateTime.now())
                 .sharePages(createRoomDto.getSharePages())
                 .pages(createRoomDto.getPages())
                 .single(createRoomDto.isSingle())
                 .inviteUsers(createRoomDto.getInviteUsers())
                 .build();
+
         if (createQuizRoom.isSingle()) {
             createQuizRoom.setRoomMax(1);
         } else {
             createQuizRoom.setRoomMax(createRoomDto.getInviteUsers().size());
         }
+
         QuizRoom createdQuizroom = quizroomService.save(createQuizRoom);
         List<QuizRoom> roomList = quizroomService.findAll();
         scheduler.schedule(() -> messageTemplate.convertAndSend("/sub/quizroom/roomList", roomList), 1000, TimeUnit.MILLISECONDS);
@@ -84,12 +113,13 @@ public class QuizRoomController {
         List<Member> members = quizRoom.getUsers();
 
         // 초대 유저에 없으면 입장 x
-        if (!quizRoom.getInviteUsers().contains(body.getUserId())) {
+        if (quizRoom.getInviteUsers().stream().noneMatch(user -> Objects.equals(user.getUserPk(), body.getUserPk()))) {
             return;
         }
+
         if (members != null) {
             for (Member member : members) {
-                if (body.getUserId().equals(member.getUserId())) {
+                if (body.getUserPk().equals(member.getUserPk())) {
                     messageTemplate.convertAndSend("/sub/quizroom/detail/" + roomId, quizRoom);
                     return;
                 }
@@ -115,7 +145,7 @@ public class QuizRoomController {
 
         // 나가려는 유저가 방에 있는 지 확인
         Optional<Member> optionalMember = quizRoom.getUsers().stream()
-                .filter(member -> member.getUserId().equals(body.getUserId()))
+                .filter(member -> member.getUserPk().equals(body.getUserPk()))
                 .findFirst();
 
         // 방에 없으면 리턴
