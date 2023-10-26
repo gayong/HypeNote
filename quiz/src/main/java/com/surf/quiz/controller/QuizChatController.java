@@ -8,6 +8,8 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
@@ -17,6 +19,9 @@ import java.time.format.DateTimeFormatter;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin(origins = {"http://localhost:3000"}, allowCredentials = "true", allowedHeaders = "*", methods = {
+        RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS, RequestMethod.HEAD, RequestMethod.DELETE,
+        RequestMethod.PUT })
 public class QuizChatController {
 
     private final SimpMessagingTemplate messageTemplate;

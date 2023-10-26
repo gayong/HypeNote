@@ -106,6 +106,7 @@ public class QuizController {
                 quiz.setComplete(true);
                 messageTemplate.convertAndSend("/sub/quiz/" + roomId, quiz);
 
+                int userAnswersSize = quiz.getUserAnswers().size();
                 // 각 유저의 퀴즈 결과 생성 및 저장
                 for (Map.Entry<String, List<String>> entry  : quiz.getUserAnswers().entrySet()) {
                     String userPk = entry.getKey();
@@ -142,10 +143,11 @@ public class QuizController {
                     quizResult.setQuestionResult(questionResults);
                     quizResultRepository.save(quizResult);
 
-                    // 여기서 길이 측정하셈
-                        List<QuizResult> result = quizResultRepository.findByRoomId(roomId);
+                // 여기서 길이 측정하셈
+                    List<QuizResult> result = quizResultRepository.findByRoomId(roomId);
+                    if (result.size() == userAnswersSize) {
                         messageTemplate.convertAndSend("/sub/quiz/" + roomId, result);
-
+                    }
 
                 }
             }
