@@ -1,36 +1,41 @@
-'use client';
-import LogoImg from '../../public/assets/logo.png';
-import Image from 'next/image';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+"use client";
+import LogoImg from "../../public/assets/logo.png";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
 
 export default function Navbar() {
+  const [mode, setMode] = useState(false);
   const pathname = usePathname();
-  if (pathname === '/signin' || pathname == '/signup') {
+
+  if (pathname === "/signin" || pathname == "/signup") {
     return null;
   }
+
+  const changeMode = () => {
+    setMode(!mode);
+  };
 
   return (
     <>
       {/* navbar */}
-      <span
-        className="absolute text-white text-4xl top-5 left-4 cursor-pointer"
-        // onclick="openSidebar()"
-      >
-        <i className="bi bi-filter-left px-2 bg-gray-900 rounded-md"></i>
-      </span>
-      <div className="sidebar fixed top-0 bottom-0 lg:left-0 p-2 w-[290px] overflow-y-auto text-center bg-primary text-secondary">
+
+      <div className="sidebar fixed top-0 bottom-0 lg:left-0 p-2 w-[290px] overflow-y-auto text-center bg-primary text-secondary dark:bg-dark_primary">
         <div className="text-secondary text-xl">
-          <div className="px-2.5 pt-2.5 pb-1 mt-1 flex items-center justify-items-start">
+          <div className="px-2.5 pt-2.5 pb-1 mt-1 flex items-center justify-between">
             <Link href="/">
-              <Image src={LogoImg} alt="우리로고" className="h-16 w-auto"></Image>
+              <Image
+                src={LogoImg}
+                alt="우리로고"
+                className="h-16 w-auto"
+              ></Image>
             </Link>
-            <i
-              className="bi bi-x cursor-pointer ml-28 lg:hidden"
-              // onclick="openSidebar()"
-            ></i>
+            <button onClick={changeMode}>다크모드</button>
           </div>
-          <h1 className="text-start text-font_primary text-[17px] ml-3">가영님, 안녕하세요</h1>
+          <h1 className="text-start text-font_primary text-[17px] ml-3">
+            가영님, 안녕하세요
+          </h1>
           {/* <div className="my-2 bg-gray-600 h-[1px]"></div> */}
           <br />
         </div>
@@ -59,7 +64,7 @@ export default function Navbar() {
 
         <div className="inline-flex items-center justify-center w-full">
           <hr className="w-full h-px my-1 bg-line_primary border-0"></hr>
-          <span className="text-[13px] absolute px-3 text-gray-300 -translate-x-1/2 bg-[#2946A2] left-1/2">
+          <span className="text-[13px] absolute px-3 text-gray-300 -translate-x-1/2 bg-[#2946A2] left-1/2  dark:bg-dark_primary">
             내 노트
           </span>
         </div>
@@ -71,7 +76,9 @@ export default function Navbar() {
           <i className="bi bi-chat-left-text-fill"></i>
           <div className="flex justify-between w-full items-center">
             {/* 하나의 책 단위 */}
-            <span className="text-[15px] ml-2 text-white font-bold">MY CS BOOK</span>
+            <span className="text-[15px] ml-2 text-white font-bold">
+              MY CS BOOK
+            </span>
             <span className="text-sm rotate-180" id="arrow">
               <i className="bi bi-chevron-down"></i>
             </span>
@@ -79,15 +86,21 @@ export default function Navbar() {
         </div>
         <div className="text-left text-[14px] mx-6 text-white" id="submenu">
           {/* 책 카테고리 */}
-          <h1 className="cursor-pointer p-2 hover:bg-hover_primary rounded-md">운영체제</h1>
-          <h1 className="cursor-pointer p-2 hover:bg-hover_primary rounded-md">네트워크</h1>
-          <h1 className="cursor-pointer p-2 hover:bg-hover_primary rounded-md">자료구조</h1>
+          <h1 className="cursor-pointer p-2 hover:bg-hover_primary rounded-md">
+            운영체제
+          </h1>
+          <h1 className="cursor-pointer p-2 hover:bg-hover_primary rounded-md">
+            네트워크
+          </h1>
+          <h1 className="cursor-pointer p-2 hover:bg-hover_primary rounded-md">
+            자료구조
+          </h1>
         </div>
 
         <br />
         <div className="inline-flex items-center justify-center w-full">
           <hr className="w-full h-px my-1 bg-line_primary border-0"></hr>
-          <span className="text-[13px] absolute px-3 text-gray-300 -translate-x-1/2 bg-[#2946A2] left-1/2">
+          <span className="text-[13px] absolute px-3 text-gray-300 -translate-x-1/2 bg-[#2946A2] left-1/2  dark:bg-dark_primary">
             공유받은 페이지
           </span>
         </div>
@@ -99,7 +112,9 @@ export default function Navbar() {
           <i className="bi bi-chat-left-text-fill"></i>
           <div className="flex justify-between w-full items-center">
             {/* 하나의 책 단위 */}
-            <span className="text-[15px] ml-2 text-white font-bold">1주차 스터디</span>
+            <span className="text-[15px] ml-2 text-white font-bold">
+              1주차 스터디
+            </span>
             <span className="text-sm rotate-180" id="arrow">
               <i className="bi bi-chevron-down"></i>
             </span>
@@ -107,9 +122,15 @@ export default function Navbar() {
         </div>
         <div className="text-left text-[14px] mx-6 text-white" id="submenu">
           {/* 책 카테고리 */}
-          <h1 className="cursor-pointer p-2 hover:bg-hover_primary rounded-md">운영체제</h1>
-          <h1 className="cursor-pointer p-2 hover:bg-hover_primary rounded-md">네트워크</h1>
-          <h1 className="cursor-pointer p-2 hover:bg-hover_primary rounded-md">자료구조</h1>
+          <h1 className="cursor-pointer p-2 hover:bg-hover_primary rounded-md">
+            운영체제
+          </h1>
+          <h1 className="cursor-pointer p-2 hover:bg-hover_primary rounded-md">
+            네트워크
+          </h1>
+          <h1 className="cursor-pointer p-2 hover:bg-hover_primary rounded-md">
+            자료구조
+          </h1>
         </div>
       </div>
     </>
