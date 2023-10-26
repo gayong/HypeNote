@@ -4,11 +4,11 @@ package com.surf.quiz.controller;
 import com.surf.quiz.dto.CreateRoomDto;
 import com.surf.quiz.dto.SearchMemberDto;
 import com.surf.quiz.dto.UserDto;
-import com.surf.quiz.entity.Member;
 import com.surf.quiz.entity.QuizRoom;
 import com.surf.quiz.service.QuizRoomService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -38,6 +38,11 @@ public class QuizRoomController {
     //단일 스레드로 동작하는 스케줄링 서비스(ScheduledExecutorService) 객체를 생성하고, 이 객체(scheduler)에 대한 참조를 유지
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
+    // 앱 종료 시 스레드 종료
+    @PreDestroy
+    public void destroy() {
+        scheduler.shutdown();
+    }
 
     @PostMapping("/quizroom")
     @Operation(summary = "멤버 탐색")
@@ -91,12 +96,6 @@ public class QuizRoomController {
         return createdQuizroom;
     }
 
-    @GetMapping("/quizroom/{id}")
-    @Operation(summary = "단일 방 탐색")
-    public Optional<QuizRoom> findQuizRoom(@PathVariable Long id) {
-        return quizroomService.findById(id);
-    }
-
     @GetMapping("/quizroom")
     @Operation(summary = "전체 방 탐색")
     public List<QuizRoom> findQuizRooms() {
@@ -106,11 +105,11 @@ public class QuizRoomController {
 
     @MessageMapping("/quizroom/in/{roomId}")
     @Operation(summary = "방 입장")
-    public void inQuizRoom(@DestinationVariable Long roomId, @Payload Member body) {
+    public void inQuizRoom(@DestinationVariable Long roomId, @Payload SearchMemberDto.Member body) {
 
         QuizRoom quizRoom = quizroomService.findById(roomId).orElseThrow();
 
-        List<Member> members = quizRoom.getUsers();
+        List<SearchMemberDto.Member> members = quizRoom.getUsers();
 
         // 초대 유저에 없으면 입장 x
         if (quizRoom.getInviteUsers().stream().noneMatch(user -> Objects.equals(user.getUserPk(), body.getUserPk()))) {
@@ -118,7 +117,7 @@ public class QuizRoomController {
         }
 
         if (members != null) {
-            for (Member member : members) {
+            for (SearchMemberDto.Member member : members) {
                 if (body.getUserPk().equals(member.getUserPk())) {
                     messageTemplate.convertAndSend("/sub/quizroom/detail/" + roomId, quizRoom);
                     return;
@@ -139,12 +138,12 @@ public class QuizRoomController {
     }
 
     @MessageMapping("/quizroom/out/{roomId}")
-    public void outQuizRoom(@DestinationVariable Long roomId, @Payload Member body) {
+    public void outQuizRoom(@DestinationVariable Long roomId, @Payload SearchMemberDto.Member body) {
 
         QuizRoom quizRoom = quizroomService.findById(roomId).orElseThrow();
 
         // 나가려는 유저가 방에 있는 지 확인
-        Optional<Member> optionalMember = quizRoom.getUsers().stream()
+        Optional<SearchMemberDto.Member> optionalMember = quizRoom.getUsers().stream()
                 .filter(member -> member.getUserPk().equals(body.getUserPk()))
                 .findFirst();
 
@@ -153,7 +152,7 @@ public class QuizRoomController {
             return;
         }
 
-        Member member = optionalMember.get();
+        SearchMemberDto.Member member = optionalMember.get();
         // 나가는 멤버가 레디 상태면 레디 -1
         if (member.isReady()) {
             quizRoom.setReadyCnt(quizRoom.getReadyCnt() - 1);
@@ -181,26 +180,25 @@ public class QuizRoomController {
 
 
     @MessageMapping("/quizroom/ready/{roomId}")
-    public void ready(@DestinationVariable Long roomId, @Payload Map<String, Object> userId) {
+    public void ready(@DestinationVariable Long roomId, @Payload Map<String, Object> payload) {
 
         QuizRoom quizRoom = quizroomService.findById(roomId).orElseThrow();
-        Long id = ((Number) userId.get("userId")).longValue();
-        quizRoom.memberReady(id);
-        quizRoom.setReadyCnt(quizRoom.getReadyCnt() + 1);
-        quizroomService.save(quizRoom);
-        messageTemplate.convertAndSend("/sub/quizroom/detail/" + roomId, quizRoom);
+        Long id = ((Number) payload.get("userId")).longValue();
+        String action = (String) payload.get("action");
+        if (action.equals("ready")) {
+            quizRoom.memberReady(id, action);
+            quizRoom.setReadyCnt(quizRoom.getReadyCnt() + 1);
+            quizroomService.save(quizRoom);
+            messageTemplate.convertAndSend("/sub/quizroom/detail/" + roomId, quizRoom);
+        } else if (action.equals("unready")) {
+            quizRoom.memberReady(id, action);
+            quizRoom.setReadyCnt(quizRoom.getReadyCnt() - 1);
+            quizroomService.save(quizRoom);
+            messageTemplate.convertAndSend("/sub/quizroom/detail/" + roomId, quizRoom);
+        }
+
     }
 
-    @MessageMapping("/quizroom/unready/{roomId}")
-    public void unready(@DestinationVariable Long roomId, @Payload Map<String, Object> userId) {
-
-        QuizRoom quizRoom = quizroomService.findById(roomId).orElseThrow();
-        Long id = ((Number) userId.get("userId")).longValue();
-        quizRoom.memberUnready(id);
-        quizRoom.setReadyCnt(quizRoom.getReadyCnt() - 1);
-        quizroomService.save(quizRoom);
-        messageTemplate.convertAndSend("/sub/quizroom/detail/" + roomId, quizRoom);
-    }
 
     @MessageMapping("/quizroom/roomList")
     public void getQuizRooms() {
@@ -217,6 +215,7 @@ public class QuizRoomController {
 
         messageTemplate.convertAndSend("/sub/quizroom/detail/" + roomId, quizRoom);
     }
+
 
 
 }

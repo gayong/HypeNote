@@ -1,7 +1,7 @@
 package com.surf.quiz.service;
 
 
-import com.surf.quiz.entity.Member;
+import com.surf.quiz.dto.SearchMemberDto;
 import com.surf.quiz.entity.QuizRoom;
 import com.surf.quiz.repository.QuizRoomRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +38,7 @@ public class QuizRoomService {
         return quizRepo.findAll();
     }
 
-    public List<Member> getUsersByRoomId(Long roomId) {
+    public List<SearchMemberDto.Member> getUsersByRoomId(Long roomId) {
         Optional<QuizRoom> optional = quizRepo.findById(roomId);
         if (optional.isPresent()) {
             return optional.get().getUsers();

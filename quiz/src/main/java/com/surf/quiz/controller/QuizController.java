@@ -2,7 +2,7 @@ package com.surf.quiz.controller;
 
 import com.surf.quiz.dto.QuestionDto;
 import com.surf.quiz.dto.QuestionResultDto;
-import com.surf.quiz.entity.Member;
+import com.surf.quiz.dto.SearchMemberDto;
 import com.surf.quiz.entity.Quiz;
 import com.surf.quiz.entity.QuizResult;
 import com.surf.quiz.repository.QuizRepository;
@@ -155,7 +155,7 @@ public class QuizController {
     }
 
     public boolean isQuizFinished(String roomId, Map<String, List<String>> userAnswers) {
-        List<Member> members = quizroomService.getUsersByRoomId(Long.parseLong(roomId));
+        List<SearchMemberDto.Member> members = quizroomService.getUsersByRoomId(Long.parseLong(roomId));
         Set<String> userIds = members.stream()
                 .map(member -> Long.toString(member.getUserPk()))
                 .collect(Collectors.toSet());

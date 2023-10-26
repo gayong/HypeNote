@@ -1,6 +1,7 @@
 package com.surf.quiz.entity;
 
 
+import com.surf.quiz.dto.SearchMemberDto;
 import com.surf.quiz.dto.UserDto;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -46,39 +47,39 @@ public class QuizRoom {
     private boolean single;
 
     private List<UserDto> inviteUsers;
-    private List<Member> users = new ArrayList<>();
+    private List<SearchMemberDto.Member> users = new ArrayList<>();
 
 
     public void setId(Long id) {
         this.id = id;
     }
 
-    public void memberIn(Member inMember) {
+    public void memberIn(SearchMemberDto.Member inMember) {
         if (this.users == null) {
             this.users = new ArrayList<>();
         }
         users.add(inMember);
     }
-    public void memberOut(Member outMember) {
+    public void memberOut(SearchMemberDto.Member outMember) {
         users.removeIf(e -> e.getUserPk().equals(outMember.getUserPk()));
     }
 
 
-    public void memberReady(Long userId) {
-        for (Member member : users) {
-            if (member.getUserPk().equals(userId)) {
-                member.setReady(true);
+    public void memberReady(Long userId, String action) {
+        if (action.equals("ready")) {
+            for (SearchMemberDto.Member member : users) {
+                if (member.getUserPk().equals(userId)) {
+                    member.setReady(true);
+                }
+            }
+        } else if (action.equals("unready")) {
+            for (SearchMemberDto.Member member : users) {
+                if (member.getUserPk().equals(userId)) {
+                    member.setReady(false);
+                }
             }
         }
-    }
-    public void memberUnready(Long userId) {
-        for (Member member : users) {
-            if (member.getUserPk().equals(userId)) {
-                member.setReady(false);
-            }
-        }
-    }
 
-
+    }
 
 }
