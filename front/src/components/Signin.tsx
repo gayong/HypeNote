@@ -1,11 +1,13 @@
 "use client";
 import { FcGoogle } from "react-icons/fc";
-
+import Link from "next/link";
 import Image from "next/image";
+
 import Button from "./ui/Button";
 import Input from "./ui/Input";
-import logoImg from "../../public/assets/logo_blue.png";
 import Label from "./ui/Label";
+
+import logoImg from "../../public/assets/logo_blue.png";
 
 export default function Signin() {
   const handleSignin = () => {
@@ -66,12 +68,12 @@ export default function Signin() {
 
           <p className="mt-10 text-center text-sm text-gray-500">
             아직 회원이 아니신가요?{" "}
-            <a
-              href="#"
+            <Link
+              href="/signup"
               className="font-semibold leading-6 text-hover_primary hover:text-font_secondary"
             >
               회원가입
-            </a>
+            </Link>
           </p>
         </div>
       </div>
