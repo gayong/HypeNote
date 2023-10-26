@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 public class QuizResult {
 
-    private String quizId;
+    private Long quizId;
     private String roomId;
     private Long userPk;
     private int totals;

@@ -1,10 +1,12 @@
 package com.surf.quiz.controller;
 
 import com.surf.quiz.dto.QuestionDto;
+import com.surf.quiz.dto.QuestionResultDto;
 import com.surf.quiz.entity.Member;
 import com.surf.quiz.entity.Quiz;
 import com.surf.quiz.entity.QuizResult;
 import com.surf.quiz.repository.QuizRepository;
+import com.surf.quiz.repository.QuizResultRepository;
 import com.surf.quiz.service.QuizRoomService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +29,7 @@ public class QuizController {
     private final QuizRoomService quizroomService;
     private final SimpMessagingTemplate messageTemplate;
     private final QuizRepository quizRepository;
+    private final QuizResultRepository quizResultRepository;
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
     @MessageMapping("/quiz/{roomId}")
@@ -90,13 +93,10 @@ public class QuizController {
     @MessageMapping("/answer/{roomId}/{userId}")
     public void receiveAnswer(@DestinationVariable String roomId, @DestinationVariable String userId, @Payload List<String> answers) {
         Optional<Quiz> optionalQuiz = quizRepository.findByRoomId(Integer.parseInt(roomId));
-        System.out.println("optionalQuiz = " + optionalQuiz);
         if (optionalQuiz.isPresent()) {
             Quiz quiz = optionalQuiz.get();
-            System.out.println("quiz = " + quiz);
             Map<String, List<String>> userAnswers = quiz.getUserAnswers();
             userAnswers.put(userId, answers);
-            System.out.println("userAnswers = " + userAnswers);
             quiz.setUserAnswers(userAnswers);
             quizRepository.save(quiz);
 
@@ -105,16 +105,49 @@ public class QuizController {
             if (isQuizFinished(roomId, quiz.getUserAnswers())) {
                 quiz.setComplete(true);
                 messageTemplate.convertAndSend("/sub/quiz/" + roomId, quiz);
-                // 같은 구독 주소로 퀴즈 결과 보내면 굳이 한번 더 api 요청을 보낼 필요 없다
-                // 같은 구독 주소로 보내기
 
-//                for (UserAnswer userAnswer : quiz.getUserAnswers()) {
-//                    QuizResult result = new QuizResult();
-//                    result.setQuizId(quiz.getQuizId());
-//                    result.setUserPk();
-//                    result.setTotals(quiz.getQuestion().size());
-//                    result.setExamDone(LocalDateTime.now());
-//                }
+                // 각 유저의 퀴즈 결과 생성 및 저장
+                for (Map.Entry<String, List<String>> entry  : quiz.getUserAnswers().entrySet()) {
+                    String userPk = entry.getKey();
+                    List<String> userAnswerList = entry .getValue();
+
+                    // 퀴즈 결과 생성
+                    QuizResult quizResult = new QuizResult();
+                    quizResult.setQuizId(quiz.getId());
+                    quizResult.setRoomId(String.valueOf(quiz.getRoomId()));
+                    quizResult.setUserPk(Long.parseLong(userPk));
+                    quizResult.setTotals(quiz.getQuestion().size());
+                    quizResult.setExamDone(LocalDateTime.now());
+
+                    int correctCount = 0;
+                    // 각 문제의 결과 생성
+                    List<QuestionResultDto> questionResults = new ArrayList<>();
+                    for (int i = 0; i < quiz.getQuestion().size(); i++) {
+                        QuestionDto questionDto = quiz.getQuestion().get(i);
+                        QuestionResultDto questionResult = new QuestionResultDto();
+                        questionResult.setId(questionDto.getId());
+                        questionResult.setQuestion(questionDto.getQuestion());
+                        questionResult.setExample(questionDto.getExample());
+                        questionResult.setAnswer(questionDto.getAnswer());
+                        questionResult.setMyAnswer(userAnswerList.get(i));
+                        questionResults.add(questionResult);
+
+                        // 답변 비교하여 맞은 경우 correctCount 증가
+                        if (questionDto.getAnswer().equals(userAnswerList.get(i))) {
+                            correctCount++;
+                        }
+                    }
+
+                    quizResult.setCorrect(correctCount);
+                    quizResult.setQuestionResult(questionResults);
+                    quizResultRepository.save(quizResult);
+
+                    // 여기서 길이 측정하셈
+                        List<QuizResult> result = quizResultRepository.findByRoomId(roomId);
+                        messageTemplate.convertAndSend("/sub/quiz/" + roomId, result);
+
+
+                }
             }
         } else {
             throw new NoSuchElementException("Quiz not found for roomId: " + roomId);
