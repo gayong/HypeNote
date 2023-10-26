@@ -1,30 +1,27 @@
-"use client";
-import { FcGoogle } from "react-icons/fc";
-import Link from "next/link";
-import Image from "next/image";
+'use client';
+import { FcGoogle } from 'react-icons/fc';
+import Link from 'next/link';
+import Image from 'next/image';
 
-import Button from "./ui/Button";
-import Input from "./ui/Input";
-import Label from "./ui/Label";
+import Button from './ui/Button';
+import Input from './ui/Input';
+import Label from './ui/Label';
 
-import logoImg from "../../public/assets/logo_blue.png";
+import logoImg from '../../public/assets/logo_blue.png';
+import krLogoImg from '../../public/assets/krlogo_blue.png';
 
 export default function Signin() {
   const handleSignin = () => {
-    console.log("로그인하마");
+    console.log('로그인하마');
   };
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <Image
-            className="mx-auto h-[20vh] w-auto"
-            src={logoImg}
-            alt="Hype Note 로고"
-            priority
-          />
+          <Image className="mx-auto h-[20vh] w-auto" src={logoImg} alt="Hype Note 로고" priority />
           <h2 className="mt-3 text-center text-2xl leading-9 tracking-tight text-gray-700">
-            로그인 후 Hype Note를 즐겨보세요 ✏️
+            로그인 후 <Image className="inline mb-1 h-[1.4rem] w-auto" priority src={krLogoImg} alt="한글로고" />를
+            즐겨보세요 ✏️
           </h2>
         </div>
 
@@ -60,18 +57,11 @@ export default function Signin() {
             </div>
           </div>
 
-          <Button
-            text="구글 로그인"
-            iconImg={<FcGoogle />}
-            onClick={handleSignin}
-          />
+          <Button text="구글로 로그인" iconImg={<FcGoogle className="text-xl mt-0.5 mr-1" />} onClick={handleSignin} />
 
           <p className="mt-10 text-center text-sm text-gray-500">
-            아직 회원이 아니신가요?{" "}
-            <Link
-              href="/signup"
-              className="font-semibold leading-6 text-hover_primary hover:text-font_secondary"
-            >
+            아직 회원이 아니신가요?{' '}
+            <Link href="/signup" className="font-semibold leading-6 text-hover_primary hover:text-font_secondary">
               회원가입
             </Link>
           </p>
