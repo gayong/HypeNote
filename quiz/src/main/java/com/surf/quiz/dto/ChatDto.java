@@ -11,6 +11,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ChatDto {
     String chatTime;
-    String user;
+    String userPK;
     String content;
 }

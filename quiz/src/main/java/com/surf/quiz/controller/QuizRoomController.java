@@ -27,7 +27,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@Tag(name = "퀴즈", description = "퀴즈")
+@Tag(name = "퀴즈룸", description = "퀴즈룸")
 public class QuizRoomController {
     private final QuizRoomService quizroomService;
 
@@ -183,7 +183,7 @@ public class QuizRoomController {
     public void ready(@DestinationVariable Long roomId, @Payload Map<String, Object> payload) {
 
         QuizRoom quizRoom = quizroomService.findById(roomId).orElseThrow();
-        Long id = ((Number) payload.get("userId")).longValue();
+        Long id = ((Number) payload.get("userPk")).longValue();
         String action = (String) payload.get("action");
         if (action.equals("ready")) {
             quizRoom.memberReady(id, action);

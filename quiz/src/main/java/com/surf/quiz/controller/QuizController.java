@@ -8,12 +8,16 @@ import com.surf.quiz.entity.QuizResult;
 import com.surf.quiz.repository.QuizRepository;
 import com.surf.quiz.repository.QuizResultRepository;
 import com.surf.quiz.service.QuizRoomService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
@@ -25,6 +29,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "퀴즈", description = "퀴즈")
 public class QuizController {
     private final QuizRoomService quizroomService;
     private final SimpMessagingTemplate messageTemplate;
@@ -163,4 +168,12 @@ public class QuizController {
                 .collect(Collectors.toSet());
         return userIds.containsAll(userAnswers.keySet()) && userIds.size() == userAnswers.keySet().size();
     }
+
+    // 나의 퀴즈 기록 보기
+    @GetMapping("/quiz/history/{userPk}")
+    @Operation(summary = "퀴즈 기록")
+    public List<QuizResult> getMyQuizHistory(@PathVariable Long userPk) {
+        return quizResultRepository.findByUserPk(userPk);
+    }
+
 }
