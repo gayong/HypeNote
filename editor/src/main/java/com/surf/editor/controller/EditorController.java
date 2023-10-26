@@ -5,6 +5,7 @@ import com.surf.editor.dto.request.EditorWriteRequest;
 import com.surf.editor.dto.response.EditorCheckResponse;
 import com.surf.editor.dto.response.EditorSearchResponse;
 import com.surf.editor.service.EditorService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +33,7 @@ public class EditorController {
     }
 
     @PostMapping("/write/{editorId}")
-    public ResponseEntity<ApiResponse> editorWrite(@PathVariable String editorId, @RequestBody EditorWriteRequest editorWriteRequest){
+    public ResponseEntity<ApiResponse> editorWrite(@PathVariable String editorId, @RequestBody @Valid EditorWriteRequest editorWriteRequest){
         editorService.editorWrite(editorId,editorWriteRequest);
 
         ApiResponse apiResponse = ApiResponse.builder()

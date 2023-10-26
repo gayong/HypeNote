@@ -1,6 +1,7 @@
 package com.surf.editor.service;
 
 import com.surf.editor.common.error.ErrorCode;
+import com.surf.editor.common.error.exception.BaseException;
 import com.surf.editor.common.error.exception.NotFoundException;
 import com.surf.editor.domain.Editor;
 import com.surf.editor.dto.request.EditorWriteRequest;
@@ -13,7 +14,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -22,37 +22,52 @@ public class EditorService {
     private final EditorRepository editorRepository;
 
     public void editorCreate(String userId) {
-        editorRepository.save(Editor.toEntity(null,null));
+        try{
+            editorRepository.save(Editor.toEntity(null,null));
+        }catch (Exception e){
+            throw new BaseException(ErrorCode.FAIL_CREATE_EDITOR);
+        }
     }
 
     public void editorWrite(String editorId, EditorWriteRequest editorWriteRequest) {
         Editor byId = editorRepository.findById(editorId).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
-        byId.write(editorWriteRequest.getTitle(),editorWriteRequest.getContent());
-        editorRepository.save(byId);
+
+        try{
+            byId.write(editorWriteRequest.getTitle(),editorWriteRequest.getContent());
+            editorRepository.save(byId);
+        }catch (Exception e){
+            throw new BaseException(ErrorCode.FAIL_WRITE_EDITOR);
+        }
+
     }
 
     public void editorDelete(String editorId) {
-        Optional<Editor> byId = editorRepository.findById(editorId);
+        Editor byId = editorRepository.findById(editorId).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
 
-        if(byId.isPresent()){
-            editorRepository.delete(byId.get());
+        try{
+            editorRepository.delete(byId);
+        }catch (Exception e){
+            throw new BaseException(ErrorCode.FAIL_DELETE_EDITOR);
         }
     }
 
     public EditorCheckResponse editorCheck(String editorId) {
-        Optional<Editor> byId = editorRepository.findById(editorId);
+        Editor byId = editorRepository.findById(editorId).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
 
         EditorCheckResponse editorCheckResponse = EditorCheckResponse.builder()
-                .id(byId.get().getId())
-                .title(byId.get().getTitle())
-                .content(byId.get().getContent())
+                .id(byId.getId())
+                .title(byId.getTitle())
+                .content(byId.getContent())
                 .build();
 
         return editorCheckResponse;
     }
 
     public EditorSearchResponse editorSearch(String search) {
-        List<Editor> byTitleContainingOrContentContaining = editorRepository.findByTitleContainingOrContentContaining(search, search);
+        List<Editor> byTitleContainingOrContentContaining =
+                editorRepository.findByTitleContainingOrContentContaining(search, search)
+                        .orElse(null);
+
         List<EditorSearchResponse.Editors> editors = new ArrayList<>();
 
         for (Editor editor : byTitleContainingOrContentContaining) {

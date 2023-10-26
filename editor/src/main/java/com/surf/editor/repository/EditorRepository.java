@@ -5,8 +5,9 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface EditorRepository extends MongoRepository<Editor,String> {
-    List<Editor> findByTitleContainingOrContentContaining(String searchTextInTitle, String searchTextInContent);
+    Optional<List<Editor>> findByTitleContainingOrContentContaining(String searchTextInTitle, String searchTextInContent);
 }
