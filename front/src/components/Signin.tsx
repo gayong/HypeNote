@@ -1,20 +1,26 @@
-'use client';
+"use client";
+import { FcGoogle } from "react-icons/fc";
 
-import Image from 'next/image';
-import Button from './ui/Button';
-import Input from './ui/Input';
-import logoImg from '../../public/assets/logo_blue.png';
-import Label from './ui/Label';
+import Image from "next/image";
+import Button from "./ui/Button";
+import Input from "./ui/Input";
+import logoImg from "../../public/assets/logo_blue.png";
+import Label from "./ui/Label";
 
-export default function Login() {
-  const handleLogin = () => {
-    console.log('로그인하마');
+export default function Signin() {
+  const handleSignin = () => {
+    console.log("로그인하마");
   };
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-          <Image className="mx-auto h-[20vh] w-auto" src={logoImg} alt="Hype Note 로고" priority />
+          <Image
+            className="mx-auto h-[20vh] w-auto"
+            src={logoImg}
+            alt="Hype Note 로고"
+            priority
+          />
           <h2 className="mt-3 text-center text-2xl leading-9 tracking-tight text-gray-700">
             로그인 후 Hype Note를 즐겨보세요 ✏️
           </h2>
@@ -39,24 +45,31 @@ export default function Login() {
             </div>
 
             <div>
-              <Button text="로그인" onClick={handleLogin}></Button>
+              <Button text="로그인" onClick={handleSignin}></Button>
             </div>
           </form>
 
           <div className="relative my-3">
             <div className="relative flex items-center">
-              <div className="my-4 bg-gray-600 h-[1px] w-full "></div>
+              <div className="my-4 bg-line_primary h-[1px] w-full "></div>
             </div>
             <div className="absolute flex justify-center w-full top-1/2 transform -translate-y-1/2">
-              <span className="bg-[#faf5ef] px-2">또는</span>
+              <span className="bg-secondary px-2">또는</span>
             </div>
           </div>
 
-          <Button text="구글 로그인" onClick={handleLogin} />
+          <Button
+            text="구글 로그인"
+            iconImg={<FcGoogle />}
+            onClick={handleSignin}
+          />
 
           <p className="mt-10 text-center text-sm text-gray-500">
-            아직 회원이 아니신가요?{' '}
-            <a href="#" className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
+            아직 회원이 아니신가요?{" "}
+            <a
+              href="#"
+              className="font-semibold leading-6 text-hover_primary hover:text-font_secondary"
+            >
               회원가입
             </a>
           </p>
