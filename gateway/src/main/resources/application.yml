@@ -1,12 +1,12 @@
 spring:
   application:
-    name: server_gateway
+    name: server-gateway
 
   cloud:
     gateway:
       routes:
-        - id: server_member
-          uri: lb://server_member
+        - id: server-member
+          uri: lb://server-member
           predicates:
             - Path=/api/member/**
 
