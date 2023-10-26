@@ -88,13 +88,16 @@ public class QuizController {
     public void receiveAnswer(@DestinationVariable String roomId, @DestinationVariable String userId, @Payload List<String> answers) {
         Map<String, List<String>> userAnswers = new HashMap<>();
         userAnswers.put(userId, answers);
-        System.out.println("roomId = " + roomId);
+        // 답변을 보낸 유저들이 전부 일치하면 게임 완료 처리
         if (isQuizFinished(roomId, userAnswers)) {
             Optional<Quiz> optionalQuiz = quizRepository.findByRoomId(Integer.parseInt(roomId));
             System.out.println("optionalQuiz = " + optionalQuiz);
             Quiz quiz = optionalQuiz.get();
+            quiz.getUserAnswers().putAll(userAnswers);
             quiz.setComplete(true);
             messageTemplate.convertAndSend("/sub/quiz/" + roomId, quiz);
+            // 같은 구독 주소로 퀴즈 결과 보내면 굳이 한번 더 api 요청을 보낼 필요 없다
+            // 같은 구독 주소로 보내기
         }
     }
 

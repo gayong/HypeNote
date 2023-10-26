@@ -1,6 +1,5 @@
 package com.surf.quiz.entity;
 
-import com.surf.quiz.dto.ExampleDto;
 import com.surf.quiz.dto.QuestionDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,7 +9,9 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.mongodb.core.index.Indexed;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -24,6 +25,8 @@ public class Quiz {
     private LocalDateTime createdDate;
 
     List<QuestionDto> question;
+
+    Map<String, List<String>> userAnswers = new HashMap<>();
 
     private boolean complete;
 }
