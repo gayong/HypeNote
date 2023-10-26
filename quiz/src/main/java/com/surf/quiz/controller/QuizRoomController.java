@@ -29,16 +29,19 @@ import java.util.concurrent.TimeUnit;
 @Tag(name = "퀴즈", description = "퀴즈")
 public class QuizRoomController {
     private final QuizRoomService quizroomService;
+
     private final SimpMessagingTemplate messageTemplate; // 메시지 브로커를 통해 클라이언트와 서버 간의 실시간 메시지 교환을 처리
 
+
     // 일정한 시간 간격으로 작업(태스크)를 실행하거나 지연 실행할 수 있는 스레드 풀 기반의 스케줄링 서비스
-    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
     //단일 스레드로 동작하는 스케줄링 서비스(ScheduledExecutorService) 객체를 생성하고, 이 객체(scheduler)에 대한 참조를 유지
+    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+
 
     @PostMapping("/quizroom")
     @Operation(summary = "방 생성")
     public QuizRoom createQuizRoom(@RequestBody CreateRoomDto createRoomDto) {
-        QuizRoom quizroomToBeCreated = QuizRoom.builder()
+        QuizRoom createQuizRoom = QuizRoom.builder()
                 .roomName(createRoomDto.getRoomName())
                 .quizCnt(createRoomDto.getQuizCount())
                 .createdDate(LocalDateTime.now())
@@ -47,10 +50,14 @@ public class QuizRoomController {
                 .single(createRoomDto.isSingle())
                 .inviteUsers(createRoomDto.getInviteUsers())
                 .build();
-
-        QuizRoom createdQuizroom = quizroomService.save(quizroomToBeCreated);
-        List<QuizRoom> listRoom = quizroomService.findAll();
-        scheduler.schedule(() -> messageTemplate.convertAndSend("/sub/quizroom/roomList", listRoom), 100, TimeUnit.MILLISECONDS);
+        if (createQuizRoom.isSingle()) {
+            createQuizRoom.setRoomMax(1);
+        } else {
+            createQuizRoom.setRoomMax(createRoomDto.getInviteUsers().size());
+        }
+        QuizRoom createdQuizroom = quizroomService.save(createQuizRoom);
+        List<QuizRoom> roomList = quizroomService.findAll();
+        scheduler.schedule(() -> messageTemplate.convertAndSend("/sub/quizroom/roomList", roomList), 1000, TimeUnit.MILLISECONDS);
         return createdQuizroom;
     }
 
@@ -69,129 +76,115 @@ public class QuizRoomController {
 
     @MessageMapping("/quizroom/in/{roomId}")
     @Operation(summary = "방 입장")
-    public void inQuizRoom(
-            @DestinationVariable Long roomId,
-            @Payload Member body) {
+    public void inQuizRoom(@DestinationVariable Long roomId, @Payload Member body) {
 
-        QuizRoom targetRoom = quizroomService.findById(roomId).orElseThrow();
+        QuizRoom quizRoom = quizroomService.findById(roomId).orElseThrow();
 
-        List<Member> members = targetRoom.getUsers();
+        List<Member> members = quizRoom.getUsers();
+
+        // 초대 유저에 없으면 입장 x
+        if (!quizRoom.getInviteUsers().contains(body.getUserId())) {
+            return;
+        }
 
         for (Member member : members) {
             if (body.getUserId().equals(member.getUserId())) {
-                messageTemplate.convertAndSend("/sub/quizroom/info/" + roomId, targetRoom);
+                messageTemplate.convertAndSend("/sub/quizroom/detail/" + roomId, quizRoom);
                 return;
             }
         }
 
-        targetRoom.memberEntrance(body);
+        quizRoom.memberIn(body);
 
 
-        targetRoom.setRoomCnt(targetRoom.getRoomCnt() + 1);
-        quizroomService.save(targetRoom);
-        List<QuizRoom> listRoom = quizroomService.findAll();
+        quizRoom.setRoomCnt(quizRoom.getRoomCnt() + 1);
+        quizroomService.save(quizRoom);
+        List<QuizRoom> roomList = quizroomService.findAll();
 
-        messageTemplate.convertAndSend("/sub/quizroom/info/" + roomId, targetRoom);
-        scheduler.schedule(() -> messageTemplate.convertAndSend("/sub/quizroom/roomList", listRoom), 100, TimeUnit.MILLISECONDS);
+        messageTemplate.convertAndSend("/sub/quizroom/detail/" + roomId, quizRoom);
+        scheduler.schedule(() -> messageTemplate.convertAndSend("/sub/quizroom/roomList", roomList), 1000, TimeUnit.MILLISECONDS);
         // 100 밀리초 후에 지정된 메시지(listRoom)를 "/sub/quizroom/roomList" 주제로 구독 중인 클라이언트들에게 전송하는 작업을 예약
     }
 
     @MessageMapping("/quizroom/out/{roomId}")
-    public void outQuizRoom(
-            @DestinationVariable Long roomId,
-            @Payload Member body) {
+    public void outQuizRoom(@DestinationVariable Long roomId, @Payload Member body) {
 
-        QuizRoom targetRoom = quizroomService.findById(roomId).orElseThrow();
+        QuizRoom quizRoom = quizroomService.findById(roomId).orElseThrow();
 
-        boolean check = false;
+        // 나가려는 유저가 방에 있는 지 확인
+        Optional<Member> optionalMember = quizRoom.getUsers().stream()
+                .filter(member -> member.getUserId().equals(body.getUserId()))
+                .findFirst();
 
-        for (Member member : targetRoom.getUsers()) {
-            if (member.getUserId().equals(body.getUserId())) {
-                if (member.isReady()) {
-                targetRoom.setReady(targetRoom.getReady() - 1);
-                }
-                targetRoom.memberExit(body);
-                targetRoom.setRoomCnt(targetRoom.getRoomCnt() - 1);
-                quizroomService.save(targetRoom);
-                check = true;
-                break;
-            }
-        }
-
-        if (!check) {
+        // 방에 없으면 리턴
+        if (optionalMember.isEmpty()) {
             return;
         }
 
-        if (targetRoom.getUsers().isEmpty()) {
-            quizroomService.delete(targetRoom);
+        Member member = optionalMember.get();
+        // 나가는 멤버가 레디 상태면 레디 -1
+        if (member.isReady()) {
+            quizRoom.setReadyCnt(quizRoom.getReadyCnt() - 1);
+        }
+        quizRoom.memberOut(body);
+        quizRoom.setRoomCnt(quizRoom.getRoomCnt() - 1);
+        quizroomService.save(quizRoom);
+
+        // 멤버가 나가서 방이 비면 삭제
+        if (quizRoom.getUsers().isEmpty()) {
+            quizroomService.delete(quizRoom);
         } else {
+            // 나가는 멤버가 방장인 경우 다른 멤버 중 첫 번째 멤버가 방장 설정
             if (body.isHost()) {
-                targetRoom.getUsers().get(0).setHost(true);
-                messageTemplate.convertAndSend("/sub/quizroom/info/" + roomId, targetRoom);
+                quizRoom.getUsers().get(0).setHost(true);
+                messageTemplate.convertAndSend("/sub/quizroom/detail/" + roomId, quizRoom);
             } else {
-                messageTemplate.convertAndSend("/sub/quizroom/info/" + roomId, targetRoom);
+                messageTemplate.convertAndSend("/sub/quizroom/detail/" + roomId, quizRoom);
             }
         }
 
-        List<QuizRoom> listRoom = quizroomService.findAll();
-
-        scheduler.schedule(() -> messageTemplate.convertAndSend("/sub/quizroom/roomList", listRoom), 100, TimeUnit.MILLISECONDS);
-
+        List<QuizRoom> roomList = quizroomService.findAll();
+        scheduler.schedule(() -> messageTemplate.convertAndSend("/sub/quizroom/roomList", roomList), 1000, TimeUnit.MILLISECONDS);
     }
 
 
     @MessageMapping("/quizroom/ready/{roomId}")
-    public void ready(
-            @DestinationVariable Long roomId,
-            @Payload Member body) {
+    public void ready(@DestinationVariable Long roomId, @Payload Long userId) {
 
-        QuizRoom targetRoom = quizroomService.findById(roomId).orElseThrow();
+        QuizRoom quizRoom = quizroomService.findById(roomId).orElseThrow();
 
-        targetRoom.readyMember(body);
-        System.out.println("targetRoom = " + targetRoom.getUsers());
-        System.out.println("body = " + body);
-        targetRoom.setReady(targetRoom.getReady() + 1);
-        quizroomService.save(targetRoom);
-        messageTemplate.convertAndSend("/sub/quizroom/info/" + roomId, targetRoom);
+        quizRoom.memberReady(userId);
+        quizRoom.setReadyCnt(quizRoom.getReadyCnt() + 1);
+        quizroomService.save(quizRoom);
+        messageTemplate.convertAndSend("/sub/quizroom/detail/" + roomId, quizRoom);
     }
 
     @MessageMapping("/quizroom/unready/{roomId}")
-    public void unready(
-            @DestinationVariable Long roomId,
-            @Payload Member body) {
+    public void unready(@DestinationVariable Long roomId, @Payload Long userId) {
 
-        QuizRoom targetRoom = quizroomService.findById(roomId).orElseThrow();
-        System.out.println("targetRoom = " + targetRoom);
-        System.out.println("body = " + body);
-        targetRoom.unreadyMember(body);
+        QuizRoom quizRoom = quizroomService.findById(roomId).orElseThrow();
 
-        targetRoom.setReady(targetRoom.getReady() - 1);
-        quizroomService.save(targetRoom);
-        messageTemplate.convertAndSend("/sub/quizroom/info/" + roomId, targetRoom);
+        quizRoom.memberUnready(userId);
+        quizRoom.setReadyCnt(quizRoom.getReadyCnt() - 1);
+        quizroomService.save(quizRoom);
+        messageTemplate.convertAndSend("/sub/quizroom/detail/" + roomId, quizRoom);
     }
 
     @MessageMapping("/quizroom/roomList")
-    public void roomList() {
+    public void getQuizRooms() {
 
         List<QuizRoom> rooms = quizroomService.findAll();
 
         messageTemplate.convertAndSend("/sub/quizroom/roomList", rooms);
     }
 
-    @MessageMapping("/quizroom/check/{roomId}")
-    public void checkRoomInfo(@DestinationVariable Long roomId) {
+    @MessageMapping("/quizroom/{roomId}")
+    public void getQuizRoom(@DestinationVariable Long roomId) {
 
-        QuizRoom targetRoom = quizroomService.findById(roomId).orElseThrow();
+        QuizRoom quizRoom = quizroomService.findById(roomId).orElseThrow();
 
-        messageTemplate.convertAndSend("/sub/quizroom/info/" + roomId, targetRoom);
+        messageTemplate.convertAndSend("/sub/quizroom/detail/" + roomId, quizRoom);
     }
 
-    @MessageMapping("/quizroom/terminate/{roomId}")
-    public void terminate(@DestinationVariable Long roomId) {
-        quizroomService.terminate(roomId);
-
-        List<QuizRoom> rooms = quizroomService.findAll();
-        messageTemplate.convertAndSend("/sub/quizroom/roomList", rooms);
-    }
 
 }

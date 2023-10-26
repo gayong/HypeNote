@@ -1,8 +1,5 @@
 package com.surf.quiz.controller;
 
-
-import com.surf.quiz.dto.ChatDto;
-import com.surf.quiz.dto.ExampleDto;
 import com.surf.quiz.dto.QuestionDto;
 import com.surf.quiz.entity.Member;
 import com.surf.quiz.entity.Quiz;
@@ -17,7 +14,6 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -30,6 +26,7 @@ public class QuizController {
     private final QuizRoomService quizroomService;
     private final SimpMessagingTemplate messageTemplate;
     private final QuizRepository quizRepository;
+    private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
     @MessageMapping("/quiz/{roomId}")
     public void StartQuiz(@DestinationVariable int roomId) {
@@ -86,26 +83,30 @@ public class QuizController {
 
     @MessageMapping("/answer/{roomId}/{userId}")
     public void receiveAnswer(@DestinationVariable String roomId, @DestinationVariable String userId, @Payload List<String> answers) {
-        Map<String, List<String>> userAnswers = new HashMap<>();
-        userAnswers.put(userId, answers);
-        // 답변을 보낸 유저들이 전부 일치하면 게임 완료 처리
-        if (isQuizFinished(roomId, userAnswers)) {
-            Optional<Quiz> optionalQuiz = quizRepository.findByRoomId(Integer.parseInt(roomId));
-            System.out.println("optionalQuiz = " + optionalQuiz);
+        Optional<Quiz> optionalQuiz = quizRepository.findByRoomId(Integer.parseInt(roomId));
+
+        if (optionalQuiz.isPresent()) {
             Quiz quiz = optionalQuiz.get();
-            quiz.getUserAnswers().putAll(userAnswers);
-            quiz.setComplete(true);
-            messageTemplate.convertAndSend("/sub/quiz/" + roomId, quiz);
-            // 같은 구독 주소로 퀴즈 결과 보내면 굳이 한번 더 api 요청을 보낼 필요 없다
-            // 같은 구독 주소로 보내기
+            Map<String, List<String>> userAnswers = quiz.getUserAnswers();
+            userAnswers.put(userId, answers);
+            quiz.setUserAnswers(userAnswers);
+            // 답변을 보낸 유저들이 전부 일치하면 게임 완료 처리
+            if (isQuizFinished(roomId, quiz.getUserAnswers())) {
+                quiz.setComplete(true);
+                messageTemplate.convertAndSend("/sub/quiz/" + roomId, quiz);
+                // 같은 구독 주소로 퀴즈 결과 보내면 굳이 한번 더 api 요청을 보낼 필요 없다
+                // 같은 구독 주소로 보내기
+            }
+        } else {
+            throw new NoSuchElementException("Quiz not found for roomId: " + roomId);
         }
     }
 
     public boolean isQuizFinished(String roomId, Map<String, List<String>> userAnswers) {
         List<Member> members = quizroomService.getUsersByRoomId(Long.parseLong(roomId));
-        List<String> userIds = members.stream()
+        Set<String> userIds = members.stream()
                 .map(member -> Long.toString(member.getUserId()))
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
         return userIds.containsAll(userAnswers.keySet());
     }
 }

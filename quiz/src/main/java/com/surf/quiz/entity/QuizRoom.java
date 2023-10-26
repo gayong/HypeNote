@@ -14,7 +14,6 @@ import java.util.List;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Document(collection = "quizroom")
@@ -25,54 +24,52 @@ public class QuizRoom {
 
     @Id
     private Long id;
-    String roomName;
-    String category;
+    private String roomName;
+    private String category;
 
-    int roomMax;
-    int roomCnt;
+    private int roomMax;
+    private int roomCnt;
 
-    int ready;
-    int quizCnt;
+    private int readyCnt;
+    private int quizCnt;
 
     // false == 대기, true == 실행
-    Boolean roomStatus=false;
+    private boolean roomStatus = false;
 
     @CreatedDate
     private LocalDateTime createdDate;
 
-    List<Integer> pages;
-    List<Integer> sharePages;
-    boolean single;
+    private List<Integer> pages;
+    private List<Integer> sharePages;
 
-    List<Long> inviteUsers;
-    List<Member> users = new ArrayList<>();
+    private boolean single;
+
+    private List<Long> inviteUsers;
+    private List<Member> users = new ArrayList<>();
 
 
     public void setId(Long id) {
         this.id = id;
     }
-    public void memberExit(Member outMember) {
+
+    public void memberIn(Member inMember) {
+        users.add(inMember);
+    }
+    public void memberOut(Member outMember) {
         users.removeIf(e -> e.getUserId().equals(outMember.getUserId()));
     }
 
-    public void memberEntrance(Member inMember) {
-        users.add(inMember);
 
-        System.out.println("inMember = " + inMember);
-        System.out.println("users = " + users);
-    }
-
-    public List<Member> readyMember(Member targetMember) {
+    public void memberReady(Long userId) {
         for (Member member : users) {
-            if (member.getUserId().equals(targetMember.getUserId())) {
+            if (member.getUserId().equals(userId)) {
                 member.setReady(true);
             }
         }
-        return users;
     }
-    public void unreadyMember(Member targetMember) {
+    public void memberUnready(Long userId) {
         for (Member member : users) {
-            if (member.getUserId().equals(targetMember.getUserId())) {
+            if (member.getUserId().equals(userId)) {
                 member.setReady(false);
             }
         }

@@ -20,18 +20,6 @@ public class QuizRoomService {
         this.quizRepo = quizRepo;
     }
 
-    public void saveScore(Long roomId, long userId) {
-        Optional<QuizRoom> optional = quizRepo.findById(roomId);
-        if (optional.isPresent()) {
-            for (Member member : optional.get().getUsers()) {
-                if (userId == member.getUserId()) {
-//                    member.setGameScore(member.getGameScore() + 100);
-                    member.setCorrect(member.getCorrect() + 1);
-                }
-            }
-            quizRepo.save(optional.get());
-        }
-    }
 
     public QuizRoom save(QuizRoom room) {
         return quizRepo.save(room);
@@ -48,11 +36,6 @@ public class QuizRoomService {
     public List<QuizRoom> findAll() {
 
         return quizRepo.findAll();
-    }
-
-    public void terminate(Long roomId) {
-        // MongoDB에서 특정 ID를 가진 데이터만 삭제합니다.
-        quizRepo.deleteById(roomId);
     }
 
     public List<Member> getUsersByRoomId(Long roomId) {

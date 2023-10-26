@@ -15,7 +15,6 @@ import java.util.Map;
 
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
 public class Quiz {
     @Indexed(unique = true)
