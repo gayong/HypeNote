@@ -9,6 +9,8 @@ body {
   overflow-x: hidden;
   background: #faf5ef;
   font-family: 'preRg';
+  color: #424242;
+  cursor: url('../../public/assets/cursor.png'), auto;
 }
 
 @font-face {
@@ -30,6 +32,10 @@ body {
   src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Bold.woff') format('woff');
   font-weight: 700;
   font-style: normal;
+}
+
+::selection {
+  background-color: #cb443c;
 }
 
 /* :root {
