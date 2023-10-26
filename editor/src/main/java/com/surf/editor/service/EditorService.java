@@ -1,5 +1,7 @@
 package com.surf.editor.service;
 
+import com.surf.editor.common.error.ErrorCode;
+import com.surf.editor.common.error.exception.NotFoundException;
 import com.surf.editor.domain.Editor;
 import com.surf.editor.dto.request.EditorWriteRequest;
 import com.surf.editor.dto.response.EditorCheckResponse;
@@ -24,14 +26,9 @@ public class EditorService {
     }
 
     public void editorWrite(String editorId, EditorWriteRequest editorWriteRequest) {
-        Optional<Editor> byId = editorRepository.findById(editorId);
-
-        System.out.println(byId.get());
-
-        if(byId.isPresent()){
-            byId.get().write(editorWriteRequest.getTitle(),editorWriteRequest.getContent());
-            editorRepository.save(byId.get());
-        }
+        Editor byId = editorRepository.findById(editorId).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
+        byId.write(editorWriteRequest.getTitle(),editorWriteRequest.getContent());
+        editorRepository.save(byId);
     }
 
     public void editorDelete(String editorId) {
@@ -67,7 +64,7 @@ public class EditorService {
                     .build());
         }
         EditorSearchResponse editorList = EditorSearchResponse.builder()
-                .editorsList(editors)
+                .notes(editors)
                 .build();
 
         return editorList;

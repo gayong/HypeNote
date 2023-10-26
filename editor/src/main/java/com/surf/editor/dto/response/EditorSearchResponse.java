@@ -8,7 +8,7 @@ import java.util.List;
 @Getter
 @Builder(toBuilder = true)
 public class EditorSearchResponse {
-    List<Editors> editorsList;
+    List<Editors> notes;
 
     @Getter
     @Builder(toBuilder = true)
