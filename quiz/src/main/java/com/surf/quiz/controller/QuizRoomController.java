@@ -54,6 +54,8 @@ public class QuizRoomController {
         roomDto.setSharePages(SearchMemberDto.getSharePages());
         roomDto.setSingle(SearchMemberDto.isSingle());
 
+        // invite users = 초대 받은 유저 + 방 만든 유저
+        // 방을 만든 사람이면 리스트의 0번으로 넣기 > 방장으로 만들기 위해서
         List<UserDto> inviteUsers = new ArrayList<>();
         UserDto user1 = new UserDto();
         user1.setUserPk(1L);
@@ -84,6 +86,7 @@ public class QuizRoomController {
                 .inviteUsers(createRoomDto.getInviteUsers())
                 .build();
 
+        // 싱글 모드면 roomMax 1 / 그룹 모드면 초대 인원 수
         if (createQuizRoom.isSingle()) {
             createQuizRoom.setRoomMax(1);
         } else {
@@ -92,7 +95,15 @@ public class QuizRoomController {
 
         QuizRoom createdQuizroom = quizroomService.save(createQuizRoom);
         List<QuizRoom> roomList = quizroomService.findAll();
-        scheduler.schedule(() -> messageTemplate.convertAndSend("/sub/quizroom/roomList", roomList), 1000, TimeUnit.MILLISECONDS);
+
+        // 스케줄러로 룸리스트 1초 후 전송
+        scheduler.schedule(() -> messageTemplate.convertAndSend("/sub/quizroom/roomList", roomList), 1, TimeUnit.SECONDS);
+
+        // 방을 만들자마자 방장이 들어가게 하거나
+        // 혹은 0명인 상태로 아무도 안 들어가고 5분 지나면 폭파 이런 방식 ?
+
+//        // 1초마다 전송
+//        scheduler.scheduleAtFixedRate(() -> messageTemplate.convertAndSend("/sub/quizroom/roomList", roomList), 1000, 1000, TimeUnit.MILLISECONDS);
         return createdQuizroom;
     }
 
@@ -107,7 +118,8 @@ public class QuizRoomController {
     @Operation(summary = "방 입장")
     public void inQuizRoom(@DestinationVariable Long roomId, @Payload SearchMemberDto.Member body) {
 
-        QuizRoom quizRoom = quizroomService.findById(roomId).orElseThrow();
+        Optional<QuizRoom> optionalQuizRoom = quizroomService.findById(roomId);
+        QuizRoom quizRoom = optionalQuizRoom.orElseThrow();
 
         List<SearchMemberDto.Member> members = quizRoom.getUsers();
 
@@ -116,31 +128,33 @@ public class QuizRoomController {
             return;
         }
 
+        // 멤버가 있는데 들어가려는 유저가 이미 방에 있으면 리턴
         if (members != null) {
             for (SearchMemberDto.Member member : members) {
                 if (body.getUserPk().equals(member.getUserPk())) {
-                    messageTemplate.convertAndSend("/sub/quizroom/detail/" + roomId, quizRoom);
+//                    messageTemplate.convertAndSend("/sub/quizroom/detail/" + roomId, quizRoom);
                     return;
                 }
             }
         }
 
+        // 방에 입장
         quizRoom.memberIn(body);
-
 
         quizRoom.setRoomCnt(quizRoom.getRoomCnt() + 1);
         quizroomService.save(quizRoom);
         List<QuizRoom> roomList = quizroomService.findAll();
 
         messageTemplate.convertAndSend("/sub/quizroom/detail/" + roomId, quizRoom);
-        scheduler.schedule(() -> messageTemplate.convertAndSend("/sub/quizroom/roomList", roomList), 1000, TimeUnit.MILLISECONDS);
-        // 100 밀리초 후에 지정된 메시지(listRoom)를 "/sub/quizroom/roomList" 주제로 구독 중인 클라이언트들에게 전송하는 작업을 예약
+        scheduler.schedule(() -> messageTemplate.convertAndSend("/sub/quizroom/roomList", roomList), 1, TimeUnit.SECONDS);
+        // 1초 후에 지정된 메시지(roomList)를 "/sub/quizroom/roomList" 주제로 구독 중인 클라이언트들에게 전송하는 작업을 예약
     }
 
     @MessageMapping("/quizroom/out/{roomId}")
     public void outQuizRoom(@DestinationVariable Long roomId, @Payload SearchMemberDto.Member body) {
 
-        QuizRoom quizRoom = quizroomService.findById(roomId).orElseThrow();
+        Optional<QuizRoom> optionalQuizRoom = quizroomService.findById(roomId);
+        QuizRoom quizRoom = optionalQuizRoom.orElseThrow();
 
         // 나가려는 유저가 방에 있는 지 확인
         Optional<SearchMemberDto.Member> optionalMember = quizRoom.getUsers().stream()
@@ -153,19 +167,22 @@ public class QuizRoomController {
         }
 
         SearchMemberDto.Member member = optionalMember.get();
+
         // 나가는 멤버가 레디 상태면 레디 -1
         if (member.isReady()) {
             quizRoom.setReadyCnt(quizRoom.getReadyCnt() - 1);
         }
+
+        // 방에서 퇴장
         quizRoom.memberOut(body);
         quizRoom.setRoomCnt(quizRoom.getRoomCnt() - 1);
-        quizroomService.save(quizRoom);
+
 
         // 멤버가 나가서 방이 비면 삭제
         if (quizRoom.getUsers().isEmpty()) {
             quizroomService.delete(quizRoom);
         } else {
-            // 나가는 멤버가 방장인 경우 다른 멤버 중 첫 번째 멤버가 방장 설정
+            // 나가는 멤버가 방장인 경우 다른 멤버 중 첫 번째 멤버를 방장 설정
             if (body.isHost()) {
                 quizRoom.getUsers().get(0).setHost(true);
                 messageTemplate.convertAndSend("/sub/quizroom/detail/" + roomId, quizRoom);
@@ -174,29 +191,37 @@ public class QuizRoomController {
             }
         }
 
+        quizroomService.save(quizRoom);
         List<QuizRoom> roomList = quizroomService.findAll();
-        scheduler.schedule(() -> messageTemplate.convertAndSend("/sub/quizroom/roomList", roomList), 1000, TimeUnit.MILLISECONDS);
+        scheduler.schedule(() -> messageTemplate.convertAndSend("/sub/quizroom/roomList", roomList), 1, TimeUnit.SECONDS);
     }
 
 
     @MessageMapping("/quizroom/ready/{roomId}")
     public void ready(@DestinationVariable Long roomId, @Payload Map<String, Object> payload) {
 
-        QuizRoom quizRoom = quizroomService.findById(roomId).orElseThrow();
+        Optional<QuizRoom> optionalQuizRoom = quizroomService.findById(roomId);
+        QuizRoom quizRoom = optionalQuizRoom.orElseThrow();
+
+        // userpk , 레디 받기
         Long id = ((Number) payload.get("userPk")).longValue();
         String action = (String) payload.get("action");
+
         if (action.equals("ready")) {
+            // 레디 처리
             quizRoom.memberReady(id, action);
             quizRoom.setReadyCnt(quizRoom.getReadyCnt() + 1);
             quizroomService.save(quizRoom);
             messageTemplate.convertAndSend("/sub/quizroom/detail/" + roomId, quizRoom);
         } else if (action.equals("unready")) {
+            // 언레디 처리
             quizRoom.memberReady(id, action);
             quizRoom.setReadyCnt(quizRoom.getReadyCnt() - 1);
             quizroomService.save(quizRoom);
             messageTemplate.convertAndSend("/sub/quizroom/detail/" + roomId, quizRoom);
         }
-
+        List<QuizRoom> roomList = quizroomService.findAll();
+        scheduler.schedule(() -> messageTemplate.convertAndSend("/sub/quizroom/roomList", roomList), 1, TimeUnit.SECONDS);
     }
 
 

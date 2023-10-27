@@ -8,8 +8,4 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface QuizRoomRepository extends MongoRepository<QuizRoom, Long> {
-//    QuizRoom save(QuizRoom quizroom);
-//    void delete(QuizRoom quizroom);
-//    Optional<QuizRoom> findById(Long Id);
-//    List<QuizRoom> findAll();
 }

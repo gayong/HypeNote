@@ -78,6 +78,21 @@ public class QuizService {
         return quiz;
     }
 
+    @Transactional
+    public Quiz processAnswer(String roomId, String userId, List<String> answers) {
+        Optional<Quiz> optionalQuiz = quizRepository.findByRoomId(Integer.parseInt(roomId));
+        if (optionalQuiz.isPresent()) {
+            Quiz quiz = optionalQuiz.get();
+            Map<String, List<String>> userAnswers = quiz.getUserAnswers();
+            userAnswers.put(userId, answers);
+            quiz.setUserAnswers(userAnswers);
+            quizRepository.save(quiz);
+
+            return quiz;
+        } else {
+            throw new NoSuchElementException("Quiz not found for roomId: " + roomId);
+        }
+    }
 
 
 

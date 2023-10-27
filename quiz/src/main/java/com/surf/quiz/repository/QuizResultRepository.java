@@ -10,4 +10,6 @@ import java.util.List;
 public interface QuizResultRepository extends MongoRepository<QuizResult, String> {
     List<QuizResult> findByRoomId(String roomId);
     List<QuizResult> findByUserPk(Long userPk);
+    long countByRoomId(String roomId);
+
 }
