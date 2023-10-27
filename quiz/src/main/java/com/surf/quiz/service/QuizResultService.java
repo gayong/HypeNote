@@ -7,7 +7,6 @@ import com.surf.quiz.entity.Quiz;
 import com.surf.quiz.entity.QuizResult;
 import com.surf.quiz.repository.QuizRepository;
 import com.surf.quiz.repository.QuizResultRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +23,7 @@ public class QuizResultService {
     private final SimpMessagingTemplate messageTemplate;
     private final QuizResultRepository quizResultRepository;
 
-    @Autowired
+
     public QuizResultService(QuizRepository quizRepository, SimpMessagingTemplate messageTemplate, QuizResultRepository quizResultRepository) {
         this.quizRepository = quizRepository;
         this.messageTemplate = messageTemplate;
@@ -75,6 +74,7 @@ public class QuizResultService {
             quizResult.setExamStart(quiz.getCreatedDate());
             quizResultRepository.save(quizResult);
 
+            // 각 유저의 답안이 저장 > 결과 전송
             if (quizResultRepository.countByRoomId(roomId) == userAnswersSize) {
                 List<QuizResult> results = quizResultRepository.findByRoomId(roomId);
                 messageTemplate.convertAndSend("/sub/quiz/" + roomId, results);
