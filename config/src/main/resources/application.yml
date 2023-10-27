@@ -2,9 +2,9 @@ server:
   port: 8888
 
 spring:
+  application:
+    name: server-config
   cloud:
-    application:
-      name: server-config
     config:
       server:
         git:
