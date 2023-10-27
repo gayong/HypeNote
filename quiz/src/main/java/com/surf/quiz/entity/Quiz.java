@@ -36,4 +36,9 @@ public class Quiz {
     Map<String, List<String>> userAnswers = new HashMap<>();
 
     private boolean complete;
+
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 }

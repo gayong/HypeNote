@@ -1,4 +1,4 @@
-package com.surf.quiz.service;
+package com.surf.quiz.service.autoIncrement;
 
 
 import com.surf.quiz.entity.DatabaseSequence;

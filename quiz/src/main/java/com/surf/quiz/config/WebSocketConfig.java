@@ -13,7 +13,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/stomp/chat")  // 서버의 웹소켓 엔드 포인트 등록
+        registry.addEndpoint("/stomp")  // 서버의 웹소켓 엔드 포인트 등록
                 .setAllowedOriginPatterns("*"); // 모든 오리진 허용
 //                .withSockJS(); // 커넥션을 맺는 경로 설정.
 //                .setAllowedOrigins("https://k9e101.p.ssafy.io", "http://k9e101.p.ssafy.io");
@@ -25,7 +25,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         // 메시지를 가공하고 처리할 필요가 있을 때
         config.setApplicationDestinationPrefixes("/pub"); // 발행자가 "/pub"의 경로로 메시지를 주면 가공을 해서 구독자들에게 전달
         config.enableSimpleBroker("/sub"); // 구독자는 "/sub"의 경로로 구독하여 메세지를 받음
-
     }
 
 

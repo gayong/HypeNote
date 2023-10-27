@@ -5,6 +5,7 @@ import com.surf.quiz.entity.QuizResult;
 import com.surf.quiz.repository.QuizRepository;
 import com.surf.quiz.repository.QuizResultRepository;
 import com.surf.quiz.service.QuizResultService;
+import com.surf.quiz.service.QuizRoomService;
 import com.surf.quiz.service.QuizService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -39,6 +40,7 @@ public class QuizController {
     private final QuizResultRepository quizResultRepository;
     private final QuizService quizService;
     private final QuizResultService quizResultService;
+    private final QuizRoomService quizRoomService;
 
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
@@ -52,9 +54,7 @@ public class QuizController {
 
     @MessageMapping("/quiz/{roomId}")
     public void StartQuiz(@DestinationVariable int roomId) {
-        // 퀴즈 생성
-        Quiz quiz = quizService.createQuiz(roomId);
-        quizRepository.save(quiz);
+        Quiz quiz = quizRepository.findByRoomId(roomId).orElseThrow(() -> new IllegalArgumentException("Invalid roomId: " + roomId));
 
         messageTemplate.convertAndSend("/sub/quiz/" + roomId, quiz);
 
