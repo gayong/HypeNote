@@ -3,6 +3,7 @@ server:
 
 spring:
   cloud:
+    name: server-config
     config:
       server:
         git:
