@@ -1,15 +1,11 @@
 "use client";
 
-import Connects from "@/components/socket/Connects";
 import Link from "next/link";
 import { useEffect } from "react";
 
 export default function QuizMain() {
-  console.log("퀴즈");
-
   return (
     <div>
-      <Connects />
       {/* <h1 className="text-3xl font-bold">여긴 퀴즈페이지</h1> */}
       <div className="mx-auto max-w-2xl text-center">
         <h2 className="text-primary text-base font-['preBd'] ">Quiz</h2>
