@@ -2,8 +2,9 @@ import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
 import Navbar from '@/components/Navbar';
+import SWRConfigContext from '@/context/SWRConfigContext';
 
-const inter = Inter({ subsets: ['latin'] });
+// const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: {
@@ -18,12 +19,19 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body>
+    <html
+      lang="en"
+      // className="dark"
+    >
+      <body className="dark:bg-dark_background dark:text-font_primary">
         <header>
           <Navbar />
         </header>
-        <div className="pl-[19rem]">{children}</div>
+        {/* <main>
+          <SWRConfigContext> */}
+        <div className="pl-[19rem] ">{children}</div>
+        {/* </SWRConfigContext>
+        </main> */}
       </body>
     </html>
   );
