@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import Providers from "./provider";
+// import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
-import SWRConfigContext from "@/context/SWRConfigContext";
 
 // const inter = Inter({ subsets: ["latin"] });
 
@@ -28,14 +28,16 @@ export default function RootLayout({
       // className="dark"
     >
       <body className="dark:bg-dark_background dark:text-font_primary">
-        <header>
-          <Navbar />
-        </header>
-        {/* <main>
+        <Providers>
+          <header>
+            <Navbar />
+          </header>
+          {/* <main>
           <SWRConfigContext> */}
-        <div className="pl-[19rem] ">{children}</div>
-        {/* </SWRConfigContext>
+          <div className="pl-[19rem] ">{children}</div>
+          {/* </SWRConfigContext>
         </main> */}
+        </Providers>
       </body>
     </html>
   );

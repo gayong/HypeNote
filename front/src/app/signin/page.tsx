@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function SigninPage() {
   return (
-    <section className="flex pr-[19rem] align-center h-[100vh]">
+    <section className="flex md:pr-[10rem] lg:pr-[19rem] align-center h-[100vh]">
       <Signin />
     </section>
   );
