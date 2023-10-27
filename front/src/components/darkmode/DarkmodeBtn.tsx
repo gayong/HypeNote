@@ -1,32 +1,26 @@
 "use client";
 
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function DarkModeBtn() {
-  const { setTheme } = useTheme();
-  const [currentTheme, setCurrentTheme] = useState(false);
-  // 나중에 사용자 정보 받아와서 처리하기
-  // true => light
-  // false => dark
+  const { theme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setTheme(currentTheme ? "light" : "dark");
-  }, [currentTheme]);
+    setMounted(true);
+  }, []);
 
-  const changeTheme = () => {
-    setCurrentTheme(!currentTheme);
-  };
+  if (!mounted) {
+    return null;
+  }
 
   return (
-    <div>
-      <button
-        onClick={() => {
-          changeTheme();
-        }}
-      >
-        {currentTheme ? <div>다크 모드 버튼</div> : <div>라이트 모드 버튼</div>}
-      </button>
-    </div>
+    <button
+      className={`w-fit absolute right-5 top-2 p-2 rounded-md hover:scale-110 active:scale-100 duration-200 bg-slate-200 dark:bg-[#212933]`}
+      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+    >
+      {theme === "light" ? "dark" : "light"}
+    </button>
   );
 }

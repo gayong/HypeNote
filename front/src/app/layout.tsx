@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Providers from "./provider";
+import Providers from "./providers";
 // import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
@@ -23,20 +23,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html
-      lang="en"
-      // className="dark"
-    >
+    <html lang="en">
       <body className="dark:bg-dark_background dark:text-font_primary">
         <Providers>
           <header>
             <Navbar />
           </header>
-          {/* <main>
-          <SWRConfigContext> */}
-          <div className="pl-[19rem] ">{children}</div>
-          {/* </SWRConfigContext>
-        </main> */}
+          <div className="pl-[19rem]">{children}</div>
         </Providers>
       </body>
     </html>
