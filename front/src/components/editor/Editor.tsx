@@ -2,7 +2,7 @@
 
 import { Editor as NovelEditor } from 'novel';
 import { useState, useEffect } from 'react';
-import { Editor as Editor$1 } from '@tiptap/core';
+import { Editor as Editor$1, JSONContent } from '@tiptap/core';
 
 type Props = {
   id: string; // id를 문자열로 지정
@@ -10,16 +10,21 @@ type Props = {
 
 export default function Editor({ id }: Props) {
   // editorPage Id
-  const EditorpageId = id;
-  const [value, setValue] = useState<Editor$1>();
-  useEffect(() => {
-    console.log(value);
-  }, [value]);
+  // const EditorpageId = id;
+  const [value, setValue] = useState<JSONContent | undefined>({});
+  // const [item, setItem] = useState<JSONContent | undefined>({});
+  console.log(id);
+  // useEffect(() => {
+  //   const local = localStorage.getItem('novel__content');
+  //   if (local) {
+  //     setItem(JSON.parse(local));
+  //   }
+  // }, [value]);
 
   return (
     <>
-      {/* <NovelEditor defaultValue={{}} onUpdate={(editor?: Editor$1 | undefined) => setValue(editor)} /> */}
-      <NovelEditor defaultValue={{}} onUpdate={(editor?: Editor$1 | undefined) => console.log(editor)} />
+      <NovelEditor defaultValue={{}} onUpdate={(editor) => setValue(editor?.getJSON())} />
+      {/* <NovelEditor defaultValue={{}} disableLocalStorage={true} value={item}/> */}
     </>
   );
 }
