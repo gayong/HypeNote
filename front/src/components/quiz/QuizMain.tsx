@@ -20,18 +20,22 @@ export default function QuizMain() {
         </p>
       </div>
       <div className="flex justify-between mt-10">
-        <div
-          className="bg-font_primary rounded-3xl mr-32 flex text-center justify-center align-center items-center h-[25rem] w-[20rem] shadow-lg
+        <Link href="/quiz/maker">
+          <div
+            className="bg-font_primary rounded-3xl mr-32 flex text-center justify-center align-center items-center h-[25rem] w-[20rem] shadow-lg
         hover:-translate-y-1 hover:scale-105 duration-300 cursor-pointer"
-        >
-          혼자풀기
-        </div>
-        <div
-          className="bg-font_primary rounded-3xl flex text-center justify-center align-middle items-center h-[25rem] w-[20rem] shadow-lg
+          >
+            혼자풀기
+          </div>
+        </Link>
+        <Link href="/quiz/list">
+          <div
+            className="bg-font_primary rounded-3xl flex text-center justify-center align-middle items-center h-[25rem] w-[20rem] shadow-lg
         hover:-translate-y-1 hover:scale-105 duration-300 cursor-pointer"
-        >
-          같이풀기
-        </div>
+          >
+            같이풀기
+          </div>
+        </Link>
       </div>
     </div>
   );
