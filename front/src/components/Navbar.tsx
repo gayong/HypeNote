@@ -1,15 +1,17 @@
-'use client';
-import LogoImg from '../../public/assets/logo.png';
-import Image from 'next/image';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useState } from 'react';
+"use client";
+
+import LogoImg from "../../public/assets/logo.png";
+import Image from "next/image";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
+import DarkModeBtn from "./darkmode/DarkmodeBtn";
 
 export default function Navbar() {
   const [mode, setMode] = useState(false);
   const pathname = usePathname();
 
-  if (pathname === '/signin' || pathname == '/signup') {
+  if (pathname === "/signin" || pathname == "/signup") {
     return null;
   }
 
@@ -20,16 +22,21 @@ export default function Navbar() {
   return (
     <>
       {/* navbar */}
-
       <div className="sidebar fixed top-0 bottom-0 lg:left-0 p-2 w-[290px] overflow-y-auto text-center bg-primary text-secondary dark:bg-dark_primary">
         <div className="text-secondary text-xl">
           <div className="px-2.5 pt-2.5 pb-1 mt-1 flex items-center justify-between">
             <Link href="/">
-              <Image src={LogoImg} alt="우리로고" className="h-16 w-auto"></Image>
+              <Image
+                src={LogoImg}
+                alt="우리로고"
+                className="h-16 w-auto"
+              ></Image>
             </Link>
-            <button onClick={changeMode}>다크모드</button>
+            <DarkModeBtn />
           </div>
-          <h1 className="text-start text-font_primary text-[17px] ml-3">가영님, 안녕하세요</h1>
+          <h1 className="text-start text-font_primary text-[17px] ml-3">
+            가영님, 안녕하세요
+          </h1>
           {/* <div className="my-2 bg-gray-600 h-[1px]"></div> */}
           <br />
         </div>
@@ -70,7 +77,9 @@ export default function Navbar() {
           <i className="bi bi-chat-left-text-fill"></i>
           <div className="flex justify-between w-full items-center">
             {/* 하나의 책 단위 */}
-            <span className="text-[15px] ml-2 text-white font-bold">MY CS BOOK</span>
+            <span className="text-[15px] ml-2 text-white font-bold">
+              MY CS BOOK
+            </span>
             <span className="text-sm rotate-180" id="arrow">
               <i className="bi bi-chevron-down"></i>
             </span>
@@ -104,7 +113,9 @@ export default function Navbar() {
           <i className="bi bi-chat-left-text-fill"></i>
           <div className="flex justify-between w-full items-center">
             {/* 하나의 책 단위 */}
-            <span className="text-[15px] ml-2 text-white font-bold">1주차 스터디</span>
+            <span className="text-[15px] ml-2 text-white font-bold">
+              1주차 스터디
+            </span>
             <span className="text-sm rotate-180" id="arrow">
               <i className="bi bi-chevron-down"></i>
             </span>
