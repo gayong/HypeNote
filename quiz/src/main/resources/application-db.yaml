@@ -1,0 +1,9 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://admin:y1ApaHzl5lnaKpnX@cluster0.kd0ywun.mongodb.net/study?retryWrites=true&w=majority
+
+#  redis:
+#    host: ec2-43-201-114-96.ap-northeast-2.compute.amazonaws.com
+#    port: 6379
+#    password: 1234
