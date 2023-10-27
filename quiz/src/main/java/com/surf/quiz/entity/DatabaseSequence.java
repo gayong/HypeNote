@@ -13,4 +13,5 @@ public class DatabaseSequence {
     @Id
     private String id;
     private Long seq;
+
 }

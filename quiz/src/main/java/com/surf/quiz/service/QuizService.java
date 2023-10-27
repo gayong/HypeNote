@@ -1,8 +1,9 @@
 package com.surf.quiz.service;
 
 
+import com.surf.quiz.dto.MemberDto;
 import com.surf.quiz.dto.QuestionDto;
-import com.surf.quiz.dto.SearchMemberDto;
+import com.surf.quiz.dto.request.SearchMemberRequestDto;
 import com.surf.quiz.entity.Quiz;
 import com.surf.quiz.repository.QuizRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,11 +82,14 @@ public class QuizService {
     @Transactional
     public Quiz processAnswer(String roomId, String userId, List<String> answers) {
         Optional<Quiz> optionalQuiz = quizRepository.findByRoomId(Integer.parseInt(roomId));
+        // 퀴즈가 있으면
         if (optionalQuiz.isPresent()) {
             Quiz quiz = optionalQuiz.get();
             Map<String, List<String>> userAnswers = quiz.getUserAnswers();
             userAnswers.put(userId, answers);
+            // 답변 설정
             quiz.setUserAnswers(userAnswers);
+            // 퀴즈 저장
             quizRepository.save(quiz);
 
             return quiz;
@@ -96,8 +100,10 @@ public class QuizService {
 
 
 
+    // 답변 보낸 유저들이 퀴즈에 참여한 유저들과 일치
+    // 전원이 제출했는지 확인
     public boolean isQuizFinished(String roomId, Map<String, List<String>> userAnswers) {
-        List<SearchMemberDto.Member> members = quizRoomService.getUsersByRoomId(Long.parseLong(roomId));
+        List<MemberDto> members = quizRoomService.getUsersByRoomId(Long.parseLong(roomId));
         Set<String> userIds = members.stream()
                 .map(member -> Long.toString(member.getUserPk()))
                 .collect(Collectors.toSet());

@@ -1,7 +1,7 @@
 package com.surf.quiz.entity;
 
 
-import com.surf.quiz.dto.SearchMemberDto;
+import com.surf.quiz.dto.MemberDto;
 import com.surf.quiz.dto.UserDto;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -23,11 +23,9 @@ public class QuizRoom {
     @Transient
     public static final String SEQUENCE_NAME = "quizroom_sequence";
 
-
     @Id
     private Long id;
     private String roomName;
-    private String category;
 
     private int roomMax;
     private int roomCnt;
@@ -47,39 +45,38 @@ public class QuizRoom {
     private boolean single;
 
     private List<UserDto> inviteUsers;
-    private List<SearchMemberDto.Member> users = new ArrayList<>();
+    private List<MemberDto> users;
 
 
     public void setId(Long id) {
         this.id = id;
     }
 
-    public void memberIn(SearchMemberDto.Member inMember) {
+    public void memberIn(MemberDto inMember) {
         if (this.users == null) {
             this.users = new ArrayList<>();
         }
         users.add(inMember);
     }
-    public void memberOut(SearchMemberDto.Member outMember) {
+    public void memberOut(MemberDto outMember) {
         users.removeIf(e -> e.getUserPk().equals(outMember.getUserPk()));
     }
 
 
     public void memberReady(Long userId, String action) {
         if (action.equals("ready")) {
-            for (SearchMemberDto.Member member : users) {
+            for (MemberDto member : users) {
                 if (member.getUserPk().equals(userId)) {
                     member.setReady(true);
                 }
             }
         } else if (action.equals("unready")) {
-            for (SearchMemberDto.Member member : users) {
+            for (MemberDto member : users) {
                 if (member.getUserPk().equals(userId)) {
                     member.setReady(false);
                 }
             }
         }
-
     }
 
 }
