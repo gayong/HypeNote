@@ -1,7 +1,5 @@
-package com.surf.quiz.dto;
+package com.surf.quiz.dto.response;
 
-
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ChatDto {
+public class ChatResponseDto {
     String chatTime;
     String userPk;
     String content;

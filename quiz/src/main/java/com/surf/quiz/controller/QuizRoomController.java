@@ -236,7 +236,8 @@ public class QuizRoomController {
     @MessageMapping("/quizroom/{roomId}")
     public void getQuizRoom(@DestinationVariable Long roomId) {
 
-        QuizRoom quizRoom = quizroomService.findById(roomId).orElseThrow();
+        Optional<QuizRoom> optionalQuizRoom = quizroomService.findById(roomId);
+        QuizRoom quizRoom = optionalQuizRoom.orElseThrow();
 
         messageTemplate.convertAndSend("/sub/quizroom/detail/" + roomId, quizRoom);
     }
