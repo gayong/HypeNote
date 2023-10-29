@@ -12,15 +12,13 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 import java.util.*;
@@ -58,14 +56,13 @@ public class QuizController {
 
         messageTemplate.convertAndSend("/sub/quiz/" + roomId, quiz);
 
-        // 퀴즈 10분 후 종료를 위한 스케줄러
-        scheduler.schedule(this::completeQuizScheduled, 10, TimeUnit.MINUTES);
-
+        int delay = quiz.getQuizCnt() * 30;
+        scheduler.schedule(() -> completeQuizScheduled(quiz), delay, TimeUnit.SECONDS);
     }
 
 
-    @MessageMapping("/answer/{roomId}/{userId}")
-    public void receiveAnswer(@DestinationVariable String roomId, @DestinationVariable String userId, @Payload List<String> answers) {
+    @PostMapping("/answer/{roomId}/{userId}")
+    public ResponseEntity<Void> receiveAnswer(@PathVariable String roomId, @PathVariable String userId, @RequestBody List<String> answers) {
 
         // 답변 전송
         Quiz quiz = quizService.processAnswer(roomId, userId, answers);
@@ -75,6 +72,7 @@ public class QuizController {
             // 퀴즈 완료 처리
             quizResultService.completeQuiz(roomId, quiz);
         }
+        return ResponseEntity.ok().build();
     }
 
 
@@ -85,12 +83,7 @@ public class QuizController {
         return quizResultRepository.findByUserPk(userPk);
     }
 
-
-    // 스케줄링 작업에 의해 10분 후에 실행되는 메서드
-    @Scheduled(fixedDelay = 10 * 60 * 1000) // 10분 (단위: 밀리초)
-    public void completeQuizScheduled() {
-        // 퀴즈를 종료하는 방식
-        // 제출하지 않았으면 답변 다 0으로 처리
-        // 빵점 처리
+    public void completeQuizScheduled(Quiz quiz) {
+        quizResultService.completeQuiz(String.valueOf(quiz.getRoomId()), quiz);
     }
 }

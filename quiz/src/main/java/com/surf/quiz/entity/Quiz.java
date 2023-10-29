@@ -24,18 +24,19 @@ public class Quiz {
     @Transient
     public static final String SEQUENCE_NAME = "quiz_sequence";
 
-
     @Id
     private Long id;
     int roomId;
     @CreatedDate
     private LocalDateTime createdDate;
+    private int quizCnt;
 
     List<QuestionDto> question;
 
     Map<String, List<String>> userAnswers = new HashMap<>();
 
     private boolean complete;
+
 
 
     public void setId(Long id) {

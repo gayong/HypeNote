@@ -129,7 +129,7 @@ public class QuizRoomService {
         QuizRoom createdQuizroom = this.save(createQuizRoom);
 
         // 퀴즈 생성
-        Quiz quiz = this.createQuiz(createdQuizroom.getId().intValue());
+        Quiz quiz = this.createQuiz(createdQuizroom);
         quizRepository.save(quiz);
 
         // 스레드 스케줄러
@@ -239,8 +239,8 @@ public class QuizRoomService {
 
 
 
-    public Quiz createQuiz(int roomId) {
-        Optional<Quiz> optionalQuiz = quizRepository.findByRoomId(roomId);
+    public Quiz createQuiz(QuizRoom createdQuizroom) {
+        Optional<Quiz> optionalQuiz = quizRepository.findByRoomId(createdQuizroom.getId().intValue());
         if(optionalQuiz.isPresent()) {
             return null;
 //            throw new AlreadyExistsException("Quiz already exists for room: " + roomId);
@@ -248,8 +248,9 @@ public class QuizRoomService {
         // 퀴즈 생성
         Quiz quiz = new Quiz();
 
-        quiz.setRoomId(roomId);
+        quiz.setRoomId(createdQuizroom.getId().intValue());
         quiz.setCreatedDate(LocalDateTime.now());
+        quiz.setQuizCnt(createdQuizroom.getQuizCnt());
         // 문제 생성
         QuestionDto question1 = new QuestionDto();
 
