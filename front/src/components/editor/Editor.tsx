@@ -58,7 +58,6 @@ export default function Editor({ id }: Props) {
         defaultValue={data}
         onUpdate={(editor) => setValue(editor?.getJSON())}
         className={styles["editor-container"]}
-        // extensions={[extensions]}
         disableLocalStorage={true}
       />
     </>
