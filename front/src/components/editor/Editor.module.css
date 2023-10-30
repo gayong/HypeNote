@@ -1,0 +1,26 @@
+/* Editor 컴포넌트 스타일링 */
+
+.editor-container {
+  position: relative;
+  width: 100%;
+  margin-bottom: calc(20vh);
+  border-radius: 8px;
+}
+
+.editor-container p {
+  margin: 0;
+}
+
+.editor-container h1,
+.editor-container h2,
+.editor-container h3,
+.editor-container h4,
+.editor-container h5,
+.editor-container h6 {
+  font-family: 'PreRg'; /* 모든 제목 태그의 폰트 설정 */
+}
+
+.editor-container ul,
+.editor-container ol {
+  font-family: 'PreRg'; /* 모든 목록 태그의 폰트 설정 */
+}
