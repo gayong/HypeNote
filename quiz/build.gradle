@@ -21,7 +21,19 @@ repositories {
 	mavenCentral()
 }
 
+// For MSA -인식문의
+// ext {
+// 	set('springCloudVersion', "2022.0.4")
+// }
+
 dependencies {
+
+	// For MSA -인식문의
+	// implementation 'org.springframework.cloud:spring-cloud-starter'
+	// implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+	// implementation 'org.springframework.cloud:spring-cloud-starter-config'
+
+	// 잡다
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	annotationProcessor 'org.projectlombok:lombok'
@@ -43,6 +55,13 @@ dependencies {
 
 
 }
+
+// For MSA -인식문의
+// dependencyManagement {
+// 	imports {
+// 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+// 	}
+// }
 
 tasks.named('test') {
 	useJUnitPlatform()
