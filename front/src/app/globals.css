@@ -8,28 +8,31 @@ body {
   height: 100vh;
   overflow-x: hidden;
   background: #faf5ef;
-  font-family: 'preRg';
+  font-family: "preRg";
   color: #424242;
-  cursor: url('../../public/assets/cursor.png'), auto;
+  cursor: url("../../public/assets/cursor.png"), auto;
 }
 
 @font-face {
-  font-family: 'PreLt';
-  src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Light.woff') format('woff');
+  font-family: "PreLt";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Light.woff")
+    format("woff");
   font-weight: 100;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'PreRg';
-  src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+  font-family: "PreRg";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff")
+    format("woff");
   font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'PreBd';
-  src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Bold.woff') format('woff');
+  font-family: "PreBd";
+  src: url("https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Bold.woff")
+    format("woff");
   font-weight: 700;
   font-style: normal;
 }
