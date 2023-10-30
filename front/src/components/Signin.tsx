@@ -1,20 +1,20 @@
-'use client';
-import { FcGoogle } from 'react-icons/fc';
-import Link from 'next/link';
-import Image from 'next/image';
+"use client";
+import { FcGoogle } from "react-icons/fc";
+import Link from "next/link";
+import Image from "next/image";
 
-import Button from './ui/Button';
-import Input from './ui/Input';
-import Label from './ui/Label';
+import Button from "./ui/Button";
+import Input from "./ui/Input";
+import Label from "./ui/Label";
 
-import logoImg from '../../public/assets/logo_blue.png';
-import darkLogoImg from '../../public/assets/logo.png';
-import krLogoImg from '../../public/assets/krlogo_blue.png';
-import darkKrLogoImg from '../../public/assets/krlogo.png';
+import logoImg from "../../public/assets/logo_blue.png";
+import darkLogoImg from "../../public/assets/logo.png";
+import krLogoImg from "../../public/assets/krlogo_blue.png";
+import darkKrLogoImg from "../../public/assets/krlogo.png";
 
 export default function Signin() {
   const handleSignin = () => {
-    console.log('로그인하마');
+    console.log("로그인하마");
   };
   return (
     <>
@@ -28,7 +28,7 @@ export default function Signin() {
             priority
           />
           <h2 className="mt-3 text-center text-2xl leading-9 tracking-tight text-gray-700">
-            로그인 후{' '}
+            로그인 후{" "}
             <Image className="inline mb-2 h-[1.6rem] w-auto dark:hidden" priority src={krLogoImg} alt="한글로고" />
             <Image
               className="mb-2 h-[1.6rem] w-auto dark:inline-block hidden"
@@ -59,7 +59,7 @@ export default function Signin() {
             </div>
 
             <div>
-              <Button text="로그인" onClick={handleSignin}></Button>
+              <Button text="로그인" onClick={handleSignin} wFull={true}></Button>
             </div>
           </form>
 
@@ -72,10 +72,15 @@ export default function Signin() {
             </div>
           </div>
 
-          <Button text="구글로 로그인" iconImg={<FcGoogle className="text-xl mt-0.5 mr-1" />} onClick={handleSignin} />
+          <Button
+            text="구글로 로그인"
+            iconImg={<FcGoogle className="text-xl mt-0.5 mr-1" />}
+            onClick={handleSignin}
+            wFull={true}
+          />
 
           <p className="mt-10 text-center text-sm text-gray-500">
-            아직 회원이 아니신가요?{' '}
+            아직 회원이 아니신가요?{" "}
             <Link href="/signup" className="font-semibold leading-6 text-hover_primary hover:text-font_secondary">
               회원가입
             </Link>

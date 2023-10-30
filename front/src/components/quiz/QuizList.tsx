@@ -1,17 +1,30 @@
+"use client";
+
+import useSubscribe from "@/hooks/useSubscribe";
 import Link from "next/link";
 
 export default function QuizList() {
+  const message = useSubscribe("/sub/quizroom/roomList");
+  console.log("이만큼의 룸이 만들어졌어요.", message);
+
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-5 ">
-        퀴즈 리스트를 보여주는 페이지
-      </h1>
-
-      <Link href="/quiz/maker">
-        <button className="bg-primary flex mx-auto hover:bg-gray-300 text-secondary py-2 px-4 rounded">
-          방 만들기
-        </button>
-      </Link>
+      <div className="mx-10 pt-15">
+        <div className="grid gap-6 mb-8 md:grid-cols-2">
+          {Array.from({ length: 10 }).map((_, id) => (
+            <div key={id}>
+              <Link href={`/quiz/room/${id}`}>
+                <div className="bg-primary min-w-0 p-4 text-font_primary rounded-lg shadow-xs dark:bg-dark_primary">
+                  <h4 className="mb-4 font-semibold text-gray-600 dark:text-gray-300">방이름</h4>
+                  <p className="text-gray-600 dark:text-gray-400">
+                    방정보 방정보 방정보 방정보 방정보 방정보 방정보 방정보 방정보 방정보 방정보 방정보 방정보 방정보
+                  </p>
+                </div>
+              </Link>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
