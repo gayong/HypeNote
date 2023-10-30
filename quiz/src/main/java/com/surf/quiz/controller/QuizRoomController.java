@@ -45,21 +45,21 @@ public class QuizRoomController {
     }
 
 
-    @PostMapping("/api/quizroom")
+    @PostMapping("/api/quiz/quizroom")
     @Operation(summary = "멤버 탐색")
     public SearchMemberResponseDto searchMember(@RequestBody SearchMemberRequestDto SearchMemberRequestDto) {
         return quizRoomService.createSearchMemberResponseDto(SearchMemberRequestDto);
     }
 
 
-    @PostMapping("/api/quizroom/invite")
+    @PostMapping("/api/quiz/quizroom/invite")
     @Operation(summary = "방 생성")
     public QuizRoom createQuizRoom(@RequestBody CreateRoomRequestDto createRoomRequestDto) {
         return quizRoomService.createAndSaveQuizRoom(createRoomRequestDto);
     }
 
 
-    @GetMapping("/api/quizroom")
+    @GetMapping("/api/quiz/quizroom")
     @Operation(summary = "전체 방 탐색")
     public List<QuizRoom> findQuizRooms() {
         return quizRoomService.findAll();
