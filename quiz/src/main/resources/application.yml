@@ -15,8 +15,24 @@
 #    name: server-quiz
 #  data:
 #    mongodb:
+#      uri: mongodb://lesser:!esser101Panda@www.hype-note.com:27017/quiz?authSource=admin
+#      port: 27017
+#      database: quiz
+#      username: lesser
+#      password: \!esser101Panda
+
+
+#  data:
+#    mongodb:
+#      uri: mongodb+srv://cluster0.kd0ywun.mongodb.net
+#      port: 27017
+#      database: study
+#      username: admin
+#      password: y1ApaHzl5lnaKpnX
+#  data:
+#    mongodb:
 #      uri: mongodb+srv://admin:y1ApaHzl5lnaKpnX@cluster0.kd0ywun.mongodb.net/study?retryWrites=true&w=majority
-#
+
 #
 ##  data:
 ##    mongodb:
@@ -26,5 +42,5 @@
 ##      username: lesser
 ##      password: \!esser101Panda
 #
-##spring.mvc.static-path-pattern: /static/**
-#springdoc.swagger-ui.path: /swagger-ui.html
+
+springdoc.swagger-ui.path: /swagger-ui.html
