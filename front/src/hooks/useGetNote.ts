@@ -1,7 +1,7 @@
-import { getNote } from "../service/editor";
+// import { getNote } from "../api/service/editor";
 
 // 내 단일 노트 가져오기
-export default async function Note(editorId: string) {
-  const data = await getNote(editorId);
-  return data.data;
-}
+// export default async function Note(editorId: string) {
+// const data = await getNote(editorId);
+// return data.data;
+// }
