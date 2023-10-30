@@ -2,24 +2,25 @@ package com.surf.quiz.controller;
 
 import com.surf.quiz.entity.Quiz;
 import com.surf.quiz.entity.QuizResult;
+import com.surf.quiz.entity.QuizRoom;
 import com.surf.quiz.repository.QuizRepository;
 import com.surf.quiz.repository.QuizResultRepository;
+import com.surf.quiz.repository.QuizRoomRepository;
 import com.surf.quiz.service.QuizResultService;
+import com.surf.quiz.service.QuizRoomService;
 import com.surf.quiz.service.QuizService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 import java.util.*;
@@ -39,6 +40,7 @@ public class QuizController {
     private final QuizResultRepository quizResultRepository;
     private final QuizService quizService;
     private final QuizResultService quizResultService;
+    private final QuizRoomRepository quizRoomRepository;
 
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
@@ -52,20 +54,21 @@ public class QuizController {
 
     @MessageMapping("/quiz/{roomId}")
     public void StartQuiz(@DestinationVariable int roomId) {
-        // 퀴즈 생성
-        Quiz quiz = quizService.createQuiz(roomId);
+        Quiz quiz = quizRepository.findByRoomId(roomId).orElseThrow(() -> new IllegalArgumentException("Invalid roomId: " + roomId));
+        QuizRoom quizroom = quizRoomRepository.findById((long) roomId).orElseThrow(() -> new IllegalArgumentException("Invalid roomId: " + roomId));;
+        quiz.setUserCnt(quizroom.getUsers().toArray().length);
         quizRepository.save(quiz);
 
         messageTemplate.convertAndSend("/sub/quiz/" + roomId, quiz);
 
-        // 퀴즈 10분 후 종료를 위한 스케줄러
-        scheduler.schedule(this::completeQuizScheduled, 10, TimeUnit.MINUTES);
-
+        int delay = quiz.getQuizCnt() * 30;
+        scheduler.schedule(() -> completeQuizScheduled(quiz), delay, TimeUnit.SECONDS);
     }
 
 
-    @MessageMapping("/answer/{roomId}/{userId}")
-    public void receiveAnswer(@DestinationVariable String roomId, @DestinationVariable String userId, @Payload List<String> answers) {
+    @PostMapping("/api/quiz/{roomId}/{userId}")
+    @Operation(summary = "정답 제출하기")
+    public ResponseEntity<Void> receiveAnswer(@PathVariable String roomId, @PathVariable String userId, @RequestBody Map<Integer, String> answers) {
 
         // 답변 전송
         Quiz quiz = quizService.processAnswer(roomId, userId, answers);
@@ -73,24 +76,21 @@ public class QuizController {
         // 답변을 보낸 유저들이 전부 일치하는지 확인
         if (quizService.isQuizFinished(roomId, quiz.getUserAnswers())) {
             // 퀴즈 완료 처리
-            quizResultService.completeQuiz(roomId, quiz);
+            quizResultService.completeQuiz(roomId);
         }
+        return ResponseEntity.ok().build();
     }
 
 
     // 나의 퀴즈 기록 보기
-    @GetMapping("/quiz/history/{userPk}")
+    @GetMapping("/api/quiz/{userPk}")
     @Operation(summary = "나의 퀴즈 기록")
     public List<QuizResult> getMyQuizHistory(@PathVariable Long userPk) {
         return quizResultRepository.findByUserPk(userPk);
     }
 
-
-    // 스케줄링 작업에 의해 10분 후에 실행되는 메서드
-    @Scheduled(fixedDelay = 10 * 60 * 1000) // 10분 (단위: 밀리초)
-    public void completeQuizScheduled() {
-        // 퀴즈를 종료하는 방식
-        // 제출하지 않았으면 답변 다 0으로 처리
-        // 빵점 처리
+    public void completeQuizScheduled(Quiz quiz) {
+        System.out.println(" = " + "스케줄러 작동");
+        quizResultService.completeQuiz(String.valueOf(quiz.getRoomId()));
     }
 }
