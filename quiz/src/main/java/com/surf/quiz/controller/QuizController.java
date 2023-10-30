@@ -68,7 +68,7 @@ public class QuizController {
 
     @PostMapping("/api/quiz/{roomId}/{userId}")
     @Operation(summary = "정답 제출하기")
-    public ResponseEntity<Void> receiveAnswer(@PathVariable String roomId, @PathVariable String userId, @RequestBody Map<Integer, String> answers) {
+    public ResponseEntity<Void> receiveAnswer(@PathVariable String roomId, @PathVariable String userId, @RequestBody Map<String, Map<String, String>> answers) {
 
         // 답변 전송
         Quiz quiz = quizService.processAnswer(roomId, userId, answers);
