@@ -1,10 +1,5 @@
-<<<<<<< HEAD
 import type { Metadata } from 'next';
-import Providers from './provider';
-=======
-import type { Metadata } from "next";
-import Providers from "./providers";
->>>>>>> 1812c1c213dbc245f4b7700ac2ce6c0e662cfa39
+import Providers from './providers';
 // import { Inter } from "next/font/google";
 import './globals.css';
 import Navbar from '@/components/Navbar';
