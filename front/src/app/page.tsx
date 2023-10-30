@@ -1,5 +1,10 @@
 import Image from 'next/image';
 import Link from 'next/link';
+// import Brain from '../components/brain/Brain';
+
+import dynamic from 'next/dynamic';
+
+// const DynamicBrain = dynamic(() => import('../components/brain/Brain'), { ssr: false });
 
 export default function Home() {
   return (
@@ -11,6 +16,7 @@ export default function Home() {
       <Link href="/signup">
         <h1 className="underline text-primary">자롱이를 위한 signUp 링크</h1>
       </Link>
+      {/* <DynamicBrain /> */}
     </>
   );
 }
