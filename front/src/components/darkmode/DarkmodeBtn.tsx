@@ -1,26 +1,55 @@
-"use client";
+'use client';
 
-import { useTheme } from "next-themes";
-import { useState, useEffect } from "react";
+import { useTheme } from 'next-themes';
+import { useEffect, useState } from 'react';
+import { BiSolidSun } from 'react-icons/bi';
+import { BsFillMoonStarsFill } from 'react-icons/bs';
 
 export default function DarkModeBtn() {
-  const { theme, setTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
+  const [currentTheme, setCurrentTheme] = useState<'light' | 'dark' | null>(null);
+  const { setTheme } = useTheme();
 
   useEffect(() => {
-    setMounted(true);
+    if (typeof window !== 'undefined') {
+      const localTheme = window.localStorage.getItem('theme');
+      setCurrentTheme(localTheme === 'dark' ? 'dark' : 'light');
+    }
   }, []);
 
-  if (!mounted) {
-    return null;
-  }
+  useEffect(() => {
+    if (currentTheme) {
+      setTheme(currentTheme);
+      window.localStorage.setItem('theme', currentTheme);
+    }
+  }, [currentTheme]);
+
+  const changeTheme = () => {
+    setCurrentTheme((current) => (current === 'dark' ? 'light' : 'dark'));
+  };
 
   return (
-    <button
-      className={`w-fit absolute right-5 top-2 p-2 rounded-md hover:scale-110 active:scale-100 duration-200 bg-slate-200 dark:bg-[#212933]`}
-      onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-    >
-      {theme === "light" ? "dark" : "light"}
-    </button>
+    <div>
+      {currentTheme === 'light' ? (
+        <div>
+          <button
+            title="다크모드로 변경"
+            onClick={changeTheme}
+            className="hover:bg-font_primary hover:bg-opacity-30 justify-center items-center flex bg-transparent w-[60px] h-[30px] border-[1.6px] mx-auto hover:bg-gray-300 text-secondary rounded-3xl"
+          >
+            <BiSolidSun className="text-[20px]" />
+          </button>
+        </div>
+      ) : (
+        <div>
+          <button
+            title="라이트모드로 변경"
+            onClick={changeTheme}
+            className="hover:bg-font_primary hover:bg-opacity-30 justify-center items-center flex bg-transparent w-[60px] h-[30px] border-[1.6px] mx-auto hover:bg-gray-300 text-secondary rounded-3xl"
+          >
+            <BsFillMoonStarsFill className="text-[14px]" />
+          </button>
+        </div>
+      )}
+    </div>
   );
 }
