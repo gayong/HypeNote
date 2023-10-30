@@ -1,0 +1,25 @@
+# For MSA -인식 문의
+ spring:
+   application:
+     name: server-quiz
+   config:
+     import: optional:configserver:http://config:8888
+
+
+# For Local -인식 문의
+#server:
+#  port: 8088
+#
+#spring:
+#  application:
+#    name: server-quiz
+#  data:
+#    mongodb:
+#      uri: mongodb://www.hype-note.com
+#      port: 27017
+#      database: quiz
+#      username: lesser
+#      password: \!esser101Panda
+#
+##spring.mvc.static-path-pattern: /static/**
+#springdoc.swagger-ui.path: /swagger-ui.html
