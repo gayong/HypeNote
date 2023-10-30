@@ -6,6 +6,7 @@ build/
 !**/src/main/**/build/
 !**/src/test/**/build/
 
+
 ### STS ###
 .apt_generated
 .classpath
@@ -40,3 +41,7 @@ out/
 
 ### Ignore application-{}.yml ###
 application-db.yml
+
+
+## 그래들
+build.gradle
