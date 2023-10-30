@@ -13,7 +13,7 @@ type Props = {
 };
 
 export default function Editor({ id }: Props) {
-  const [value, setValue] = useState<JSONContent>({});
+  const [value, setValue] = useState<JSONContent | undefined>({});
   useEffect(() => {
     console.log(value);
   }, [value]);
