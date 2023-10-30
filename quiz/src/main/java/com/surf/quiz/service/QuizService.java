@@ -79,13 +79,22 @@ public class QuizService {
 //    }
 
     @Transactional
-    public Quiz processAnswer(String roomId, String userId, Map<Integer, String> answers) {
+    public Quiz processAnswer(String roomId, String userId, Map<String, Map<String, String>> answers) {
         Optional<Quiz> optionalQuiz = quizRepository.findByRoomId(Integer.parseInt(roomId));
         // 퀴즈가 있으면
         if (optionalQuiz.isPresent()) {
             Quiz quiz = optionalQuiz.get();
             Map<String, Map<Integer, String>> userAnswers = quiz.getUserAnswers();
-            userAnswers.put(userId, answers);
+
+            Map<Integer, String> convertedAnswers = new HashMap<>();
+            for (Map.Entry<String, Map<String, String>> entry : answers.entrySet()) {
+                Map<String, String> innerMap = entry.getValue();
+                for (Map.Entry<String, String> innerEntry : innerMap.entrySet()) {
+                    convertedAnswers.put(Integer.parseInt(innerEntry.getKey()), innerEntry.getValue());
+                }
+            }
+
+            userAnswers.put(userId, convertedAnswers);
             // 답변 설정
             quiz.setUserAnswers(userAnswers);
             // 퀴즈 저장

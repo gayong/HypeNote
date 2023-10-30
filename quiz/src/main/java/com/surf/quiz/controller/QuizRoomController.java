@@ -100,7 +100,4 @@ public class QuizRoomController {
 
         messageTemplate.convertAndSend("/sub/quizroom/detail/" + roomId, quizRoom);
     }
-
-
-
 }
