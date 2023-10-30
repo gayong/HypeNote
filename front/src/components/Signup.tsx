@@ -1,18 +1,18 @@
-'use client';
-import Image from 'next/image';
+"use client";
+import Image from "next/image";
 
-import Button from './ui/Button';
-import Input from './ui/Input';
-import Label from './ui/Label';
+import Button from "./ui/Button";
+import Input from "./ui/Input";
+import Label from "./ui/Label";
 
-import logoImg from '../../public/assets/logo_blue.png';
-import darkLogoImg from '../../public/assets/logo.png';
-import krLogoImg from '../../public/assets/krlogo_blue.png';
-import darkKrLogoImg from '../../public/assets/krlogo.png';
+import logoImg from "../../public/assets/logo_blue.png";
+import darkLogoImg from "../../public/assets/logo.png";
+import krLogoImg from "../../public/assets/krlogo_blue.png";
+import darkKrLogoImg from "../../public/assets/krlogo.png";
 
 export default function Signup() {
   const handleSignup = () => {
-    console.log('회원가입하마');
+    console.log("회원가입하마");
   };
 
   return (
@@ -27,7 +27,7 @@ export default function Signup() {
             priority
           />
           <h2 className="mt-3 text-center text-2xl leading-9 tracking-tight text-gray-700">
-            회원가입 후{' '}
+            회원가입 후{" "}
             <Image
               className="inline mb-2 h-[1.6rem] w-auto dark:hidden"
               priority
@@ -78,7 +78,7 @@ export default function Signup() {
             </div>
 
             <div className="pt-5">
-              <Button text="회원가입" onClick={handleSignup}></Button>
+              <Button text="회원가입" onClick={handleSignup} wFull={true}></Button>
             </div>
           </form>
         </div>
