@@ -13,7 +13,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/stomp")  // 서버의 웹소켓 엔드 포인트 등록
+        registry.addEndpoint("/api/stomp")  // 서버의 웹소켓 엔드 포인트 등록
                 .setAllowedOriginPatterns("*"); // 모든 오리진 허용
 //                .withSockJS(); // 커넥션을 맺는 경로 설정
 //                 테스트 환경에선 주석 처리

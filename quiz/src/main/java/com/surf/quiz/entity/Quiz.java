@@ -30,12 +30,14 @@ public class Quiz {
     @CreatedDate
     private LocalDateTime createdDate;
     private int quizCnt;
+    private int userCnt;
 
     List<QuestionDto> question;
 
-    Map<String, List<String>> userAnswers = new HashMap<>();
+    Map<String, Map<Integer, String>> userAnswers = new HashMap<>();
 
     private boolean complete;
+
 
 
 
