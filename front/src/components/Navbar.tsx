@@ -6,6 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import DarkModeBtn from "./darkmode/DarkmodeBtn";
+import Category from "./category/Category";
 
 export default function Navbar() {
   const [mode, setMode] = useState(false);
@@ -26,17 +27,11 @@ export default function Navbar() {
         <div className="text-secondary text-xl">
           <div className="px-2.5 pt-2.5 pb-1 mt-1 flex items-center justify-between">
             <Link href="/">
-              <Image
-                src={LogoImg}
-                alt="우리로고"
-                className="h-16 w-auto"
-              ></Image>
+              <Image src={LogoImg} alt="우리로고" className="h-16 w-auto"></Image>
             </Link>
             <DarkModeBtn />
           </div>
-          <h1 className="text-start text-font_primary text-[17px] ml-3">
-            가영님, 안녕하세요
-          </h1>
+          <h1 className="text-start text-font_primary text-[17px] ml-3">가영님, 안녕하세요</h1>
           {/* <div className="my-2 bg-gray-600 h-[1px]"></div> */}
           <br />
         </div>
@@ -69,35 +64,8 @@ export default function Navbar() {
             내 노트
           </span>
         </div>
-
-        <div
-          className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-hover_primary hover:bg-opacity-50 dark:hover:bg-line_primary dark:hover:bg-opacity-50"
-          // onclick="dropdown()"
-        >
-          <i className="bi bi-chat-left-text-fill"></i>
-          <div className="flex justify-between w-full items-center">
-            {/* 하나의 책 단위 */}
-            <span className="text-[15px] ml-2 text-white font-bold">
-              MY CS BOOK
-            </span>
-            <span className="text-sm rotate-180" id="arrow">
-              <i className="bi bi-chevron-down"></i>
-            </span>
-          </div>
-        </div>
-        <div className="text-left text-[14px] mx-6 text-white" id="submenu">
-          {/* 책 카테고리 */}
-          <h1 className="cursor-pointer p-2 hover:bg-hover_primary hover:bg-opacity-50 dark:hover:bg-line_primary dark:hover:bg-opacity-50 rounded-md">
-            운영체제
-          </h1>
-          <h1 className="cursor-pointer p-2 hover:bg-hover_primary hover:bg-opacity-50 dark:hover:bg-line_primary dark:hover:bg-opacity-50 rounded-md">
-            네트워크
-          </h1>
-          <h1 className="cursor-pointer p-2 hover:bg-hover_primary hover:bg-opacity-50 dark:hover:bg-line_primary dark:hover:bg-opacity-50 rounded-md">
-            자료구조
-          </h1>
-        </div>
-
+        {/* 제일큰 노트 map으로 호출 */}
+        <Category title="MY CS BOOK" key={1} />
         <br />
         <div className="inline-flex items-center justify-center w-full">
           <hr className="w-full h-px my-1 bg-line_primary border-0"></hr>
@@ -105,34 +73,8 @@ export default function Navbar() {
             공유받은 페이지
           </span>
         </div>
-
-        <div
-          className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-hover_primary hover:bg-opacity-50 dark:hover:bg-line_primary dark:hover:bg-opacity-50"
-          // onclick="dropdown()"
-        >
-          <i className="bi bi-chat-left-text-fill"></i>
-          <div className="flex justify-between w-full items-center">
-            {/* 하나의 책 단위 */}
-            <span className="text-[15px] ml-2 text-white font-bold">
-              1주차 스터디
-            </span>
-            <span className="text-sm rotate-180" id="arrow">
-              <i className="bi bi-chevron-down"></i>
-            </span>
-          </div>
-        </div>
-        <div className="text-left text-[14px] mx-6 text-white" id="submenu">
-          {/* 책 카테고리 */}
-          <h1 className="cursor-pointer p-2 hover:bg-hover_primary hover:bg-opacity-50 dark:hover:bg-line_primary dark:hover:bg-opacity-50 rounded-md">
-            운영체제
-          </h1>
-          <h1 className="cursor-pointer p-2 hover:bg-hover_primary hover:bg-opacity-50 dark:hover:bg-line_primary dark:hover:bg-opacity-50 rounded-md">
-            네트워크
-          </h1>
-          <h1 className="cursor-pointer p-2 hover:bg-hover_primary hover:bg-opacity-50 dark:hover:bg-line_primary dark:hover:bg-opacity-50 rounded-md">
-            자료구조
-          </h1>
-        </div>
+        {/* 공유받은 페이지 map으로 호출 */}
+        <Category title="1주차 스터디" key={2} />
       </div>
     </>
   );
