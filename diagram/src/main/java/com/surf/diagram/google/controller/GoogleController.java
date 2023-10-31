@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.io.FileInputStream;
 
 @RestController
-@RequestMapping("/google")
+@RequestMapping("/api/diagram/google")
 @Tag(name = "구글", description = "구글")
 public class GoogleController {
 

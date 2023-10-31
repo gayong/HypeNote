@@ -1,23 +1,22 @@
 package com.surf.diagram.diagram.controller;
 
-import com.surf.diagram.diagram.dto.CreateDiagramDto;
-import com.surf.diagram.diagram.dto.CreateDiagramWithParentDto;
-import com.surf.diagram.diagram.dto.UpdateDiagramDto;
-import com.surf.diagram.diagram.dto.UpdatePositionDto;
+import com.surf.diagram.diagram.common.BaseResponse;
+import com.surf.diagram.diagram.dto.request.CreateDiagramDto;
+import com.surf.diagram.diagram.dto.request.CreateDiagramWithParentDto;
+import com.surf.diagram.diagram.dto.request.UpdateDiagramDto;
+import com.surf.diagram.diagram.dto.request.UpdatePositionDto;
 import com.surf.diagram.diagram.entity.Diagram;
 import com.surf.diagram.diagram.repository.DiagramRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/diagrams")
+@RequestMapping("/api/diagram")
 @Tag(name = "다이어그램", description = "다이어그램")
 public class DiagramController {
 
@@ -27,7 +26,7 @@ public class DiagramController {
 
     @PostMapping
     @Operation(summary = "다이어그램 생성")
-    public ResponseEntity<String> createDiagram(@RequestBody CreateDiagramDto dto) {
+    public BaseResponse<String> createDiagram(@RequestBody CreateDiagramDto dto) {
         // 요청으로부터 필요한 정보를 추출하여 Diagram 객체를 생성합니다.
         Diagram diagram = Diagram.builder()
                 .title(dto.getTitle())
@@ -36,32 +35,32 @@ public class DiagramController {
 
         // MongoDB에 Diagram 객체를 저장합니다.
         diagramRepository.save(diagram);
-        return ResponseEntity.ok("다이어그램 생성 완료");
+        return new BaseResponse<>("다이어그램 생성 완료");
     }
     @GetMapping
     @Operation(summary = "모든 다이어그램 조회")
-    public ResponseEntity<List<Diagram>> getAllDiagrams() {
+    public BaseResponse<List<Diagram>> getAllDiagrams() {
         List<Diagram> diagrams = diagramRepository.findAll();
-        return ResponseEntity.ok(diagrams);
+        return new BaseResponse<>(diagrams);
     }
 
 
     @GetMapping("/{id}")
     @Operation(summary = "단일 다이어그램 조회")
-    public ResponseEntity<Diagram> getDiagramById(@PathVariable("id") Long id) {
+    public BaseResponse<Diagram> getDiagramById(@PathVariable("id") Long id) {
         Optional<Diagram> optionalDiagram = diagramRepository.findById(id);
 
         if (optionalDiagram.isPresent()) {
             Diagram diagram = optionalDiagram.get();
-            return ResponseEntity.ok(diagram);
+            return new BaseResponse<>(diagram);
         } else {
-            return ResponseEntity.notFound().build();
+            return new BaseResponse<>(null);
         }
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "다이어그램 수정")
-    public ResponseEntity<String> updateDiagram(@PathVariable("id") Long id, @RequestBody UpdateDiagramDto dto) {
+    public BaseResponse<String> updateDiagram(@PathVariable("id") Long id, @RequestBody UpdateDiagramDto dto) {
         Optional<Diagram> optionalDiagaram = diagramRepository.findById(id);
 
         if(optionalDiagaram.isPresent()) {
@@ -71,15 +70,15 @@ public class DiagramController {
 
             diagramRepository.save(existingDiagaram);
 
-            return ResponseEntity.ok("다이어그램 수정 완료");
+            return new BaseResponse<>("다이어그램 수정 완료");
         } else {
-            return ResponseEntity.notFound().build();
+            return new BaseResponse<>(null);
         }
     }
 
     @PutMapping("/position/{id}")
     @Operation(summary = "다이어그램 위치 수정")
-    public ResponseEntity<String> updatePosition(@PathVariable("id") Long id, @RequestBody UpdatePositionDto dto) {
+    public BaseResponse<String> updatePosition(@PathVariable("id") Long id, @RequestBody UpdatePositionDto dto) {
         Optional<Diagram> optionalDiagaram = diagramRepository.findById(id);
 
         if(optionalDiagaram.isPresent()) {
@@ -91,22 +90,22 @@ public class DiagramController {
 
             diagramRepository.save(existingDiagaram);
 
-            return ResponseEntity.ok("위치 수정 완료");
+            return new BaseResponse<>("위치 수정 완료");
         } else {
-            return ResponseEntity.notFound().build();
+            return new BaseResponse<>(null);
         }
     }
 
 
     @DeleteMapping("/{id}")
     @Operation(summary = "다이어그램 삭제")
-    public ResponseEntity<String> deleteById(@PathVariable("id") Long id){
+    public BaseResponse<String> deleteById(@PathVariable("id") Long id){
         Optional<Diagram> optionalDiaogram=diagramRepository.findById(id);
         if(optionalDiaogram.isPresent()){
             diagramRepository.deleteById(id);
-            return  ResponseEntity.ok("다이어그램 삭제 완료");
+            return new BaseResponse<>("다이어그램 삭제 완료");
         }else{
-            return ResponseEntity.notFound().build();
+            return new BaseResponse<>(null);
         }
     }
 
@@ -144,7 +143,7 @@ public class DiagramController {
 //    }
     @PostMapping("/parent/{parentid}")
     @Operation(summary = "부모 노드 참조")
-    public ResponseEntity<String> createDiagramWithParent(@PathVariable("parentid") Long parentid, @RequestBody CreateDiagramWithParentDto dto) {
+    public BaseResponse<String> createDiagramWithParent(@PathVariable("parentid") Long parentid, @RequestBody CreateDiagramWithParentDto dto) {
         Optional<Diagram> optionalParent = diagramRepository.findById(parentid);
 
         if (optionalParent.isPresent()) {
@@ -160,9 +159,9 @@ public class DiagramController {
             // MongoDB에 변경된 Diagram 객체(자식)을 저장합니다.
             diagramRepository.save(child);
 
-            return ResponseEntity.ok("부모 노드 참조");
+            return new BaseResponse<>("부모 노드 참조");
         } else {
-            return ResponseEntity.notFound().build();
+            return new BaseResponse<>(null);
         }
     }
 

@@ -1,4 +1,4 @@
-package com.surf.diagram.diagram.dto;
+package com.surf.diagram.diagram.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class CreateDiagramDto {
+public class UpdateDiagramDto {
     private String title;
-    private String content;
 }
