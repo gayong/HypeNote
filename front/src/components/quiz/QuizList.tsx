@@ -1,11 +1,13 @@
 "use client";
+import useConnectSocket from "@/hooks/useConnectSocket";
+// import useSubscribe from "@/hooks/useSubscribe";
 
-import useSubscribe from "@/hooks/useSubscribe";
 import Link from "next/link";
 
 export default function QuizList() {
-  const message = useSubscribe("/sub/quizroom/roomList");
-  console.log("이만큼의 룸이 만들어졌어요.", message);
+  // useConnectSocket();
+  useConnectSocket("/sub/quizroom/roomList");
+  // useConnectSocket("/sub/quizroom/detail/", 1);
 
   return (
     <div>
