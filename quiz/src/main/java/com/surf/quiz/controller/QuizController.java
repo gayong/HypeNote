@@ -84,10 +84,10 @@ public class QuizController {
 
 
     // 나의 퀴즈 기록 보기
-    @GetMapping("/api/quiz/{userPk}")
+    @GetMapping("/api/quiz/{userId}")
     @Operation(summary = "나의 퀴즈 기록")
-    public BaseResponse<List<QuizResult>> getMyQuizHistory(@PathVariable Long userPk) {
-        List<QuizResult> result = quizResultRepository.findByUserPk(userPk);
+    public BaseResponse<List<QuizResult>> getMyQuizHistory(@PathVariable Long userId) {
+        List<QuizResult> result = quizResultRepository.findByUserPk(userId);
         return new BaseResponse<>(result);
     }
 

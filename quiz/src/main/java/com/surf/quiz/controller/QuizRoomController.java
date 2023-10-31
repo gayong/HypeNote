@@ -63,8 +63,9 @@ public class QuizRoomController {
 
     @GetMapping("/api/quiz/quizroom")
     @Operation(summary = "전체 방 탐색")
-    public List<QuizRoom> findQuizRooms() {
-        return quizRoomService.findAll();
+    public BaseResponse<List<QuizRoom>> findQuizRooms() {
+        List<QuizRoom> results = quizRoomService.findAll();
+        return new BaseResponse<>(results);
     }
 
 

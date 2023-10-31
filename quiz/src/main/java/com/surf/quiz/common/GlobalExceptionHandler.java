@@ -26,4 +26,12 @@ public class GlobalExceptionHandler {
         // IllegalArgumentException 발생 시, BAD_REQUEST 상태와 에러 메시지 반환
         return new BaseResponse<>(BaseResponseStatus.REQUEST_ERROR);
     }
+
+    @ExceptionHandler(NullPointerException.class)
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public BaseResponse<String> handleNullPointerException(final NullPointerException e) {
+        // NullPointerException 발생 시, BAD_REQUEST 상태와 에러 메시지 반환
+        return new BaseResponse<>(BaseResponseStatus.REQUEST_ERROR);
+    }
 }
