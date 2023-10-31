@@ -224,6 +224,9 @@ public class QuizRoomService {
 
         if (quizRoom.getUsers().isEmpty()) {
             delete(quizRoom);
+            Optional<Quiz> optionalQuiz = quizRepository.findByRoomId(roomId.intValue());
+            Quiz quiz = optionalQuiz.orElseThrow();
+            quizRepository.delete(quiz);
         } else {
             if (memberDto.isHost()) {
                 quizRoom.getUsers().get(0).setHost(true);
