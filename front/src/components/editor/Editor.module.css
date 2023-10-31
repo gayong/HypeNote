@@ -4,7 +4,6 @@
   position: relative;
   width: 100%;
   margin-bottom: calc(20vh);
-  border-radius: 8px;
 }
 
 .editor-container p {
@@ -17,10 +16,29 @@
 .editor-container h4,
 .editor-container h5,
 .editor-container h6 {
-  font-family: 'PreRg'; /* 모든 제목 태그의 폰트 설정 */
+  font-family: "PreRg"; /* 모든 제목 태그의 폰트 설정 */
+  font-weight: bold;
+  margin-top: 10px; /* 위쪽 마진을 10px로 설정 */
+  margin-bottom: 10px; /* 아래쪽 마진을 10px로 설정 */
 }
 
 .editor-container ul,
 .editor-container ol {
-  font-family: 'PreRg'; /* 모든 목록 태그의 폰트 설정 */
+  font-family: "PreRg"; /* 모든 목록 태그의 폰트 설정 */
+}
+
+.editor-container .ProseMirror-selectednode {
+  outline: none !important;
+  border-radius: 0.2rem;
+  background-color: red !important;
+  transition: background-color 0.2s;
+  box-shadow: none;
+}
+
+.ProseMirror:not(.dragging) .ProseMirror-selectednode {
+  outline: none !important;
+  border-radius: 0.2rem;
+  background-color: var(--novel-highlight-blue);
+  transition: background-color 0.2s;
+  box-shadow: none;
 }

@@ -1,4 +1,4 @@
-import { div } from "three/examples/jsm/nodes/Nodes.js";
+import style from "./Category.module.css";
 
 interface categoryProps {
   title: string;
@@ -34,13 +34,14 @@ export default function Category(props: categoryProps) {
           </span>
         </div>
       </div>
-      <div className="text-left text-[14px] mx-6 text-white" id="submenu">
+      <div className="text-[14px] mx-6 text-white" id="submenu">
         {/* 책 카테고리 */}
         {subjects.map((subject) => (
-          <div key={subject.id}>
-            <h1 className="cursor-pointer p-2 hover:bg-hover_primary hover:bg-opacity-50 dark:hover:bg-line_primary dark:hover:bg-opacity-50 rounded-md">
-              {subject.title}
-            </h1>
+          <div
+            key={subject.id}
+            className="group flex justify-between items-center cursor-pointer p-2 hover:bg-hover_primary hover:bg-opacity-50 dark:hover:bg-line_primary dark:hover:bg-opacity-50 rounded-md">
+            <h1 className="text-left">{subject.title}</h1>
+            <h1 className="p-0 m-0 text-right invisible group-hover:visible">+</h1>
           </div>
         ))}
       </div>
