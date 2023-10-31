@@ -1,4 +1,4 @@
-package com.surf.diagram.diagram.dto;
+package com.surf.diagram.diagram.dto.request;
 
 
 import lombok.Getter;

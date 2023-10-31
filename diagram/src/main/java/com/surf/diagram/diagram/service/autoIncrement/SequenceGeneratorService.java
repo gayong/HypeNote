@@ -1,4 +1,4 @@
-package com.surf.diagram.diagram.service;
+package com.surf.diagram.diagram.service.autoIncrement;
 
 import com.surf.diagram.diagram.entity.DatabaseSequence;
 import lombok.RequiredArgsConstructor;
