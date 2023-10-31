@@ -18,6 +18,8 @@
     "@tiptap/extension-collaboration": "^2.1.12",
     "@types/three": "^0.158.0",
     "axios": "^1.6.0",
+    "d3": "^7.8.5",
+    "d3-array": "^3.2.4",
     "leva": "^0.9.35",
     "next": "13.5.6",
     "next-themes": "^0.2.1",
