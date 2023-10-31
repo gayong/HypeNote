@@ -2,69 +2,174 @@
 
 import React, { useRef, useEffect } from "react";
 import * as THREE from "three";
-import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+import { PDBLoader } from "three/examples/jsm/loaders/PDBLoader.js";
+import { CSS2DRenderer, CSS2DObject } from "three/examples/jsm/renderers/CSS2DRenderer.js";
+import { TrackballControls } from "three/examples/jsm/controls/TrackballControls.js";
+import { GUI } from "three/addons/libs/lil-gui.module.min.js";
 
 const ThreeScene: React.FC = () => {
-  const containerRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    if (typeof window !== "undefined") {
+    if (containerRef.current) {
       const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-      const renderer = new THREE.WebGLRenderer();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-      containerRef.current?.appendChild(renderer.domElement);
-      camera.position.z = 5;
+      scene.background = new THREE.Color(0xfaf5ef);
 
-      const geometry = new THREE.SphereGeometry(2, 32, 16);
-      const material = new THREE.MeshNormalMaterial(); // 조명에 반응하는 재질
-      const sphere = new THREE.Mesh(geometry, material);
-      scene.add(sphere);
+      const camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1, 4000);
+      camera.position.z = 800;
+      scene.add(camera);
 
-      const edges = new THREE.EdgesGeometry(geometry); // 구체의 엣지(테두리) 정보를 계산
-      const lineMaterial = new THREE.LineBasicMaterial({ color: 0xffffff }); // 테두리의 재질 및 색상
-      const lines = new THREE.LineSegments(edges, lineMaterial); // 테두리를 라인으로 표현
-      scene.add(lines);
+      const light1 = new THREE.DirectionalLight(0xffffff, 2.5);
+      light1.position.set(1, 1, 1);
+      scene.add(light1);
 
-      // const light = new THREE.DirectionalLight(0xffffff, 1); // 흰색, 강도 1의 방향광
-      // light.position.set(1, 1, 1); // 광원의 위치 설정
-      // scene.add(light);
+      const light2 = new THREE.DirectionalLight(0xffffff, 1.5);
+      light2.position.set(-1, -1, 1);
+      scene.add(light2);
 
-      // const geometry = new THREE.BoxGeometry();
-      // const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-      // const cube = new THREE.Mesh(geometry, material);
-      // scene.add(cube);
+      const root = new THREE.Group();
+      scene.add(root);
 
-      // Render the scene and camera
-      renderer.render(scene, camera);
+      const renderer = new THREE.WebGLRenderer({ antialias: true });
+      renderer.setPixelRatio(window.devicePixelRatio);
+      renderer.setSize(window.innerWidth - 304, window.innerHeight);
+      containerRef.current.appendChild(renderer.domElement);
 
-      const renderScene = () => {
-        sphere.rotation.x += 0.02; // 기존값의 두 배
-        sphere.rotation.y += 0.02;
+      const labelRenderer = new CSS2DRenderer();
+      labelRenderer.setSize(window.innerWidth, window.innerHeight);
+      labelRenderer.domElement.style.position = "absolute";
+      labelRenderer.domElement.style.top = "0px";
+      labelRenderer.domElement.style.pointerEvents = "none";
+      containerRef.current.appendChild(labelRenderer.domElement);
+
+      const controls = new TrackballControls(camera, renderer.domElement);
+      controls.minDistance = 500;
+      controls.maxDistance = 2000;
+
+      const loader = new PDBLoader();
+      const offset = new THREE.Vector3();
+
+      function loadMolecule() {
+        const url = "/caffeine.pdb";
+
+        while (root.children.length > 0) {
+          const object = root.children[0];
+          object.parent && object.parent.remove(object);
+        }
+
+        loader.load(url, function (pdb) {
+          const geometryAtoms = pdb.geometryAtoms;
+          const geometryBonds = pdb.geometryBonds;
+          const json = pdb.json;
+
+          const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
+          const sphereGeometry = new THREE.IcosahedronGeometry(1, 3);
+
+          geometryAtoms.computeBoundingBox();
+          geometryAtoms.computeBoundingBox();
+          if (geometryAtoms.boundingBox !== null) {
+            geometryAtoms.boundingBox.getCenter(offset).negate();
+          }
+
+          geometryAtoms.translate(offset.x, offset.y, offset.z);
+          geometryBonds.translate(offset.x, offset.y, offset.z);
+
+          let positions = geometryAtoms.getAttribute("position");
+          const colors = geometryAtoms.getAttribute("color");
+
+          const position = new THREE.Vector3();
+          const color = new THREE.Color();
+
+          for (let i = 0; i < positions.count; i++) {
+            position.x = positions.getX(i);
+            position.y = positions.getY(i);
+            position.z = positions.getZ(i);
+
+            color.r = colors.getX(i);
+            color.g = colors.getY(i);
+            color.b = colors.getZ(i);
+
+            const material = new THREE.MeshPhongMaterial({ color: color });
+
+            const object = new THREE.Mesh(sphereGeometry, material);
+            object.position.copy(position);
+            object.position.multiplyScalar(75);
+            object.scale.multiplyScalar(25);
+            root.add(object);
+
+            const atom = json.atoms[i];
+
+            const text = document.createElement("div");
+            text.className = "label";
+            text.style.color = "rgb(" + atom[3][0] + "," + atom[3][1] + "," + atom[3][2] + ")";
+            text.style.fontSize = "20px";
+            // text.style.marginRight = "25px";
+            text.style.textShadow = "-1px 1px 1px rgb(0,0,0)";
+            text.textContent = atom[4];
+
+            const label = new CSS2DObject(text);
+            label.position.copy(object.position);
+            root.add(label);
+          }
+
+          positions = geometryBonds.getAttribute("position");
+
+          const start = new THREE.Vector3();
+          const end = new THREE.Vector3();
+
+          for (let i = 0; i < positions.count; i += 2) {
+            start.x = positions.getX(i);
+            start.y = positions.getY(i);
+            start.z = positions.getZ(i);
+
+            end.x = positions.getX(i + 1);
+            end.y = positions.getY(i + 1);
+            end.z = positions.getZ(i + 1);
+
+            start.multiplyScalar(75);
+            end.multiplyScalar(75);
+
+            const object = new THREE.Mesh(boxGeometry, new THREE.MeshPhongMaterial({ color: 0xffffff }));
+            object.position.copy(start);
+            object.position.lerp(end, 0.5);
+            object.scale.set(5, 5, start.distanceTo(end));
+            object.lookAt(end);
+            root.add(object);
+          }
+
+          render();
+        });
+      }
+
+      function onWindowResize() {
+        camera.aspect = (window.innerWidth - 304) / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth - 304, window.innerHeight);
+        labelRenderer.setSize(window.innerWidth - 304, window.innerHeight);
+        render();
+      }
+
+      function animate() {
+        requestAnimationFrame(animate);
+        controls.update();
+
+        const time = Date.now() * 0.0004;
+
+        root.rotation.x = time;
+        root.rotation.y = time * 0.7;
+
+        render();
+      }
+
+      function render() {
         renderer.render(scene, camera);
-        requestAnimationFrame(renderScene);
-      };
+        labelRenderer.render(scene, camera);
+      }
 
-      // Call the renderScene function to start the animation loop
-      renderScene();
+      loadMolecule();
 
-      const controls = new OrbitControls(camera, renderer.domElement);
-      controls.target = sphere.position;
-
-      // const handleResize = () => {
-      //   const width = window.innerWidth;
-      //   const height = window.innerHeight;
-
-      //   camera.aspect = width / height;
-      //   camera.updateProjectionMatrix();
-
-      //   renderer.setSize(width, height);
-      // };
-
-      // window.addEventListener("resize", handleResize);
-      // return () => {
-      //   window.removeEventListener("resize", handleResize);
-      // };
+      window.addEventListener("resize", onWindowResize);
+      animate();
     }
   }, []);
 
