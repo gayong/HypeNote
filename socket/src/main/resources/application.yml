@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: server-socket
+  config:
+    import: optional:configserver:http://config:8888
