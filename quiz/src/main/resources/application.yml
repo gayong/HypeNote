@@ -43,4 +43,4 @@
 ##      password: \!esser101Panda
 #
 
-springdoc.swagger-ui.path: /swagger-ui.html
+#springdoc.swagger-ui.path: /swagger-ui.html
