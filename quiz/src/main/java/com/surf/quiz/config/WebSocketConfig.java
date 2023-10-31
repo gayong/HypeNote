@@ -3,7 +3,6 @@ package com.surf.quiz.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
@@ -16,10 +15,10 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/api/quiz/stomp/ws")  // 서버의 웹소켓 엔드 포인트 등록
                 .setAllowedOriginPatterns("*") // 모든 오리진 허용
-                .withSockJS(); // 커넥션을 맺는 경로 설정
+                .withSockJS();      // 만약 WebSocket을 사용할 수 없는 브라우저라면 다른 방식을 사용하도록 설정
 //                 테스트 환경에선 주석 처리
-//                .setAllowedOrigins("https://k9e101.p.ssafy.io", "http://k9e101.p.ssafy.io");
-//                만약 WebSocket을 사용할 수 없는 브라우저라면 다른 방식을 사용하도록 설정
+//                .setAllowedOrigins("https://k9e101.p.ssafy.io", "http://k9e101.p.ssafy.io");  // 커넥션을 맺는 경로 설정
+
 //
     }
     @Override

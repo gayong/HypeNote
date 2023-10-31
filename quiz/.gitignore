@@ -39,9 +39,3 @@ out/
 .vscode/
 
 
-### Ignore application-{}.yml ###
-application-db.yml
-
-
-## 그래들
-build.gradle

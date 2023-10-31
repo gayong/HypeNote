@@ -1,6 +1,7 @@
 package com.surf.quiz.controller;
 
 
+import com.surf.quiz.common.BaseResponse;
 import com.surf.quiz.dto.request.CreateRoomRequestDto;
 import com.surf.quiz.dto.MemberDto;
 import com.surf.quiz.dto.request.SearchMemberRequestDto;
@@ -18,7 +19,6 @@ import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -47,22 +47,25 @@ public class QuizRoomController {
 
     @PostMapping("/api/quiz/quizroom")
     @Operation(summary = "멤버 탐색")
-    public SearchMemberResponseDto searchMember(@RequestBody SearchMemberRequestDto SearchMemberRequestDto) {
-        return quizRoomService.createSearchMemberResponseDto(SearchMemberRequestDto);
+    public BaseResponse<SearchMemberResponseDto> searchMember(@RequestBody SearchMemberRequestDto SearchMemberRequestDto) {
+        SearchMemberResponseDto result = quizRoomService.createSearchMemberResponseDto(SearchMemberRequestDto);
+        return new BaseResponse<>(result);
     }
 
 
     @PostMapping("/api/quiz/quizroom/invite")
     @Operation(summary = "방 생성")
-    public QuizRoom createQuizRoom(@RequestBody CreateRoomRequestDto createRoomRequestDto) {
-        return quizRoomService.createAndSaveQuizRoom(createRoomRequestDto);
+    public BaseResponse<QuizRoom> createQuizRoom(@RequestBody CreateRoomRequestDto createRoomRequestDto) {
+        QuizRoom result = quizRoomService.createAndSaveQuizRoom(createRoomRequestDto);
+        return new BaseResponse<>(result);
     }
 
 
     @GetMapping("/api/quiz/quizroom")
     @Operation(summary = "전체 방 탐색")
-    public List<QuizRoom> findQuizRooms() {
-        return quizRoomService.findAll();
+    public BaseResponse<List<QuizRoom>> findQuizRooms() {
+        List<QuizRoom> results = quizRoomService.findAll();
+        return new BaseResponse<>(results);
     }
 
 
