@@ -1,5 +1,6 @@
 package com.surf.quiz.controller;
 
+import com.surf.quiz.common.BaseResponse;
 import com.surf.quiz.entity.Quiz;
 import com.surf.quiz.entity.QuizResult;
 import com.surf.quiz.entity.QuizRoom;
@@ -7,17 +8,17 @@ import com.surf.quiz.repository.QuizRepository;
 import com.surf.quiz.repository.QuizResultRepository;
 import com.surf.quiz.repository.QuizRoomRepository;
 import com.surf.quiz.service.QuizResultService;
-import com.surf.quiz.service.QuizRoomService;
+
 import com.surf.quiz.service.QuizService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.Payload;
+
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.bind.annotation.*;
@@ -55,7 +56,7 @@ public class QuizController {
     @MessageMapping("/quiz/{roomId}")
     public void StartQuiz(@DestinationVariable int roomId) {
         Quiz quiz = quizRepository.findByRoomId(roomId).orElseThrow(() -> new IllegalArgumentException("Invalid roomId: " + roomId));
-        QuizRoom quizroom = quizRoomRepository.findById((long) roomId).orElseThrow(() -> new IllegalArgumentException("Invalid roomId: " + roomId));;
+        QuizRoom quizroom = quizRoomRepository.findById((long) roomId).orElseThrow(() -> new IllegalArgumentException("Invalid roomId: " + roomId));
         quiz.setUserCnt(quizroom.getUsers().toArray().length);
         quizRepository.save(quiz);
 
@@ -68,7 +69,7 @@ public class QuizController {
 
     @PostMapping("/api/quiz/{roomId}/{userId}")
     @Operation(summary = "정답 제출하기")
-    public ResponseEntity<Void> receiveAnswer(@PathVariable String roomId, @PathVariable String userId, @RequestBody Map<String, Map<String, String>> answers) {
+    public BaseResponse<Void> receiveAnswer(@PathVariable String roomId, @PathVariable String userId, @RequestBody Map<String, Map<String, String>> answers) {
 
         // 답변 전송
         Quiz quiz = quizService.processAnswer(roomId, userId, answers);
@@ -78,15 +79,16 @@ public class QuizController {
             // 퀴즈 완료 처리
             quizResultService.completeQuiz(roomId);
         }
-        return ResponseEntity.ok().build();
+        return new BaseResponse<>(null);
     }
 
 
     // 나의 퀴즈 기록 보기
     @GetMapping("/api/quiz/{userPk}")
     @Operation(summary = "나의 퀴즈 기록")
-    public List<QuizResult> getMyQuizHistory(@PathVariable Long userPk) {
-        return quizResultRepository.findByUserPk(userPk);
+    public BaseResponse<List<QuizResult>> getMyQuizHistory(@PathVariable Long userPk) {
+        List<QuizResult> result = quizResultRepository.findByUserPk(userPk);
+        return new BaseResponse<>(result);
     }
 
     public void completeQuizScheduled(Quiz quiz) {
