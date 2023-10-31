@@ -28,7 +28,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/components/brain/Outlines.js",
-    "src/components/brain/Brain.js"
+    "src/components/brain/Brain.js",
+    "src/components/brain/test.js"
   ],
   "exclude": ["node_modules"]
 }

@@ -23,7 +23,7 @@ const ThreeScene: React.FC = () => {
       const sphere = new THREE.Mesh(geometry, material);
       scene.add(sphere);
 
-      const edges = new THREE.EdgesGeometry(geometry); // 구체의 엣지(테두리) 정보를 계산
+      const edges = new THREE.EdgesGeometry(geometry); // 구체의 엣지 정보를 계산
       const lineMaterial = new THREE.LineBasicMaterial({ color: 0xffffff }); // 테두리의 재질 및 색상
       const lines = new THREE.LineSegments(edges, lineMaterial); // 테두리를 라인으로 표현
       scene.add(lines);
@@ -41,7 +41,7 @@ const ThreeScene: React.FC = () => {
       renderer.render(scene, camera);
 
       const renderScene = () => {
-        sphere.rotation.x += 0.02; // 기존값의 두 배
+        sphere.rotation.x += 0.02;
         sphere.rotation.y += 0.02;
         renderer.render(scene, camera);
         requestAnimationFrame(renderScene);
