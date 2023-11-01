@@ -22,6 +22,7 @@ public class Diagram {
 
     @Id
     private Long id;
+    private int userId;
     private String title;
     private String content;
     private String category;
