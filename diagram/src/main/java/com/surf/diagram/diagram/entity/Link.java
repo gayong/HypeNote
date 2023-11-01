@@ -14,7 +14,7 @@ public class Link {
 
     @Id
     private String id;
-    private String source;
-    private String target;
+    private int source;
+    private int target;
     private int userId;
 }

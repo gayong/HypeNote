@@ -105,10 +105,9 @@ public class DiagramController {
         for (Node node : nodes) {
             NodeDto nodeDto = new NodeDto();
             nodeDto.setId(node.getId());
-            nodeDto.setTitle(node.getTitle());
             nodeDto.setEditorId(node.getEditorId());
+            nodeDto.setTitle(node.getTitle());
             nodeDto.setUserId(node.getUserId());
-
             nodeDtos.add(nodeDto);
         }
         response.setNodes(nodeDtos);
