@@ -1,23 +1,23 @@
 # For MSA -인식 문의
- spring:
-   application:
-     name: server-diagram
-   config:
-     import: optional:configserver:http://config:8888
+# spring:
+#   application:
+#     name: server-diagram
+#   config:
+#     import: optional:configserver:http://config:8888
 
 
 ## For Local -인식 문의
-#server:
-#  port: 8087
-#
-#spring:
-#  application:
-#    name: server-diagram
-#  data:
-#    mongodb:
-#      uri: mongodb://lesser:!esser101Panda@www.hype-note.com:27017/quiz?authSource=admin
-#      port: 27017
-#      database: diagram
-#      username: lesser
-#      password: \!esser101Panda
-#springdoc.swagger-ui.path: /swagger-ui.html
+server:
+  port: 8087
+
+spring:
+  application:
+    name: server-diagram
+  data:
+    mongodb:
+      uri: mongodb://lesser:!esser101Panda@www.hype-note.com:27017/diagram?authSource=admin
+      port: 27017
+      database: diagram
+      username: lesser
+      password: \!esser101Panda
+springdoc.swagger-ui.path: /swagger-ui.html
