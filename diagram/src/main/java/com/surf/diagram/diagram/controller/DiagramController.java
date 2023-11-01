@@ -41,12 +41,12 @@ public class DiagramController {
         String message = diagramService.createDiagram(dto);
         return new BaseResponse<>(message);
     }
-    @GetMapping
-    @Operation(summary = "모든 다이어그램 조회")
-    public BaseResponse<List<Diagram>> getAllDiagrams() {
-        List<Diagram> diagrams = diagramService.getAllDiagrams();
-        return new BaseResponse<>(diagrams);
-    }
+//    @GetMapping
+//    @Operation(summary = "모든 다이어그램 조회")
+//    public BaseResponse<List<Diagram>> getAllDiagrams() {
+//        List<Diagram> diagrams = diagramService.getAllDiagrams();
+//        return new BaseResponse<>(diagrams);
+//    }
 
 
     @GetMapping("/{id}")
@@ -93,7 +93,7 @@ public class DiagramController {
         return new BaseResponse<>(diagrams);
     }
 
-    @GetMapping("/node")
+    @GetMapping("")
     @Operation(summary = "내 노드와 링크 조회")
     public BaseResponse<NodeResponseDto> getNodes() {
         NodeResponseDto response = new NodeResponseDto();
