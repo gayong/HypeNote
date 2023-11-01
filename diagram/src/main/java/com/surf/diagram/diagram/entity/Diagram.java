@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -26,18 +27,16 @@ public class Diagram {
     private String title;
     private String content;
     private String category;
+    private Float confidence;
     private String access = "Private";
     private Long x;
     private Long y;
     private Long z;
     private Long parentId;
-    private List<Diagram> children;
+    private List<Long> childId = new ArrayList<>();
 
     public void setId(Long id) {
         this.id = id;
     }
 
-    public void setChildren(List<Diagram> children) {
-        this.children = children;
-    }
 }
