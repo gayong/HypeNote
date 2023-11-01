@@ -1,12 +1,12 @@
 "use client";
-import useConnectSocket from "@/hooks/useConnectSocket";
+// import { useConnectSocket } from "@/hooks/useConnectSocket";
 // import useSubscribe from "@/hooks/useSubscribe";
 
 import Link from "next/link";
 
 export default function QuizList() {
   // useConnectSocket();
-  useConnectSocket("/sub/quizroom/roomList");
+  // useConnectSocket("/sub/quizroom/roomList");
   // useConnectSocket("/sub/quizroom/detail/", 1);
 
   return (
