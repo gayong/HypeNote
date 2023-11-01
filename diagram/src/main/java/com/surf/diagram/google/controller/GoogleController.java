@@ -33,4 +33,11 @@ public class GoogleController {
         diagramService.classifyAndSaveEmptyCategoryNodes();
         return new BaseResponse<>("모든 Diagram들이 성공적으로 분석되고 업데이트되었습니다.");
     }
+
+    @PostMapping("/link")
+    @Operation(summary = "링크 연결")
+    public BaseResponse<String> linkNodesByCategoryAndConfidence() throws Exception {
+        diagramService.linkNodesByCategoryAndConfidence();
+        return new BaseResponse<>("링크 생성 완료");
+    }
 }

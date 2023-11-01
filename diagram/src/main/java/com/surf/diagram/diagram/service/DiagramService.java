@@ -10,12 +10,6 @@ import java.util.List;
 import java.util.Optional;
 
 public interface DiagramService {
-//    String createDiagram(CreateDiagramDto dto);
-//    List<Diagram> getAllDiagrams();
-//    Optional<Diagram> getDiagramById(Long id);
-//    String updateDiagram(Long id, UpdateDiagramDto dto);
-//    String updatePosition(Long id, UpdatePositionDto dto);
-//    String deleteById(Long id);
-//    Diagram createDiagramWithParent(Long parentid, CreateDiagramWithParentDto dto);
-//    List<Diagram> getShareNode(Long shareId);
+    void classifyAndSaveEmptyCategoryNodes() throws Exception;
+    void linkNodesByCategoryAndConfidence();
 }
