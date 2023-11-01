@@ -1,9 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
 // import ThreeScene from "../components/ThreeScene";
-import ThreeScene from "../components/ThreeScene";
+// import ThreeScene from "../components/ThreeScene";
 // import Brain from "../components/brain/Brain";
-
+import ThreeScene from "@/components/brain/test";
 // import dynamic from "next/dynamic";
 
 // const DynamicBrain = dynamic(() => import("../components/brain/Brain"), { ssr: false });

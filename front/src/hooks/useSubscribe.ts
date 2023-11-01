@@ -1,18 +1,12 @@
 // 구독
-import { useState, useRef } from "react";
-import { CompatClient } from "@stomp/stompjs";
+import { useState, useRef, useEffect } from "react";
+import useConnectSocket from "./useConnectSocket";
+import { Stomp, CompatClient } from "@stomp/stompjs";
 
-export default function useSubscribe(topic: string) {
-  const client = useRef<CompatClient | null>(null);
+export default function useSubscribe(topic: string, roomId?: number) {
   const [message, setMessage] = useState("");
 
-  // 지금 내가 소켓에 들어가 있다면
-  // /sub/chat/${roomId} => 채팅
-  if (client.current) {
-    client.current.subscribe(topic, (message) => {
-      setMessage(JSON.parse(message.body));
-    });
-  }
+  useConnectSocket(topic, roomId);
 
   return message;
 }

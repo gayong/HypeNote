@@ -23,7 +23,7 @@ export default function Navbar() {
   return (
     <>
       {/* navbar */}
-      <div className="sidebar fixed top-0 bottom-0 lg:left-0 p-2 w-[290px] overflow-y-auto text-center bg-primary text-secondary dark:bg-dark_primary">
+      <div className="z-50 sidebar fixed top-0 bottom-0 lg:left-0 p-2 w-[290px] overflow-y-auto text-center bg-primary text-secondary dark:bg-dark_primary">
         <div className="text-secondary text-xl">
           <div className="px-2.5 pt-2.5 pb-1 mt-1 flex items-center justify-between">
             <Link href="/">
