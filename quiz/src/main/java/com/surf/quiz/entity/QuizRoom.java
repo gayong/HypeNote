@@ -63,20 +63,34 @@ public class QuizRoom {
     }
 
 
-    public void memberReady(Long userId, String action) {
+    public boolean memberReady(Long userId, String action) {
+        boolean isProcessed = false;
+
         if (action.equals("ready")) {
             for (MemberDto member : users) {
                 if (member.getUserPk().equals(userId)) {
+                    if (member.isReady()) {
+                        break; // 이미 레디인 경우 반복문 종료
+                    }
                     member.setReady(true);
+                    isProcessed = true;
+                    break;
                 }
             }
         } else if (action.equals("unready")) {
             for (MemberDto member : users) {
                 if (member.getUserPk().equals(userId)) {
+                    if (!member.isReady()) {
+                        break; // 이미 언레디인 경우 반복문 종료
+                    }
                     member.setReady(false);
+                    isProcessed = true;
+                    break;
                 }
             }
         }
+
+        return isProcessed;
     }
 
 }

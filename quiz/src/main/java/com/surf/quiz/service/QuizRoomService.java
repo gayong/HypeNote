@@ -157,18 +157,16 @@ public class QuizRoomService {
         // userpk , 레디 받기
         Long id = ((Number) payload.get("userPk")).longValue();
         String action = (String) payload.get("action");
+        boolean isProcessed = quizRoom.memberReady(id, action);
 
-        if (action.equals("ready")) {
-            // 레디 처리
-            quizRoom.memberReady(id, action);
-            quizRoom.setReadyCnt(quizRoom.getReadyCnt() + 1);
-            this.save(quizRoom);
-            messageTemplate.convertAndSend("/sub/quizroom/detail/" + roomId, quizRoom);
-
-        } else if (action.equals("unready")) {
-            // 언레디 처리
-            quizRoom.memberReady(id, action);
-            quizRoom.setReadyCnt(quizRoom.getReadyCnt() - 1);
+        if (isProcessed) {
+            if (action.equals("ready")) {
+                // 레디 처리
+                quizRoom.setReadyCnt(quizRoom.getReadyCnt() + 1);
+            } else if (action.equals("unready")) {
+                // 언레디 처리
+                quizRoom.setReadyCnt(quizRoom.getReadyCnt() - 1);
+            }
             this.save(quizRoom);
             messageTemplate.convertAndSend("/sub/quizroom/detail/" + roomId, quizRoom);
         }
