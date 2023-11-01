@@ -5,7 +5,12 @@ import com.surf.diagram.diagram.dto.request.CreateDiagramDto;
 import com.surf.diagram.diagram.dto.request.CreateDiagramWithParentDto;
 import com.surf.diagram.diagram.dto.request.UpdateDiagramDto;
 import com.surf.diagram.diagram.dto.request.UpdatePositionDto;
+import com.surf.diagram.diagram.dto.response.NodeResponseDto;
 import com.surf.diagram.diagram.entity.Diagram;
+import com.surf.diagram.diagram.entity.Link;
+import com.surf.diagram.diagram.entity.Node;
+import com.surf.diagram.diagram.repository.LinkRepository;
+import com.surf.diagram.diagram.repository.NodeRepository;
 import com.surf.diagram.diagram.service.DiagramService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,9 +24,13 @@ import java.util.List;
 public class DiagramController {
 
     private final DiagramService diagramService;
+    private final NodeRepository nodeRepository;
+    private final LinkRepository linkRepository;
 
-    public DiagramController(DiagramService diagramService) {
+    public DiagramController(DiagramService diagramService, NodeRepository nodeRepository ,LinkRepository linkRepository) {
         this.diagramService = diagramService;
+        this.nodeRepository = nodeRepository;
+        this.linkRepository = linkRepository;
     }
 
     @PostMapping
@@ -74,6 +83,48 @@ public class DiagramController {
         Diagram diagram = diagramService.createDiagramWithParent(parentid, dto);
         return new BaseResponse<>(diagram);
     }
+
+    @PostMapping("/share/{shareId}")
+    @Operation(summary = "공유 노드")
+    public BaseResponse<List<Diagram>> getShareNode(@PathVariable("shareId") Long shareId) {
+        List<Diagram> diagrams = diagramService.getShareNode(shareId);
+        return new BaseResponse<>(diagrams);
+    }
+
+    @GetMapping("/node")
+    @Operation(summary = "내 노드와 링크 조회")
+    public BaseResponse<NodeResponseDto> getNodes() {
+        NodeResponseDto response = new NodeResponseDto();
+        List<Node> nodes = nodeRepository.findByUserId(1);
+        List<Link> links = linkRepository.findByUserId(1);
+
+        response.setNodes(nodes);
+        response.setLinks(links);
+        return new BaseResponse<>(response);
+    }
+
+
+    @PostMapping("/node")
+    @Operation(summary = "노드와 링크 생성")
+    public void createNodeAndLink() {
+
+        Node node = new Node();
+        Link link = new Link();
+
+        node.setUserId(1);
+        node.setTitle("1");
+        node.setContent("1");
+        node.setCategory("12");
+        node.setEditorId(1);
+
+        link.setTarget("123");
+        link.setSource("123");
+        link.setUserId(1);
+
+        nodeRepository.save(node);
+        linkRepository.save(link);
+    }
+
 
 
 

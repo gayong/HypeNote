@@ -12,9 +12,10 @@ import com.surf.diagram.diagram.repository.DiagramRepository;
 import org.springframework.stereotype.Service;
 
 import java.io.FileInputStream;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-
+import java.util.*;
 @Service
 public class DiagramServiceImpl implements DiagramService {
 
@@ -29,6 +30,8 @@ public class DiagramServiceImpl implements DiagramService {
         Diagram diagram = Diagram.builder()
                 .title(dto.getTitle())
                 .content(dto.getContent())
+                .access("Private")
+                .childId(new ArrayList<>())
                 .build();
         diagramRepository.save(diagram);
         return "다이어그램 생성 완료";
@@ -131,6 +134,7 @@ public class DiagramServiceImpl implements DiagramService {
                     for (ClassificationCategory category : response.getCategoriesList()) {
                         if (category.getName().contains("Computer")) {
                             diagram.setCategory(category.getName());
+                            diagram.setConfidence(category.getConfidence());
                             diagramRepository.save(diagram);
                             System.out.println("분석이 성공적으로 완료되었습니다.");
                             break;
@@ -142,6 +146,35 @@ public class DiagramServiceImpl implements DiagramService {
                 }
             }
         }
+    }
+
+
+    @Override
+    public List<Diagram> getShareNode(Long shareId) {
+        int id = 1;
+
+        // userID가 id인 필드들과 id2인 필드들
+        List<Diagram> diagrams1 = diagramRepository.findByUserId(id);
+        List<Diagram> diagrams2 = diagramRepository.findByUserId(shareId.intValue());
+
+        for (Diagram diagram1 : diagrams1) {
+            // 카테고리가 같은 Diagram
+            List<Diagram> sameCategoryDiagrams = diagrams2.stream()
+                    .filter(d -> d.getCategory().equals(diagram1.getCategory()))
+                    .toList();
+
+            if (!sameCategoryDiagrams.isEmpty()) {
+                // 같은 카테고리의 Diagram 중에서 confidence가 가장 높은 Diagram
+                Diagram maxConfidenceDiagram = sameCategoryDiagrams.stream()
+                        .max(Comparator.comparing(Diagram::getConfidence))
+                        .orElseThrow(NoSuchElementException::new);
+
+                // userID가 1인 필드의 자식 리스트에 userID가 2인 필드 추가
+                diagram1.getChildId().add(maxConfidenceDiagram.getId());
+            }
+        }
+
+        return diagrams1;
     }
 
 
