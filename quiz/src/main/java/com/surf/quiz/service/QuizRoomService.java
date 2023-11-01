@@ -13,7 +13,6 @@ import com.surf.quiz.repository.QuizRepository;
 import com.surf.quiz.repository.QuizRoomRepository;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -26,8 +25,6 @@ public class QuizRoomService {
     private final QuizRoomRepository quizRepo;
     private final QuizRepository quizRepository;
     private final SimpMessagingTemplate messageTemplate; // 메시지 브로커를 통해 클라이언트와 서버 간의 실시간 메시지 교환을 처리
-//    private final QuizService quizService;
-//    private final QuizRepository quizRepository;
 
     // 일정한 시간 간격으로 작업(태스크)를 실행하거나 지연 실행할 수 있는 스레드 풀 기반의 스케줄링 서비스
     //단일 스레드로 동작하는 스케줄링 서비스(ScheduledExecutorService) 객체를 생성하고, 이 객체(scheduler)에 대한 참조를 유지
@@ -126,7 +123,19 @@ public class QuizRoomService {
             createQuizRoom.setRoomMax(createRoomRequestDto.getInviteUsers().size());
         }
 
+        MemberDto member = new MemberDto();
+        member.setHost(true);
+        member.setReady(false);
+        member.setUserPk(1L);
+        member.setUserName("csi");
+        List<MemberDto> members = new ArrayList<>();
+        members.add(member);
+        createQuizRoom.setUsers(members);
+
         QuizRoom createdQuizroom = this.save(createQuizRoom);
+
+
+
 
         // 퀴즈 생성
         Quiz quiz = this.createQuiz(createdQuizroom);

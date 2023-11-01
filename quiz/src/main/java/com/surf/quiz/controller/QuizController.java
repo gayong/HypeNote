@@ -56,9 +56,14 @@ public class QuizController {
 
     @MessageMapping("/quiz/{roomId}")
     public void StartQuiz(@DestinationVariable int roomId) {
-        Quiz quiz = quizRepository.findByRoomId(roomId).orElseThrow(() -> new IllegalArgumentException("Invalid roomId: " + roomId));
         QuizRoom quizroom = quizRoomRepository.findById((long) roomId).orElseThrow(() -> new IllegalArgumentException("Invalid roomId: " + roomId));
+        if (quizroom.getReadyCnt() != quizroom.getRoomCnt()) {
+            return;
+        }
+        Quiz quiz = quizRepository.findByRoomId(roomId).orElseThrow(() -> new IllegalArgumentException("Invalid roomId: " + roomId));
         quiz.setUserCnt(quizroom.getUsers().toArray().length);
+        quizroom.setRoomStatus(true);
+        quizRoomRepository.save(quizroom);
         quizRepository.save(quiz);
 
         messageTemplate.convertAndSend("/sub/quiz/" + roomId, quiz);
