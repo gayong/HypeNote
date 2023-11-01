@@ -92,7 +92,7 @@ const ThreeScene = () => {
       const forceNode = d3.forceManyBody();
       const forceLink = d3
         .forceLink(links)
-        .id(({ index: i }) => N[i])
+        .id((d) => d.id)
         .distance(100);
       if (nodeStrength !== undefined) forceNode.strength(nodeStrength);
       if (linkStrength !== undefined) forceLink.strength(linkStrength);
@@ -101,14 +101,14 @@ const ThreeScene = () => {
         .forceSimulation(nodes)
         .force("link", forceLink)
         .force("charge", forceNode)
-        .force("center", d3.forceCenter().strength(0.05))
+        .force("center", d3.forceCenter().strength(0.02))
         .on("tick", ticked);
 
       const svg = d3
         .select(ref.current)
         .append("svg")
         .attr("width", width - 320)
-        .attr("height", height)
+        .attr("height", height - 100)
         .attr("viewBox", [-width / 2, -height / 2, width, height])
         .attr("style", "height: auto; overflow: hidden;");
 
@@ -193,7 +193,7 @@ const ThreeScene = () => {
         svg.call(
           d3
             .zoom()
-            .scaleExtent([1, 1.5])
+            .scaleExtent([0.75, 1.5])
             .on("zoom", function (event) {
               let dx = Math.min(0, Math.max(event.transform.x, width - width * event.transform.k));
               let dy = Math.min(0, Math.max(event.transform.y, height - height * event.transform.k));
