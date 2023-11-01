@@ -22,6 +22,8 @@ public class Node {
     private int editorId;
     private String content;
     private String category;
+    private Float confidence;
+    private String access = "Private";
 
     public void setId(Long id) {
         this.id = id;
