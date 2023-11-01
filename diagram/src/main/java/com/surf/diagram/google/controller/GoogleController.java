@@ -30,7 +30,7 @@ public class GoogleController {
     @PostMapping("/keyword")
     @Operation(summary = "키워드 분석")
     public BaseResponse<String> classifyAndSaveEmptyCategoryDiagrams() throws Exception {
-        diagramService.classifyAndSaveEmptyCategoryDiagrams();
+        diagramService.classifyAndSaveEmptyCategoryNodes();
         return new BaseResponse<>("모든 Diagram들이 성공적으로 분석되고 업데이트되었습니다.");
     }
 }

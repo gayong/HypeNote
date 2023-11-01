@@ -36,12 +36,12 @@ public class DiagramController {
         this.linkRepository = linkRepository;
     }
 
-    @PostMapping
-    @Operation(summary = "다이어그램 생성")
-    public BaseResponse<String> createDiagram(@RequestBody CreateDiagramDto dto) {
-        String message = diagramService.createDiagram(dto);
-        return new BaseResponse<>(message);
-    }
+//    @PostMapping
+//    @Operation(summary = "다이어그램 생성")
+//    public BaseResponse<String> createDiagram(@RequestBody CreateDiagramDto dto) {
+//        String message = diagramService.createDiagram(dto);
+//        return new BaseResponse<>(message);
+//    }
 //    @GetMapping
 //    @Operation(summary = "모든 다이어그램 조회")
 //    public BaseResponse<List<Diagram>> getAllDiagrams() {
@@ -50,49 +50,49 @@ public class DiagramController {
 //    }
 
 
-    @GetMapping("/{id}")
-    @Operation(summary = "단일 다이어그램 조회")
-    public BaseResponse<Diagram> getDiagramById(@PathVariable("id") Long id) {
-        Diagram diagram = diagramService.getDiagramById(id).orElse(null);
-        return new BaseResponse<>(diagram);
-    }
-
-    @PutMapping("/{id}")
-    @Operation(summary = "다이어그램 수정")
-    public BaseResponse<String> updateDiagram(@PathVariable("id") Long id, @RequestBody UpdateDiagramDto dto) {
-        String message = diagramService.updateDiagram(id, dto);
-        return new BaseResponse<>(message);
-    }
-
-    @PutMapping("/position/{id}")
-    @Operation(summary = "다이어그램 위치 수정")
-    public BaseResponse<String> updatePosition(@PathVariable("id") Long id, @RequestBody UpdatePositionDto dto) {
-        String message = diagramService.updatePosition(id, dto);
-        return new BaseResponse<>(message);
-    }
-
-
-    @DeleteMapping("/{id}")
-    @Operation(summary = "다이어그램 삭제")
-    public BaseResponse<String> deleteById(@PathVariable("id") Long id){
-        String message = diagramService.deleteById(id);
-        return new BaseResponse<>(message);
-    }
-
-
-    @PostMapping("/parent/{parentid}")
-    @Operation(summary = "부모 노드 참조")
-    public BaseResponse<Diagram> createDiagramWithParent(@PathVariable("parentid") Long parentid, @RequestBody CreateDiagramWithParentDto dto) {
-        Diagram diagram = diagramService.createDiagramWithParent(parentid, dto);
-        return new BaseResponse<>(diagram);
-    }
-
-    @PostMapping("/share/{shareId}")
-    @Operation(summary = "공유 노드")
-    public BaseResponse<List<Diagram>> getShareNode(@PathVariable("shareId") Long shareId) {
-        List<Diagram> diagrams = diagramService.getShareNode(shareId);
-        return new BaseResponse<>(diagrams);
-    }
+//    @GetMapping("/{id}")
+//    @Operation(summary = "단일 다이어그램 조회")
+//    public BaseResponse<Diagram> getDiagramById(@PathVariable("id") Long id) {
+//        Diagram diagram = diagramService.getDiagramById(id).orElse(null);
+//        return new BaseResponse<>(diagram);
+//    }
+//
+//    @PutMapping("/{id}")
+//    @Operation(summary = "다이어그램 수정")
+//    public BaseResponse<String> updateDiagram(@PathVariable("id") Long id, @RequestBody UpdateDiagramDto dto) {
+//        String message = diagramService.updateDiagram(id, dto);
+//        return new BaseResponse<>(message);
+//    }
+//
+//    @PutMapping("/position/{id}")
+//    @Operation(summary = "다이어그램 위치 수정")
+//    public BaseResponse<String> updatePosition(@PathVariable("id") Long id, @RequestBody UpdatePositionDto dto) {
+//        String message = diagramService.updatePosition(id, dto);
+//        return new BaseResponse<>(message);
+//    }
+//
+//
+//    @DeleteMapping("/{id}")
+//    @Operation(summary = "다이어그램 삭제")
+//    public BaseResponse<String> deleteById(@PathVariable("id") Long id){
+//        String message = diagramService.deleteById(id);
+//        return new BaseResponse<>(message);
+//    }
+//
+//
+//    @PostMapping("/parent/{parentid}")
+//    @Operation(summary = "부모 노드 참조")
+//    public BaseResponse<Diagram> createDiagramWithParent(@PathVariable("parentid") Long parentid, @RequestBody CreateDiagramWithParentDto dto) {
+//        Diagram diagram = diagramService.createDiagramWithParent(parentid, dto);
+//        return new BaseResponse<>(diagram);
+//    }
+//
+//    @PostMapping("/share/{shareId}")
+//    @Operation(summary = "공유 노드")
+//    public BaseResponse<List<Diagram>> getShareNode(@PathVariable("shareId") Long shareId) {
+//        List<Diagram> diagrams = diagramService.getShareNode(shareId);
+//        return new BaseResponse<>(diagrams);
+//    }
 
     @GetMapping("")
     @Operation(summary = "내 노드와 링크 조회")
@@ -127,24 +127,29 @@ public class DiagramController {
     }
 
 
-//    @PostMapping("/node")
-//    @Operation(summary = "노드와 링크 생성")
-//    public void createNodeAndLink() {
-//
-//        NodeDto node = new NodeDto();
-//        Link link = new Link();
-//
-//        node.setUserId(1);
-//        node.setTitle("1");
-//        node.setEditorId(1);
-//
-//        link.setTarget("123");
-//        link.setSource("123");
-//        link.setUserId(1);
-//
-//        nodeRepository.save(node);
-//        linkRepository.save(link);
-//    }
+
+
+
+
+    @PostMapping("/node")
+    @Operation(summary = "노드와 링크 생성")
+    public void createNodeAndLink() {
+
+        Node node = new Node();
+        Link link = new Link();
+
+        node.setUserId(1);
+        node.setTitle("1");
+        node.setEditorId(1);
+        node.setContent("123");
+
+        link.setTarget(1);
+        link.setSource(2);
+        link.setUserId(1);
+
+        nodeRepository.save(node);
+        linkRepository.save(link);
+    }
 
 
 
