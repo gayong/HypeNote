@@ -6,31 +6,37 @@ import { mean, median } from "d3-array";
 // import { howto } from "@d3/example-components";
 // import { Swatches } from "@d3/color-legend";
 import { useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 
 const ThreeScene = () => {
+  const router = useRouter();
   const ref = useRef();
   const nodes = [
-    { id: "node1" },
-    { id: "node2" },
-    { id: "node3" },
-    { id: "node4" },
-    { id: "node5" },
-    { id: "node6" },
-    { id: "node7" },
+    { id: "네트워크", group: 1 },
+    { id: "운영체제", group: 1 },
+    { id: "프레임워크", group: 2 },
+    { id: "자료구조", group: 2 },
+    { id: "node5", group: 2 },
+    { id: "node6", group: 3 },
+    { id: "node7", group: 3 },
+    { id: "node8", group: 4 },
+    { id: "node9", group: 4 },
+    { id: "node10", group: 4 },
   ];
 
   const links = [
-    { source: "node1", target: "node2" },
-    { source: "node2", target: "node3" },
-    { source: "node1", target: "node4" },
-    { source: "node1", target: "node7" },
-    { source: "node4", target: "node5" },
+    { source: "네트워크", target: "운영체제" },
+    { source: "운영체제", target: "프레임워크" },
+    { source: "네트워크", target: "자료구조" },
+    { source: "네트워크", target: "node7" },
+    { source: "자료구조", target: "node5" },
     { source: "node5", target: "node6" },
-    { source: "node4", target: "node6" },
+    { source: "자료구조", target: "node6" },
+    { source: "node8", target: "node9" },
+    { source: "node8", target: "node10" },
   ];
 
   useEffect(() => {
-    // ForceGraph 함수 시작
     function ForceGraph(
       {
         nodes, // an iterable of node objects (typically [{id}, …])
@@ -42,8 +48,8 @@ const ThreeScene = () => {
         nodeGroups, // an array of ordinal values representing the node groups
         nodeTitle, // given d in nodes, a title string
         nodeFill = "currentColor", // node stroke fill (if not using a group color encoding)
-        nodeStroke = "#fff", // node stroke color
-        nodeStrokeWidth = 1.5, // node stroke width, in pixels
+        nodeStroke = "#bab8b8", // node stroke color
+        nodeStrokeWidth = 2.5, // 노드 테두리 굵기
         nodeStrokeOpacity = 1, // node stroke opacity
         nodeRadius = 10, // node radius, in pixels
         nodeStrength,
@@ -51,11 +57,11 @@ const ThreeScene = () => {
         linkTarget = ({ target }) => target, // given d in links, returns a node identifier string
         linkStroke = "#999", // link stroke color
         linkStrokeOpacity = 0.6, // link stroke opacity
-        linkStrokeWidth = 4.5, // given d in links, returns a stroke width in pixels
+        linkStrokeWidth = 1.5, // given d in links, returns a stroke width in pixels
         linkStrokeLinecap = "round", // link stroke linecap
         linkStrength,
-        colors = d3.schemeTableau10, // an array of color strings, for the node groups
-        width = window.innerWidth - 320, // outer width, in pixels
+        // colors = d3.schemeTableau10, // an array of color strings, for the node groups
+        width = window.innerWidth, // outer width, in pixels
         height = window.innerHeight, // outer height, in pixels
         invalidation, // when this promise resolves, stop the simulation
       } = {}
@@ -71,21 +77,23 @@ const ThreeScene = () => {
       const L = typeof linkStroke !== "function" ? null : d3.map(links, linkStroke);
 
       // Replace the input nodes and links with mutable objects for the simulation.
-      nodes = d3.map(nodes, (_, i) => ({ id: N[i] }));
-      links = d3.map(links, (_, i) => ({ source: LS[i], target: LT[i] }));
+      // x, y 위치
+      // nodes = d3.map(nodes, (_, i) => ({ id: N[i], group: nodes[i[1]] }));
+      // links = d3.map(links, (_, i) => ({ source: LS[i], target: LT[i] }));
 
       // Compute default domains.
-      if (G && nodeGroups === undefined) nodeGroups = d3.sort(G);
+      // if (G && nodeGroups === undefined) nodeGroups = d3.sort(G);
 
       // Construct the scales.
-      const color = nodeGroup == null ? null : d3.scaleOrdinal(nodeGroups, colors);
+      // const color = nodeGroup == null ? null : d3.scaleOrdinal(nodeGroups, colors);
+      const color = d3.scaleOrdinal(d3.schemeCategory10);
 
       // Construct the forces.
       const forceNode = d3.forceManyBody();
       const forceLink = d3
         .forceLink(links)
         .id(({ index: i }) => N[i])
-        .distance(70);
+        .distance(100);
       if (nodeStrength !== undefined) forceNode.strength(nodeStrength);
       if (linkStrength !== undefined) forceLink.strength(linkStrength);
 
@@ -93,16 +101,16 @@ const ThreeScene = () => {
         .forceSimulation(nodes)
         .force("link", forceLink)
         .force("charge", forceNode)
-        .force("center", d3.forceCenter())
+        .force("center", d3.forceCenter().strength(0.05))
         .on("tick", ticked);
 
       const svg = d3
         .select(ref.current)
         .append("svg")
-        .attr("width", width)
+        .attr("width", width - 320)
         .attr("height", height)
         .attr("viewBox", [-width / 2, -height / 2, width, height])
-        .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
+        .attr("style", "height: auto; overflow: hidden;");
 
       const link = svg
         .append("g")
@@ -118,24 +126,35 @@ const ThreeScene = () => {
         .append("g")
         .attr("stroke", nodeStroke)
         .attr("stroke-opacity", nodeStrokeOpacity)
-        .attr("stroke-width", nodeStrokeWidth)
+        // .attr("stroke-width", nodeStrokeWidth)
         .selectAll("g")
         .data(nodes)
         .join("g")
         .call(drag(simulation));
 
-      node.append("circle").attr("fill", nodeFill).attr("r", nodeRadius);
+      console.log("내가 노드 배열", nodes);
+
+      node
+        .append("circle")
+        .attr("r", nodeRadius)
+        .attr("fill", (d) => color(d.group))
+        .attr("stroke-width", nodeStrokeWidth)
+        .on("click", function (d) {
+          // router.push(`/editor/${d.editorId}`);
+          router.push("/editor/1");
+        });
 
       node
         .append("text")
         .text((d) => d.id)
-        .attr("x", 6)
-        .attr("y", 3)
-        .attr("style", "fill: black");
+        .attr("x", 0)
+        .attr("y", 28)
+        .attr("text-anchor", "middle")
+        .style("font-family", "preLt");
 
       if (W) link.attr("stroke-width", ({ index: i }) => W[i]);
       if (L) link.attr("stroke", ({ index: i }) => L[i]);
-      if (G) node.attr("fill", ({ index: i }) => color(G[i]));
+      // if (G) node.attr("fill", ({ index: i }) => color(G[i]));
       if (T) node.append("title").text(({ index: i }) => T[i]);
       if (invalidation != null) invalidation.then(() => simulation.stop());
 
@@ -174,16 +193,34 @@ const ThreeScene = () => {
         svg.call(
           d3
             .zoom()
-            .scaleExtent([0.7, 2])
+            .scaleExtent([1, 1.5])
             .on("zoom", function (event) {
-              svg.attr("transform", event.transform);
+              let dx = Math.min(0, Math.max(event.transform.x, width - width * event.transform.k));
+              let dy = Math.min(0, Math.max(event.transform.y, height - height * event.transform.k));
+
+              svg.attr("transform", `translate(${dx}, ${dy}) scale(${event.transform.k})`);
             })
         );
+
+        // 초기 배율 1.5배로 변경
+        const zoom = d3
+          .zoom()
+          .scaleExtent([1, 1.5])
+          .on("zoom", function (event) {
+            let dx = Math.min(0, Math.max(event.transform.x, width - width * event.transform.k));
+            let dy = Math.min(0, Math.max(event.transform.y, height - height * event.transform.k));
+            svg.attr("transform", `translate(${dx}, ${dy}) scale(${event.transform.k})`);
+          });
+
+        // SVG에 Zoom 설정 적용
+        svg.call(zoom);
+
+        // 초기 화면 배율을 1.5배로 설정
+        svg.call(zoom.scaleTo, 1.3);
 
         return d3.drag().on("start", dragstarted).on("drag", dragged).on("end", dragended);
       }
     }
-    // ForceGraph 함수 종료
 
     ForceGraph({ nodes, links });
   }, []);
