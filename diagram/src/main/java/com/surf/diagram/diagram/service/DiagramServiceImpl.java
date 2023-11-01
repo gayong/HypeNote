@@ -9,7 +9,6 @@ import com.surf.diagram.diagram.dto.request.UpdateDiagramDto;
 import com.surf.diagram.diagram.dto.request.UpdatePositionDto;
 import com.surf.diagram.diagram.entity.Diagram;
 import com.surf.diagram.diagram.repository.DiagramRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.FileInputStream;
@@ -19,8 +18,11 @@ import java.util.Optional;
 @Service
 public class DiagramServiceImpl implements DiagramService {
 
-    @Autowired
-    private DiagramRepository diagramRepository;
+    private final DiagramRepository diagramRepository;
+
+    public DiagramServiceImpl(DiagramRepository diagramRepository) {
+        this.diagramRepository = diagramRepository;
+    }
 
     @Override
     public String createDiagram(CreateDiagramDto dto) {
@@ -126,9 +128,15 @@ public class DiagramServiceImpl implements DiagramService {
                 System.out.println("response = " + response);
 
                 if (response != null && !response.getCategoriesList().isEmpty()) {
-                    diagram.setCategory(response.getCategoriesList().get(0).getName());
-                    diagramRepository.save(diagram);  // 결과를 Diagram의 category에 저장하고 데이터베이스에 저장합니다.
-                    System.out.println("분석이 성공적으로 완료되었습니다.");
+                    for (ClassificationCategory category : response.getCategoriesList()) {
+                        if (category.getName().contains("Computer")) {
+                            diagram.setCategory(category.getName());
+                            diagramRepository.save(diagram);
+                            System.out.println("분석이 성공적으로 완료되었습니다.");
+                            break;
+                        }
+                    }
+                    System.out.println("'Computer'를 포함하는 카테고리가 없습니다.");
                 } else {
                     System.out.println("분석에 실패했습니다.");
                 }
