@@ -5,6 +5,7 @@ import com.surf.diagram.diagram.dto.request.CreateDiagramDto;
 import com.surf.diagram.diagram.dto.request.CreateDiagramWithParentDto;
 import com.surf.diagram.diagram.dto.request.UpdateDiagramDto;
 import com.surf.diagram.diagram.dto.request.UpdatePositionDto;
+import com.surf.diagram.diagram.dto.response.NodeDto;
 import com.surf.diagram.diagram.dto.response.NodeResponseDto;
 import com.surf.diagram.diagram.entity.Diagram;
 import com.surf.diagram.diagram.entity.Link;
@@ -16,6 +17,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -98,32 +100,41 @@ public class DiagramController {
         List<Node> nodes = nodeRepository.findByUserId(1);
         List<Link> links = linkRepository.findByUserId(1);
 
-        response.setNodes(nodes);
+        List<NodeDto> nodeDtos = new ArrayList<>();
+
+        for (Node node : nodes) {
+            NodeDto nodeDto = new NodeDto();
+            nodeDto.setId(node.getId());
+            nodeDto.setTitle(node.getTitle());
+            nodeDto.setEditorId(node.getEditorId());
+            nodeDto.setUserId(node.getUserId());
+
+            nodeDtos.add(nodeDto);
+        }
+        response.setNodes(nodeDtos);
         response.setLinks(links);
         return new BaseResponse<>(response);
     }
 
 
-    @PostMapping("/node")
-    @Operation(summary = "노드와 링크 생성")
-    public void createNodeAndLink() {
-
-        Node node = new Node();
-        Link link = new Link();
-
-        node.setUserId(1);
-        node.setTitle("1");
-        node.setContent("1");
-        node.setCategory("12");
-        node.setEditorId(1);
-
-        link.setTarget("123");
-        link.setSource("123");
-        link.setUserId(1);
-
-        nodeRepository.save(node);
-        linkRepository.save(link);
-    }
+//    @PostMapping("/node")
+//    @Operation(summary = "노드와 링크 생성")
+//    public void createNodeAndLink() {
+//
+//        NodeDto node = new NodeDto();
+//        Link link = new Link();
+//
+//        node.setUserId(1);
+//        node.setTitle("1");
+//        node.setEditorId(1);
+//
+//        link.setTarget("123");
+//        link.setSource("123");
+//        link.setUserId(1);
+//
+//        nodeRepository.save(node);
+//        linkRepository.save(link);
+//    }
 
 
 
