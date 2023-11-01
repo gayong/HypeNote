@@ -5,8 +5,9 @@ import com.surf.diagram.diagram.dto.request.CreateDiagramDto;
 import com.surf.diagram.diagram.dto.request.CreateDiagramWithParentDto;
 import com.surf.diagram.diagram.dto.request.UpdateDiagramDto;
 import com.surf.diagram.diagram.dto.request.UpdatePositionDto;
-import com.surf.diagram.diagram.dto.response.NodeDto;
+import com.surf.diagram.diagram.dto.response.LinkResponseDto;
 import com.surf.diagram.diagram.dto.response.NodeResponseDto;
+import com.surf.diagram.diagram.dto.response.DiagramResponseDto;
 import com.surf.diagram.diagram.entity.Diagram;
 import com.surf.diagram.diagram.entity.Link;
 import com.surf.diagram.diagram.entity.Node;
@@ -95,23 +96,33 @@ public class DiagramController {
 
     @GetMapping("")
     @Operation(summary = "내 노드와 링크 조회")
-    public BaseResponse<NodeResponseDto> getNodes() {
-        NodeResponseDto response = new NodeResponseDto();
+    public BaseResponse<DiagramResponseDto> getNodes() {
+        DiagramResponseDto response = new DiagramResponseDto();
         List<Node> nodes = nodeRepository.findByUserId(1);
         List<Link> links = linkRepository.findByUserId(1);
 
-        List<NodeDto> nodeDtos = new ArrayList<>();
+        List<NodeResponseDto> nodeResponseDtos = new ArrayList<>();
+        List<LinkResponseDto> linkResponseDtos = new ArrayList<>();
 
         for (Node node : nodes) {
-            NodeDto nodeDto = new NodeDto();
-            nodeDto.setId(node.getId());
-            nodeDto.setEditorId(node.getEditorId());
-            nodeDto.setTitle(node.getTitle());
-            nodeDto.setUserId(node.getUserId());
-            nodeDtos.add(nodeDto);
+            NodeResponseDto nodeResponseDto = new NodeResponseDto();
+            nodeResponseDto.setId(node.getId());
+            nodeResponseDto.setTitle(node.getTitle());
+            nodeResponseDto.setUserId(node.getUserId());
+            nodeResponseDto.setEditorId(node.getEditorId());
+            nodeResponseDtos.add(nodeResponseDto);
         }
-        response.setNodes(nodeDtos);
-        response.setLinks(links);
+
+        for (Link link : links) {
+            LinkResponseDto linkResponseDto = new LinkResponseDto();
+            linkResponseDto.setSource(link.getSource());
+            linkResponseDto.setTarget(link.getTarget());
+            linkResponseDto.setUserId(link.getUserId());
+            linkResponseDtos.add(linkResponseDto);
+        }
+
+        response.setNodes(nodeResponseDtos);
+        response.setLinks(linkResponseDtos);
         return new BaseResponse<>(response);
     }
 
