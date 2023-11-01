@@ -33,6 +33,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j // 로깅
 @EnableScheduling  // 스케줄러 허용
 @RestController
+@RequestMapping("/api/quiz")
 @RequiredArgsConstructor // notnull 생성자 사용
 @Tag(name = "퀴즈", description = "퀴즈")
 public class QuizController {
@@ -67,7 +68,7 @@ public class QuizController {
     }
 
 
-    @PostMapping("/api/quiz/{roomId}/{userId}")
+    @PostMapping("/{roomId}/{userId}")
     @Operation(summary = "정답 제출하기")
     public BaseResponse<Void> receiveAnswer(@PathVariable String roomId, @PathVariable String userId, @RequestBody Map<String, Map<String, String>> answers) {
 
@@ -84,7 +85,7 @@ public class QuizController {
 
 
     // 나의 퀴즈 기록 보기
-    @GetMapping("/api/quiz/{userId}")
+    @GetMapping("/{userId}")
     @Operation(summary = "나의 퀴즈 기록")
     public BaseResponse<List<QuizResult>> getMyQuizHistory(@PathVariable Long userId) {
         List<QuizResult> result = quizResultRepository.findByUserPk(userId);

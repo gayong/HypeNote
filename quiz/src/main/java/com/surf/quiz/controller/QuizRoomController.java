@@ -27,6 +27,7 @@ import java.util.concurrent.ScheduledExecutorService;
 @Slf4j
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/quiz")
 @Tag(name = "퀴즈룸", description = "퀴즈룸")
 public class QuizRoomController {
     private final QuizRoomService quizRoomService;
@@ -45,7 +46,7 @@ public class QuizRoomController {
     }
 
 
-    @PostMapping("/api/quiz/quizroom")
+    @PostMapping("/quizroom")
     @Operation(summary = "멤버 탐색")
     public BaseResponse<SearchMemberResponseDto> searchMember(@RequestBody SearchMemberRequestDto SearchMemberRequestDto) {
         SearchMemberResponseDto result = quizRoomService.createSearchMemberResponseDto(SearchMemberRequestDto);
@@ -53,7 +54,7 @@ public class QuizRoomController {
     }
 
 
-    @PostMapping("/api/quiz/quizroom/invite")
+    @PostMapping("/quizroom/invite")
     @Operation(summary = "방 생성")
     public BaseResponse<QuizRoom> createQuizRoom(@RequestBody CreateRoomRequestDto createRoomRequestDto) {
         QuizRoom result = quizRoomService.createAndSaveQuizRoom(createRoomRequestDto);
@@ -61,7 +62,7 @@ public class QuizRoomController {
     }
 
 
-    @GetMapping("/api/quiz/quizroom")
+    @GetMapping("/quizroom")
     @Operation(summary = "전체 방 탐색")
     public BaseResponse<List<QuizRoom>> findQuizRooms() {
         List<QuizRoom> results = quizRoomService.findAll();
