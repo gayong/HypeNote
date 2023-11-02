@@ -3,11 +3,16 @@
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { BiSolidSun } from "react-icons/bi";
-import { BsFillMoonStarsFill } from "react-icons/bs";
+import { BsFillMoonFill, BsThreeDots } from "react-icons/bs";
 
 export default function DarkModeBtn() {
+  const [mounted, setMounted] = useState(false);
   const [currentTheme, setCurrentTheme] = useState<"light" | "dark" | null>(null);
   const { setTheme } = useTheme();
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -27,15 +32,16 @@ export default function DarkModeBtn() {
     setCurrentTheme((current) => (current === "dark" ? "light" : "dark"));
   };
 
-  return (
+  // 클라이언트 측에서만 버튼을 렌더링
+  return mounted ? (
     <div>
       {currentTheme === "light" ? (
         <div>
           <button
             title="다크모드로 변경"
             onClick={changeTheme}
-            className="hover:bg-font_primary hover:bg-opacity-30 justify-center items-center flex bg-transparent w-[60px] h-[30px] border-[1.6px] mx-auto hover:bg-gray-300 text-secondary rounded-3xl">
-            <BiSolidSun className="text-[20px]" />
+            className="hover:bg-font_primary hover:bg-opacity-30 justify-start items-center flex bg-transparent w-[45px] h-[25px] border-[1.6px] hover:bg-gray-300 text-secondary rounded-3xl">
+            <BiSolidSun className="ml-1.5 text-[18px]" />
           </button>
         </div>
       ) : (
@@ -43,11 +49,20 @@ export default function DarkModeBtn() {
           <button
             title="라이트모드로 변경"
             onClick={changeTheme}
-            className="hover:bg-font_primary hover:bg-opacity-30 justify-center items-center flex bg-transparent w-[60px] h-[30px] border-[1.6px] mx-auto hover:bg-gray-300 text-secondary rounded-3xl">
-            <BsFillMoonStarsFill className="text-[14px]" />
+            className="hover:bg-font_primary hover:bg-opacity-30 justify-end items-center flex bg-transparent w-[45px] h-[25px] border-[1.6px] hover:bg-gray-300 text-secondary rounded-3xl">
+            <BsFillMoonFill className="mr-1.5 mb-[1px] text-[12px]" />
           </button>
         </div>
       )}
+    </div>
+  ) : (
+    <div>
+      <button
+        title="다크모드로 변경"
+        onClick={changeTheme}
+        className="hover:bg-font_primary hover:bg-opacity-30 justify-center items-center flex bg-transparent w-[45px] h-[25px] border-[1.6px] hover:bg-gray-300 text-secondary rounded-3xl">
+        <BsThreeDots className="text-[18px] rounded-xl" />
+      </button>
     </div>
   );
 }

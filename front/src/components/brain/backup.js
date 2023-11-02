@@ -202,6 +202,7 @@ const ThreeScene = () => {
             })
         );
 
+        // 초기 배율 1.5배로 변경
         const zoom = d3
           .zoom()
           .scaleExtent([1, 1.5])
@@ -214,8 +215,8 @@ const ThreeScene = () => {
         // SVG에 Zoom 설정 적용
         svg.call(zoom);
 
-        // 초기 배율
-        svg.call(zoom.scaleTo, 1.1);
+        // 초기 화면 배율을 1.5배로 설정
+        svg.call(zoom.scaleTo, 1.3);
 
         return d3.drag().on("start", dragstarted).on("drag", dragged).on("end", dragended);
       }
