@@ -110,7 +110,7 @@ export default function QuizMaker() {
     justifyContent: "center",
     color: token.colorTextTertiary,
     backgroundColor: token.colorFillAlter,
-    borderRadius: token.borderRadiusLG,
+    // borderRadius: token.borderRadiusLG,
     border: `1px dashed ${token.colorBorder}`,
     marginTop: 16,
     fontFamily: "preRg",

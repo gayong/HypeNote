@@ -1,3 +1,5 @@
+// "use client";
+
 import QuizMaker from "@/components/quiz/QuizMaker";
 import { Metadata } from "next";
 
@@ -8,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function QuizMakerPage() {
   return (
-    <section className="flex items-center justify-center h-screen">
+    <section>
       <QuizMaker />
     </section>
   );
