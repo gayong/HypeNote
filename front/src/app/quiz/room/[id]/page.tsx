@@ -1,9 +1,19 @@
+"use client";
+
+import QuizRoom from "@/components/quiz/QuizRoom";
+import { SocketContext } from "@/context/SocketProvider";
+import { useContext, useEffect } from "react";
+
 type Props = {
   params: {
-    id: string;
+    id: number;
   };
 };
 
 export default function QuizRoomPage({ params: { id } }: Props) {
-  return <div>퀴즈룸이다 인마</div>;
+  return (
+    <div>
+      <QuizRoom roomId={id} />
+    </div>
+  );
 }
