@@ -2,16 +2,13 @@ package com.surf.quiz.service;
 
 
 import com.surf.quiz.dto.MemberDto;
-import com.surf.quiz.dto.QuestionDto;
-import com.surf.quiz.dto.request.AnswerDto;
-import com.surf.quiz.dto.request.SearchMemberRequestDto;
 import com.surf.quiz.entity.Quiz;
 import com.surf.quiz.repository.QuizRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
