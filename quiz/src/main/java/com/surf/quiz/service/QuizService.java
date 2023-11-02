@@ -72,6 +72,8 @@ public class QuizService {
         Set<String> userIds = members.stream()
                 .map(member -> Long.toString(member.getUserPk()))
                 .collect(Collectors.toSet());
-        return userIds.containsAll(userAnswers.keySet()) && userIds.size() == userAnswers.keySet().size();
+        int submittedUserCount = userAnswers.keySet().size(); // 정답을 제출한 팀원 수
+        int totalUserCount = userIds.size(); // 퀴즈룸의 전체 팀원 수
+        return submittedUserCount == totalUserCount;
     }
 }
