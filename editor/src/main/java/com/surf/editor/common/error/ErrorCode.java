@@ -20,10 +20,15 @@ public enum ErrorCode {
     USER_NOT_FOUND(404,"해당 유저를 찾을 수 없습니다."),
     EDITOR_NOT_FOUND(404, "해당 게시글을 찾을 수 없습니다."),
 
-    FAIL_CREATE_EDITOR(400,"게시글 생성에 실패 했습니다."),
-    FAIL_WRITE_EDITOR(400,"게시글 작성에 실패 했습니다."),
-    FAIL_DELETE_EDITOR(400,"게시글 삭제에 실패 했습니다."),
-    FAIL_SEARCH_EDITOR(400,"게시글 검색에 실패 했습니다.");
+    FAIL_CREATE_EDITOR(400,"문서 생성에 실패 했습니다."),
+    FAIL_WRITE_EDITOR(400,"문서 작성에 실패 했습니다."),
+    FAIL_DELETE_EDITOR(400,"문서 삭제에 실패 했습니다."),
+    FAIL_SEARCH_EDITOR(400,"문서 검색에 실패 했습니다."),
+
+    DIAGRAM_SAVE_FAIL(400,"다이어그램에 문서 정보 저장 실패했습니다"),
+    MEMBER_SAVE_FAIL(400,"유저에 문서 정보 저장 실패했습니다."),
+    QUIZ_SAVE_FAIL(400,"퀴즈에 문서 정보 저장 실패했습니다.")
+    ;
 
 
 

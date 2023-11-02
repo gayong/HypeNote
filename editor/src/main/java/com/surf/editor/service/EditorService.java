@@ -7,6 +7,12 @@ import com.surf.editor.domain.Editor;
 import com.surf.editor.dto.request.EditorWriteRequest;
 import com.surf.editor.dto.response.EditorCheckResponse;
 import com.surf.editor.dto.response.EditorSearchResponse;
+import com.surf.editor.feign.client.DiagramOpenFeign;
+import com.surf.editor.feign.client.MemberOpenFeign;
+import com.surf.editor.feign.client.QuizOpenFeign;
+import com.surf.editor.feign.dto.DiagramEditorSaveRequestDto;
+import com.surf.editor.feign.dto.MemberEditorSaveRequestDto;
+import com.surf.editor.feign.dto.QuizEditorSaveRequestDto;
 import com.surf.editor.repository.EditorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,13 +26,61 @@ import java.util.List;
 @RequiredArgsConstructor
 public class EditorService {
     private final EditorRepository editorRepository;
+    private final DiagramOpenFeign diagramOpenFeign;
+    private final MemberOpenFeign memberOpenFeign;
+    private final QuizOpenFeign quizOpenFeign;
 
-    public void editorCreate(String userId) {
+
+    @Transactional
+    public void editorCreate(int userId) {
+        Editor savedEditor = new Editor();
         try{
-            editorRepository.save(Editor.toEntity(null,null));
+            savedEditor = editorRepository.save(Editor.toEntity(null, null));
         }catch (Exception e){
             throw new BaseException(ErrorCode.FAIL_CREATE_EDITOR);
         }
+
+        try{
+            //루트 게시글 찾기
+            List<String> byParentIdAndUserId = editorRepository.findByParentIdAndUserId(null, userId)
+                    .orElse(null);
+
+            MemberEditorSaveRequestDto memberEditorSaveRequestDto = MemberEditorSaveRequestDto.builder()
+                    .userId(userId)
+                    .documentsRoots(byParentIdAndUserId) //추가 필요
+                    .build();
+
+            memberOpenFeign.MemberEditorSave(memberEditorSaveRequestDto);
+        }catch (Exception e){
+            throw new BaseException(ErrorCode.MEMBER_SAVE_FAIL);
+        }
+
+        try{
+            DiagramEditorSaveRequestDto diagramEditorSaveRequestDto = DiagramEditorSaveRequestDto.builder()
+                    .userId(userId)
+                    .documentId(savedEditor.getId())
+                    .title(savedEditor.getTitle())
+                    .content(savedEditor.getContent())
+                    .build();
+
+            diagramOpenFeign.DiagramEditorSave(diagramEditorSaveRequestDto);
+        }catch (Exception e){
+            throw new BaseException(ErrorCode.DIAGRAM_SAVE_FAIL);
+        }
+
+        try{
+            QuizEditorSaveRequestDto quizEditorSaveRequestDto = QuizEditorSaveRequestDto.builder()
+                    .userId(userId)
+                    .documentId(savedEditor.getId())
+                    .title(savedEditor.getTitle())
+                    .content(savedEditor.getContent())
+                    .build();
+
+            quizOpenFeign.QuizEditorSave(quizEditorSaveRequestDto);
+        }catch (Exception e){
+            throw new BaseException(ErrorCode.QUIZ_SAVE_FAIL);
+        }
+
     }
 
     public void editorWrite(String editorId, EditorWriteRequest editorWriteRequest) {

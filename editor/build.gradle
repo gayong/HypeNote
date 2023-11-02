@@ -41,6 +41,9 @@ dependencies {
 
 	//websocket
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+	//open feign
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 }
 
 // For MSA -인식문의

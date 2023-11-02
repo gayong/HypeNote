@@ -20,7 +20,7 @@ public class EditorController {
     final private EditorService editorService;
 
     @PostMapping("/{userId}")
-    public ResponseEntity<ApiResponse> editorCreate(@PathVariable String userId){
+    public ResponseEntity<ApiResponse> editorCreate(@PathVariable int userId){
         editorService.editorCreate(userId);
 
         ApiResponse apiResponse = ApiResponse.builder()

@@ -10,4 +10,5 @@ import java.util.Optional;
 @Repository
 public interface EditorRepository extends MongoRepository<Editor,String> {
     Optional<List<Editor>> findByTitleContainingOrContentContaining(String searchTextInTitle, String searchTextInContent);
+    Optional<List<String>> findByParentIdAndUserId(String parentId, int userId);
 }
