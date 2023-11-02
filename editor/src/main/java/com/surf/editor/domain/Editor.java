@@ -7,6 +7,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.FieldType;
 
+import java.util.List;
+
 @Getter
 @NoArgsConstructor
 @Builder
@@ -16,10 +18,13 @@ public class Editor {
     @Id
     @Field(value = "_id", targetType = FieldType.OBJECT_ID)
     private String id;
+    private int userId; //첫 생성자
 
     private String title;
     private String content;
 
+    private String parentId;
+    private List<String> childId;
 
     public static Editor toEntity(String title, String content){
         return Editor.builder()
