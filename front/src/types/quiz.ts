@@ -12,11 +12,15 @@ export interface QuizRoomInfo {
   roomName: string;
   roomMax: number;
   roomCnt: number;
-  ready: number;
+  readyCnt: number;
   quizCnt: number;
   roomStatus: boolean;
   createdDate: string;
   users: Array<object>;
+  pages: Array<number>;
+  sharePages: Array<number>;
+  single: boolean;
+  inviteUsers: Array<object>;
 }
 
 export interface QuizResultInfo {
