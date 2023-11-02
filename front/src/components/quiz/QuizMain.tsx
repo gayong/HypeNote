@@ -28,7 +28,7 @@ export default function QuizMain() {
             </div>
           </div>
         </Link>
-        <Link href="/quiz/list">
+        <Link href="/quiz/room">
           <div
             className="group bg-font_primary hover:bg-font_primary bg-cover bg-[url('/assets/toge.gif')] rounded-3xl flex text-center justify-center align-center items-center h-[25rem] w-[20rem] shadow-lg dark:shadow-font_secondary
         hover:-translate-y-1 hover:scale-105 duration-300 cursor-pointer">
