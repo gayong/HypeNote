@@ -155,84 +155,63 @@ public class QuizRoomService {
 
 
 
+    // 레디, 언레디
     public void changeReady(Long roomId, Map<String, Object> payload) {
-        Optional<QuizRoom> optionalQuizRoom = this.findById(roomId);
-        QuizRoom quizRoom = optionalQuizRoom.orElseThrow();
+        QuizRoom quizRoom = this.findById(roomId).orElseThrow();
 
-        // userpk , 레디 받기
         Long id = ((Number) payload.get("userPk")).longValue();
         String action = (String) payload.get("action");
+
+        // 레디 상태 변경, 언레디 상태 변경
         boolean isProcessed = quizRoom.memberReady(id, action);
 
         if (isProcessed) {
-            if (action.equals("ready")) {
-                // 레디 처리
-                quizRoom.setReadyCnt(quizRoom.getReadyCnt() + 1);
-            } else if (action.equals("unready")) {
-                // 언레디 처리
-                quizRoom.setReadyCnt(quizRoom.getReadyCnt() - 1);
-            }
-            this.save(quizRoom);
-            Map<String, Object> payloads = new HashMap<>();
-            payloads.put("type", "detail");
-            payloads.put("result", quizRoom);
-            messageTemplate.convertAndSend("/sub/quiz/" + roomId, payloads);
+            // 레디 카운트 변경
+            updateReadyCount(quizRoom, action);
+            // 퀴즈룸 저장
+            saveAndSendQuizRoom(roomId, quizRoom);
         }
 
-        // 스레드 스케줄러
         this.findAllAndSend();
     }
 
+    private void updateReadyCount(QuizRoom quizRoom, String action) {
+        int increment = action.equals("ready") ? 1 : -1;
+        quizRoom.setReadyCnt(quizRoom.getReadyCnt() + increment);
+    }
 
-
+    // 방입장
     public void enterQuizRoom(Long roomId, MemberDto memberDto ) {
-        Optional<QuizRoom> optionalQuizRoom = findById(roomId);
-        QuizRoom quizRoom = optionalQuizRoom.orElseThrow();
+        QuizRoom quizRoom = findById(roomId).orElseThrow();
 
-        List<MemberDto> members = quizRoom.getUsers();
-
-        // 초대 유저에 없으면 입장 X
-        if (quizRoom.getInviteUsers().stream().noneMatch(user -> Objects.equals(user.getUserPk(), memberDto.getUserPk()))) {
+        // 이미 방에 있으면 리턴
+        if (!canEnterQuizRoom(quizRoom, memberDto)) {
             return;
         }
-
-        // 멤버가 있는데 들어가려는 유저가 이미 방에 있으면 리턴
-        if (members != null) {
-            for (MemberDto member : members) {
-                if (memberDto.getUserPk().equals(member.getUserPk())) {
-                    return;
-                }
-            }
-        }
-
-        // 방에 입장
+        //입장
         quizRoom.memberIn(memberDto);
-
         quizRoom.setRoomCnt(quizRoom.getRoomCnt() + 1);
-        this.save(quizRoom);
-        Map<String, Object> payload = new HashMap<>();
-        payload.put("type", "detail");
-        payload.put("result", quizRoom);
-        messageTemplate.convertAndSend("/sub/quiz/" + roomId, payload);
-
+        // 저장
+        saveAndSendQuizRoom(roomId, quizRoom);
         this.findAllAndSend();
     }
 
+    private boolean canEnterQuizRoom(QuizRoom quizRoom, MemberDto memberDto) {
+        return quizRoom.getInviteUsers().stream().anyMatch(user -> Objects.equals(user.getUserPk(), memberDto.getUserPk()))
+                && quizRoom.getUsers().stream().noneMatch(member -> memberDto.getUserPk().equals(member.getUserPk()));
+    }
 
     public void leaveQuizRoom(Long roomId, MemberDto memberDto) {
-        Optional<QuizRoom> optionalQuizRoom = findById(roomId);
-        QuizRoom quizRoom = optionalQuizRoom.orElseThrow();
+        QuizRoom quizRoom = findById(roomId).orElseThrow();
+        // 방에 있는 멤버인지 찾기
+        Optional<MemberDto> optionalMember = findMemberInQuizRoom(quizRoom, memberDto);
 
-        Optional<MemberDto> optionalMember = quizRoom.getUsers().stream()
-                .filter(member -> member.getUserPk().equals(memberDto.getUserPk()))
-                .findFirst();
-
+        // 멤버 못 찾으면 리턴
         if (optionalMember.isEmpty()) {
             return;
         }
 
         MemberDto member = optionalMember.get();
-
         if (member.isReady()) {
             quizRoom.setReadyCnt(quizRoom.getReadyCnt() - 1);
         }
@@ -240,24 +219,42 @@ public class QuizRoomService {
         quizRoom.memberOut(memberDto);
         quizRoom.setRoomCnt(quizRoom.getRoomCnt() - 1);
 
+        // 빈 방이면 삭제, 빈 방 아니면 다른 녀석에 방장 주기
+        handleEmptyQuizRoom(roomId, quizRoom, memberDto);
+        this.save(quizRoom);
+        this.findAllAndSend();
+    }
+
+    private Optional<MemberDto> findMemberInQuizRoom(QuizRoom quizRoom, MemberDto memberDto) {
+        return quizRoom.getUsers().stream()
+                .filter(member -> member.getUserPk().equals(memberDto.getUserPk()))
+                .findFirst();
+    }
+
+    private void handleEmptyQuizRoom(Long roomId, QuizRoom quizRoom, MemberDto memberDto) {
         if (quizRoom.getUsers().isEmpty()) {
             delete(quizRoom);
-            Optional<Quiz> optionalQuiz = quizRepository.findByRoomId(roomId.intValue());
-            Quiz quiz = optionalQuiz.orElseThrow();
-            quizRepository.delete(quiz);
+            deleteQuiz(roomId.intValue());
         } else {
             if (memberDto.isHost()) {
                 quizRoom.getUsers().get(0).setHost(true);
             }
-            Map<String, Object> payload = new HashMap<>();
-            payload.put("type", "detail");
-            payload.put("result", quizRoom);
-            messageTemplate.convertAndSend("/sub/quiz/" + roomId, payload);
-
+            saveAndSendQuizRoom(roomId, quizRoom);
         }
+    }
 
+    private void deleteQuiz(int roomId) {
+        Optional<Quiz> optionalQuiz = quizRepository.findByRoomId(roomId);
+        Quiz quiz = optionalQuiz.orElseThrow();
+        quizRepository.delete(quiz);
+    }
+
+    private void saveAndSendQuizRoom(Long roomId, QuizRoom quizRoom) {
         this.save(quizRoom);
-        this.findAllAndSend();
+        Map<String, Object> payload = new HashMap<>();
+        payload.put("type", "detail");
+        payload.put("result", quizRoom);
+        messageTemplate.convertAndSend("/sub/quiz/" + roomId, payload);
     }
 
 
