@@ -13,15 +13,18 @@ interface Props {
 export const SocketContext = createContext<{
   client: CompatClient | null;
   quizRooms: Array<QuizRoomInfo>;
-  sendRoom: (roomId: number) => void;
+  // sendRoom: (roomId: number) => void;
+  setRoomNumber: (roomNumber: number | null) => void;
 }>({
   client: null,
   quizRooms: [],
-  sendRoom: () => {},
+  // sendRoom: () => {},
+  setRoomNumber: () => {},
 });
 
 // 소켓 기본 연결
 export const SocketProvider: React.FC<Props> = ({ children }) => {
+  const [roomNumber, setRoomNumber] = useState<number | null>(null);
   const [quizRooms, setQuizRooms] = useState([]);
   const [room, setRoom] = useState({});
 
@@ -32,16 +35,14 @@ export const SocketProvider: React.FC<Props> = ({ children }) => {
   // const client = Stomp.over(socket);
 
   useEffect(() => {
-    console.log("영어어어어어ㅓ언결확인좀");
-    console.log(client.connected);
-    console.log("영어어어어어ㅓ언결확인좀");
-  }, [client.connected]);
-
-  useEffect(() => {
     client.connect({}, () => {
       console.log("서버와 연결!", client.connected);
       sendRooms();
-      // subscribeChat(8);
+      console.log("dkjgkaljdgklajklgdjalkj");
+      console.log(roomNumber);
+      if (roomNumber) {
+        sendRoom(roomNumber);
+      }
     });
 
     return () => {
@@ -49,7 +50,7 @@ export const SocketProvider: React.FC<Props> = ({ children }) => {
         console.log("서버 연결 해제");
       });
     };
-  }, []);
+  }, [roomNumber]);
 
   const subscribeRoomList = () => {
     client.subscribe("/sub/quizroom/roomList", (roomList) => {
@@ -64,35 +65,39 @@ export const SocketProvider: React.FC<Props> = ({ children }) => {
   const sendRooms = () => {
     if (quizRooms.length === 0) {
       console.log("방리스트구독!", client.connected);
-
       subscribeRoomList();
     }
     client.send("/pub/quizroom/roomList", {});
   };
 
   const subscribeRoom = (roomId: number) => {
-    client.subscribe(`/sub/quizroom/detail/${roomId}`, (room) => {
+    // client.connect({}, () => {
+    console.log("진짜 제발요");
+
+    client.subscribe(`/sub/quiz/${roomId}`, (room) => {
       setRoom(JSON.parse(room.body));
       console.log("방 들어간다.");
     });
+    // });
+    console.log(room);
   };
+
   const sendRoom = (roomId: number) => {
-    console.log("여기");
-    console.log("방구독!", client.connected);
-    // if (!room) {
-    // console.log("방이 있다잉");
+    // if (room !== roomId) {
     subscribeRoom(roomId);
     // }
 
-    // const data = {
-    //   userPk: "2",
-    //   userName: "isc",
-    //   host: false,
-    //   ready: false,
-    // };
+    const data = {
+      userPk: "2",
+      userName: "윤자현",
+    };
 
-    // client.send(`/pub/quizroom/in/${roomId}`, {}, JSON.stringify(data));
+    client.send(`/pub/quizroom/in/${roomId}`, {}, JSON.stringify(data));
   };
+
+  useEffect(() => {
+    return () => {};
+  }, []);
 
   const subscribeChat = (roomId: number) => {
     client.subscribe(`/sub/chat/${roomId}`, (message) => {
@@ -100,10 +105,10 @@ export const SocketProvider: React.FC<Props> = ({ children }) => {
     });
     const input = {
       userPk: "1",
-      content: "Hello World!",
+      content: "난 바보야.",
     };
     client.send(`/pub/chat/${roomId}`, {}, JSON.stringify(input));
   };
 
-  return <SocketContext.Provider value={{ client, quizRooms, sendRoom }}>{children}</SocketContext.Provider>;
+  return <SocketContext.Provider value={{ client, quizRooms, setRoomNumber }}>{children}</SocketContext.Provider>;
 };

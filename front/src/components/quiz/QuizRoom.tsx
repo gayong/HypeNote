@@ -8,9 +8,11 @@ interface QuizRoomProps {
 }
 
 export default function QuizRoom(props: QuizRoomProps) {
-  const { sendRoom, client } = useContext(SocketContext);
+  const { setRoomNumber } = useContext(SocketContext);
+
   useEffect(() => {
-    console.log(client?.connected);
+    setRoomNumber(props.roomId);
+    console.log(props.roomId);
   }, []);
 
   return (

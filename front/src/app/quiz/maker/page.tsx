@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 
 export default function QuizMakerPage() {
   return (
-    <section>
+    <section className="flex items-center justify-center h-screen">
       <QuizMaker />
     </section>
   );
