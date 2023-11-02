@@ -16,8 +16,8 @@ public class QuizResult {
     private Long userPk;
     private int totals;
     private int Correct;
-    private LocalDateTime examStart;
-    private LocalDateTime examDone;
+    private String examStart;
+    private String examDone;
     List<QuestionResultDto> questionResult;
 
 }

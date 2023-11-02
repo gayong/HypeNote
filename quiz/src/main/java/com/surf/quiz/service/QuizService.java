@@ -2,15 +2,13 @@ package com.surf.quiz.service;
 
 
 import com.surf.quiz.dto.MemberDto;
-import com.surf.quiz.dto.QuestionDto;
-import com.surf.quiz.dto.request.SearchMemberRequestDto;
 import com.surf.quiz.entity.Quiz;
 import com.surf.quiz.repository.QuizRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -28,22 +26,32 @@ public class QuizService {
 
 
     @Transactional
-    public Quiz processAnswer(String roomId, String userId, Map<String, Map<String, String>> answers) {
+    public Quiz processAnswer(String roomId, String userId, Map<String, Map<Long, String>> userAnswerDto) {
         Optional<Quiz> optionalQuiz = quizRepository.findByRoomId(Integer.parseInt(roomId));
+
         // 퀴즈가 있으면
         if (optionalQuiz.isPresent()) {
             Quiz quiz = optionalQuiz.get();
             Map<String, Map<Integer, String>> userAnswers = quiz.getUserAnswers();
 
-            Map<Integer, String> convertedAnswers = new HashMap<>();
-            for (Map.Entry<String, Map<String, String>> entry : answers.entrySet()) {
-                Map<String, String> innerMap = entry.getValue();
-                for (Map.Entry<String, String> innerEntry : innerMap.entrySet()) {
-                    convertedAnswers.put(Integer.parseInt(innerEntry.getKey()), innerEntry.getValue());
+            if(userAnswerDto != null) {
+                for (Map.Entry<String, Map<Long, String>> entry : userAnswerDto.entrySet()) {
+                    Map<Integer, String> convertedAnswers = new HashMap<>();
+                    for (Map.Entry<Long, String> answerEntry : entry.getValue().entrySet()) {
+                        convertedAnswers.put(Math.toIntExact(answerEntry.getKey()), answerEntry.getValue());
+                    }
+
+                    // 기존 유저의 답변이 있는 경우, 병합
+                    if(userAnswers.containsKey(entry.getKey())) {
+                        Map<Integer, String> existingAnswers = userAnswers.get(entry.getKey());
+                        existingAnswers.putAll(convertedAnswers); // 기존 답변에 새 답변 추가
+                        userAnswers.put(entry.getKey(), existingAnswers);
+                    } else { // 새로운 유저의 답변인 경우, 추가
+                        userAnswers.put(entry.getKey(), convertedAnswers);
+                    }
                 }
             }
 
-            userAnswers.put(userId, convertedAnswers);
             // 답변 설정
             quiz.setUserAnswers(userAnswers);
             // 퀴즈 저장

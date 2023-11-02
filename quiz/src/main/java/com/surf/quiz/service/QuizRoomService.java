@@ -1,6 +1,7 @@
 package com.surf.quiz.service;
 
 
+import com.surf.quiz.dto.ExampleDto;
 import com.surf.quiz.dto.MemberDto;
 import com.surf.quiz.dto.QuestionDto;
 import com.surf.quiz.dto.UserDto;
@@ -13,9 +14,9 @@ import com.surf.quiz.repository.QuizRepository;
 import com.surf.quiz.repository.QuizRoomRepository;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -26,8 +27,6 @@ public class QuizRoomService {
     private final QuizRoomRepository quizRepo;
     private final QuizRepository quizRepository;
     private final SimpMessagingTemplate messageTemplate; // 메시지 브로커를 통해 클라이언트와 서버 간의 실시간 메시지 교환을 처리
-//    private final QuizService quizService;
-//    private final QuizRepository quizRepository;
 
     // 일정한 시간 간격으로 작업(태스크)를 실행하거나 지연 실행할 수 있는 스레드 풀 기반의 스케줄링 서비스
     //단일 스레드로 동작하는 스케줄링 서비스(ScheduledExecutorService) 객체를 생성하고, 이 객체(scheduler)에 대한 참조를 유지
@@ -109,10 +108,12 @@ public class QuizRoomService {
 
 
     public QuizRoom createAndSaveQuizRoom(CreateRoomRequestDto createRoomRequestDto) {
+        String formattedDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+
         QuizRoom createQuizRoom = QuizRoom.builder()
                 .roomName(createRoomRequestDto.getRoomName())
                 .quizCnt(createRoomRequestDto.getQuizCnt())
-                .createdDate(LocalDateTime.now())
+                .createdDate(formattedDateTime)
                 .sharePages(createRoomRequestDto.getSharePages())
                 .pages(createRoomRequestDto.getPages())
                 .single(createRoomRequestDto.isSingle())
@@ -126,7 +127,20 @@ public class QuizRoomService {
             createQuizRoom.setRoomMax(createRoomRequestDto.getInviteUsers().size());
         }
 
+        MemberDto member = new MemberDto();
+        member.setHost(true);
+        member.setReady(false);
+        member.setUserPk(1L);
+        member.setUserName("csi");
+        List<MemberDto> members = new ArrayList<>();
+        members.add(member);
+        createQuizRoom.setUsers(members);
+        createQuizRoom.setRoomCnt(1);
+
         QuizRoom createdQuizroom = this.save(createQuizRoom);
+
+
+
 
         // 퀴즈 생성
         Quiz quiz = this.createQuiz(createdQuizroom);
@@ -148,18 +162,16 @@ public class QuizRoomService {
         // userpk , 레디 받기
         Long id = ((Number) payload.get("userPk")).longValue();
         String action = (String) payload.get("action");
+        boolean isProcessed = quizRoom.memberReady(id, action);
 
-        if (action.equals("ready")) {
-            // 레디 처리
-            quizRoom.memberReady(id, action);
-            quizRoom.setReadyCnt(quizRoom.getReadyCnt() + 1);
-            this.save(quizRoom);
-            messageTemplate.convertAndSend("/sub/quizroom/detail/" + roomId, quizRoom);
-
-        } else if (action.equals("unready")) {
-            // 언레디 처리
-            quizRoom.memberReady(id, action);
-            quizRoom.setReadyCnt(quizRoom.getReadyCnt() - 1);
+        if (isProcessed) {
+            if (action.equals("ready")) {
+                // 레디 처리
+                quizRoom.setReadyCnt(quizRoom.getReadyCnt() + 1);
+            } else if (action.equals("unready")) {
+                // 언레디 처리
+                quizRoom.setReadyCnt(quizRoom.getReadyCnt() - 1);
+            }
             this.save(quizRoom);
             messageTemplate.convertAndSend("/sub/quizroom/detail/" + roomId, quizRoom);
         }
@@ -246,52 +258,52 @@ public class QuizRoomService {
         Optional<Quiz> optionalQuiz = quizRepository.findByRoomId(createdQuizroom.getId().intValue());
         if(optionalQuiz.isPresent()) {
             return null;
-//            throw new AlreadyExistsException("Quiz already exists for room: " + roomId);
         }
-        // 퀴즈 생성
         Quiz quiz = new Quiz();
 
         quiz.setRoomId(createdQuizroom.getId().intValue());
-        quiz.setCreatedDate(LocalDateTime.now());
+        String formattedDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        quiz.setCreatedDate(formattedDateTime);
         quiz.setQuizCnt(createdQuizroom.getQuizCnt());
-        // 문제 생성
-        QuestionDto question1 = new QuestionDto();
 
+        QuestionDto question1 = new QuestionDto();
         question1.setQuestion("IP(Internet Protocol) 주소는 어떻게 구성되며, 어떤 역할을 담당하고 있나요?");
         question1.setId(1);
-        // 보기 생성
-        List<String> examples = new ArrayList<>();
-        examples.add("1) IP 주소는 64비트로 구성되어 있으며, 데이터의 무결성을 검증한다.");
-        examples.add("2) IP 주소는 4바이트로 이루어져 있으며, 컴퓨터의 주소 역할을 한다.");
-        examples.add("3) IP 주소는 데이터의 재조합을 처리하며, 데이터의 순서를 조정한다.");
-        examples.add("4) IP 주소는 하드웨어 고유의 식별번호인 MAC 주소와 동일하다.");
 
-        question1.setExample(examples); // 변경된 부분
+        List<ExampleDto> examples = new ArrayList<>();
+        examples.add(new ExampleDto("ex1", "1) IP 주소는 64비트로 구성되어 있으며, 데이터의 무결성을 검증한다."));
+        examples.add(new ExampleDto("ex2", "2) IP 주소는 4바이트로 이루어져 있으며, 컴퓨터의 주소 역할을 한다."));
+        examples.add(new ExampleDto("ex3", "3) IP 주소는 데이터의 재조합을 처리하며, 데이터의 순서를 조정한다."));
+        examples.add(new ExampleDto("ex4", "4) IP 주소는 하드웨어 고유의 식별번호인 MAC 주소와 동일하다."));
 
+        question1.setExample(examples);
 
-        // 문제에 답안 설정
-        question1.setAnswer("2) IP 주소는 4바이트로 이루어져 있으며, 컴퓨터의 주소 역할을 한다.");
-
+        question1.setAnswer("ex2");
+        question1.setCommentary("해설1");
 
         QuestionDto question2 = new QuestionDto();
         question2.setQuestion("TCP/IP는 어떤 두 가지 프로토콜로 구성되어 있으며, 어떤 역할을 각각 수행하고 있는가?");
         question2.setId(2);
-        List<String> examples2 = new ArrayList<>();
-        examples2.add("1) TCP가 데이터의 추적을 처리하고, IP가 데이터의 배달을 담당한다.");
-        examples2.add("2) IP가 데이터의 추적을 처리하고, TCP가 데이터의 배달을 담당한다.");
-        examples2.add("3) TCP와 IP가 모두 데이터의 재조합을 처리한다.");
-        examples2.add("4) TCP와 IP가 모두 데이터의 손실 여부를 확인한다.");
-        question2.setExample(examples2);
-        question2.setAnswer("1) TCP가 데이터의 추적을 처리하고, IP가 데이터의 배달을 담당한다.");
 
-        // 퀴즈에 문제 추가
+        List<ExampleDto> examples2 = new ArrayList<>();
+        examples2.add(new ExampleDto("ex1", "1) TCP가 데이터의 추적을 처리하고, IP가 데이터의 배달을 담당한다."));
+        examples2.add(new ExampleDto("ex2", "2) IP가 데이터의 추적을 처리하고, TCP가 데이터의 배달을 담당한다."));
+        examples2.add(new ExampleDto("ex3", "3) TCP와 IP가 모두 데이터의 재조합을 처리한다."));
+        examples2.add(new ExampleDto("ex4", "4) TCP와 IP가 모두 데이터의 손실 여부를 확인한다."));
+
+        question2.setExample(examples2);
+
+        question2.setAnswer("ex1");
+        question2.setCommentary("해설2");
+
         List<QuestionDto> questions = new ArrayList<>();
         questions.add(question1);
-        quiz.setQuestion(questions);
-        quiz.getQuestion().add(question2);
+        questions.add(question2);
 
-        // 퀴즈 완료 상태 설정
+        quiz.setQuestion(questions);
+
         quiz.setComplete(false);
+
         return quiz;
     }
 

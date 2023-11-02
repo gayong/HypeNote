@@ -20,7 +20,4 @@
 #      database: quiz
 #      username: lesser
 #      password: \!esser101Panda
-#
-#
-
 #springdoc.swagger-ui.path: /swagger-ui.html

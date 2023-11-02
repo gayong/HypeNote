@@ -12,7 +12,7 @@ import java.time.format.DateTimeFormatter;
 @Service
 public class QuizChatService {
     private final SimpMessagingTemplate messageTemplate;
-    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd HH:mm");
+//    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd HH:mm");
 
     public QuizChatService(SimpMessagingTemplate messageTemplate) {
         this.messageTemplate = messageTemplate;
@@ -23,8 +23,7 @@ public class QuizChatService {
         chatDto.setContent(body.getContent());
         chatDto.setUserPk(body.getUserPk());
 
-        LocalDateTime dateTime = LocalDateTime.now();
-        String formattedDateTime = dateTime.format(formatter);
+        String formattedDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
         chatDto.setChatTime(formattedDateTime);
         return chatDto;
     }

@@ -25,8 +25,8 @@ public class Quiz {
     @Id
     private Long id;
     int roomId;
-    @CreatedDate
-    private LocalDateTime createdDate;
+
+    private String createdDate;
     private int quizCnt;
     private int userCnt;
 

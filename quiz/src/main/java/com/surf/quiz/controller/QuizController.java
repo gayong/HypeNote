@@ -1,6 +1,8 @@
 package com.surf.quiz.controller;
 
 import com.surf.quiz.common.BaseResponse;
+import com.surf.quiz.common.BaseResponseStatus;
+import com.surf.quiz.dto.request.AnswerDto;
 import com.surf.quiz.entity.Quiz;
 import com.surf.quiz.entity.QuizResult;
 import com.surf.quiz.entity.QuizRoom;
@@ -33,6 +35,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j // 로깅
 @EnableScheduling  // 스케줄러 허용
 @RestController
+@RequestMapping("/api/quiz")
 @RequiredArgsConstructor // notnull 생성자 사용
 @Tag(name = "퀴즈", description = "퀴즈")
 public class QuizController {
@@ -55,9 +58,14 @@ public class QuizController {
 
     @MessageMapping("/quiz/{roomId}")
     public void StartQuiz(@DestinationVariable int roomId) {
-        Quiz quiz = quizRepository.findByRoomId(roomId).orElseThrow(() -> new IllegalArgumentException("Invalid roomId: " + roomId));
         QuizRoom quizroom = quizRoomRepository.findById((long) roomId).orElseThrow(() -> new IllegalArgumentException("Invalid roomId: " + roomId));
+        if (quizroom.getReadyCnt() != quizroom.getRoomCnt()) {
+            return;
+        }
+        Quiz quiz = quizRepository.findByRoomId(roomId).orElseThrow(() -> new IllegalArgumentException("Invalid roomId: " + roomId));
         quiz.setUserCnt(quizroom.getUsers().toArray().length);
+        quizroom.setRoomStatus(true);
+        quizRoomRepository.save(quizroom);
         quizRepository.save(quiz);
 
         messageTemplate.convertAndSend("/sub/quiz/" + roomId, quiz);
@@ -67,24 +75,25 @@ public class QuizController {
     }
 
 
-    @PostMapping("/api/quiz/{roomId}/{userId}")
+    @PostMapping("/{roomId}/{userId}")
     @Operation(summary = "정답 제출하기")
-    public BaseResponse<Void> receiveAnswer(@PathVariable String roomId, @PathVariable String userId, @RequestBody Map<String, Map<String, String>> answers) {
+    public BaseResponse<Void> receiveAnswer(@PathVariable String roomId, @PathVariable String userId, @RequestBody AnswerDto answerDto) {
 
+        Map<String, Map<Long, String>> userAnswers = answerDto.getAnswers();
         // 답변 전송
-        Quiz quiz = quizService.processAnswer(roomId, userId, answers);
+        Quiz quiz = quizService.processAnswer(roomId, userId, userAnswers);
 
         // 답변을 보낸 유저들이 전부 일치하는지 확인
         if (quizService.isQuizFinished(roomId, quiz.getUserAnswers())) {
             // 퀴즈 완료 처리
             quizResultService.completeQuiz(roomId);
         }
-        return new BaseResponse<>(null);
+        return new BaseResponse<>(BaseResponseStatus.SUCCESS);
     }
 
 
     // 나의 퀴즈 기록 보기
-    @GetMapping("/api/quiz/{userId}")
+    @GetMapping("/{userId}")
     @Operation(summary = "나의 퀴즈 기록")
     public BaseResponse<List<QuizResult>> getMyQuizHistory(@PathVariable Long userId) {
         List<QuizResult> result = quizResultRepository.findByUserPk(userId);
