@@ -22,16 +22,16 @@ repositories {
 }
 
 // For MSA -인식문의
-// ext {
-// 	set('springCloudVersion', "2022.0.4")
-// }
+ ext {
+ 	set('springCloudVersion', "2022.0.4")
+ }
 
 dependencies {
 
 	// For MSA -인식문의
-//	 implementation 'org.springframework.cloud:spring-cloud-starter'
-//	 implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
-//	 implementation 'org.springframework.cloud:spring-cloud-starter-config'
+	 implementation 'org.springframework.cloud:spring-cloud-starter'
+	 implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+	 implementation 'org.springframework.cloud:spring-cloud-starter-config'
 
 	// 잡다
 	compileOnly 'org.projectlombok:lombok'
@@ -53,15 +53,16 @@ dependencies {
 	//  swagger
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
 
-
+	// jsoup : html parse
+	implementation 'org.jsoup:jsoup:1.16.2'
 }
 
 // For MSA -인식문의
-// dependencyManagement {
-// 	imports {
-// 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
-// 	}
-// }
+ dependencyManagement {
+ 	imports {
+ 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+ 	}
+ }
 
 tasks.named('test') {
 	useJUnitPlatform()

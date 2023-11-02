@@ -30,7 +30,7 @@ import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-
+import org.jsoup.Jsoup;
 
 @Slf4j // 로깅
 @EnableScheduling  // 스케줄러 허용
@@ -107,8 +107,17 @@ public class QuizController {
     @Operation(summary = "나의 퀴즈 기록")
     public BaseResponse<List<QuizResult>> getMyQuizHistory(@PathVariable Long userId) {
         List<QuizResult> result = quizResultRepository.findByUserPk(userId);
+        String aaa = "<h1>1231231231231231321132132133333333333333333d</h1><p>asd</p><p>asdddddd</p><p>asdadsad</p><blockquote class=\"novel-border-l-4 novel-border-stone-700\"><p>sdfsdf</p></blockquote><p>asdadsd</p><p></p>";
+        String bbb = extractTextFromHtml(aaa);
+        System.out.println("aaa = " + aaa);
+        System.out.println("bbb = " + bbb);
         return new BaseResponse<>(result);
     }
+
+    public String extractTextFromHtml(String html) {
+        return Jsoup.parse(html).text();
+    }
+
 
     public void completeQuizScheduled(Quiz quiz) {
         System.out.println(" = " + "스케줄러 작동");
