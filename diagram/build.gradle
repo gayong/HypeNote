@@ -19,6 +19,7 @@ configurations {
 
 repositories {
 	mavenCentral()
+	maven { url 'https://jitpack.io' }
 }
 
 // For MSA -인식문의
@@ -54,7 +55,8 @@ dependencies {
 	implementation 'com.google.cloud:google-cloud-language:2.29.0'
 	implementation 'com.google.auth:google-auth-library-oauth2-http:1.18.0'
 
-
+	// komoran
+	implementation 'com.github.shin285:KOMORAN:3.3.9'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
