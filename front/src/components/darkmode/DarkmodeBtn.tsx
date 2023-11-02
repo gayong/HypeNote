@@ -3,7 +3,7 @@
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { BiSolidSun } from "react-icons/bi";
-import { BsFillMoonStarsFill } from "react-icons/bs";
+import { BsFillMoonFill } from "react-icons/bs";
 
 export default function DarkModeBtn() {
   const [currentTheme, setCurrentTheme] = useState<"light" | "dark" | null>(null);
@@ -34,8 +34,8 @@ export default function DarkModeBtn() {
           <button
             title="다크모드로 변경"
             onClick={changeTheme}
-            className="hover:bg-font_primary hover:bg-opacity-30 justify-center items-center flex bg-transparent w-[60px] h-[30px] border-[1.6px] mx-auto hover:bg-gray-300 text-secondary rounded-3xl">
-            <BiSolidSun className="text-[20px]" />
+            className="hover:bg-font_primary hover:bg-opacity-30 justify-start items-center flex bg-transparent w-[45px] h-[25px] border-[1.6px] hover:bg-gray-300 text-secondary rounded-3xl">
+            <BiSolidSun className="ml-1.5 mb-[0.8px] text-[18px] rounded-xl " />
           </button>
         </div>
       ) : (
@@ -43,8 +43,8 @@ export default function DarkModeBtn() {
           <button
             title="라이트모드로 변경"
             onClick={changeTheme}
-            className="hover:bg-font_primary hover:bg-opacity-30 justify-center items-center flex bg-transparent w-[60px] h-[30px] border-[1.6px] mx-auto hover:bg-gray-300 text-secondary rounded-3xl">
-            <BsFillMoonStarsFill className="text-[14px]" />
+            className="hover:bg-font_primary hover:bg-opacity-30 justify-end items-center flex bg-transparent w-[45px] h-[25px] border-[1.6px] hover:bg-gray-300 text-secondary rounded-3xl">
+            <BsFillMoonFill className="mr-1.5 mb-[1.2px] text-[12px]" />
           </button>
         </div>
       )}
