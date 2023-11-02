@@ -88,6 +88,7 @@ public class QuizController {
             // 퀴즈 완료 처리
             quizResultService.completeQuiz(roomId);
         }
+
         return new BaseResponse<>(BaseResponseStatus.SUCCESS);
     }
 
