@@ -7,10 +7,25 @@ import { mean, median } from "d3-array";
 // import { Swatches } from "@d3/color-legend";
 import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { fetchDiagramAll } from "../../api/service/diagram";
 
 const ThreeScene = () => {
   const router = useRouter();
   const ref = useRef();
+
+  const getMine = async () => {
+    try {
+      const response = await fetchDiagramAll();
+      console.log("brain", response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    getMine();
+  }, []);
+
   const nodes = [
     { id: "네트워크", group: 1 },
     { id: "운영체제", group: 1 },
