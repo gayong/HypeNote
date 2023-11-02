@@ -1,9 +1,9 @@
-import QuizMaker from '@/components/quiz/QuizMaker';
-import { Metadata } from 'next';
+import QuizMaker from "@/components/quiz/QuizMaker";
+import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: 'QuizMaker',
-  description: 'Make your own quiz',
+  title: "QuizMaker",
+  description: "Make your own quiz",
 };
 
 export default function QuizMakerPage() {

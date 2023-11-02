@@ -1,5 +1,5 @@
 import QuizMain from "@/components/quiz/QuizMain";
-import { SocketProvider } from "@/context/SocketProvider";
+// import { SocketProvider } from "@/context/SocketProvider";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -7,12 +7,10 @@ export const metadata: Metadata = {
   description: "Quiz MainPage",
 };
 
-export default function QuizMainPage() {
+export default function QuizPage() {
   return (
-    <SocketProvider>
-      <section className="flex items-center justify-center h-screen">
-        <QuizMain />
-      </section>
-    </SocketProvider>
+    <section className="flex items-center justify-center h-screen">
+      <QuizMain />
+    </section>
   );
 }
