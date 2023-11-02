@@ -24,9 +24,17 @@ export const SocketContext = createContext<{
 export const SocketProvider: React.FC<Props> = ({ children }) => {
   const [quizRooms, setQuizRooms] = useState([]);
   const [room, setRoom] = useState({});
+  const socketFactory = () => new SockJS(process.env.NEXT_PUBLIC_SERVER_URL + "quiz/stomp/ws");
+  const client = Stomp.over(socketFactory);
 
-  const socket = new SockJS(process.env.NEXT_PUBLIC_SERVER_URL + "quiz/stomp/ws");
-  const client = Stomp.over(socket);
+  // const socket = new SockJS(process.env.NEXT_PUBLIC_SERVER_URL + "quiz/stomp/ws");
+  // const client = Stomp.over(socket);
+
+  useEffect(() => {
+    console.log("영어어어어어ㅓ언결확인좀");
+    console.log(client.connected);
+    console.log("영어어어어어ㅓ언결확인좀");
+  }, [client.connected]);
 
   useEffect(() => {
     client.connect({}, () => {

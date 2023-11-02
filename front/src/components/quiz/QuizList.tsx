@@ -9,7 +9,10 @@ import { useContext, useEffect } from "react";
 
 export default function QuizList() {
   const { quizRooms } = useContext(SocketContext);
-
+  const { sendRoom, client } = useContext(SocketContext);
+  useEffect(() => {
+    console.log("alkdgjkladjgkajdlkg", client?.connected);
+  }, []);
   return (
     <div>
       <div className="mx-10 pt-15">
