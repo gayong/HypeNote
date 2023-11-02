@@ -36,8 +36,8 @@ public class QuizRoom {
     // false == 대기, true == 실행
     private boolean roomStatus;
 
-    @CreatedDate
-    private LocalDateTime createdDate;
+
+    private String createdDate;
 
     private List<Integer> pages;
     private List<Integer> sharePages;

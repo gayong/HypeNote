@@ -14,8 +14,9 @@ public class QuestionResultDto {
     private int id;
     private String question;
 
-    private List<String> example;
+    private List<ExampleDto> example;
 
     private String answer;
     private String myAnswer;
+    private String commentary;
 }

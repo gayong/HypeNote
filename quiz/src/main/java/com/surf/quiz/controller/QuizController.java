@@ -1,6 +1,8 @@
 package com.surf.quiz.controller;
 
 import com.surf.quiz.common.BaseResponse;
+import com.surf.quiz.common.BaseResponseStatus;
+import com.surf.quiz.dto.request.AnswerDto;
 import com.surf.quiz.entity.Quiz;
 import com.surf.quiz.entity.QuizResult;
 import com.surf.quiz.entity.QuizRoom;
@@ -75,17 +77,18 @@ public class QuizController {
 
     @PostMapping("/{roomId}/{userId}")
     @Operation(summary = "정답 제출하기")
-    public BaseResponse<Void> receiveAnswer(@PathVariable String roomId, @PathVariable String userId, @RequestBody Map<String, Map<String, String>> answers) {
+    public BaseResponse<Void> receiveAnswer(@PathVariable String roomId, @PathVariable String userId, @RequestBody AnswerDto answerDto) {
 
+        Map<String, Map<Long, String>> userAnswers = answerDto.getAnswers();
         // 답변 전송
-        Quiz quiz = quizService.processAnswer(roomId, userId, answers);
+        Quiz quiz = quizService.processAnswer(roomId, userId, userAnswers);
 
         // 답변을 보낸 유저들이 전부 일치하는지 확인
         if (quizService.isQuizFinished(roomId, quiz.getUserAnswers())) {
             // 퀴즈 완료 처리
             quizResultService.completeQuiz(roomId);
         }
-        return new BaseResponse<>(null);
+        return new BaseResponse<>(BaseResponseStatus.SUCCESS);
     }
 
 

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -48,14 +49,16 @@ public class QuizResultService {
 
 
     private void createQuizResultAndSave(MemberDto user, Quiz quiz, Map<Integer, String> userAnswerList) {
+        System.out.println("user = " + user);
+        System.out.println("quiz = " + quiz);
+        System.out.println("userAnswerList = " + userAnswerList);
         QuizResult quizResult = new QuizResult();
         quizResult.setQuizId(quiz.getId());
         quizResult.setRoomId(String.valueOf(quiz.getRoomId()));
         quizResult.setUserPk(user.getUserPk());
-        System.out.println("quizResult.setUserPk = " + user.getUserPk());
         quizResult.setTotals(quiz.getQuestion().size());
-        quizResult.setExamDone(LocalDateTime.now());
-        System.out.println("userAnswerList = " + userAnswerList);
+        String formattedDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
+        quizResult.setExamDone(formattedDateTime);
 
         int correctCount = 0;
         List<QuestionResultDto> questionResults = new ArrayList<>();
@@ -66,11 +69,12 @@ public class QuizResultService {
             questionResult.setQuestion(questionDto.getQuestion());
             questionResult.setExample(questionDto.getExample());
             questionResult.setAnswer(questionDto.getAnswer());
-            String myAnswer = userAnswerList.get(i+1) != null ? userAnswerList.get(i+1) : "0";
-            System.out.println("myAnswer = " + myAnswer);
+            String myAnswer = (userAnswerList != null && userAnswerList.get(i+1) != null) ? userAnswerList.get(i+1) : "0";
             questionResult.setMyAnswer(myAnswer);
+            questionResult.setCommentary(questionDto.getCommentary());
             questionResults.add(questionResult);
 
+            // 정답 확인 조건문 수정
             if (myAnswer.equals(questionDto.getAnswer())) {
                 correctCount++;
             }
@@ -79,9 +83,9 @@ public class QuizResultService {
         quizResult.setCorrect(correctCount);
         quizResult.setQuestionResult(questionResults);
         quizResult.setExamStart(quiz.getCreatedDate());
-        System.out.println("questionResults = " + questionResults);
         quizResultRepository.save(quizResult);
     }
+
 
     @Transactional
     public void completeQuiz(String roomId) {
@@ -94,7 +98,9 @@ public class QuizResultService {
         int userAnswersSize = getUserAnswersSize(quiz);
         System.out.println("userAnswersSize = " + userAnswersSize);
         if (userAnswersSize == 0) {
+            System.out.println("userAnswersSize = " + userAnswersSize);
             for (MemberDto user : quizroom.getUsers()) {
+                System.out.println("user = " + user);
                 createQuizResultAndSave(user, quiz, null);
             }
         } else if (userAnswersSize == quizroom.getUsers().size()) {
