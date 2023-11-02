@@ -25,42 +25,56 @@ public class QuizService {
 
 
 
+    // 정답 저장
     @Transactional
     public Quiz processAnswer(String roomId, String userId, Map<String, Map<Long, String>> userAnswerDto) {
-        Optional<Quiz> optionalQuiz = quizRepository.findByRoomId(Integer.parseInt(roomId));
+        Quiz quiz = findQuizByRoomId(roomId);
+        Map<String, Map<Integer, String>> userAnswers = quiz.getUserAnswers();
 
-        // 퀴즈가 있으면
-        if (optionalQuiz.isPresent()) {
-            Quiz quiz = optionalQuiz.get();
-            Map<String, Map<Integer, String>> userAnswers = quiz.getUserAnswers();
-
-            if(userAnswerDto != null) {
-                for (Map.Entry<String, Map<Long, String>> entry : userAnswerDto.entrySet()) {
-                    Map<Integer, String> convertedAnswers = new HashMap<>();
-                    for (Map.Entry<Long, String> answerEntry : entry.getValue().entrySet()) {
-                        convertedAnswers.put(Math.toIntExact(answerEntry.getKey()), answerEntry.getValue());
-                    }
-
-                    // 기존 유저의 답변이 있는 경우, 병합
-                    if(userAnswers.containsKey(entry.getKey())) {
-                        Map<Integer, String> existingAnswers = userAnswers.get(entry.getKey());
-                        existingAnswers.putAll(convertedAnswers); // 기존 답변에 새 답변 추가
-                        userAnswers.put(entry.getKey(), existingAnswers);
-                    } else { // 새로운 유저의 답변인 경우, 추가
-                        userAnswers.put(entry.getKey(), convertedAnswers);
-                    }
-                }
-            }
-
-            // 답변 설정
-            quiz.setUserAnswers(userAnswers);
-            // 퀴즈 저장
-            quizRepository.save(quiz);
-
-            return quiz;
+        // 유저 정답이 있으면
+        if(userAnswerDto != null) {
+            processUserAnswers(userAnswerDto, userAnswers);
         } else {
-            throw new NoSuchElementException("Quiz not found for roomId: " + roomId);
+            // null 예외처리
+            throw new IllegalArgumentException("User answer cannot be null");
         }
+
+        // 답변 설정
+        quiz.setUserAnswers(userAnswers);
+        // 퀴즈 저장
+        quizRepository.save(quiz);
+
+        return quiz;
+    }
+
+    private Quiz findQuizByRoomId(String roomId) {
+        return quizRepository.findByRoomId(Integer.parseInt(roomId))
+                .orElseThrow(() -> new NoSuchElementException("Quiz not found for roomId: " + roomId));
+    }
+
+    private void processUserAnswers(Map<String, Map<Long, String>> userAnswerDto, Map<String, Map<Integer, String>> userAnswers) {
+        // 유저 정답을 돌면서
+        for (Map.Entry<String, Map<Long, String>> entry : userAnswerDto.entrySet()) {
+            Map<Integer, String> convertedAnswers = convertUserAnswer(entry);
+
+            // 기존 유저의 답변이 있는 경우, 병합
+            if(userAnswers.containsKey(entry.getKey())) {
+                Map<Integer, String> existingAnswers = userAnswers.get(entry.getKey());
+                existingAnswers.putAll(convertedAnswers); // 기존 답변에 새 답변 추가
+                userAnswers.put(entry.getKey(), existingAnswers);
+            } else { // 새로운 유저의 답변인 경우, 추가
+                userAnswers.put(entry.getKey(), convertedAnswers);
+            }
+        }
+    }
+
+    private Map<Integer, String> convertUserAnswer(Map.Entry<String, Map<Long, String>> userAnswerEntry) {
+        Map<Integer, String> convertedAnswers = new HashMap<>();
+        // 문제 / 정답 추출
+        for (Map.Entry<Long, String> answerEntry : userAnswerEntry.getValue().entrySet()) {
+            convertedAnswers.put(Math.toIntExact(answerEntry.getKey()), answerEntry.getValue());
+        }
+        return convertedAnswers;
     }
 
 

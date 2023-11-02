@@ -36,9 +36,53 @@ public class QuizResultService {
     }
 
 
+
+    // 퀴즈 완료
+    @Transactional
+    public void completeQuiz(String roomId) {
+        Quiz quiz = findQuizByRoomId(roomId);
+        if (quiz.isComplete()) {
+            return;
+        }
+        QuizRoom quizroom = getQuizRoomById(roomId);
+
+        // 정답 대조
+        processUserAnswers(quiz, quizroom);
+        // 결과 저장
+        saveAndSendResults(roomId, quiz);
+    }
+
+    private Quiz findQuizByRoomId(String roomId) {
+        return quizRepository.findByRoomId(Integer.parseInt(roomId))
+                .orElseThrow(() -> new RuntimeException("Quiz not found"));
+    }
+
     private QuizRoom getQuizRoomById(String roomId) {
         return quizRoomRepository.findById(Long.valueOf(roomId))
                 .orElseThrow(() -> new IllegalArgumentException("Invalid roomId: " + roomId));
+    }
+
+    // 정답 처리
+    private void processUserAnswers(Quiz quiz, QuizRoom quizroom) {
+        int userAnswersSize = getUserAnswersSize(quiz);
+        System.out.println("userAnswersSize = " + userAnswersSize);
+        for (MemberDto user : quizroom.getUsers()) {
+            // 유저 정답 리스트 가져오기
+            Map<Integer, String> userAnswerList = getUserAnswerList(quiz, user, userAnswersSize);
+            createQuizResultAndSave(user, quiz, userAnswerList);
+        }
+    }
+
+    private Map<Integer, String> getUserAnswerList(Quiz quiz, MemberDto user, int userAnswersSize) {
+        if (userAnswersSize == 0 || userAnswersSize != quiz.getUserCnt()) {
+            return quiz.getUserAnswers().get(String.valueOf(user.getUserPk()));
+        } else {
+            return quiz.getUserAnswers().entrySet().stream()
+                    .filter(entry -> user.getUserPk() == Long.parseLong(entry.getKey()))
+                    .map(Map.Entry::getValue)
+                    .findFirst()
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+        }
     }
 
     private int getUserAnswersSize(Quiz quiz) {
@@ -47,11 +91,16 @@ public class QuizResultService {
                 .orElse(0);
     }
 
-
+    // 문제 결과 만들고 저장
     private void createQuizResultAndSave(MemberDto user, Quiz quiz, Map<Integer, String> userAnswerList) {
-        System.out.println("user = " + user);
-        System.out.println("quiz = " + quiz);
-        System.out.println("userAnswerList = " + userAnswerList);
+        QuizResult quizResult = createQuizResult(user, quiz);
+        List<QuestionResultDto> questionResults = createQuestionResults(quiz, userAnswerList, quizResult);
+        quizResult.setQuestionResult(questionResults);
+        quizResultRepository.save(quizResult);
+    }
+
+    // 개인 결과
+    private QuizResult createQuizResult(MemberDto user, Quiz quiz) {
         QuizResult quizResult = new QuizResult();
         quizResult.setQuizId(quiz.getId());
         quizResult.setRoomId(String.valueOf(quiz.getRoomId()));
@@ -59,68 +108,43 @@ public class QuizResultService {
         quizResult.setTotals(quiz.getQuestion().size());
         String formattedDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
         quizResult.setExamDone(formattedDateTime);
+        quizResult.setExamStart(quiz.getCreatedDate());
+        return quizResult;
+    }
 
+    // 퀴즈 결과 만들기
+    private List<QuestionResultDto> createQuestionResults(Quiz quiz, Map<Integer, String> userAnswerList, QuizResult quizResult) {
         int correctCount = 0;
         List<QuestionResultDto> questionResults = new ArrayList<>();
         for (int i = 0; i < quiz.getQuestion().size(); i++) {
             QuestionDto questionDto = quiz.getQuestion().get(i);
-            QuestionResultDto questionResult = new QuestionResultDto();
-            questionResult.setId(questionDto.getId());
-            questionResult.setQuestion(questionDto.getQuestion());
-            questionResult.setExample(questionDto.getExample());
-            questionResult.setAnswer(questionDto.getAnswer());
-            String myAnswer = (userAnswerList != null && userAnswerList.get(i+1) != null) ? userAnswerList.get(i+1) : "0";
-            questionResult.setMyAnswer(myAnswer);
-            questionResult.setCommentary(questionDto.getCommentary());
+            QuestionResultDto questionResult = createQuestionResult(questionDto, userAnswerList, i);
             questionResults.add(questionResult);
-
-            // 정답 확인 조건문 수정
-            if (myAnswer.equals(questionDto.getAnswer())) {
+            if (isCorrectAnswer(questionDto, questionResult)) {
                 correctCount++;
             }
         }
-
         quizResult.setCorrect(correctCount);
-        quizResult.setQuestionResult(questionResults);
-        quizResult.setExamStart(quiz.getCreatedDate());
-        quizResultRepository.save(quizResult);
+        return questionResults;
     }
 
-
-    @Transactional
-    public void completeQuiz(String roomId) {
-        Quiz quiz = quizRepository.findByRoomId(Integer.parseInt(roomId)).orElseThrow(() -> new RuntimeException("Quiz not found"));
-        if (quiz.isComplete()) {
-            return;
-        }
-        QuizRoom quizroom = getQuizRoomById(roomId);
-
-        int userAnswersSize = getUserAnswersSize(quiz);
-        System.out.println("userAnswersSize = " + userAnswersSize);
-        if (userAnswersSize == 0) {
-            System.out.println("userAnswersSize = " + userAnswersSize);
-            for (MemberDto user : quizroom.getUsers()) {
-                System.out.println("user = " + user);
-                createQuizResultAndSave(user, quiz, null);
-            }
-        } else if (userAnswersSize == quizroom.getUsers().size()) {
-            for (Map.Entry<String, Map<Integer, String>> entry : quiz.getUserAnswers().entrySet()) {
-                MemberDto user = quizroom.getUsers().stream()
-                        .filter(u -> u.getUserPk() == Long.parseLong(entry.getKey()))
-                        .findFirst()
-                        .orElseThrow(() -> new RuntimeException("User not found"));
-                createQuizResultAndSave(user, quiz, entry.getValue());
-            }
-        } else {
-            for (MemberDto user : quizroom.getUsers()) {
-                Map<Integer, String> userAnswerList = quiz.getUserAnswers().get(String.valueOf(user.getUserPk()));
-                createQuizResultAndSave(user, quiz, userAnswerList);
-            }
-        }
-
-        this.saveAndSendResults(roomId, quiz);
+    // 문제 결과
+    private QuestionResultDto createQuestionResult(QuestionDto questionDto, Map<Integer, String> userAnswerList, int index) {
+        QuestionResultDto questionResult = new QuestionResultDto();
+        questionResult.setId(questionDto.getId());
+        questionResult.setQuestion(questionDto.getQuestion());
+        questionResult.setExample(questionDto.getExample());
+        questionResult.setAnswer(questionDto.getAnswer());
+        String myAnswer = (userAnswerList != null && userAnswerList.get(index+1) != null) ? userAnswerList.get(index+1) : "0";
+        questionResult.setMyAnswer(myAnswer);
+        questionResult.setCommentary(questionDto.getCommentary());
+        return questionResult;
     }
 
+    // 정답이 맞는지 확인
+    private boolean isCorrectAnswer(QuestionDto questionDto, QuestionResultDto questionResult) {
+        return questionResult.getMyAnswer().equals(questionDto.getAnswer());
+    }
 
     // 각 유저의 답안이 저장 > 결과 전송
     private void saveAndSendResults(String roomId, Quiz quiz) {

@@ -59,21 +59,25 @@ public class QuizController {
     @MessageMapping("/quiz/{roomId}")
     public void StartQuiz(@DestinationVariable int roomId) {
         QuizRoom quizroom = quizRoomRepository.findById((long) roomId).orElseThrow(() -> new IllegalArgumentException("Invalid roomId: " + roomId));
+
+        // 퀴즈룸 레디 안 했으면 리턴
         if (quizroom.getReadyCnt() != quizroom.getRoomCnt()) {
             return;
         }
+
         Quiz quiz = quizRepository.findByRoomId(roomId).orElseThrow(() -> new IllegalArgumentException("Invalid roomId: " + roomId));
         quiz.setUserCnt(quizroom.getUsers().toArray().length);
         quizroom.setRoomStatus(true);
         quizRoomRepository.save(quizroom);
 
+
         Map<String, Object> payload = new HashMap<>();
         payload.put("type", "quiz");
         payload.put("result", quiz);
         quizRepository.save(quiz);
-
         messageTemplate.convertAndSend("/sub/quiz/" + roomId, payload);
 
+        // 시간 제한 퀴즈 종료 스케줄러 작동
         int delay = quiz.getQuizCnt() * 30;
         scheduler.schedule(() -> completeQuizScheduled(quiz), delay, TimeUnit.SECONDS);
     }
@@ -84,6 +88,7 @@ public class QuizController {
     public BaseResponse<Void> receiveAnswer(@PathVariable String roomId, @PathVariable String userId, @RequestBody AnswerDto answerDto) {
 
         Map<String, Map<Long, String>> userAnswers = answerDto.getAnswers();
+
         // 답변 전송
         Quiz quiz = quizService.processAnswer(roomId, userId, userAnswers);
 
