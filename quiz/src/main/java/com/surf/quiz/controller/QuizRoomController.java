@@ -102,6 +102,6 @@ public class QuizRoomController {
         Optional<QuizRoom> optionalQuizRoom = quizRoomService.findById(roomId);
         QuizRoom quizRoom = optionalQuizRoom.orElseThrow();
 
-        messageTemplate.convertAndSend("/sub/quizroom/detail/" + roomId, quizRoom);
+        messageTemplate.convertAndSend("/sub/quiz/" + roomId, quizRoom);
     }
 }

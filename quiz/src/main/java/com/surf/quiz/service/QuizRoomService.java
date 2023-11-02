@@ -129,7 +129,7 @@ public class QuizRoomService {
 
         MemberDto member = new MemberDto();
         member.setHost(true);
-        member.setReady(false);
+        member.setReady(createQuizRoom.isSingle());
         member.setUserPk(1L);
         member.setUserName("csi");
         List<MemberDto> members = new ArrayList<>();
@@ -173,7 +173,10 @@ public class QuizRoomService {
                 quizRoom.setReadyCnt(quizRoom.getReadyCnt() - 1);
             }
             this.save(quizRoom);
-            messageTemplate.convertAndSend("/sub/quizroom/detail/" + roomId, quizRoom);
+            Map<String, Object> payloads = new HashMap<>();
+            payloads.put("type", "detail");
+            payloads.put("result", quizRoom);
+            messageTemplate.convertAndSend("/sub/quiz/" + roomId, payloads);
         }
 
         // 스레드 스케줄러
@@ -207,7 +210,10 @@ public class QuizRoomService {
 
         quizRoom.setRoomCnt(quizRoom.getRoomCnt() + 1);
         this.save(quizRoom);
-        messageTemplate.convertAndSend("/sub/quizroom/detail/" + roomId, quizRoom);
+        Map<String, Object> payload = new HashMap<>();
+        payload.put("type", "detail");
+        payload.put("result", quizRoom);
+        messageTemplate.convertAndSend("/sub/quiz/" + roomId, payload);
 
         this.findAllAndSend();
     }
@@ -242,10 +248,12 @@ public class QuizRoomService {
         } else {
             if (memberDto.isHost()) {
                 quizRoom.getUsers().get(0).setHost(true);
-                messageTemplate.convertAndSend("/sub/quizroom/detail/" + roomId, quizRoom);
-            } else {
-                messageTemplate.convertAndSend("/sub/quizroom/detail/" + roomId, quizRoom);
             }
+            Map<String, Object> payload = new HashMap<>();
+            payload.put("type", "detail");
+            payload.put("result", quizRoom);
+            messageTemplate.convertAndSend("/sub/quiz/" + roomId, payload);
+
         }
 
         this.save(quizRoom);

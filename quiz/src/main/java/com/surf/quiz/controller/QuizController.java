@@ -66,9 +66,13 @@ public class QuizController {
         quiz.setUserCnt(quizroom.getUsers().toArray().length);
         quizroom.setRoomStatus(true);
         quizRoomRepository.save(quizroom);
+
+        Map<String, Object> payload = new HashMap<>();
+        payload.put("type", "quiz");
+        payload.put("result", quiz);
         quizRepository.save(quiz);
 
-        messageTemplate.convertAndSend("/sub/quiz/" + roomId, quiz);
+        messageTemplate.convertAndSend("/sub/quiz/" + roomId, payload);
 
         int delay = quiz.getQuizCnt() * 30;
         scheduler.schedule(() -> completeQuizScheduled(quiz), delay, TimeUnit.SECONDS);

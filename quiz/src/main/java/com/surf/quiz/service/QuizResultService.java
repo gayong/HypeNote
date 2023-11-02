@@ -138,8 +138,9 @@ public class QuizResultService {
 
             // results와 ranking을 하나의 객체에 담아 보냄
             Map<String, Object> payload = new HashMap<>();
-            payload.put("results", results);
+            payload.put("type", "result");
             payload.put("ranking", ranking);
+            payload.put("result", results);
 
             messageTemplate.convertAndSend("/sub/quiz/" + roomId, payload);
         }
