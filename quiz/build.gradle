@@ -50,11 +50,16 @@ dependencies {
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+	// feign
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+	implementation 'org.springframework.cloud:spring-cloud-starter-loadbalancer'
+
 	//  swagger
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
 	
 	// jsoup : html parse
 	implementation 'org.jsoup:jsoup:1.16.2'
+
 }
 
 // For MSA -인식문의
