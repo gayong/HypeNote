@@ -4,7 +4,7 @@ import SockJS from "sockjs-client";
 import { useEffect, useRef, useState, createContext } from "react";
 import { Stomp, CompatClient } from "@stomp/stompjs";
 import React, { ReactNode } from "react";
-import { QuizRoomInfo } from "@/types/quiz";
+import { QuizRoomInfo, QuizRoomDetail } from "@/types/quiz";
 
 interface Props {
   children: ReactNode;
@@ -13,12 +13,12 @@ interface Props {
 export const SocketContext = createContext<{
   client: CompatClient | null;
   quizRooms: Array<QuizRoomInfo>;
-  // sendRoom: (roomId: number) => void;
+  room: QuizRoomInfo | null;
   setRoomNumber: (roomNumber: number | null) => void;
 }>({
   client: null,
   quizRooms: [],
-  // sendRoom: () => {},
+  room: null,
   setRoomNumber: () => {},
 });
 
@@ -26,7 +26,7 @@ export const SocketContext = createContext<{
 export const SocketProvider: React.FC<Props> = ({ children }) => {
   const [roomNumber, setRoomNumber] = useState<number | null>(null);
   const [quizRooms, setQuizRooms] = useState([]);
-  const [room, setRoom] = useState({});
+  const [room, setRoom] = useState<QuizRoomInfo | null>(null);
 
   const socketFactory = () => new SockJS(process.env.NEXT_PUBLIC_SERVER_URL + "quiz/stomp/ws");
   const client = Stomp.over(socketFactory);
@@ -38,8 +38,7 @@ export const SocketProvider: React.FC<Props> = ({ children }) => {
     client.connect({}, () => {
       console.log("서버와 연결!", client.connected);
       sendRooms();
-      console.log("dkjgkaljdgklajklgdjalkj");
-      console.log(roomNumber);
+      // 룸 연결
       if (roomNumber) {
         sendRoom(roomNumber);
       }
@@ -54,9 +53,6 @@ export const SocketProvider: React.FC<Props> = ({ children }) => {
 
   const subscribeRoomList = () => {
     client.subscribe("/sub/quizroom/roomList", (roomList) => {
-      console.log("방보여줘");
-      console.log("방보여줘!", client.connected);
-
       setQuizRooms(JSON.parse(roomList.body));
       console.log(roomList.body);
     });
@@ -71,18 +67,16 @@ export const SocketProvider: React.FC<Props> = ({ children }) => {
   };
 
   const subscribeRoom = (roomId: number) => {
-    // client.connect({}, () => {
     console.log("진짜 제발요");
 
-    client.subscribe(`/sub/quiz/${roomId}`, (room) => {
-      setRoom(JSON.parse(room.body));
-      console.log("방 들어간다.");
+    client.subscribe(`/sub/quiz/${roomId}`, (response) => {
+      const responseBody = JSON.parse(response.body);
+      setRoom(responseBody.result);
     });
-    // });
-    console.log(room);
   };
 
   const sendRoom = (roomId: number) => {
+    console.log(room, "dalkghakldgjhlakdjgklajlkg");
     // if (room !== roomId) {
     subscribeRoom(roomId);
     // }
@@ -110,5 +104,5 @@ export const SocketProvider: React.FC<Props> = ({ children }) => {
     client.send(`/pub/chat/${roomId}`, {}, JSON.stringify(input));
   };
 
-  return <SocketContext.Provider value={{ client, quizRooms, setRoomNumber }}>{children}</SocketContext.Provider>;
+  return <SocketContext.Provider value={{ client, quizRooms, setRoomNumber, room }}>{children}</SocketContext.Provider>;
 };
