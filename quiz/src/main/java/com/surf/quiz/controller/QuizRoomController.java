@@ -33,7 +33,7 @@ import java.util.concurrent.ScheduledExecutorService;
 @RequiredArgsConstructor
 @RequestMapping("/api/quiz")
 @Tag(name = "퀴즈룸", description = "퀴즈룸")
-@CrossOrigin(origins = {"http://localhost:3000", "https://k9e101.p.ssafy.io"}, allowCredentials = "true", allowedHeaders = "*", methods = {
+@CrossOrigin(origins = {"http://localhost:3000", "https://k9e101.p.ssafy.io", "http://localhost:8080"}, allowCredentials = "true", allowedHeaders = "*", methods = {
         RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS, RequestMethod.HEAD, RequestMethod.DELETE,
         RequestMethod.PUT })
 public class QuizRoomController {
