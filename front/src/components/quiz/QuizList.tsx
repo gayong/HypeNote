@@ -9,14 +9,14 @@ import { useContext, useEffect } from "react";
 import Button from "../../components/ui/Button";
 
 export default function QuizList() {
-  const { quizRooms, setRoomNumber } = useContext(SocketContext);
+  const { quizRooms, setRoomNumber, sendRooms } = useContext(SocketContext);
 
   const handleCreateRoom = () => {
     console.log("방만들기");
   };
 
   return (
-    <div>
+    <>
       <div className="mx-10">
         <h1 className="text-3xl font-bold mb-2 text-center">퀴즈 리스트</h1>
         <div className="flex justify-end">
@@ -45,6 +45,6 @@ export default function QuizList() {
           ))}
         </div>
       </div>
-    </div>
+    </>
   );
 }

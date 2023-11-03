@@ -20,7 +20,6 @@ export default function QuizRoom(props: QuizRoomProps) {
 
     if (room) {
       setQuizRoom(room);
-      console.log(room);
     }
   }, [room]);
 
