@@ -1,4 +1,4 @@
-package com.surf.diagram.google.dto;
+package com.surf.diagram.diagram.dto;
 
 
 import lombok.AllArgsConstructor;
