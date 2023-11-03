@@ -15,11 +15,15 @@ export const SocketContext = createContext<{
   quizRooms: Array<QuizRoomInfo>;
   room: QuizRoomInfo | null;
   setRoomNumber: (roomNumber: number | null) => void;
+  sendReady: (roomNumber: number) => void;
+  sendOutRoom: (roomNumber: number) => void;
 }>({
   client: null,
   quizRooms: [],
   room: null,
   setRoomNumber: () => {},
+  sendReady: () => {},
+  sendOutRoom: () => {},
 });
 
 // 소켓 기본 연결
@@ -37,10 +41,11 @@ export const SocketProvider: React.FC<Props> = ({ children }) => {
   useEffect(() => {
     client.connect({}, () => {
       console.log("서버와 연결!", client.connected);
+      // 지금 현재 방목록 불러오기
       sendRooms();
       // 룸 연결
       if (roomNumber) {
-        sendRoom(roomNumber);
+        sendInRoom(roomNumber);
       }
     });
 
@@ -49,7 +54,7 @@ export const SocketProvider: React.FC<Props> = ({ children }) => {
         console.log("서버 연결 해제");
       });
     };
-  }, [roomNumber]);
+  }, [roomNumber, client]);
 
   const subscribeRoomList = () => {
     client.subscribe("/sub/quizroom/roomList", (roomList) => {
@@ -66,43 +71,60 @@ export const SocketProvider: React.FC<Props> = ({ children }) => {
     client.send("/pub/quizroom/roomList", {});
   };
 
-  const subscribeRoom = (roomId: number) => {
-    console.log("진짜 제발요");
-
+  // 방 구독
+  const subscribeInRoom = (roomId: number) => {
     client.subscribe(`/sub/quiz/${roomId}`, (response) => {
       const responseBody = JSON.parse(response.body);
       setRoom(responseBody.result);
     });
   };
 
-  const sendRoom = (roomId: number) => {
-    console.log(room, "dalkghakldgjhlakdjgklajlkg");
-    // if (room !== roomId) {
-    subscribeRoom(roomId);
-    // }
+  // 입장
+  const sendInRoom = (roomId: number) => {
+    subscribeInRoom(roomId);
 
     const data = {
       userPk: "2",
-      userName: "윤자현",
+      userName: "isc",
     };
 
     client.send(`/pub/quizroom/in/${roomId}`, {}, JSON.stringify(data));
   };
 
-  useEffect(() => {
-    return () => {};
-  }, []);
+  //퇴장
+  const sendOutRoom = (roomId: number) => {
+    const data = {
+      userPk: "2",
+    };
+
+    client.send(`/pub/quizroom/out/${roomId}`, {}, JSON.stringify(data));
+  };
+
+  // 레디
+  const sendReady = (roomId: number) => {
+    console.log("레디합니데이");
+    const data = {
+      userPk: 2,
+      action: "ready",
+    };
+
+    client.send(`/pub/quizroom/ready/${roomId}`, {}, JSON.stringify(data));
+  };
 
   const subscribeChat = (roomId: number) => {
     client.subscribe(`/sub/chat/${roomId}`, (message) => {
       console.log("채팅", message);
     });
     const input = {
-      userPk: "1",
+      userPk: "2",
       content: "난 바보야.",
     };
     client.send(`/pub/chat/${roomId}`, {}, JSON.stringify(input));
   };
 
-  return <SocketContext.Provider value={{ client, quizRooms, setRoomNumber, room }}>{children}</SocketContext.Provider>;
+  return (
+    <SocketContext.Provider value={{ client, quizRooms, setRoomNumber, room, sendReady, sendOutRoom }}>
+      {children}
+    </SocketContext.Provider>
+  );
 };
