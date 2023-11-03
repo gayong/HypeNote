@@ -21,6 +21,7 @@ import java.util.*;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Service
 public class QuizRoomService {
@@ -67,7 +68,9 @@ public class QuizRoomService {
 
 
     public void findAllAndSend() {
-        List<QuizRoom> roomList = this.findAll();
+        List<QuizRoom> roomList = this.findAll().stream()
+                .filter(room -> !room.isSingle())
+                .collect(Collectors.toList());
         scheduler.schedule(() -> messageTemplate.convertAndSend("/sub/quizroom/roomList", roomList), 1, TimeUnit.SECONDS);
     }
 
@@ -183,7 +186,9 @@ public class QuizRoomService {
     // 방입장
     public void enterQuizRoom(Long roomId, MemberDto memberDto ) {
         QuizRoom quizRoom = findById(roomId).orElseThrow();
-
+        if (quizRoom.getRoomCnt()>=quizRoom.getRoomMax()) {
+            return ;
+        }
         // 이미 방에 있으면 리턴
         if (!canEnterQuizRoom(quizRoom, memberDto)) {
             return;
