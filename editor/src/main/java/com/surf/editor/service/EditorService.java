@@ -4,6 +4,7 @@ import com.surf.editor.common.error.ErrorCode;
 import com.surf.editor.common.error.exception.BaseException;
 import com.surf.editor.common.error.exception.NotFoundException;
 import com.surf.editor.domain.Editor;
+import com.surf.editor.dto.request.EditorHyperLinkRequestDto;
 import com.surf.editor.dto.request.EditorRelationRequestDto;
 import com.surf.editor.dto.request.EditorWriteRequestDto;
 import com.surf.editor.dto.response.EditorCheckResponseDto;
@@ -156,6 +157,16 @@ public class EditorService {
                 .orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
 
         findEditor.childRelation(editorRelationRequestDto.getChildId());
+
+        editorRepository.save(findEditor);
+    }
+
+    public void editorHyperLink(int userId, EditorHyperLinkRequestDto editorHyperLinkRequestDto) {
+        // db의 hyperLink 리스트에 추가
+        Editor findEditor = editorRepository.findById(editorHyperLinkRequestDto.getParentId())
+                .orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
+
+        findEditor.childHyperLink(editorHyperLinkRequestDto.getChildId());
 
         editorRepository.save(findEditor);
     }

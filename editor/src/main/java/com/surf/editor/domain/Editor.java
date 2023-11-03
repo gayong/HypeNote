@@ -25,6 +25,7 @@ public class Editor {
 
     private String parentId;
     private List<String> childId;
+    private List<String> hyperLink;
 
     public static Editor toEntity(String title, String content){
         return Editor.builder()
@@ -41,5 +42,8 @@ public class Editor {
 
     public void childRelation(String child){
         childId.add(child);
+    }
+    public void childHyperLink(String child){
+        hyperLink.add(child);
     }
 }

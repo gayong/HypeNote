@@ -1,6 +1,7 @@
 package com.surf.editor.controller;
 
 import com.surf.editor.common.response.ApiResponse;
+import com.surf.editor.dto.request.EditorHyperLinkRequestDto;
 import com.surf.editor.dto.request.EditorRelationRequestDto;
 import com.surf.editor.dto.request.EditorWriteRequestDto;
 import com.surf.editor.dto.response.EditorCheckResponseDto;
@@ -26,7 +27,7 @@ public class EditorController {
         EditorCreateResponseDto editorCreateResponseDto = editorService.editorCreate(userId);
 
         ApiResponse apiResponse = ApiResponse.builder()
-                .message("게시판 작성")
+                .message("문서 작성 성공")
                 .status(OK.value())
                 .data(editorCreateResponseDto)
                 .build();
@@ -39,7 +40,20 @@ public class EditorController {
         editorService.editorRelation(userId,editorRelationRequestDto);
 
         ApiResponse apiResponse = ApiResponse.builder()
-                .message(" 작성")
+                .message("문서 연관 관계 연결 성공")
+                .status(OK.value())
+                .data(null)
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @PostMapping("/hyperlink/{userId}")
+    public ResponseEntity<ApiResponse> editorHyperLink(@PathVariable int userId, @RequestBody EditorHyperLinkRequestDto editorHyperLinkRequestDto){
+        editorService.editorHyperLink(userId,editorHyperLinkRequestDto);
+
+        ApiResponse apiResponse = ApiResponse.builder()
+                .message("문서 하이퍼 링크 연결 성공")
                 .status(OK.value())
                 .data(null)
                 .build();
@@ -52,7 +66,7 @@ public class EditorController {
         editorService.editorWrite(editorId,editorWriteRequest);
 
         ApiResponse apiResponse = ApiResponse.builder()
-                .message("게시판 글 쓰기")
+                .message("문서 글 쓰기")
                 .status(OK.value())
                 .data(null)
                 .build();
@@ -65,7 +79,7 @@ public class EditorController {
         editorService.editorDelete(editorId);
 
         ApiResponse apiResponse = ApiResponse.builder()
-                .message("게시판 글 삭제")
+                .message("문서 글 삭제")
                 .status(OK.value())
                 .data(null)
                 .build();
@@ -78,7 +92,7 @@ public class EditorController {
         EditorCheckResponseDto editorCheckResponse = editorService.editorCheck(editorId);
 
         ApiResponse apiResponse = ApiResponse.builder()
-                .message("게시글 조회")
+                .message("문서 조회")
                 .status(OK.value())
                 .data(editorCheckResponse)
                 .build();
@@ -91,7 +105,7 @@ public class EditorController {
         EditorSearchResponseDto editorSearchResponse = editorService.editorSearch(search);
 
         ApiResponse apiResponse = ApiResponse.builder()
-                .message("게시글 검색")
+                .message("문서 검색")
                 .status(OK.value())
                 .data(editorSearchResponse)
                 .build();
