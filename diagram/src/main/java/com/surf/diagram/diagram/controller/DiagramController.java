@@ -19,6 +19,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/diagram")
 @Tag(name = "다이어그램", description = "다이어그램")
+@CrossOrigin(origins = {"http://localhost:3000", "https://k9e101.p.ssafy.io"}, allowCredentials = "true", allowedHeaders = "*", methods = {
+        RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS, RequestMethod.HEAD, RequestMethod.DELETE,
+        RequestMethod.PUT })
 public class DiagramController {
 
     private final DiagramService diagramService;
@@ -31,12 +34,12 @@ public class DiagramController {
         this.linkRepository = linkRepository;
     }
 
-    @GetMapping("")
+    @GetMapping("/{userId}")
     @Operation(summary = "내 노드와 링크 조회")
-    public BaseResponse<DiagramResponseDto> getNodes() {
+    public BaseResponse<DiagramResponseDto> getNodes(@PathVariable int userId) {
         DiagramResponseDto response = new DiagramResponseDto();
-        List<Node> nodes = nodeRepository.findByUserId(1);
-        List<Link> links = linkRepository.findByUserId(1);
+        List<Node> nodes = nodeRepository.findByUserId(userId);
+        List<Link> links = linkRepository.findByUserId(userId);
 
         List<NodeResponseDto> nodeResponseDtos = new ArrayList<>();
         List<LinkResponseDto> linkResponseDtos = new ArrayList<>();
@@ -84,5 +87,25 @@ public class DiagramController {
         linkRepository.save(link);
     }
 
+    @PostMapping("/keyword/{userId}")
+    @Operation(summary = "키워드 분석")
+    public BaseResponse<String> classifyAndSaveEmptyCategoryDiagrams(@PathVariable int userId) throws Exception {
+        diagramService.classifyAndSaveEmptyCategoryNodes(userId);
+        return new BaseResponse<>("모든 Diagram들이 성공적으로 분석되고 업데이트되었습니다.");
+    }
 
+    @PostMapping("/link/{userId}")
+    @Operation(summary = "링크 연결")
+    public BaseResponse<String> linkNodesByCategoryAndConfidence(@PathVariable int userId) throws Exception {
+        diagramService.linkNodesByCategoryAndConfidence(userId);
+        return new BaseResponse<>("링크 생성 완료");
+    }
+
+
+    @PostMapping("/share/{userId}/{targetUserId}")
+    @Operation(summary = "쉐어 노드")
+    public BaseResponse<DiagramResponseDto> linkNodesByShare(@PathVariable int userId, @PathVariable int targetUserId) throws Exception {
+        DiagramResponseDto responseDto = diagramService.linkNodesByShare(userId, targetUserId);
+        return new BaseResponse<>(responseDto);
+    }
 }

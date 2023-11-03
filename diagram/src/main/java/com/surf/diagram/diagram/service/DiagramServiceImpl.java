@@ -5,6 +5,9 @@ package com.surf.diagram.diagram.service;
 import com.google.api.gax.core.FixedCredentialsProvider;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.language.v2.*;
+import com.surf.diagram.diagram.dto.response.DiagramResponseDto;
+import com.surf.diagram.diagram.dto.response.LinkResponseDto;
+import com.surf.diagram.diagram.dto.response.NodeResponseDto;
 import com.surf.diagram.diagram.entity.Link;
 import com.surf.diagram.diagram.entity.Node;
 import com.surf.diagram.diagram.repository.DiagramRepository;
@@ -43,9 +46,10 @@ public class DiagramServiceImpl implements DiagramService {
         return Jsoup.parse(html).text();
     }
 
-    public void classifyAndSaveEmptyCategoryNodes() throws Exception {
-        // userId가 1이고, category가 빈 칸인 Node들을 불러옵니다.
-        List<Node> nodes = nodeRepository.findByUserId(1)
+
+    public void classifyAndSaveEmptyCategoryNodes(int userId) throws Exception {
+        // category가 빈 칸인 Node들을 불러옵니다.
+        List<Node> nodes = nodeRepository.findByUserId(userId)
                 .stream()
                 .filter(n -> n.getCategory() == null || n.getCategory().isEmpty())
                 .toList();
@@ -59,6 +63,8 @@ public class DiagramServiceImpl implements DiagramService {
         for (Node node : nodes) {
             String myyString = node.getContent();
             String myString = extractTextFromHtml(myyString);
+            System.out.println("myString = " + myString);
+            myString = myString.replaceAll("[^a-zA-Z0-9가-힣]", "");
             System.out.println("myString = " + myString);
 
             try (LanguageServiceClient language = LanguageServiceClient.create(LanguageServiceSettings.newBuilder()
@@ -189,9 +195,9 @@ public class DiagramServiceImpl implements DiagramService {
 
 
 
-    public void linkNodesByCategoryAndConfidence() {
-        // userId가 1인 Node들을 불러옵니다.
-        List<Node> nodes = nodeRepository.findByUserId(1);
+    public void linkNodesByCategoryAndConfidence(int userId) {
+        // Node들
+        List<Node> nodes = nodeRepository.findByUserId(userId);
 
         // 카테고리별 Node를 저장할 Map 생성
         Map<String, List<Node>> categoryNodeMap = new HashMap<>();
@@ -229,7 +235,6 @@ public class DiagramServiceImpl implements DiagramService {
                 if (closestNode != null) {
                     int source = sourceNode.getId().intValue();
                     int target = closestNode.getId().intValue();
-                    int userId = 1;
 
                     // 이미 같은 소스와 타겟, userId를 가진 Link가 있는지 확인
                     if (!linkRepository.existsBySourceAndTargetAndUserId(source, target, userId)) {
@@ -242,6 +247,67 @@ public class DiagramServiceImpl implements DiagramService {
                 }
             }
         }
+    }
+
+
+    public DiagramResponseDto linkNodesByShare(int userId, int targetUserId) {
+        List<Node> nodes1 = nodeRepository.findByUserId(userId);
+        List<Node> nodes2 = nodeRepository.findByUserId(targetUserId);
+
+        Map<String, Node> categoryNodeMap = new HashMap<>();
+
+        List<NodeResponseDto> nodeDtoList = new ArrayList<>();
+        List<LinkResponseDto> linkDtoList = new ArrayList<>();
+
+        for (Node node : nodes1) {
+            NodeResponseDto nodeDto = new NodeResponseDto();
+            nodeDto.setId(node.getId());
+            nodeDto.setTitle(node.getTitle());
+            nodeDto.setUserId(userId);
+            nodeDto.setEditorId(node.getEditorId());
+
+            nodeDtoList.add(nodeDto);
+
+            String category = node.getCategory();
+            if (category != null && !category.isEmpty()) {
+                if (categoryNodeMap.containsKey(category)) {
+                    Node existingNode = categoryNodeMap.get(category);
+                    if (node.getConfidence() > existingNode.getConfidence()) {
+                        categoryNodeMap.put(category, node);
+                    }
+                } else {
+                    categoryNodeMap.put(category, node);
+                }
+            }
+        }
+
+        for (Node node : nodes2) {
+            NodeResponseDto nodeDto = new NodeResponseDto();
+            nodeDto.setId(node.getId());
+            nodeDto.setTitle(node.getTitle());
+            nodeDto.setUserId(targetUserId);
+            nodeDto.setEditorId(node.getEditorId());
+
+            nodeDtoList.add(nodeDto);
+
+            String category = node.getCategory();
+            if (category != null && !category.isEmpty() && categoryNodeMap.containsKey(category)) {
+                Node sourceNode = categoryNodeMap.get(category);
+
+                LinkResponseDto linkDto = new LinkResponseDto();
+                linkDto.setSource(sourceNode.getId().intValue());
+                linkDto.setTarget(node.getId().intValue());
+                linkDto.setUserId(userId);
+
+                linkDtoList.add(linkDto);
+            }
+        }
+
+        DiagramResponseDto responseDto = new DiagramResponseDto();
+        responseDto.setNodes(nodeDtoList);
+        responseDto.setLinks(linkDtoList);
+
+        return responseDto;
     }
 
 }
