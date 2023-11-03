@@ -16,6 +16,7 @@ export const SocketContext = createContext<{
   room: QuizRoomInfo | null;
   setRoomNumber: (roomNumber: number | null) => void;
   sendReady: (roomNumber: number) => void;
+  sendUnReady: (roomNumber: number) => void;
   sendOutRoom: (roomNumber: number) => void;
   sendRooms: () => void;
 }>({
@@ -24,6 +25,7 @@ export const SocketContext = createContext<{
   room: null,
   setRoomNumber: () => {},
   sendReady: () => {},
+  sendUnReady: () => {},
   sendOutRoom: () => {},
   sendRooms: () => {},
 });
@@ -50,7 +52,9 @@ export const SocketProvider: React.FC<Props> = ({ children }) => {
         subscribeRoomList();
       }
       // 룸 연결
+      console.log(roomNumber);
       if (roomNumber) {
+        console.log(roomNumber, "null아님");
         sendInRoom(roomNumber);
       }
     });
@@ -106,6 +110,10 @@ export const SocketProvider: React.FC<Props> = ({ children }) => {
     };
 
     client.send(`/pub/quizroom/out/${roomId}`, {}, JSON.stringify(data));
+
+    client.unsubscribe(`/sub/quiz/${roomId}`);
+
+    setRoomNumber(null);
   };
 
   // 레디
@@ -116,6 +124,16 @@ export const SocketProvider: React.FC<Props> = ({ children }) => {
       action: "ready",
     };
 
+    client.send(`/pub/quizroom/ready/${roomId}`, {}, JSON.stringify(data));
+  };
+
+  // 언레디
+  const sendUnReady = (roomId: number) => {
+    console.log("언레디");
+    const data = {
+      userPk: 2,
+      action: "unready",
+    };
     client.send(`/pub/quizroom/ready/${roomId}`, {}, JSON.stringify(data));
   };
 
@@ -131,7 +149,8 @@ export const SocketProvider: React.FC<Props> = ({ children }) => {
   };
 
   return (
-    <SocketContext.Provider value={{ client, quizRooms, setRoomNumber, room, sendReady, sendOutRoom, sendRooms }}>
+    <SocketContext.Provider
+      value={{ client, quizRooms, setRoomNumber, room, sendReady, sendOutRoom, sendRooms, sendUnReady }}>
       {children}
     </SocketContext.Provider>
   );
