@@ -15,6 +15,7 @@
     "@react-three/fiber": "^8.15.8",
     "@react-three/postprocessing": "^2.15.8",
     "@stomp/stompjs": "^7.0.0",
+    "@tanstack/react-query-next-experimental": "^5.5.0",
     "@tiptap/extension-collaboration": "^2.1.12",
     "@types/three": "^0.158.0",
     "antd": "^5.10.3",
@@ -37,6 +38,7 @@
     "util-deprecate": "^1.0.2"
   },
   "devDependencies": {
+    "@tanstack/react-query-devtools": "^5.4.3",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
