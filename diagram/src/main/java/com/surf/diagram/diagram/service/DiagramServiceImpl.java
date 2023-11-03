@@ -253,11 +253,21 @@ public class DiagramServiceImpl implements DiagramService {
     public DiagramResponseDto linkNodesByShare(int userId, int targetUserId) {
         List<Node> nodes1 = nodeRepository.findByUserId(userId);
         List<Node> nodes2 = nodeRepository.findByUserId(targetUserId);
+        List<Link> links1 = linkRepository.findByUserId(userId);
+        List<Link> links2 = linkRepository.findByUserId(targetUserId);
 
         Map<String, Node> categoryNodeMap = new HashMap<>();
 
         List<NodeResponseDto> nodeDtoList = new ArrayList<>();
         List<LinkResponseDto> linkDtoList = new ArrayList<>();
+
+        // 링크들을 LinkResponseDto로 변환
+        for (Link link : links1) {
+            linkDtoList.add(convertLinkToDto(link));
+        }
+        for (Link link : links2) {
+            linkDtoList.add(convertLinkToDto(link));
+        }
 
         for (Node node : nodes1) {
             NodeResponseDto nodeDto = new NodeResponseDto();
@@ -310,4 +320,12 @@ public class DiagramServiceImpl implements DiagramService {
         return responseDto;
     }
 
+
+    private LinkResponseDto convertLinkToDto(Link link) {
+        LinkResponseDto linkDto = new LinkResponseDto();
+        linkDto.setSource(link.getSource());
+        linkDto.setTarget(link.getTarget());
+        linkDto.setUserId(link.getUserId());
+        return linkDto;
+    }
 }
