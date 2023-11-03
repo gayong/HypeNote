@@ -5,18 +5,20 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import static com.surf.quiz.common.BaseResponseStatus.SUCCESS;
 
 @Getter
+@NoArgsConstructor
 @AllArgsConstructor
 @JsonPropertyOrder({"isSuccess", "code", "message", "result", "status", "errorMessage"})
 public class BaseResponse<T> {
 
     @JsonProperty("isSuccess")
-    private final Boolean isSuccess;
-    private final String message;
-    private final int code;
+    private  Boolean isSuccess;
+    private  String message;
+    private  int code;
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private T result;
     @JsonInclude(JsonInclude.Include.NON_NULL)

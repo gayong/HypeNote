@@ -29,9 +29,9 @@ repositories {
 dependencies {
 
 	// For MSA -인식문의
-//	 implementation 'org.springframework.cloud:spring-cloud-starter'
-//	 implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
-//	 implementation 'org.springframework.cloud:spring-cloud-starter-config'
+	 implementation 'org.springframework.cloud:spring-cloud-starter'
+	 implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+	 implementation 'org.springframework.cloud:spring-cloud-starter-config'
 
 	// 잡다
 	compileOnly 'org.projectlombok:lombok'
@@ -52,6 +52,7 @@ dependencies {
 
 	// feign
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+	implementation 'org.springframework.cloud:spring-cloud-starter-loadbalancer'
 
 	//  swagger
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
