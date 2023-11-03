@@ -38,4 +38,8 @@ public class Editor {
         this.title = title;
         this.content = content;
     }
+
+    public void childRelation(String child){
+        childId.add(child);
+    }
 }

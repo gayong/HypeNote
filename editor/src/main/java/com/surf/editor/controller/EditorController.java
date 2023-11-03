@@ -1,9 +1,11 @@
 package com.surf.editor.controller;
 
 import com.surf.editor.common.response.ApiResponse;
-import com.surf.editor.dto.request.EditorWriteRequest;
-import com.surf.editor.dto.response.EditorCheckResponse;
-import com.surf.editor.dto.response.EditorSearchResponse;
+import com.surf.editor.dto.request.EditorRelationRequestDto;
+import com.surf.editor.dto.request.EditorWriteRequestDto;
+import com.surf.editor.dto.response.EditorCheckResponseDto;
+import com.surf.editor.dto.response.EditorCreateResponseDto;
+import com.surf.editor.dto.response.EditorSearchResponseDto;
 import com.surf.editor.service.EditorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,10 +23,23 @@ public class EditorController {
 
     @PostMapping("/{userId}")
     public ResponseEntity<ApiResponse> editorCreate(@PathVariable int userId){
-        editorService.editorCreate(userId);
+        EditorCreateResponseDto editorCreateResponseDto = editorService.editorCreate(userId);
 
         ApiResponse apiResponse = ApiResponse.builder()
                 .message("게시판 작성")
+                .status(OK.value())
+                .data(editorCreateResponseDto)
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @PostMapping("/relation/{userId}")
+    public ResponseEntity<ApiResponse> editorRelation(@PathVariable int userId, @RequestBody EditorRelationRequestDto editorRelationRequestDto){
+        editorService.editorRelation(userId,editorRelationRequestDto);
+
+        ApiResponse apiResponse = ApiResponse.builder()
+                .message(" 작성")
                 .status(OK.value())
                 .data(null)
                 .build();
@@ -33,7 +48,7 @@ public class EditorController {
     }
 
     @PostMapping("/write/{editorId}")
-    public ResponseEntity<ApiResponse> editorWrite(@PathVariable String editorId, @RequestBody @Valid EditorWriteRequest editorWriteRequest){
+    public ResponseEntity<ApiResponse> editorWrite(@PathVariable String editorId, @RequestBody @Valid EditorWriteRequestDto editorWriteRequest){
         editorService.editorWrite(editorId,editorWriteRequest);
 
         ApiResponse apiResponse = ApiResponse.builder()
@@ -60,7 +75,7 @@ public class EditorController {
 
     @GetMapping("/{editorId}")
     public ResponseEntity<ApiResponse> editorCheck(@PathVariable String editorId){
-        EditorCheckResponse editorCheckResponse = editorService.editorCheck(editorId);
+        EditorCheckResponseDto editorCheckResponse = editorService.editorCheck(editorId);
 
         ApiResponse apiResponse = ApiResponse.builder()
                 .message("게시글 조회")
@@ -73,7 +88,7 @@ public class EditorController {
 
     @GetMapping()
     public ResponseEntity<ApiResponse> editorSearch(@RequestParam(value = "search")String search){
-        EditorSearchResponse editorSearchResponse = editorService.editorSearch(search);
+        EditorSearchResponseDto editorSearchResponse = editorService.editorSearch(search);
 
         ApiResponse apiResponse = ApiResponse.builder()
                 .message("게시글 검색")

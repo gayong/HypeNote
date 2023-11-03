@@ -5,10 +5,6 @@ import lombok.Getter;
 
 @Getter
 @Builder(toBuilder = true)
-public class EditorCreateResponse {
+public class EditorCreateResponseDto {
     private String id;
-    private String title;
-    private String content;
-
-
 }

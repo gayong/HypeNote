@@ -4,9 +4,11 @@ import com.surf.editor.common.error.ErrorCode;
 import com.surf.editor.common.error.exception.BaseException;
 import com.surf.editor.common.error.exception.NotFoundException;
 import com.surf.editor.domain.Editor;
-import com.surf.editor.dto.request.EditorWriteRequest;
-import com.surf.editor.dto.response.EditorCheckResponse;
-import com.surf.editor.dto.response.EditorSearchResponse;
+import com.surf.editor.dto.request.EditorRelationRequestDto;
+import com.surf.editor.dto.request.EditorWriteRequestDto;
+import com.surf.editor.dto.response.EditorCheckResponseDto;
+import com.surf.editor.dto.response.EditorCreateResponseDto;
+import com.surf.editor.dto.response.EditorSearchResponseDto;
 import com.surf.editor.feign.client.DiagramOpenFeign;
 import com.surf.editor.feign.client.MemberOpenFeign;
 import com.surf.editor.feign.client.QuizOpenFeign;
@@ -20,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -32,7 +35,7 @@ public class EditorService {
 
 
     @Transactional
-    public void editorCreate(int userId) {
+    public EditorCreateResponseDto editorCreate(int userId) {
         Editor savedEditor = new Editor();
         try{
             savedEditor = editorRepository.save(Editor.toEntity(null, null));
@@ -81,9 +84,15 @@ public class EditorService {
             throw new BaseException(ErrorCode.QUIZ_SAVE_FAIL);
         }
 
+        EditorCreateResponseDto editorCreateResponseDto = EditorCreateResponseDto.builder()
+                .id(savedEditor.getId())
+                .build();
+
+        return editorCreateResponseDto;
+
     }
 
-    public void editorWrite(String editorId, EditorWriteRequest editorWriteRequest) {
+    public void editorWrite(String editorId, EditorWriteRequestDto editorWriteRequest) {
         Editor byId = editorRepository.findById(editorId).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
 
         try{
@@ -105,10 +114,10 @@ public class EditorService {
         }
     }
 
-    public EditorCheckResponse editorCheck(String editorId) {
+    public EditorCheckResponseDto editorCheck(String editorId) {
         Editor byId = editorRepository.findById(editorId).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
 
-        EditorCheckResponse editorCheckResponse = EditorCheckResponse.builder()
+        EditorCheckResponseDto editorCheckResponse = EditorCheckResponseDto.builder()
                 .id(byId.getId())
                 .title(byId.getTitle())
                 .content(byId.getContent())
@@ -117,26 +126,37 @@ public class EditorService {
         return editorCheckResponse;
     }
 
-    public EditorSearchResponse editorSearch(String search) {
+    public EditorSearchResponseDto editorSearch(String search) {
         List<Editor> byTitleContainingOrContentContaining =
                 editorRepository.findByTitleContainingOrContentContaining(search, search)
                         .orElse(null);
 
-        List<EditorSearchResponse.Editors> editors = new ArrayList<>();
+        List<EditorSearchResponseDto.Editors> editors = new ArrayList<>();
 
         for (Editor editor : byTitleContainingOrContentContaining) {
 
             editors.add(
-                    EditorSearchResponse.Editors.builder()
+                    EditorSearchResponseDto.Editors.builder()
                     .id(editor.getId())
                     .title(editor.getTitle())
                     .content(editor.getContent())
                     .build());
         }
-        EditorSearchResponse editorList = EditorSearchResponse.builder()
+        EditorSearchResponseDto editorList = EditorSearchResponseDto.builder()
                 .notes(editors)
                 .build();
 
         return editorList;
+    }
+
+
+    public void editorRelation(int userId, EditorRelationRequestDto editorRelationRequestDto) {
+        // db의 child 리스트에 추가
+        Editor findEditor = editorRepository.findById(editorRelationRequestDto.getParentId())
+                .orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
+
+        findEditor.childRelation(editorRelationRequestDto.getChildId());
+
+        editorRepository.save(findEditor);
     }
 }
