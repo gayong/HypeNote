@@ -2,16 +2,17 @@
 spring:
  application:
    name: server-quiz
- cloud:
-   openfeign:
-     client:
-       config:
-         default:
-           connectTimeout: 5000
-           readTimeout: 5000
-           loggerLevel: basic
  config:
    import: optional:configserver:http://config:8888
+# cloud:
+#   openfeign:
+#     client:
+#       config:
+#         default:
+#           connectTimeout: 5000
+#           readTimeout: 5000
+#           loggerLevel: basic
+
 
 
 ## For Local -인식 문의
