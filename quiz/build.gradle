@@ -51,9 +51,8 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
 	//  swagger
-//	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
-	implementation 'org.springdoc:springdoc-openapi-ui:1.6.3'
-
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
+	
 	// jsoup : html parse
 	implementation 'org.jsoup:jsoup:1.16.2'
 }
