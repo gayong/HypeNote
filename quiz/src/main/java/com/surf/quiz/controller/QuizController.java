@@ -38,9 +38,6 @@ import org.jsoup.Jsoup;
 @RequestMapping("/api/quiz")
 @RequiredArgsConstructor // notnull 생성자 사용
 @Tag(name = "퀴즈", description = "퀴즈")
-@CrossOrigin(origins = {"http://localhost:3000", "https://k9e101.p.ssafy.io"}, allowCredentials = "true", allowedHeaders = "*", methods = {
-        RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS, RequestMethod.HEAD, RequestMethod.DELETE,
-        RequestMethod.PUT })
 public class QuizController {
     private final SimpMessagingTemplate messageTemplate;
     private final QuizRepository quizRepository;
