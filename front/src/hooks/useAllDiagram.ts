@@ -5,8 +5,15 @@ export const useAllDiagram = () => {
   return useQuery(["diagrams"], fetchDiagramAll);
 };
 
+//
+// export const useAllDiary = () => {
+//   return useQuery(["diaries"], () => fetchAllDiaries, {
+//     staleTime: 60 * 1000, // 1 분
+//   });
+// };
+
 // 나중에 빼서 쓸 때는
-// const { data, isLoading, isLoading, isError, status } = useQuery(["diagrams"], fetchDiagramAll);
+// const { data, isLoading, isError, status } = useQuery(["diagrams"], fetchDiagramAll);
 
 // 변수 참고하세요.
 // status: 쿼리 요청 함수의 상태를 표현하는 status는 4가지의 값이 존재한다.(문자열 형태)
