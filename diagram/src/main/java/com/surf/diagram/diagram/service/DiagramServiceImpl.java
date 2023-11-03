@@ -13,6 +13,7 @@ import com.surf.diagram.diagram.repository.NodeRepository;
 import kr.co.shineware.nlp.komoran.constant.DEFAULT_MODEL;
 import kr.co.shineware.nlp.komoran.core.Komoran;
 import kr.co.shineware.nlp.komoran.model.Token;
+import org.jsoup.Jsoup;
 import org.springframework.stereotype.Service;
 
 import java.io.FileInputStream;
@@ -38,6 +39,9 @@ public class DiagramServiceImpl implements DiagramService {
         this.nodeRepository = nodeRepository;
         this.linkRepository = linkRepository;
     }
+    public String extractTextFromHtml(String html) {
+        return Jsoup.parse(html).text();
+    }
 
     public void classifyAndSaveEmptyCategoryNodes() throws Exception {
         // userId가 1이고, category가 빈 칸인 Node들을 불러옵니다.
@@ -53,7 +57,9 @@ public class DiagramServiceImpl implements DiagramService {
         GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream(keyPath));
 
         for (Node node : nodes) {
-            String myString = node.getContent();
+            String myyString = node.getContent();
+            String myString = extractTextFromHtml(myyString);
+            System.out.println("myString = " + myString);
 
             try (LanguageServiceClient language = LanguageServiceClient.create(LanguageServiceSettings.newBuilder()
                     .setCredentialsProvider(FixedCredentialsProvider.create(credentials))
