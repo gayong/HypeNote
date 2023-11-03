@@ -3,7 +3,7 @@ import Providers from "./providers";
 // import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
-
+// import { QueryClient, QueryClientProvider } from "react-query";
 // const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -17,16 +17,20 @@ export const metadata: Metadata = {
   },
 };
 
+// const queryClient = new QueryClient();
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body className="dark:bg-dark_background dark:text-font_primary">
+        {/* <QueryClientProvider client={queryClient}> */}
         <Providers>
           <header>
             <Navbar />
           </header>
           <div className="pl-[19rem]">{children}</div>
         </Providers>
+        {/* </QueryClientProvider> */}
       </body>
     </html>
   );
