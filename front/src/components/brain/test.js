@@ -7,24 +7,20 @@ import { mean, median } from "d3-array";
 // import { Swatches } from "@d3/color-legend";
 import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
-import { fetchDiagramAll } from "../../api/service/diagram";
+import { useAllDiagram } from "@/hooks/useAllDiagram";
 
 const ThreeScene = () => {
   const router = useRouter();
   const ref = useRef();
-
-  const getMine = async () => {
-    try {
-      const response = await fetchDiagramAll();
-      console.log("brain", response.data);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  const { data: response, isLoading, error } = useAllDiagram();
+  const [diagram, setDiagram] = useState([]);
 
   useEffect(() => {
-    getMine();
-  }, []);
+    if (response) {
+      console.log(response);
+      // setDiagram(response.data) 이런식으로 넣어서 쓰십쇼
+    }
+  }, [third]);
 
   const nodes = [
     { id: "네트워크", group: 1 },
