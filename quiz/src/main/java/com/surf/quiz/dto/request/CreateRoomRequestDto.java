@@ -14,5 +14,5 @@ public class CreateRoomRequestDto {
     boolean single;
     List<Integer> pages;
     List<Integer> sharePages;
-    private List<UserDto> inviteUsers;
+    private List<UserDto> users;
 }

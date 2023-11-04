@@ -120,14 +120,14 @@ public class QuizRoomService {
                 .sharePages(createRoomRequestDto.getSharePages())
                 .pages(createRoomRequestDto.getPages())
                 .single(createRoomRequestDto.isSingle())
-                .inviteUsers(createRoomRequestDto.getInviteUsers())
+                .inviteUsers(createRoomRequestDto.getUsers())
                 .build();
 
         // 싱글 모드면 roomMax 1 / 그룹 모드면 초대 인원 수
         if (createQuizRoom.isSingle()) {
             createQuizRoom.setRoomMax(1);
         } else {
-            createQuizRoom.setRoomMax(createRoomRequestDto.getInviteUsers().size());
+            createQuizRoom.setRoomMax(createRoomRequestDto.getUsers().size());
         }
 
         MemberDto member = new MemberDto();
