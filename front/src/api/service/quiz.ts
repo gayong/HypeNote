@@ -28,7 +28,7 @@ export const inviteUser = (
   single: boolean,
   users: Array<object>
 ) =>
-  api.post(`quizroom/invite`, {
+  api.post(`quiz/quizroom/invite`, {
     roomName,
     pages,
     sharePages,
@@ -38,4 +38,4 @@ export const inviteUser = (
   });
 
 // 퀴즈 정답 전송
-export const sendQuiz = (roomId: number, userId: number) => api.post(`quizroom/${roomId}/${userId}`);
+export const sendQuiz = (roomId: number, userId: number) => api.post(`quiz/quizroom/${roomId}/${userId}`);

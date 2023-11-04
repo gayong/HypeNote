@@ -6,6 +6,9 @@ export interface QuizRoom {
   single: boolean;
   users?: Array<object>;
 }
+export interface QuizRoomGroup extends QuizRoom {
+  inviteUsers: Array<QuizUser>;
+}
 
 export interface QuizRoomDetail {
   result: QuizRoomInfo;
