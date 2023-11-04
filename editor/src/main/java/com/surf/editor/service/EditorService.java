@@ -38,11 +38,26 @@ public class EditorService {
     public EditorCreateResponseDto editorCreate(int userId) {
         Editor savedEditor = new Editor();
         try{
-            savedEditor = editorRepository.save(Editor.toEntity(null, null));
+            /**
+             * 새로 만들면 부모가 null, 자식도 새로 만들어진다.
+             */
+            savedEditor = editorRepository.save(Editor.editorCreate());
         }catch (Exception e){
             throw new BaseException(ErrorCode.FAIL_CREATE_EDITOR);
         }
 
+        //feign member, quiz, diagram DB에도 저장
+        feign(userId, savedEditor);
+
+        EditorCreateResponseDto editorCreateResponseDto = EditorCreateResponseDto.builder()
+                .id(savedEditor.getId())
+                .build();
+
+        return editorCreateResponseDto;
+
+    }
+
+    private void feign(int userId, Editor savedEditor) {
         try{
             //루트 게시글 찾기
             List<String> byParentIdAndUserId = editorRepository.findByParentIdAndUserId(null, userId)
@@ -83,13 +98,6 @@ public class EditorService {
         }catch (Exception e){
             throw new BaseException(ErrorCode.QUIZ_SAVE_FAIL);
         }
-
-        EditorCreateResponseDto editorCreateResponseDto = EditorCreateResponseDto.builder()
-                .id(savedEditor.getId())
-                .build();
-
-        return editorCreateResponseDto;
-
     }
 
     public void editorWrite(String editorId, EditorWriteRequestDto editorWriteRequest) {

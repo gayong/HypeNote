@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.data.mongodb.core.mapping.FieldType;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -29,11 +30,14 @@ public class Editor {
     private List<String> childId;
     private List<String> hyperLink;
 
-    public static Editor toEntity(String title, String content){
+    public static Editor editorCreate(){
         return Editor.builder()
                 .id(null)
-                .content(content)
-                .title(title)
+                .content(null)
+                .title(null)
+                .parentId(null)
+                .childId(new ArrayList<>())
+                .hyperLink(new ArrayList<>())
                 .build();
     }
 
