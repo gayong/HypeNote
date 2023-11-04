@@ -19,9 +19,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/diagram")
 @Tag(name = "다이어그램", description = "다이어그램")
-@CrossOrigin(origins = {"http://localhost:3000", "https://k9e101.p.ssafy.io"}, allowCredentials = "true", allowedHeaders = "*", methods = {
-        RequestMethod.GET, RequestMethod.POST, RequestMethod.OPTIONS, RequestMethod.HEAD, RequestMethod.DELETE,
-        RequestMethod.PUT })
 public class DiagramController {
 
     private final DiagramService diagramService;
