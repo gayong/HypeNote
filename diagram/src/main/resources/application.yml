@@ -1,7 +1,7 @@
 # For MSA -인식 문의
 spring:
  application:
-   name: server-quiz
+   name: server-diagram
  config:
    import: optional:configserver:http://config:8888
 # cloud:
