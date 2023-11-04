@@ -2,11 +2,8 @@ package com.surf.quiz.controller;
 
 
 import com.surf.quiz.common.BaseResponse;
-import com.surf.quiz.common.DiagramServiceFeignClient;
-import com.surf.quiz.common.EditorServiceFeignClient;
+import com.surf.quiz.fegin.DiagramServiceFeignClient;
 import com.surf.quiz.dto.diagram.DiagramResponseDto;
-import com.surf.quiz.dto.editor.ApiResponse;
-import com.surf.quiz.dto.editor.EditorCheckResponse;
 import com.surf.quiz.dto.request.CreateRoomRequestDto;
 import com.surf.quiz.dto.MemberDto;
 import com.surf.quiz.dto.request.SearchMemberRequestDto;
@@ -70,21 +67,7 @@ public class QuizRoomController {
     @Operation(summary = "전체 방 탐색")
     public BaseResponse<List<QuizRoom>> findQuizRooms() {
         List<QuizRoom> results = quizRoomService.findAll();
-        fetchDiagramInfo(1);
         return new BaseResponse<>(results);
-    }
-
-    @Autowired
-    private DiagramServiceFeignClient diagramServiceFeignClient;
-//
-//    @Autowired
-//    private EditorServiceFeignClient editorServiceFeignClient;
-//
-    public void fetchDiagramInfo(int userId) {
-        BaseResponse<DiagramResponseDto> response = diagramServiceFeignClient.getNodes(userId);
-//        ApiResponse<EditorCheckResponse> response11 = editorServiceFeignClient.getEditor("65392c40cbd1ff6e316819e1");
-        System.out.println("response = " + response.getResult().getLinks());
-//        System.out.println("response11 = " + response11.getData().getId());
     }
 
     @MessageMapping("/quizroom/in/{roomId}")
