@@ -8,6 +8,4 @@ import lombok.Getter;
 public class QuizEditorSaveRequestDto {
     private String documentId;
     private int userId;
-    private String title;
-    private String content;
 }
