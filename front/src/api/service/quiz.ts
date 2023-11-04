@@ -10,13 +10,14 @@ export const createQuizRoom = (
   quizCnt: number,
   single: boolean
 ) =>
-  api.post(`quizroom`, {
+  api.post(`quiz/quizroom`, {
     roomName,
     pages,
     sharePages,
     quizCnt,
     single,
   });
+// export const createQuizRoom = () => api.get(`quiz/quizroom`);
 
 // 유저 초대 (여러명)
 export const inviteUser = (
@@ -37,5 +38,4 @@ export const inviteUser = (
   });
 
 // 퀴즈 정답 전송
-export const sendQuiz = (roomId: number, userId: number) =>
-  api.post(`quizroom/${roomId}/${userId}`);
+export const sendQuiz = (roomId: number, userId: number) => api.post(`quizroom/${roomId}/${userId}`);

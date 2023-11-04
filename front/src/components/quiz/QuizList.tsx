@@ -1,18 +1,16 @@
 "use client";
 import { SocketContext } from "@/context/SocketProvider";
-// import { useConnectSocket } from "@/hooks/useConnectSocket";
-// import useSubscribe from "@/hooks/useSubscribe";
-import { useQuery, useInfiniteQuery } from "react-query";
-
 import Link from "next/link";
 import { useContext, useEffect } from "react";
-import Button from "../../components/ui/Button";
-
+import { Button } from "antd";
+import { useCreateRoom } from "@/hooks/useCreateRoom";
 export default function QuizList() {
   const { quizRooms, setRoomNumber, sendRooms } = useContext(SocketContext);
+  const { createRoom } = useCreateRoom();
 
-  const handleCreateRoom = () => {
-    console.log("방만들기");
+  const handleCreateRoom = async () => {
+    console.log("만드를어");
+    await createRoom("자현이의 룸", [1, 2, 3], [1, 2], 3, false);
   };
 
   return (
@@ -20,9 +18,17 @@ export default function QuizList() {
       <div className="mx-10">
         <h1 className="text-3xl font-bold mb-2 text-center">퀴즈 리스트</h1>
         <div className="flex justify-end">
-          <Link href="/quiz/maker">
-            <Button text="방 만들기" onClick={handleCreateRoom}></Button>
-          </Link>
+          {/* <Link href="/quiz/maker"> */}
+          <Button
+            className="dark:border dark:border-font_primary"
+            style={{ fontFamily: "preRg", backgroundColor: "#2946A2" }}
+            type="primary"
+            onClick={() => handleCreateRoom()}>
+            방 만들기
+          </Button>
+
+          {/* <Button text="방 만들기" onClick={() => handleCreateRoom()}></Button> */}
+          {/* </Link> */}
         </div>
         <br />
         <div className="grid gap-6 mb-8 md:grid-cols-2">
