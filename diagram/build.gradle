@@ -61,6 +61,12 @@ dependencies {
 	// jsoup : html parse
 	implementation 'org.jsoup:jsoup:1.16.2'
 
+	// feign
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+	implementation 'org.springframework.cloud:spring-cloud-starter-loadbalancer'
+
+
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
 
