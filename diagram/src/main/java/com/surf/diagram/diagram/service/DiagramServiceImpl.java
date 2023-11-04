@@ -51,7 +51,7 @@ public class DiagramServiceImpl implements DiagramService {
         // category가 빈 칸인 Node들을 불러옵니다.
         List<Node> nodes = nodeRepository.findByUserId(userId)
                 .stream()
-                .filter(n -> n.getCategory() == null || n.getCategory().isEmpty())
+//                .filter(n -> n.getCategory() == null || n.getCategory().isEmpty())
                 .toList();
 
         // 인증 키 파일 경로 설정
