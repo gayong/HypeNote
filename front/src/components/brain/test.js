@@ -5,12 +5,26 @@ import { select, selectAll } from "d3";
 import { mean, median } from "d3-array";
 // import { howto } from "@d3/example-components";
 // import { Swatches } from "@d3/color-legend";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useAllDiagram } from "@/hooks/useAllDiagram";
 
 const ThreeScene = () => {
   const router = useRouter();
   const ref = useRef();
+  const { data: response, isLoading, error } = useAllDiagram();
+  const [diagram, setDiagram] = useState([]);
+
+  useEffect(() => {
+    console.log("안녕");
+
+    if (response) {
+      console.log("나야나");
+      console.log(response.data.result);
+      setDiagram(response.data.result);
+    }
+  }, [response]);
+
   const nodes = [
     { id: "네트워크", group: 1 },
     { id: "운영체제", group: 1 },

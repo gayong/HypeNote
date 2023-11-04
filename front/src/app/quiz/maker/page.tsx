@@ -1,3 +1,5 @@
+// "use client";
+
 import QuizMaker from "@/components/quiz/QuizMaker";
 import { Metadata } from "next";
 

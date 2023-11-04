@@ -7,6 +7,11 @@ export interface QuizRoom {
   users?: Array<object>;
 }
 
+export interface QuizRoomDetail {
+  result: QuizRoomInfo;
+  type: string;
+}
+
 export interface QuizRoomInfo {
   id: number;
   roomName: string;
@@ -16,11 +21,11 @@ export interface QuizRoomInfo {
   quizCnt: number;
   roomStatus: boolean;
   createdDate: string;
-  users: Array<object>;
+  users: Array<QuizUser>;
   pages: Array<number>;
   sharePages: Array<number>;
   single: boolean;
-  inviteUsers: Array<object>;
+  inviteUsers: Array<QuizUser>;
 }
 
 export interface QuizResultInfo {
@@ -33,4 +38,11 @@ export interface Chat {
   chatTime: string;
   userPk: string;
   content: string;
+}
+
+export interface QuizUser {
+  host?: boolean;
+  ready?: boolean;
+  userName: string;
+  userPk: number;
 }
