@@ -75,8 +75,6 @@ public class EditorService {
             QuizEditorSaveRequestDto quizEditorSaveRequestDto = QuizEditorSaveRequestDto.builder()
                     .userId(userId)
                     .documentId(savedEditor.getId())
-                    .title(savedEditor.getTitle())
-                    .content(savedEditor.getContent())
                     .build();
 
             quizOpenFeign.QuizEditorSave(quizEditorSaveRequestDto);
