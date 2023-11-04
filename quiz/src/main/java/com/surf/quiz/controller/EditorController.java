@@ -7,8 +7,11 @@ import com.surf.quiz.dto.diagram.DiagramResponseDto;
 import com.surf.quiz.dto.editor.ApiResponse;
 import com.surf.quiz.dto.editor.EditorCheckResponse;
 import com.surf.quiz.dto.request.EditorRequestDto;
+import com.surf.quiz.entity.Editor;
 import com.surf.quiz.fegin.DiagramServiceFeignClient;
 import com.surf.quiz.fegin.EditorServiceFeignClient;
+import com.surf.quiz.repository.EditorRepository;
+import com.surf.quiz.service.QuizRoomService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +25,7 @@ public class EditorController {
     @Autowired
     private EditorServiceFeignClient editorServiceFeignClient;
 
+    private final EditorRepository editorRepository;
     @PostMapping("/editor")
     @Operation(summary = "에디터 받기")
     public BaseResponse<Void> getEditor(@RequestBody EditorRequestDto editorDto) {
@@ -37,6 +41,12 @@ public class EditorController {
     public BaseResponse<ApiResponse<EditorCheckResponse>> getEditorInfo(@PathVariable int userId) {
         ApiResponse<EditorCheckResponse> response = editorServiceFeignClient.getEditor("65426205cd1e39028569f167");
         System.out.println("response = " + response.getData().getId());
+        Editor editor = new Editor();
+        editor.setEditorId(response.getData().getId());
+        editor.setUserPk(1);
+        editor.setContent("content");
+        editor.setTitle("title");
+        editorRepository.save(editor);
         return new BaseResponse<>(response);
     }
 

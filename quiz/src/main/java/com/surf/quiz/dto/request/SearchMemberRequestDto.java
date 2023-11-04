@@ -14,5 +14,4 @@ public class SearchMemberRequestDto {
     boolean single;
     List<Integer> pages;
     List<Integer> sharePages;
-
 }

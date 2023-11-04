@@ -22,6 +22,8 @@ server:
 spring:
   application:
     name: server-quiz
+  config:
+    import: optional:classpath:application-gpt.yml
   data:
     mongodb:
       uri: mongodb://lesser:!esser101Panda@www.hype-note.com
