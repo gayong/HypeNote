@@ -23,7 +23,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -107,6 +106,15 @@ public class EditorService {
 
     public void editorDelete(String editorId) {
         Editor byId = editorRepository.findById(editorId).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
+
+        //부모,자녀 관계 제거
+        Editor parentEditor = editorRepository.findById(byId.getParentId()).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
+        parentEditor.childDelete(byId.getId());
+
+        for (String childId : byId.getChildId()) {
+            Editor childEditor = editorRepository.findById(childId).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
+            childEditor.parentDelete();
+        }
 
         try{
             editorRepository.delete(byId);
