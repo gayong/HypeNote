@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className="dark:bg-dark_background dark:text-font_primary">
+      <body className="dark:bg-dark_background dark:text-font_primary transition-colors duration-1000">
         <Providers>
           <header>
             <Navbar />
