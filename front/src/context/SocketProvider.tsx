@@ -1,10 +1,10 @@
 "use client";
 
 import SockJS from "sockjs-client";
-import { useEffect, useRef, useState, createContext } from "react";
+import { useEffect, useState, createContext } from "react";
 import { Stomp, CompatClient } from "@stomp/stompjs";
 import React, { ReactNode } from "react";
-import { QuizRoomInfo, QuizRoomDetail } from "@/types/quiz";
+import { QuizRoomInfo } from "@/types/quiz";
 
 interface Props {
   children: ReactNode;
@@ -19,6 +19,7 @@ export const SocketContext = createContext<{
   sendUnReady: (roomNumber: number) => void;
   sendOutRoom: (roomNumber: number) => void;
   sendRooms: () => void;
+  sendMessage: (roomNumber: number, messageInput: object) => void;
 }>({
   client: null,
   quizRooms: [],
@@ -28,6 +29,7 @@ export const SocketContext = createContext<{
   sendUnReady: () => {},
   sendOutRoom: () => {},
   sendRooms: () => {},
+  sendMessage: () => {},
 });
 
 // 소켓 기본 연결
@@ -56,6 +58,7 @@ export const SocketProvider: React.FC<Props> = ({ children }) => {
       if (roomNumber) {
         console.log(roomNumber, "null아님");
         sendInRoom(roomNumber);
+        subscribeChat(roomNumber);
       }
     });
 
@@ -137,20 +140,20 @@ export const SocketProvider: React.FC<Props> = ({ children }) => {
     client.send(`/pub/quizroom/ready/${roomId}`, {}, JSON.stringify(data));
   };
 
+  //채팅방 구독
   const subscribeChat = (roomId: number) => {
     client.subscribe(`/sub/chat/${roomId}`, (message) => {
       console.log("채팅", message);
     });
-    const input = {
-      userPk: "2",
-      content: "난 바보야.",
-    };
-    client.send(`/pub/chat/${roomId}`, {}, JSON.stringify(input));
+  };
+  // 채팅 전송
+  const sendMessage = (roomId: number, messageInput: object) => {
+    client.send(`/pub/chat/${roomId}`, {}, JSON.stringify(messageInput));
   };
 
   return (
     <SocketContext.Provider
-      value={{ client, quizRooms, setRoomNumber, room, sendReady, sendOutRoom, sendRooms, sendUnReady }}>
+      value={{ client, quizRooms, setRoomNumber, room, sendReady, sendOutRoom, sendRooms, sendUnReady, sendMessage }}>
       {children}
     </SocketContext.Provider>
   );
