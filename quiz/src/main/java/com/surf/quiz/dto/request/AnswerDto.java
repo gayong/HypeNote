@@ -8,6 +8,6 @@ import java.util.Map;
 @Getter
 @Setter
 public class AnswerDto {
-    private Map<String, Map<Long, String>> answers;
+    private Map<Long, String> answers;
 
 }

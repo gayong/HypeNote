@@ -10,5 +10,7 @@ import lombok.Setter;
 public class ChatResponseDto {
     String chatTime;
     String userPk;
+    String userName;
     String content;
+
 }

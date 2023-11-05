@@ -87,7 +87,7 @@ public class QuizController {
     @Operation(summary = "정답 제출하기")
     public BaseResponse<Void> receiveAnswer(@PathVariable String roomId, @PathVariable String userId, @RequestBody AnswerDto answerDto) {
 
-        Map<String, Map<Long, String>> userAnswers = answerDto.getAnswers();
+        Map<Long, String> userAnswers = answerDto.getAnswers();
 
         // 답변 전송
         Quiz quiz = quizService.processAnswer(roomId, userId, userAnswers);

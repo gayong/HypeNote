@@ -27,13 +27,13 @@ public class QuizService {
 
     // 정답 저장
     @Transactional
-    public Quiz processAnswer(String roomId, String userId, Map<String, Map<Long, String>> userAnswerDto) {
+    public Quiz processAnswer(String roomId, String userId, Map<Long, String> userAnswerDto) {
         Quiz quiz = findQuizByRoomId(roomId);
         Map<String, Map<Integer, String>> userAnswers = quiz.getUserAnswers();
 
         // 유저 정답이 있으면
         if(userAnswerDto != null) {
-            processUserAnswers(userAnswerDto, userAnswers);
+            processUserAnswers(userId, userAnswerDto, userAnswers);
         } else {
             // null 예외처리
             throw new IllegalArgumentException("User answer cannot be null");
@@ -52,26 +52,23 @@ public class QuizService {
                 .orElseThrow(() -> new NoSuchElementException("Quiz not found for roomId: " + roomId));
     }
 
-    private void processUserAnswers(Map<String, Map<Long, String>> userAnswerDto, Map<String, Map<Integer, String>> userAnswers) {
-        // 유저 정답을 돌면서
-        for (Map.Entry<String, Map<Long, String>> entry : userAnswerDto.entrySet()) {
-            Map<Integer, String> convertedAnswers = convertUserAnswer(entry);
+    private void processUserAnswers(String userId, Map<Long, String> userAnswerDto, Map<String, Map<Integer, String>> userAnswers) {
+        Map<Integer, String> convertedAnswers = convertUserAnswer(userAnswerDto);
 
-            // 기존 유저의 답변이 있는 경우, 병합
-            if(userAnswers.containsKey(entry.getKey())) {
-                Map<Integer, String> existingAnswers = userAnswers.get(entry.getKey());
-                existingAnswers.putAll(convertedAnswers); // 기존 답변에 새 답변 추가
-                userAnswers.put(entry.getKey(), existingAnswers);
-            } else { // 새로운 유저의 답변인 경우, 추가
-                userAnswers.put(entry.getKey(), convertedAnswers);
-            }
+        // 기존 유저의 답변이 있는 경우, 병합
+        if(userAnswers.containsKey(userId)) {
+            Map<Integer, String> existingAnswers = userAnswers.get(userId);
+            existingAnswers.putAll(convertedAnswers); // 기존 답변에 새 답변 추가
+            userAnswers.put(userId, existingAnswers);
+        } else { // 새로운 유저의 답변인 경우, 추가
+            userAnswers.put(userId, convertedAnswers);
         }
     }
 
-    private Map<Integer, String> convertUserAnswer(Map.Entry<String, Map<Long, String>> userAnswerEntry) {
+    private Map<Integer, String> convertUserAnswer(Map<Long, String> userAnswerDto) {
         Map<Integer, String> convertedAnswers = new HashMap<>();
         // 문제 / 정답 추출
-        for (Map.Entry<Long, String> answerEntry : userAnswerEntry.getValue().entrySet()) {
+        for (Map.Entry<Long, String> answerEntry : userAnswerDto.entrySet()) {
             convertedAnswers.put(Math.toIntExact(answerEntry.getKey()), answerEntry.getValue());
         }
         return convertedAnswers;

@@ -9,5 +9,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ChatRequestDto {
     String userPk;
+    String userName;
     String content;
 }

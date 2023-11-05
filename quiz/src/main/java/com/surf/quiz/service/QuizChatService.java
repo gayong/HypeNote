@@ -22,7 +22,7 @@ public class QuizChatService {
         ChatResponseDto chatDto = new ChatResponseDto();
         chatDto.setContent(body.getContent());
         chatDto.setUserPk(body.getUserPk());
-
+        chatDto.setUserName(body.getUserName());
         String formattedDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
         chatDto.setChatTime(formattedDateTime);
         return chatDto;
