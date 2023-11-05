@@ -30,7 +30,7 @@ export default function QuizMaker() {
   const handleCreateRoom = () => {
     console.log("만드를어");
     createRoomMutation.mutate({
-      roomName: "자현공주의방",
+      roomName: "테스트1",
       pages: [1, 2, 3],
       sharePages: [1, 2],
       quizCnt: 10,
