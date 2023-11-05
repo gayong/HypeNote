@@ -265,10 +265,6 @@ public class QuizRoomService {
 
 
     public Quiz createQuiz(QuizRoom createdQuizroom) {
-        Optional<Quiz> optionalQuiz = quizRepository.findByRoomId(createdQuizroom.getId().intValue());
-        if(optionalQuiz.isPresent()) {
-            return null;
-        }
         Quiz quiz = new Quiz();
 
         quiz.setRoomId(createdQuizroom.getId().intValue());
