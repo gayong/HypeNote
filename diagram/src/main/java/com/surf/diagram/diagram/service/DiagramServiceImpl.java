@@ -1,7 +1,6 @@
 package com.surf.diagram.diagram.service;
 
 
-
 import com.google.api.gax.core.FixedCredentialsProvider;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.language.v2.*;
@@ -17,7 +16,10 @@ import kr.co.shineware.nlp.komoran.constant.DEFAULT_MODEL;
 import kr.co.shineware.nlp.komoran.core.Komoran;
 import kr.co.shineware.nlp.komoran.model.Token;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
+
 
 import java.io.FileInputStream;
 import java.util.Comparator;
@@ -43,8 +45,20 @@ public class DiagramServiceImpl implements DiagramService {
         this.linkRepository = linkRepository;
     }
     public String extractTextFromHtml(String html) {
-        return Jsoup.parse(html).text();
+        org.jsoup.nodes.Document document = Jsoup.parse(html);
+        Elements elements = document.body().children();
+        List<String> texts = new ArrayList<>();
+
+        for (Element element : elements) {
+            texts.add(element.text());
+        }
+
+        return String.join(". ", texts); // '|'를 구분자로 사용
     }
+
+//    public String extractTextFromHtml(String html) {
+//        return Jsoup.parse(html).text();
+//    }
 
 
     public void classifyAndSaveEmptyCategoryNodes(int userId) throws Exception {
@@ -62,10 +76,23 @@ public class DiagramServiceImpl implements DiagramService {
 
         for (Node node : nodes) {
             String myyString = node.getContent();
-            String myString = extractTextFromHtml(myyString);
+            System.out.println("myyString = " + myyString);
+            myyString = extractTextFromHtml(myyString);
+            System.out.println("myString = " + myyString);
+            String myString = myyString.replaceAll("[^a-zA-Z0-9가-힣|]", "");
             System.out.println("myString = " + myString);
-            myString = myString.replaceAll("[^a-zA-Z0-9가-힣]", "");
-            System.out.println("myString = " + myString);
+
+            List<String> keywords = extractKeywordsWithKomoran(myString, 5); // 상위 5개 키워드 추출
+            System.out.println("keywords = " + keywords);
+
+            // 키워드가 포함된 문장 추출
+            List<String> sentences = Arrays.stream(myString.split("\\|\\|\\|"))
+                    .filter(sentence -> keywords.stream().anyMatch(sentence::contains))
+                    .collect(Collectors.toList());
+
+            // 키워드와 관련된 문장을 분석에 사용
+            String analysisInput = String.join("|||", sentences);
+            System.out.println("analysisInput = " + analysisInput);
 
             try (LanguageServiceClient language = LanguageServiceClient.create(LanguageServiceSettings.newBuilder()
                     .setCredentialsProvider(FixedCredentialsProvider.create(credentials))
@@ -213,28 +240,30 @@ public class DiagramServiceImpl implements DiagramService {
             }
         }
 
-        // 같은 카테고리 내에서 confidence가 가장 근사치인 Node를 찾아 Link 생성
+        // 같은 카테고리 내에서 유사도가 가장 높은 Node를 찾아 Link 생성
         for (Map.Entry<String, List<Node>> entry : categoryNodeMap.entrySet()) {
             List<Node> categoryNodes = entry.getValue();
 
             for (int i = 0; i < categoryNodes.size() - 1; i++) {
                 Node sourceNode = categoryNodes.get(i);
-                Node closestNode = null;
-                float minDiff = Float.MAX_VALUE;
+                Node mostSimilarNode = null;
+                double maxSimilarity = Double.MIN_VALUE;
 
                 for (int j = i + 1; j < categoryNodes.size(); j++) {
                     Node targetNode = categoryNodes.get(j);
-                    float diff = Math.abs(sourceNode.getConfidence() - targetNode.getConfidence());
+                    double similarity = calculateSimilarity(sourceNode.getContent(), targetNode.getContent());
+                    System.out.println("similarity = " + similarity);
 
-                    if (diff < minDiff) {
-                        closestNode = targetNode;
-                        minDiff = diff;
+                    if (similarity > maxSimilarity) {
+                        mostSimilarNode = targetNode;
+                        maxSimilarity = similarity;
                     }
                 }
 
-                if (closestNode != null) {
+                if (mostSimilarNode != null) {
                     int source = sourceNode.getId().intValue();
-                    int target = closestNode.getId().intValue();
+                    int target = mostSimilarNode.getId().intValue();
+                    System.out.println("target = " + target+source);
 
                     // 이미 같은 소스와 타겟, userId를 가진 Link가 있는지 확인
                     if (!linkRepository.existsBySourceAndTargetAndUserId(source, target, userId)) {
@@ -249,14 +278,25 @@ public class DiagramServiceImpl implements DiagramService {
         }
     }
 
+    private double calculateSimilarity(String text1, String text2) {
+        Set<String> set1 = new HashSet<>(Arrays.asList(text1.split("\\s+")));
+        Set<String> set2 = new HashSet<>(Arrays.asList(text2.split("\\s+")));
+
+        Set<String> intersection = new HashSet<>(set1);
+        intersection.retainAll(set2);
+
+        Set<String> union = new HashSet<>(set1);
+        union.addAll(set2);
+
+        return (double) intersection.size() / union.size();
+    }
+
 
     public DiagramResponseDto linkNodesByShare(int userId, int targetUserId) {
         List<Node> nodes1 = nodeRepository.findByUserId(userId);
         List<Node> nodes2 = nodeRepository.findByUserId(targetUserId);
         List<Link> links1 = linkRepository.findByUserId(userId);
         List<Link> links2 = linkRepository.findByUserId(targetUserId);
-
-        Map<String, Node> categoryNodeMap = new HashMap<>();
 
         List<NodeResponseDto> nodeDtoList = new ArrayList<>();
         List<LinkResponseDto> linkDtoList = new ArrayList<>();
@@ -269,44 +309,33 @@ public class DiagramServiceImpl implements DiagramService {
             linkDtoList.add(convertLinkToDto(link));
         }
 
+        // 노드들을 NodeResponseDto로 변환
         for (Node node : nodes1) {
-            NodeResponseDto nodeDto = new NodeResponseDto();
-            nodeDto.setId(node.getId());
-            nodeDto.setTitle(node.getTitle());
-            nodeDto.setUserId(userId);
-            nodeDto.setEditorId(node.getEditorId());
-
+            NodeResponseDto nodeDto = convertNodeToDto(node, userId);
             nodeDtoList.add(nodeDto);
-
-            String category = node.getCategory();
-            if (category != null && !category.isEmpty()) {
-                if (categoryNodeMap.containsKey(category)) {
-                    Node existingNode = categoryNodeMap.get(category);
-                    if (node.getConfidence() > existingNode.getConfidence()) {
-                        categoryNodeMap.put(category, node);
-                    }
-                } else {
-                    categoryNodeMap.put(category, node);
-                }
-            }
+        }
+        for (Node node : nodes2) {
+            NodeResponseDto nodeDto = convertNodeToDto(node, targetUserId);
+            nodeDtoList.add(nodeDto);
         }
 
-        for (Node node : nodes2) {
-            NodeResponseDto nodeDto = new NodeResponseDto();
-            nodeDto.setId(node.getId());
-            nodeDto.setTitle(node.getTitle());
-            nodeDto.setUserId(targetUserId);
-            nodeDto.setEditorId(node.getEditorId());
+        // 유사도가 가장 높은 노드끼리 링크를 생성
+        for (Node node1 : nodes1) {
+            Node bestMatch = null;
+            double maxSimilarity = 0.0;
 
-            nodeDtoList.add(nodeDto);
+            for (Node node2 : nodes2) {
+                double similarity = calculateSimilarity(node1.getTitle(), node2.getTitle());
+                if (similarity > maxSimilarity) {
+                    bestMatch = node2;
+                    maxSimilarity = similarity;
+                }
+            }
 
-            String category = node.getCategory();
-            if (category != null && !category.isEmpty() && categoryNodeMap.containsKey(category)) {
-                Node sourceNode = categoryNodeMap.get(category);
-
+            if (bestMatch != null) {
                 LinkResponseDto linkDto = new LinkResponseDto();
-                linkDto.setSource(sourceNode.getId().intValue());
-                linkDto.setTarget(node.getId().intValue());
+                linkDto.setSource(node1.getId().intValue());
+                linkDto.setTarget(bestMatch.getId().intValue());
                 linkDto.setUserId(userId);
 
                 linkDtoList.add(linkDto);
@@ -320,6 +349,14 @@ public class DiagramServiceImpl implements DiagramService {
         return responseDto;
     }
 
+    private NodeResponseDto convertNodeToDto(Node node, int userId) {
+        NodeResponseDto nodeDto = new NodeResponseDto();
+        nodeDto.setId(node.getId());
+        nodeDto.setTitle(node.getTitle());
+        nodeDto.setUserId(userId);
+        nodeDto.setEditorId(node.getEditorId());
+        return nodeDto;
+    }
 
     private LinkResponseDto convertLinkToDto(Link link) {
         LinkResponseDto linkDto = new LinkResponseDto();
