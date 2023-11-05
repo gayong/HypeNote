@@ -49,3 +49,9 @@ export interface QuizUser {
   userName: string;
   userPk: number;
 }
+
+export interface chatUser {
+  userPk: string;
+  content: string;
+  chatTime: string;
+}

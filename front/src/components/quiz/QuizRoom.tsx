@@ -5,7 +5,7 @@ import { useContext, useEffect, useState } from "react";
 import { QuizRoomInfo } from "@/types/quiz";
 import { Button } from "antd";
 import { useRouter } from "next/navigation";
-
+import ChatRoom from "./ChatRoom";
 interface QuizRoomProps {
   roomId: number;
 }
@@ -67,6 +67,7 @@ export default function QuizRoom(props: QuizRoomProps) {
         onClick={() => outRoom()}>
         퇴장
       </Button>
+      <ChatRoom roomId={props.roomId} />
     </div>
   );
 }
