@@ -133,72 +133,6 @@ public class DiagramServiceImpl implements DiagramService {
         }
     }
 
-//    public void classifyAndSaveEmptyCategoryNodes() throws Exception {
-//        // userId가 1이고, category가 빈 칸인 Node들을 불러옵니다.
-//        List<Node> nodes = nodeRepository.findByUserId(1)
-//                .stream()
-////                .filter(n -> n.getCategory() == null || n.getCategory().isEmpty())
-//                .toList();
-//
-//        // 인증 키 파일 경로 설정
-//        String keyPath = "src/main/resources/static/natural-402603-1827cceef8e7.json";
-//
-//        // 인증 키 파일을 사용하여 Credentials 객체 생성
-//        GoogleCredentials credentials = GoogleCredentials.fromStream(new FileInputStream(keyPath));
-//
-//        for (Node node : nodes) {
-//            String myString = node.getContent();
-//
-//            List<String> keywords = extractKeywordsWithKomoran(myString, 5); // 상위 5개 키워드 추출
-//            System.out.println("keywords = " + keywords);
-//
-//            // 키워드가 포함된 문장 추출
-//            List<String> sentences = Arrays.stream(myString.split(". "))
-//                    .filter(sentence -> keywords.stream().anyMatch(sentence::contains))
-//                    .collect(Collectors.toList());
-//
-//            // 키워드와 관련된 문장을 분석에 사용
-//            String analysisInput = String.join(". ", sentences);
-//            System.out.println("analysisInput = " + analysisInput);
-//            try (LanguageServiceClient language = LanguageServiceClient.create(LanguageServiceSettings.newBuilder()
-//                    .setCredentialsProvider(FixedCredentialsProvider.create(credentials))
-//                    .build())) {
-//                Document doc = Document.newBuilder()
-//                        .setContent(analysisInput)
-//                        .setType(Document.Type.PLAIN_TEXT)
-//                        .build();
-//                ClassifyTextRequest request = ClassifyTextRequest.newBuilder()
-//                        .setDocument(doc)
-//                        .build();
-//                ClassifyTextResponse response = language.classifyText(request);
-//                System.out.println("response = " + response);
-//
-//                if (response != null && !response.getCategoriesList().isEmpty()) {
-//                    boolean categoryFound = false;
-//                    for (ClassificationCategory category : response.getCategoriesList()) {
-//                        if (category.getName().contains("Computer")) {
-//                            node.setCategory(category.getName());
-//                            node.setConfidence(category.getConfidence());
-//                            System.out.println("분석이 성공적으로 완료되었습니다.");
-//                            categoryFound = true;
-//                            break;
-//                        }
-//                    }
-//                    if (!categoryFound) {
-//                        System.out.println("'Computer'를 포함하는 카테고리가 없습니다.");
-//                        node.setCategory("other");
-//                        node.setConfidence(100F);
-//                    }
-//                } else {
-//                    System.out.println("분석에 실패했습니다.");
-//                    node.setCategory("other");
-//                    node.setConfidence(0F);
-//                }
-//                nodeRepository.save(node);
-//            }
-//        }
-//    }
-
 
     private List<String> extractKeywordsWithKomoran(String content, int topN) {
         Komoran komoran = new Komoran(DEFAULT_MODEL.FULL);
@@ -279,16 +213,37 @@ public class DiagramServiceImpl implements DiagramService {
     }
 
     private double calculateSimilarity(String text1, String text2) {
-        Set<String> set1 = new HashSet<>(Arrays.asList(text1.split("\\s+")));
-        Set<String> set2 = new HashSet<>(Arrays.asList(text2.split("\\s+")));
+        Map<String, Integer> wordCount1 = getWordCount(text1);
+        Map<String, Integer> wordCount2 = getWordCount(text2);
 
-        Set<String> intersection = new HashSet<>(set1);
-        intersection.retainAll(set2);
+        Set<String> allWords = new HashSet<>();
+        allWords.addAll(wordCount1.keySet());
+        allWords.addAll(wordCount2.keySet());
 
-        Set<String> union = new HashSet<>(set1);
-        union.addAll(set2);
+        double dotProduct = 0.0;
+        double norm1 = 0.0;
+        double norm2 = 0.0;
 
-        return (double) intersection.size() / union.size();
+        for (String word : allWords) {
+            int count1 = wordCount1.getOrDefault(word, 0);
+            int count2 = wordCount2.getOrDefault(word, 0);
+
+            dotProduct += count1 * count2;
+            norm1 += count1 * count1;
+            norm2 += count2 * count2;
+        }
+
+        return dotProduct / (Math.sqrt(norm1) * Math.sqrt(norm2));
+    }
+
+    private Map<String, Integer> getWordCount(String text) {
+        Map<String, Integer> wordCount = new HashMap<>();
+
+        for (String word : text.split("\\s+")) {
+            wordCount.put(word, wordCount.getOrDefault(word, 0) + 1);
+        }
+
+        return wordCount;
     }
 
 
@@ -329,40 +284,24 @@ public class DiagramServiceImpl implements DiagramService {
                 if (similarity > maxSimilarity) {
                     bestMatch = node2;
                     maxSimilarity = similarity;
+                    System.out.println("similarity = " + maxSimilarity);
                 }
             }
 
             if (bestMatch != null) {
-                LinkResponseDto linkDto = new LinkResponseDto();
-                linkDto.setSource(node1.getId().intValue());
-                linkDto.setTarget(bestMatch.getId().intValue());
-                linkDto.setUserId(userId);
-
+                LinkResponseDto linkDto = new LinkResponseDto(node1.getId().intValue(), bestMatch.getId().intValue(), userId);
                 linkDtoList.add(linkDto);
             }
         }
 
-        DiagramResponseDto responseDto = new DiagramResponseDto();
-        responseDto.setNodes(nodeDtoList);
-        responseDto.setLinks(linkDtoList);
-
-        return responseDto;
+        return new DiagramResponseDto(nodeDtoList, linkDtoList);
     }
 
     private NodeResponseDto convertNodeToDto(Node node, int userId) {
-        NodeResponseDto nodeDto = new NodeResponseDto();
-        nodeDto.setId(node.getId());
-        nodeDto.setTitle(node.getTitle());
-        nodeDto.setUserId(userId);
-        nodeDto.setEditorId(node.getEditorId());
-        return nodeDto;
+        return new NodeResponseDto(node.getId(), node.getTitle(), userId, node.getEditorId());
     }
 
     private LinkResponseDto convertLinkToDto(Link link) {
-        LinkResponseDto linkDto = new LinkResponseDto();
-        linkDto.setSource(link.getSource());
-        linkDto.setTarget(link.getTarget());
-        linkDto.setUserId(link.getUserId());
-        return linkDto;
+        return new LinkResponseDto(link.getSource(), link.getTarget(), link.getUserId());
     }
 }

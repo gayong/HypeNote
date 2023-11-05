@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/diagram")
@@ -34,32 +35,18 @@ public class DiagramController {
     @GetMapping("/{userId}")
     @Operation(summary = "내 노드와 링크 조회")
     public BaseResponse<DiagramResponseDto> getNodes(@PathVariable int userId) {
-        DiagramResponseDto response = new DiagramResponseDto();
         List<Node> nodes = nodeRepository.findByUserId(userId);
         List<Link> links = linkRepository.findByUserId(userId);
 
-        List<NodeResponseDto> nodeResponseDtos = new ArrayList<>();
-        List<LinkResponseDto> linkResponseDtos = new ArrayList<>();
+        List<NodeResponseDto> nodeResponseDtos = nodes.stream()
+                .map(node -> new NodeResponseDto(node.getId(), node.getTitle(), node.getUserId(), node.getEditorId()))
+                .collect(Collectors.toList());
 
-        for (Node node : nodes) {
-            NodeResponseDto nodeResponseDto = new NodeResponseDto();
-            nodeResponseDto.setId(node.getId());
-            nodeResponseDto.setTitle(node.getTitle());
-            nodeResponseDto.setUserId(node.getUserId());
-            nodeResponseDto.setEditorId(node.getEditorId());
-            nodeResponseDtos.add(nodeResponseDto);
-        }
+        List<LinkResponseDto> linkResponseDtos = links.stream()
+                .map(link -> new LinkResponseDto(link.getSource(), link.getTarget(), link.getUserId()))
+                .collect(Collectors.toList());
 
-        for (Link link : links) {
-            LinkResponseDto linkResponseDto = new LinkResponseDto();
-            linkResponseDto.setSource(link.getSource());
-            linkResponseDto.setTarget(link.getTarget());
-            linkResponseDto.setUserId(link.getUserId());
-            linkResponseDtos.add(linkResponseDto);
-        }
-
-        response.setNodes(nodeResponseDtos);
-        response.setLinks(linkResponseDtos);
+        DiagramResponseDto response = new DiagramResponseDto(nodeResponseDtos, linkResponseDtos);
         return new BaseResponse<>(response);
     }
 
