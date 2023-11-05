@@ -8,11 +8,22 @@ import Document from "@tiptap/extension-document";
 import { useState, useEffect, useRef } from "react";
 import { CompatClient, Frame, Stomp } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
+import Placeholder from "@tiptap/extension-placeholder";
+import CollaborationCursor from "@tiptap/extension-collaboration-cursor";
+import Collaboration from "@tiptap/extension-collaboration";
+import { store, webrtcProvider } from "./store";
+
 type Props = {
   id: string; // id를 문자열로 지정
 };
 
 export default function Editor({ id }: Props) {
+  const colors = ["#958DF1", "#F98181", "#FBBC88", "#FAF594", "#70CFF8", "#94FADB", "#B9F18D"];
+  const names = ["Lea Thompson", "Cyndi Lauper", "Tom Cruise", "Madonna"];
+
+  const getRandomElement = (list) => list[Math.floor(Math.random() * list.length)];
+  const getRandomColor = () => getRandomElement(colors);
+  const getRandomName = () => getRandomElement(names);
   // // 웹 소켓 연결
   // const [stompClient, setStompClient] = useState<CompatClient | null>(null);
   // const testNote = useRef({});
@@ -59,35 +70,50 @@ export default function Editor({ id }: Props) {
   // }, []);
 
   // // 첫 블럭은 h1
-  // const CustomDocument = Document.extend({
-  //   content: "heading block*",
-  // });
-  // const editorHandler = (editor: TypeOfEditor) => {
-  //   if (stompClient) {
-  //     const html = editor.getHTML;
-  //     console.log(editor.getJSON());
-  //     // console.log(editorProps?.getJSON());
-  //     stompClient.send("/pub/note/1", {}, JSON.stringify(editor.getJSON()));
-  //     // const Json = generateJSON(html, [StarterKit]);
-  //     // const html = editor.getHTML();
-  //     // stompClient.send("/pub/note/1", {}, html);
+  const CustomDocument = Document.extend({
+    content: "heading block*",
+  });
+  const editorHandler = (editor: TypeOfEditor) => {
+    // console.log(
+    //   Collaboration.configure({
+    //     fragment: store.fragment,
+    //   })
+    // );
+    //   if (stompClient) {
+    //     const html = editor.getHTML;
+    console.log(editor.getJSON());
+    //     // console.log(editorProps?.getJSON());
+    //     stompClient.send("/pub/note/1", {}, JSON.stringify(editor.getJSON()));
+    //     // const Json = generateJSON(html, [StarterKit]);
+    //     // const html = editor.getHTML();
+    //     // stompClient.send("/pub/note/1", {}, html);
 
-  //     // editor.commands.setContent(Json);
-  //   }
-  // };
+    //     // editor.commands.setContent(Json);
+    //   }
+  };
 
   return (
     <>
       <NovelEditor
         defaultValue={{}}
-        // onUpdate={(editor) => {
-        //   if (editor) {
-        //     editorHandler(editor);
-        //   }
-        // }}
+        onUpdate={(editor) => {
+          editorHandler(editor);
+        }}
         className={styles["editor-container"]}
         disableLocalStorage={true}
-        // extensions={[CustomDocument]}
+        extensions={[
+          // CustomDocument,
+          Placeholder.configure({
+            placeholder: "Write something …",
+          }),
+          Collaboration.configure({
+            fragment: store.fragment,
+          }),
+          CollaborationCursor.configure({
+            provider: webrtcProvider(id),
+            user: { name: getRandomName(), color: getRandomColor() },
+          }),
+        ]}
       />
     </>
   );
