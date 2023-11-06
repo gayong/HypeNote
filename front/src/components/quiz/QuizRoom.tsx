@@ -13,24 +13,15 @@ interface QuizRoomProps {
 }
 
 export default function QuizRoom(props: QuizRoomProps) {
-  const { setRoomNumber, room, sendReady, sendOutRoom, sendUnReady, quizs } = useContext(SocketContext);
-  const [quizRoom, setQuizRoom] = useState<QuizRoomInfo | null>(null);
+  const { setRoomNumber, room, sendReady, sendOutRoom, sendUnReady, quizs, setRoom } = useContext(SocketContext);
   const [ready, setReady] = useState<boolean>(false);
 
   const router = useRouter();
 
-  useEffect(() => {
-    setRoomNumber(props.roomId);
-  }, []);
-
-  useEffect(() => {
-    if (room) {
-      setQuizRoom(room);
-    }
-  }, [room]);
-
   const outRoom = () => {
     sendOutRoom(props.roomId);
+    setRoom(null);
+
     router.push("/quiz/room");
     setRoomNumber(null);
   };
@@ -47,7 +38,7 @@ export default function QuizRoom(props: QuizRoomProps) {
 
   return (
     <div>
-      <h1 className="text-3xl font-bold">{quizRoom?.roomName}</h1>
+      <h1 className="text-3xl font-bold">{room?.roomName}</h1>
       <div>{props.roomId}</div>
       <Button
         className="dark:border dark:border-font_primary"
@@ -62,11 +53,11 @@ export default function QuizRoom(props: QuizRoomProps) {
       ) : (
         // 퀴즈 게임 전
         <>
-          <div>레디 중 : {quizRoom?.readyCnt}</div>
+          <div>레디 중 : {room?.readyCnt}</div>
           <div>
-            {quizRoom?.roomCnt}/{quizRoom?.roomMax}
+            {room?.roomCnt}/{room?.roomMax}
           </div>
-          {quizRoom?.users.map((user) => {
+          {room?.users.map((user) => {
             return <div key={user.userPk}>{user.userName}</div>;
           })}
 

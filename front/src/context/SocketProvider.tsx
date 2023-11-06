@@ -25,6 +25,7 @@ export const SocketContext = createContext<{
   sendRooms: () => void;
   sendMessage: (roomNumber: number, messageInput: object) => void;
   sendQuizStart: (roomNumber: number) => void;
+  setRoom: (room: QuizRoomInfo | null) => void;
 }>({
   client: null,
   quizRooms: [],
@@ -40,6 +41,7 @@ export const SocketContext = createContext<{
   sendRooms: () => {},
   sendMessage: () => {},
   sendQuizStart: () => {},
+  setRoom: () => {},
 });
 
 // const socketFactory = () => new SockJS(process.env.NEXT_PUBLIC_SERVER_URL + "quiz/stomp/ws");
@@ -57,41 +59,28 @@ export const SocketProvider: React.FC<Props> = ({ children }) => {
 
   const [chatMessages, setChatMessages] = useState<Array<chatUser>>([]);
 
-  // const clientRef = useRef<CompatClient | null>(null);
-
-  // if (clientRef.current === null) {
-  //   const socketFactory = () => new SockJS(process.env.NEXT_PUBLIC_SERVER_URL + "quiz/stomp/ws");
-  //   clientRef.current = Stomp.over(socketFactory()); // clientRef.current가 null인 경우에만 Stomp.over를 호출합니다.
-  // }
-
-  // const client = clientRef.current;
-
   const socketFactory = () => new SockJS(process.env.NEXT_PUBLIC_SERVER_URL + "quiz/stomp/ws");
   const client = Stomp.over(socketFactory);
 
-  // 룸리스트 연결
   useEffect(() => {
-    client.connect({}, () => {
-      console.log("서버와 연결!", client.connected);
+    if (!client.connected) {
+      client.connect({}, () => {
+        console.log("서버와 연결!", client.connected);
 
-      // 지금 현재 방목록 불러오기
-      if (quizRooms.length == 0) {
-        subscribeRoomList();
-      }
-      // 룸 연결
-      console.log(roomNumber);
-      if (roomNumber) {
-        console.log(roomNumber, "null아님");
-        sendInRoom(roomNumber);
-        subscribeChat(roomNumber);
-      }
-    });
-    // return () => {
-    // client.disconnect(() => {
-    // console.log("서버 연결 해제");
-    // });
-    // };
-  }, [roomNumber, client]);
+        // 지금 현재 방목록 불러오기
+        if (quizRooms.length == 0) {
+          subscribeRoomList();
+        }
+
+        // 룸 연결
+        console.log(roomNumber, room);
+        if (roomNumber && !room) {
+          console.log(roomNumber, "null아님");
+          sendInRoom(roomNumber);
+        }
+      });
+    }
+  }, [client]);
 
   const subscribeRoomList = () => {
     client.subscribe("/sub/quizroom/roomList", (roomList) => {
@@ -102,17 +91,12 @@ export const SocketProvider: React.FC<Props> = ({ children }) => {
   };
 
   const sendRooms = () => {
-    // if (quizRooms.length === 0) {
-    //   console.log("방리스트구독!", client.connected);
-    //   subscribeRoomList();
-    // }
-
     client.send("/pub/quizroom/roomList", {});
   };
 
   // 방 구독
   const subscribeInRoom = (roomId: number) => {
-    client.subscribe(`/sub/quiz/${roomId}`, (response) => {
+    const subscription = client.subscribe(`/sub/quiz/${roomId}`, (response) => {
       const responseBody = JSON.parse(response.body);
       console.log(responseBody);
       // 방 정보
@@ -130,12 +114,17 @@ export const SocketProvider: React.FC<Props> = ({ children }) => {
         setQuizRanking(responseBody.ranking);
       }
     });
+
+    // 클리너 함수에서 구독 취소
+    return () => {
+      subscription.unsubscribe();
+    };
   };
 
   // 입장
   const sendInRoom = (roomId: number) => {
     subscribeInRoom(roomId);
-
+    subscribeChat(roomId);
     const data = {
       userPk: "2",
       userName: "isc",
@@ -146,7 +135,11 @@ export const SocketProvider: React.FC<Props> = ({ children }) => {
 
   //퇴장
   const sendOutRoom = (roomId: number) => {
-    setRoomNumber(null);
+    console.log("퇴장");
+    client.unsubscribe(`/sub/quiz/${roomId}`);
+
+    // setRoom(null);
+    // setRoomNumber(null);
 
     const data = {
       userPk: "2",
@@ -154,11 +147,10 @@ export const SocketProvider: React.FC<Props> = ({ children }) => {
 
     client.send(`/pub/quizroom/out/${roomId}`, {}, JSON.stringify(data));
     // sendUnReady(roomId);
-    // client.unsubscribe(`/sub/quiz/${roomId}`);
-
     setQuizs([]);
     setQuizResults([]);
     setQuizRanking([]);
+    setChatMessages([]);
   };
 
   // 레디
@@ -184,14 +176,12 @@ export const SocketProvider: React.FC<Props> = ({ children }) => {
 
   //채팅방 구독
   const subscribeChat = (roomId: number) => {
-    client.subscribe(`/sub/chat/${roomId}`, (mes) => {
-      console.log("채팅", mes.body);
+    return client.subscribe(`/sub/chat/${roomId}`, (mes) => {
       const message = JSON.parse(mes.body);
       setChatMessages((prevChatMessages) => [...prevChatMessages, message]);
-      console.log("@@@@@@@@");
-      console.log(chatMessages);
     });
   };
+
   // 채팅 전송
   const sendMessage = (roomId: number, messageInput: object) => {
     client.send(`/pub/chat/${roomId}`, {}, JSON.stringify(messageInput));
@@ -215,6 +205,7 @@ export const SocketProvider: React.FC<Props> = ({ children }) => {
         sendUnReady,
         sendMessage,
         sendQuizStart,
+        setRoom,
         quizs,
         quizRanking,
         quizResults,

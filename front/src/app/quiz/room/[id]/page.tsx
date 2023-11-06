@@ -1,8 +1,9 @@
 "use client";
 
+import Loading from "@/app/loading";
 import QuizRoom from "@/components/quiz/QuizRoom";
 import { SocketContext } from "@/context/SocketProvider";
-import { useContext, useEffect } from "react";
+import { useEffect, useContext } from "react";
 
 type Props = {
   params: {
@@ -11,6 +12,12 @@ type Props = {
 };
 
 export default function QuizRoomPage({ params: { id } }: Props) {
+  const { setRoomNumber, room } = useContext(SocketContext);
+
+  useEffect(() => {
+    setRoomNumber(id);
+  }, []);
+
   return (
     <div>
       <QuizRoom roomId={id} />
