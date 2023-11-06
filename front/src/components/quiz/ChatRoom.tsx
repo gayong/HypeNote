@@ -5,6 +5,7 @@ import { MyChat, YourChat } from "../ui/chat";
 import { Button, Input } from "antd";
 import { SocketContext } from "@/context/SubscribeProvider";
 import { chatUser } from "@/types/quiz";
+import { useWebSocket } from "@/context/SocketProvider";
 
 interface QuizRoomProps {
   roomId: number;
@@ -14,6 +15,7 @@ export default function ChatRoom(props: QuizRoomProps) {
 
   const { chatMessages } = useContext(SocketContext);
   const chatEndRef = useRef<null | HTMLDivElement>(null);
+  const stompClient = useWebSocket();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
@@ -28,7 +30,9 @@ export default function ChatRoom(props: QuizRoomProps) {
       content: message,
       chatTime: new Date().toLocaleString(),
     };
-
+    if (stompClient) {
+      stompClient.send(`/pub/chat/${props.roomId}`, {}, JSON.stringify(messageInput));
+    }
     // sendMessage(props.roomId, messageInput);
     // setChatMessages([...chatMessages, messageInput]);
     setMessage("");

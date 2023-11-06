@@ -20,6 +20,7 @@ export default function QuizList() {
       });
       stompClient.send("/pub/quizroom/roomList", {});
     }
+    return stompClient?.unsubscribe("/sub/quizroom/roomList");
   }, []);
 
   return (
