@@ -142,14 +142,15 @@ export const SocketProvider: React.FC<Props> = ({ children }) => {
 
   //퇴장
   const sendOutRoom = (roomId: number) => {
+    setRoomNumber(null);
+
     const data = {
       userPk: "2",
     };
 
-    setRoomNumber(null);
     client.send(`/pub/quizroom/out/${roomId}`, {}, JSON.stringify(data));
-
-    client.unsubscribe(`/sub/quiz/${roomId}`);
+    // sendUnReady(roomId);
+    // client.unsubscribe(`/sub/quiz/${roomId}`);
 
     setQuizs([]);
     setQuizResults([]);
