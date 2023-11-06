@@ -9,14 +9,16 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@hocuspocus/provider": "^2.7.1",
+    "@blocknote/react": "^0.9.6",
     "@react-three/cannon": "^6.6.0",
     "@react-three/drei": "^9.88.7",
     "@react-three/fiber": "^8.15.8",
     "@react-three/postprocessing": "^2.15.8",
     "@stomp/stompjs": "^7.0.0",
+    "@syncedstore/core": "^0.6.0",
     "@tanstack/react-query-next-experimental": "^5.5.0",
     "@tiptap/extension-collaboration": "^2.1.12",
+    "@tiptap/extension-collaboration-cursor": "^2.1.12",
     "@types/three": "^0.158.0",
     "antd": "^5.10.3",
     "axios": "^1.6.0",
@@ -35,7 +37,9 @@
     "swr": "^2.2.4",
     "three": "^0.158.0",
     "three-stdlib": "^2.28.3",
-    "util-deprecate": "^1.0.2"
+    "util-deprecate": "^1.0.2",
+    "y-webrtc": "^10.2.5",
+    "yjs": "^13.6.8"
   },
   "devDependencies": {
     "@tanstack/react-query-devtools": "^5.4.3",
