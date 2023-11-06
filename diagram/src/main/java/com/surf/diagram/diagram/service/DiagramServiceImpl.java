@@ -257,22 +257,12 @@ public class DiagramServiceImpl implements DiagramService {
         List<LinkResponseDto> linkDtoList = new ArrayList<>();
 
         // 링크들을 LinkResponseDto로 변환
-        for (Link link : links1) {
-            linkDtoList.add(convertLinkToDto(link));
-        }
-        for (Link link : links2) {
-            linkDtoList.add(convertLinkToDto(link));
-        }
+        linkDtoList.addAll(convertLinksToDtos(links1));
+        linkDtoList.addAll(convertLinksToDtos(links2));
 
         // 노드들을 NodeResponseDto로 변환
-        for (Node node : nodes1) {
-            NodeResponseDto nodeDto = convertNodeToDto(node, userId);
-            nodeDtoList.add(nodeDto);
-        }
-        for (Node node : nodes2) {
-            NodeResponseDto nodeDto = convertNodeToDto(node, targetUserId);
-            nodeDtoList.add(nodeDto);
-        }
+        nodeDtoList.addAll(convertNodesToDtos(nodes1, userId));
+        nodeDtoList.addAll(convertNodesToDtos(nodes2, targetUserId));
 
         // 유사도가 가장 높은 노드끼리 링크를 생성
         for (Node node1 : nodes1) {
@@ -303,5 +293,18 @@ public class DiagramServiceImpl implements DiagramService {
 
     private LinkResponseDto convertLinkToDto(Link link) {
         return new LinkResponseDto(link.getSource(), link.getTarget(), link.getUserId());
+    }
+
+
+    private List<NodeResponseDto> convertNodesToDtos(List<Node> nodes, int userId) {
+        return nodes.stream()
+                .map(node -> convertNodeToDto(node, userId))
+                .collect(Collectors.toList());
+    }
+
+    private List<LinkResponseDto> convertLinksToDtos(List<Link> links) {
+        return links.stream()
+                .map(this::convertLinkToDto)
+                .collect(Collectors.toList());
     }
 }

@@ -11,6 +11,6 @@ import lombok.Setter;
 public class NodeResponseDto {
     private Long id;
     private String title;
-    private int userId;      // group
+    private int group;      // group
     private int editorId;
 }
