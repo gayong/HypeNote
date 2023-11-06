@@ -1,9 +1,26 @@
 "use client";
-import { SocketContext } from "@/context/SocketProvider";
+import { SocketContext } from "@/context/SubscribeProvider";
 import Link from "next/link";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
+import { useWebSocket } from "@/context/SocketProvider";
+import { QuizRoomInfo } from "@/types/quiz";
+
 export default function QuizList() {
-  const { quizRooms, setRoomNumber, sendRooms } = useContext(SocketContext);
+  // const { quizRooms } = useContext(SocketContext);
+  const [quizRooms, setQuizRooms] = useState<Array<QuizRoomInfo>>([]);
+
+  const stompClient = useWebSocket();
+
+  useEffect(() => {
+    if (stompClient) {
+      const roomListSubscription = stompClient.subscribe("/sub/quizroom/roomList", (roomList) => {
+        // console.log(roomList);
+        console.log("방리스트 구독한거 나온대");
+        setQuizRooms(JSON.parse(roomList.body));
+      });
+      stompClient.send("/pub/quizroom/roomList", {});
+    }
+  }, []);
 
   return (
     <>
@@ -20,7 +37,7 @@ export default function QuizList() {
         <div className="grid gap-6 mb-8 md:grid-cols-2">
           {quizRooms.map((room) => (
             <div key={room.id}>
-              <Link href={`/quiz/room/${room.id}`} onClick={() => setRoomNumber(room.id)}>
+              <Link href={`/quiz/room/${room.id}`}>
                 <div className="hover:border-2 dark:hover:border-font_primary hover:border-primary bg-font_primary bg-opacity-50 min-w-0 p-4 text-font_primary rounded-lg shadow-lg dark:bg-dark_primary">
                   <h4 className="text-xl font-bold text-dark_primary dark:text-font_primary">{room.roomName}</h4>
                   <p className="text-sm text-line_primary text-opacity-60 dark:text-opacity-40 mb-4 dark:text-font_primary">

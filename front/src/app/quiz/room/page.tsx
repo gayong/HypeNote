@@ -1,9 +1,5 @@
 import QuizList from "@/components/quiz/QuizList";
 import { Metadata } from "next";
-import Link from "next/link";
-import Button from "../../../components/ui/Button";
-import { useContext } from "react";
-import { SocketContext } from "@/context/SocketProvider";
 
 export const metadata: Metadata = {
   title: "QuizRoom",
