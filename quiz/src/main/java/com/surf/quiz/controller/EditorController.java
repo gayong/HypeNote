@@ -1,21 +1,27 @@
 package com.surf.quiz.controller;
 
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.surf.quiz.common.BaseResponse;
 import com.surf.quiz.common.BaseResponseStatus;
-import com.surf.quiz.dto.diagram.DiagramResponseDto;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.surf.quiz.dto.QuestionDto;
 import com.surf.quiz.dto.editor.ApiResponse;
 import com.surf.quiz.dto.editor.EditorCheckResponse;
 import com.surf.quiz.dto.request.EditorRequestDto;
 import com.surf.quiz.entity.Editor;
-import com.surf.quiz.fegin.DiagramServiceFeignClient;
+import com.surf.quiz.fegin.ChatCompletionClient;
 import com.surf.quiz.fegin.EditorServiceFeignClient;
 import com.surf.quiz.repository.EditorRepository;
-import com.surf.quiz.service.QuizRoomService;
+import com.surf.quiz.service.ChatCompletionService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 
 @RestController
@@ -24,6 +30,10 @@ import org.springframework.web.bind.annotation.*;
 public class EditorController {
     @Autowired
     private EditorServiceFeignClient editorServiceFeignClient;
+    @Autowired
+    private ChatCompletionClient chatCompletionClient;
+
+    private final ChatCompletionService chatCompletionService;
 
     private final EditorRepository editorRepository;
     @PostMapping("/editor")
@@ -50,19 +60,27 @@ public class EditorController {
         return new BaseResponse<>(response);
     }
 
-//    @Autowired
-//    private DiagramServiceFeignClient diagramServiceFeignClient;
+    @PostMapping("/gpt")
+    @Operation(summary = "gpt")
+    public BaseResponse<List<QuestionDto>> getGpt(@RequestBody String content) {
+        String abc = chatCompletionService.chatCompletions(content);
+        System.out.println("abc = " + abc);
 
-//    fetchDiagramInfo(1);
-    //
-//    @Autowired
-//    private EditorServiceFeignClient editorServiceFeignClient;
-//
-//    public void fetchDiagramInfo(int userId) {
-//        BaseResponse<DiagramResponseDto> response = diagramServiceFeignClient.getNodes(userId);
-////        ApiResponse<EditorCheckResponse> response11 = editorServiceFeignClient.getEditor("65392c40cbd1ff6e316819e1");
-//        System.out.println("response = " + response.getResult().getLinks());
-////        System.out.println("response11 = " + response11.getData().getId());
-//    }
+        // ObjectMapper 객체 생성
+        ObjectMapper objectMapper = new ObjectMapper();
 
+        try {
+            // JSON 문자열을 객체로 담고 있는 리스트로 변환
+            List<QuestionDto> questionList = objectMapper.readValue(abc, new TypeReference<List<QuestionDto>>() {});
+            // 변환된 리스트 사용
+            for (QuestionDto question : questionList) {
+                System.out.println(question.getQuestion());
+                System.out.println(question.getAnswer());
+            }
+            return new BaseResponse<>(questionList);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return new BaseResponse<>(null);
+        }
+    }
 }

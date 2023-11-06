@@ -2,8 +2,6 @@ package com.surf.quiz.controller;
 
 
 import com.surf.quiz.common.BaseResponse;
-import com.surf.quiz.fegin.DiagramServiceFeignClient;
-import com.surf.quiz.dto.diagram.DiagramResponseDto;
 import com.surf.quiz.dto.request.CreateRoomRequestDto;
 import com.surf.quiz.dto.MemberDto;
 import com.surf.quiz.dto.request.SearchMemberRequestDto;

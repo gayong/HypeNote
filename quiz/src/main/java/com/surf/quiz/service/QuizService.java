@@ -64,7 +64,8 @@ public class QuizService {
             userAnswers.put(userId, convertedAnswers);
         }
     }
-
+    
+    // 문제와 정답 추출
     private Map<Integer, String> convertUserAnswer(Map<Long, String> userAnswerDto) {
         Map<Integer, String> convertedAnswers = new HashMap<>();
         // 문제 / 정답 추출
