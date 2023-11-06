@@ -1,42 +1,42 @@
 # For MSA -인식 문의
-spring:
- application:
-   name: server-quiz
- config:
-   import: optional:configserver:http://config:8888
- cloud:
-   openfeign:
-     client:
-       config:
-         default:
-           connectTimeout: 5000
-           readTimeout: 5000
-           loggerLevel: basic
+#spring:
+# application:
+#   name: server-quiz
+# config:
+#   import: optional:configserver:http://config:8888
+# cloud:
+#   openfeign:
+#     client:
+#       config:
+#         default:
+#           connectTimeout: 5000
+#           readTimeout: 5000
+#           loggerLevel: basic
 
 
 
 ## For Local -인식 문의
-#server:
-#  port: 8088
-#
-#spring:
-#  application:
-#    name: server-quiz
-#  config:
-#    import: optional:classpath:application-gpt.yml
-#  data:
-#    mongodb:
-#      uri: mongodb://lesser:!esser101Panda@www.hype-note.com
-#      port: 27017
-#      database: quiz
-#      username: lesser
-#      password: \!esser101Panda
-#  cloud:
-#    openfeign:
-#      client:
-#        config:
-#          default:
-#            connectTimeout: 5000
-#            readTimeout: 5000
-#            loggerLevel: basic
-#springdoc.swagger-ui.path: /swagger-ui.html
+server:
+  port: 8088
+
+spring:
+  application:
+    name: server-quiz
+  config:
+    import: optional:classpath:application-gpt.yml
+  data:
+    mongodb:
+      uri: mongodb://lesser:!esser101Panda@www.hype-note.com
+      port: 27017
+      database: quiz
+      username: lesser
+      password: \!esser101Panda
+  cloud:
+    openfeign:
+      client:
+        config:
+          default:
+            connectTimeout: 5000
+            readTimeout: 5000
+            loggerLevel: basic
+springdoc.swagger-ui.path: /swagger-ui.html
