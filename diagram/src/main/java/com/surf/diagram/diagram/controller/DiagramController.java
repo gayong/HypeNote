@@ -51,25 +51,6 @@ public class DiagramController {
     }
 
 
-    @PostMapping("/node")
-    @Operation(summary = "노드와 링크 생성")
-    public void createNodeAndLink() {
-
-        Node node = new Node();
-        Link link = new Link();
-
-        node.setUserId(1);
-        node.setTitle("1");
-        node.setEditorId(1);
-        node.setContent("123");
-
-        link.setTarget(1);
-        link.setSource(2);
-        link.setUserId(1);
-
-        nodeRepository.save(node);
-        linkRepository.save(link);
-    }
 
     @PostMapping("/keyword/{userId}")
     @Operation(summary = "키워드 분석")
