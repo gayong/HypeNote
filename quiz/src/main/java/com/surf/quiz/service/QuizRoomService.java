@@ -162,7 +162,14 @@ public class QuizRoomService {
     public void changeReady(Long roomId, Map<String, Object> payload) {
         QuizRoom quizRoom = this.findById(roomId).orElseThrow();
 
-        Long id = ((Number) payload.get("userPk")).longValue();
+        long id;
+        Object userPk = payload.get("userPk");
+        if (userPk instanceof Number) {
+            id = ((Number) userPk).longValue();
+        } else {
+            id = Long.parseLong((String) userPk);
+        }
+
         String action = (String) payload.get("action");
 
         // 레디 상태 변경, 언레디 상태 변경
