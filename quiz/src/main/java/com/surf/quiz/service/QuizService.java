@@ -80,11 +80,13 @@ public class QuizService {
     // 전원이 제출했는지 확인
     public boolean isQuizFinished(String roomId, Map<String, Map<Integer, String>> userAnswers) {
         List<MemberDto> members = quizRoomService.getUsersByRoomId(Long.parseLong(roomId));
+        System.out.println("members = " + members);
         Set<String> userIds = members.stream()
                 .map(member -> Long.toString(member.getUserPk()))
                 .collect(Collectors.toSet());
         int submittedUserCount = userAnswers.keySet().size(); // 정답을 제출한 팀원 수
         int totalUserCount = userIds.size(); // 퀴즈룸의 전체 팀원 수
+        System.out.println("totalUserCount = " + totalUserCount+submittedUserCount);
         return submittedUserCount == totalUserCount;
     }
 }

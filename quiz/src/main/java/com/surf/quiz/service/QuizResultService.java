@@ -103,7 +103,8 @@ public class QuizResultService {
     private QuizResult createQuizResult(MemberDto user, Quiz quiz) {
         QuizResult quizResult = new QuizResult();
         quizResult.setQuizId(quiz.getId());
-        quizResult.setRoomId(String.valueOf(quiz.getRoomId()));
+        quizResult.setRoomId(quiz.getRoomId());
+        quizResult.setRoomName(quiz.getRoomName());
         quizResult.setUserPk(user.getUserPk());
         quizResult.setTotals(quiz.getQuestion().size());
         String formattedDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
@@ -148,11 +149,12 @@ public class QuizResultService {
 
     // 각 유저의 답안이 저장 > 결과 전송
     private void saveAndSendResults(String roomId, Quiz quiz) {
-        if (quizResultRepository.countByRoomId(roomId) == quiz.getUserCnt()) {
+        System.out.println("111roomId = " + roomId);
+        if (quizResultRepository.countByRoomId(Integer.parseInt(roomId)) == quiz.getUserCnt()) {
             quiz.setComplete(true);
             quizRepository.save(quiz);
 
-            List<QuizResult> results = quizResultRepository.findByRoomId(roomId);
+            List<QuizResult> results = quizResultRepository.findByRoomId(Integer.parseInt(roomId));
             results.sort((o1, o2) -> o2.getCorrect() - o1.getCorrect());
 
             // 각 QuizResult에서 userPk를 추출하여 ranking 리스트 생성
@@ -165,6 +167,7 @@ public class QuizResultService {
             payload.put("type", "result");
             payload.put("ranking", ranking);
             payload.put("result", results);
+            System.out.println("payload = " + payload);
 
             messageTemplate.convertAndSend("/sub/quiz/" + roomId, payload);
         }

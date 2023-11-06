@@ -2,7 +2,9 @@ package com.surf.quiz.controller;
 
 import com.surf.quiz.common.BaseResponse;
 import com.surf.quiz.common.BaseResponseStatus;
+import com.surf.quiz.dto.ResultDto;
 import com.surf.quiz.dto.request.AnswerDto;
+import com.surf.quiz.dto.response.QuizResultResponseDto;
 import com.surf.quiz.entity.Quiz;
 import com.surf.quiz.entity.QuizResult;
 import com.surf.quiz.entity.QuizRoom;
@@ -105,17 +107,35 @@ public class QuizController {
     // 나의 퀴즈 기록 보기
     @GetMapping("/{userId}")
     @Operation(summary = "나의 퀴즈 기록")
-    public BaseResponse<List<QuizResult>> getMyQuizHistory(@PathVariable Long userId) {
-        List<QuizResult> result = quizResultRepository.findByUserPk(userId);
-        String aaa = "<h1>1231231231231231321132132133333333333333333d</h1><p>asd</p><p>asdddddd</p><p>asdadsad</p><blockquote class=\"novel-border-l-4 novel-border-stone-700\"><p>sdfsdf</p></blockquote><p>asdadsd</p><p></p>";
-        String bbb = extractTextFromHtml(aaa);
-        System.out.println("aaa = " + aaa);
-        System.out.println("bbb = " + bbb);
-        return new BaseResponse<>(result);
+    public BaseResponse<QuizResultResponseDto> getMyQuizHistory(@PathVariable Long userId) {
+        List<QuizResult> quizResults = quizResultRepository.findByUserPk(userId);
+        QuizResultResponseDto quizResultResponseDto = new QuizResultResponseDto();
+
+        quizResultResponseDto.setQuizCnt((long) quizResults.size());
+        quizResultResponseDto.setTotalCnt(quizResults.stream().mapToLong(QuizResult::getTotals).sum());
+        quizResultResponseDto.setCorrectCnt(quizResults.stream().mapToLong(QuizResult::getCorrect).sum());
+
+        List<ResultDto> quiz = new ArrayList<>();
+        for (QuizResult quizResult : quizResults) {
+            ResultDto resultDto = new ResultDto();
+            resultDto.setQuizId(quizResult.getQuizId().intValue());
+            resultDto.setRoomName(quizResult.getRoomName());
+            resultDto.setTotals(quizResult.getTotals());
+            resultDto.setCorrect(quizResult.getCorrect());
+            resultDto.setExamDone(quizResult.getExamDone());
+            quiz.add(resultDto);
+        }
+        quizResultResponseDto.setQuiz(quiz);
+
+        return new BaseResponse<>(quizResultResponseDto);
     }
 
-    public String extractTextFromHtml(String html) {
-        return Jsoup.parse(html).text();
+    // 나의 퀴즈 단일 기록 보기
+    @GetMapping("/{userId}/{quizId}")
+    @Operation(summary = "나의 퀴즈 기록 단일")
+    public BaseResponse<QuizResult> getMyQuizResultDetail(@PathVariable Long userId, @PathVariable int quizId) {
+        QuizResult result = quizResultRepository.findByUserPkAndRoomId(userId, quizId);
+        return new BaseResponse<>(result);
     }
 
 

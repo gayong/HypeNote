@@ -12,7 +12,8 @@ import java.util.List;
 public class QuizResult {
 
     private Long quizId;
-    private String roomId;
+    private int roomId;
+    private String roomName;
     private Long userPk;
     private int totals;
     private int Correct;

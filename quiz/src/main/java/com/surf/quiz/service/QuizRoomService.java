@@ -271,20 +271,21 @@ public class QuizRoomService {
         String formattedDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
         quiz.setCreatedDate(formattedDateTime);
         quiz.setQuizCnt(createdQuizroom.getQuizCnt());
+        quiz.setRoomName(createdQuizroom.getRoomName());
 
         QuestionDto question1 = new QuestionDto();
         question1.setQuestion("IP(Internet Protocol) 주소는 어떻게 구성되며, 어떤 역할을 담당하고 있나요?");
         question1.setId(1);
 
         List<ExampleDto> examples = new ArrayList<>();
-        examples.add(new ExampleDto("ex1", "1) IP 주소는 64비트로 구성되어 있으며, 데이터의 무결성을 검증한다."));
-        examples.add(new ExampleDto("ex2", "2) IP 주소는 4바이트로 이루어져 있으며, 컴퓨터의 주소 역할을 한다."));
-        examples.add(new ExampleDto("ex3", "3) IP 주소는 데이터의 재조합을 처리하며, 데이터의 순서를 조정한다."));
-        examples.add(new ExampleDto("ex4", "4) IP 주소는 하드웨어 고유의 식별번호인 MAC 주소와 동일하다."));
+        examples.add(new ExampleDto("1", "IP 주소는 64비트로 구성되어 있으며, 데이터의 무결성을 검증한다."));
+        examples.add(new ExampleDto("2", "IP 주소는 4바이트로 이루어져 있으며, 컴퓨터의 주소 역할을 한다."));
+        examples.add(new ExampleDto("3", "IP 주소는 데이터의 재조합을 처리하며, 데이터의 순서를 조정한다."));
+        examples.add(new ExampleDto("4", "IP 주소는 하드웨어 고유의 식별번호인 MAC 주소와 동일하다."));
 
         question1.setExample(examples);
 
-        question1.setAnswer("ex2");
+        question1.setAnswer("2");
         question1.setCommentary("해설1");
 
         QuestionDto question2 = new QuestionDto();
@@ -292,14 +293,14 @@ public class QuizRoomService {
         question2.setId(2);
 
         List<ExampleDto> examples2 = new ArrayList<>();
-        examples2.add(new ExampleDto("ex1", "1) TCP가 데이터의 추적을 처리하고, IP가 데이터의 배달을 담당한다."));
-        examples2.add(new ExampleDto("ex2", "2) IP가 데이터의 추적을 처리하고, TCP가 데이터의 배달을 담당한다."));
-        examples2.add(new ExampleDto("ex3", "3) TCP와 IP가 모두 데이터의 재조합을 처리한다."));
-        examples2.add(new ExampleDto("ex4", "4) TCP와 IP가 모두 데이터의 손실 여부를 확인한다."));
+        examples2.add(new ExampleDto("1", "TCP가 데이터의 추적을 처리하고, IP가 데이터의 배달을 담당한다."));
+        examples2.add(new ExampleDto("2", "IP가 데이터의 추적을 처리하고, TCP가 데이터의 배달을 담당한다."));
+        examples2.add(new ExampleDto("3", "TCP와 IP가 모두 데이터의 재조합을 처리한다."));
+        examples2.add(new ExampleDto("4", "TCP와 IP가 모두 데이터의 손실 여부를 확인한다."));
 
         question2.setExample(examples2);
 
-        question2.setAnswer("ex1");
+        question2.setAnswer("1");
         question2.setCommentary("해설2");
 
         List<QuestionDto> questions = new ArrayList<>();

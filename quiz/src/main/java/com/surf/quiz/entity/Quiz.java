@@ -27,6 +27,7 @@ public class Quiz {
     int roomId;
 
     private String createdDate;
+    private String roomName;
     private int quizCnt;
     private int userCnt;
 
