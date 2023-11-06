@@ -5,15 +5,9 @@ import { TreeSelect, Select, Button, message, Steps, theme } from "antd";
 import type { SelectProps, RadioChangeEvent } from "antd";
 import { useAtom } from "jotai";
 import { isSoloAtom } from "../../store/isSolo";
-
-const names: SelectProps["options"] = [
-  { value: "가영", label: "가영" },
-  { value: "자현", label: "자현" },
-  { value: "규렬", label: "규렬" },
-  { value: "세울", label: "세울" },
-  { value: "상익", label: "상익" },
-  { value: "인식", label: "인식" },
-];
+import { useCreateRoom } from "@/hooks/useCreateRoom";
+import { useMutation } from "react-query";
+import Loading from "@/app/loading";
 
 const handleChange = (value: string | string[]) => {
   console.log(`Selected: ${value}`);
@@ -25,11 +19,51 @@ export default function QuizMaker() {
   const [value, setValue] = useState(["0-0-0"]);
   const { SHOW_PARENT } = TreeSelect;
   const [isSolo] = useAtom(isSoloAtom);
+  const { createRoomMutation, inviteUserInfo, inviteUserMutation, roomInfo } = useCreateRoom();
 
-  console.log("혼자냐?", isSolo);
+  console.log("혼자냐?", "규렬 왈 : ", isSolo);
   useEffect(() => {
-    console.log("혼자냐?", isSolo);
+    console.log("혼자냐?", "규렬 왈 : ", isSolo);
   }, [isSolo]);
+
+  // 퀴즈 방 만들기 STEP 1
+  const handleCreateRoom = () => {
+    console.log("만드를어");
+    createRoomMutation.mutate({
+      roomName: "테스트1",
+      pages: [1, 2, 3],
+      sharePages: [1, 2],
+      quizCnt: 10,
+      single: false,
+    });
+  };
+
+  const userOptions = useMemo(() => {
+    if (inviteUserInfo) {
+      return inviteUserInfo.map((user) => ({ value: user.userName, label: user.userName }));
+    } else {
+      return [];
+    }
+  }, [inviteUserInfo]);
+
+  // 퀴즈 방 만들기 STEP 2
+  const users = [
+    { userPk: 1, userName: "csi" },
+    { userPk: 2, userName: "isc" },
+  ];
+
+  const handleSumbitCreateRoom = () => {
+    if (roomInfo) {
+      // const { inviteUsers, ...rest } = roomInfo;
+      inviteUserMutation.mutate({ ...roomInfo, users: users });
+    }
+    if (inviteUserMutation.isSuccess) {
+      message.success("생성 완료!");
+      // 방입장 시키던지..뭐 어케해야할듯..?
+    } else if (inviteUserMutation.isError) {
+      message.error("삐빕 에러에러");
+    }
+  };
 
   const treeData = [
     {
@@ -137,24 +171,28 @@ export default function QuizMaker() {
                     닉네임 검색을 통해 친구를 초대해보세요.
                   </h1>
                   <Select
-                    defaultValue={["가영"]}
+                    // defaultValue={["가영"]}
                     mode="tags"
                     size="middle"
                     placeholder="닉네임을 검색하세요"
                     onChange={handleChange}
                     style={{ width: "400px" }}
-                    options={names}
+                    options={userOptions}
                   />
                 </div>
               ),
             },
           ]),
     ],
-    []
+    [userOptions]
   );
 
   const next = () => {
     setCurrent(current + 1);
+
+    if (current === 1) {
+      handleCreateRoom();
+    }
   };
 
   const prev = () => {
@@ -185,30 +223,39 @@ export default function QuizMaker() {
       <Steps current={current} items={items} />
       <div style={contentStyle}>{steps[current].content}</div>
       <div style={{ display: "flex", justifyContent: "flex-end", fontFamily: "preRg", marginTop: 24 }}>
-        {current > 0 && (
-          <Button style={{ fontFamily: "preRg", backgroundColor: "white", margin: "0 8px" }} onClick={() => prev()}>
-            이전
-          </Button>
-        )}
-        {current < steps.length - 1 && (
-          <Button
-            className="dark:border dark:border-font_primary"
-            style={{ fontFamily: "preRg", backgroundColor: "#2946A2" }}
-            type="primary"
-            onClick={() => next()}>
-            다음
-          </Button>
-        )}
-        {current === steps.length - 1 && (
-          <Button
-            className="dark:border dark:border-font_primary"
-            style={{ fontFamily: "preRg", backgroundColor: "#2946A2" }}
-            type="primary"
-            onClick={() => message.success("생성 완료!")}>
-            생성하기
-          </Button>
+        {/* 첫번째 관문 로딩 페이지 */}
+        {createRoomMutation.isLoading ? (
+          <Loading /> // 로딩 컴포넌트를 렌더링
+        ) : (
+          <div>
+            {current > 0 && (
+              <Button style={{ fontFamily: "preRg", backgroundColor: "white", margin: "0 8px" }} onClick={() => prev()}>
+                이전
+              </Button>
+            )}
+            {current < steps.length - 1 && (
+              <Button
+                className="dark:border dark:border-font_primary"
+                style={{ fontFamily: "preRg", backgroundColor: "#2946A2" }}
+                type="primary"
+                onClick={() => next()}>
+                다음
+              </Button>
+            )}
+            {current === steps.length - 1 && (
+              <Button
+                className="dark:border dark:border-font_primary"
+                style={{ fontFamily: "preRg", backgroundColor: "#2946A2" }}
+                type="primary"
+                onClick={() => handleSumbitCreateRoom()}>
+                생성하기
+              </Button>
+            )}
+          </div>
         )}
       </div>
+      {/* 퀴즈 친구들 받아오기 그리고 여기서 누구누구 선택하면 담기겠지? */}
+      {/* <div>{inviteUserInfo && inviteUserInfo.map((user) => <div key={user.userPk}>{user.userName}</div>)}</div> */}
     </div>
   );
 }

@@ -17,7 +17,6 @@ export const createQuizRoom = (
     quizCnt,
     single,
   });
-// export const createQuizRoom = () => api.get(`quiz/quizroom`);
 
 // 유저 초대 (여러명)
 export const inviteUser = (
@@ -28,7 +27,7 @@ export const inviteUser = (
   single: boolean,
   users: Array<object>
 ) =>
-  api.post(`quizroom/invite`, {
+  api.post(`quiz/quizroom/invite`, {
     roomName,
     pages,
     sharePages,
@@ -38,4 +37,10 @@ export const inviteUser = (
   });
 
 // 퀴즈 정답 전송
-export const sendQuiz = (roomId: number, userId: number) => api.post(`quizroom/${roomId}/${userId}`);
+export const sendQuiz = (roomId: number, userId: number, answers: object) =>
+  api.post(`quiz/quizroom/${roomId}/${userId}`, {
+    answers,
+  });
+
+// 내 퀴즈 히스토리
+export const quizHistory = (userId: number) => api.get(`quiz/${userId}`);
