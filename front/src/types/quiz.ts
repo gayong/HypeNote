@@ -11,8 +11,9 @@ export interface QuizRoomGroup extends QuizRoom {
 }
 
 export interface QuizRoomDetail {
-  result: QuizRoomInfo;
+  result: object;
   type: string;
+  ranking?: Array<number>;
 }
 
 export interface QuizRoomInfo {
@@ -31,17 +32,11 @@ export interface QuizRoomInfo {
   inviteUsers: Array<QuizUser>;
 }
 
-export interface QuizResultInfo {
-  ranking: Array<number>;
-  avg: number;
-  result: Array<object>;
-}
-
-export interface Chat {
-  chatTime: string;
-  userPk: string;
-  content: string;
-}
+// export interface Chat {
+//   chatTime: string;
+//   userPk: string;
+//   content: string;
+// }
 
 export interface QuizUser {
   host?: boolean;
@@ -54,4 +49,32 @@ export interface chatUser {
   userPk: string;
   content: string;
   chatTime: string;
+  userName: string;
+}
+
+export interface QuizInfo {
+  answer: string;
+  commentary: string;
+  example: Array<QuizQuestion>;
+  id: number;
+  question: string;
+}
+export interface QuizInfoWithMyAnswer extends QuizInfo {
+  myAnswer: number;
+}
+
+export interface QuizQuestion {
+  content: string;
+  ex: string;
+}
+
+export interface QuizResultInfo {
+  correct: number;
+  examDone: string;
+  examStart: string;
+  questionResult: Array<object>;
+  quizId: number;
+  roomId: number;
+  totals: number;
+  userPk: number;
 }
