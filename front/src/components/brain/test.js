@@ -13,49 +13,48 @@ const ThreeScene = () => {
   const router = useRouter();
   const ref = useRef();
   const { data: response, isLoading, error } = useAllDiagram();
-  const [diagram, setDiagram] = useState([]);
+  const [nodes, setNodes] = useState([]);
+  const [links, setLinks] = useState([]);
 
   useEffect(() => {
-    console.log("안녕");
-
     if (response) {
-      console.log("나야나");
-      console.log(response.data.result);
-      setDiagram(response.data.result);
+      console.log("날 뇌에 담아줘!", response.data.result);
+      console.log("노드", response.data.result.nodes);
+      setNodes(response.data.result.nodes);
+      console.log("링크", response.data.result.links);
+      setLinks(response.data.result.links);
     }
   }, [response]);
 
-  const nodes = [
-    { id: "네트워크", group: 1 },
-    { id: "운영체제", group: 1 },
-    { id: "프레임워크", group: 2 },
-    { id: "자료구조", group: 2 },
-    { id: "node5", group: 2 },
-    { id: "node6", group: 3 },
-    { id: "node7", group: 3 },
-    { id: "node8", group: 4 },
-    { id: "node9", group: 4 },
-    { id: "node10", group: 4 },
-  ];
+  // const nodes = [
+  //   { id: "네트워크", group: 1 },
+  //   { id: "운영체제", group: 1 },
+  //   { id: "프레임워크", group: 2 },
+  //   { id: "자료구조", group: 2 },
+  //   { id: "node5", group: 2 },
+  //   { id: "node6", group: 3 },
+  //   { id: "node7", group: 3 },
+  //   { id: "node8", group: 4 },
+  //   { id: "node9", group: 4 },
+  //   { id: "node10", group: 4 },
+  // ];
 
-  const links = [
-    { source: "네트워크", target: "운영체제" },
-    { source: "운영체제", target: "프레임워크" },
-    { source: "네트워크", target: "자료구조" },
-    { source: "네트워크", target: "node7" },
-    { source: "자료구조", target: "node5" },
-    { source: "node5", target: "node6" },
-    { source: "자료구조", target: "node6" },
-    { source: "node8", target: "node9" },
-    { source: "node8", target: "node10" },
-  ];
+  // const links = [
+  //   { source: "네트워크", target: "운영체제" },
+  //   { source: "운영체제", target: "프레임워크" },
+  //   { source: "네트워크", target: "자료구조" },
+  //   { source: "네트워크", target: "node7" },
+  //   { source: "자료구조", target: "node5" },
+  //   { source: "node5", target: "node6" },
+  //   { source: "자료구조", target: "node6" },
+  //   { source: "node8", target: "node9" },
+  //   { source: "node8", target: "node10" },
+  // ];
 
   useEffect(() => {
+    console.log("zz", nodes, links);
     function ForceGraph(
-      {
-        nodes, // an iterable of node objects (typically [{id}, …])
-        links, // an iterable of link objects (typically [{source, target}, …])
-      },
+      { nodes, links },
       {
         nodeId = (d) => d.id, // given d in nodes, returns a unique identifier (string)
         nodeGroup, // given d in nodes, returns an (ordinal) value for color
@@ -66,7 +65,7 @@ const ThreeScene = () => {
         nodeStrokeWidth = 2.5, // 노드 테두리 굵기
         nodeStrokeOpacity = 1, // node stroke opacity
         nodeRadius = 10, // node radius, in pixels
-        nodeStrength = -100,
+        nodeStrength = -100, // 노드끼리 밀어내는 힘, 절댓값 클수록 많이 밀어냄
         linkSource = ({ source }) => source, // given d in links, returns a node identifier string
         linkTarget = ({ target }) => target, // given d in links, returns a node identifier string
         linkStroke = "#999", // link stroke color
@@ -146,21 +145,19 @@ const ThreeScene = () => {
         .join("g")
         .call(drag(simulation));
 
-      console.log("내가 노드 배열", nodes);
-
       node
         .append("circle")
         .attr("r", nodeRadius)
-        .attr("fill", (d) => color(d.group))
+        .attr("fill", (d) => color(d.userId))
         .attr("stroke-width", nodeStrokeWidth)
         .on("click", function (d) {
-          // router.push(`/editor/${d.editorId}`);
-          router.push("/editor/1");
+          router.push(`/editor/${d.editorId}`);
+          // router.push("/editor/1");
         });
 
       node
         .append("text")
-        .text((d) => d.id)
+        .text((d) => d.title)
         .attr("x", 0)
         .attr("y", 28)
         .attr("text-anchor", "middle")
@@ -235,9 +232,12 @@ const ThreeScene = () => {
       }
     }
 
-    ForceGraph({ nodes, links });
-  }, []);
+    if (nodes.length > 0 && links.length > 0) {
+      ForceGraph({ nodes, links });
+    }
+  }, [nodes, links]);
 
+  // return <div ref={ref} />;
   return <div ref={ref} style={{ width: "100%", height: "100%" }} />;
 };
 

@@ -1,11 +1,15 @@
+"use client";
+
 import type { Metadata } from "next";
 import Providers from "./providers";
-// import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import { usePathname } from "next/navigation";
+// import { Inter } from "next/font/google";
 // const inter = Inter({ subsets: ["latin"] });
 
-export const metadata: Metadata = {
+// metadata 에러나면 export 붙여서 따로 모듈화하기
+const metadata: Metadata = {
   title: {
     default: "한입노트(Hype Note)",
     template: "한입노트(Hype Note)",
@@ -17,6 +21,9 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const noNavbar = pathname === "/signin" || pathname === "/signup" || pathname === "/intro";
+
   return (
     <html lang="en">
       <body className="dark:bg-dark_background dark:text-font_primary transition-colors duration-1000">
@@ -24,7 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <header>
             <Navbar />
           </header>
-          <div className="pl-[19rem]">{children}</div>
+          <div className={noNavbar ? "" : "pl-[19rem]"}>{children}</div>
         </Providers>
       </body>
     </html>
