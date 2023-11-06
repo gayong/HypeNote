@@ -32,11 +32,11 @@ export interface QuizRoomInfo {
   inviteUsers: Array<QuizUser>;
 }
 
-export interface Chat {
-  chatTime: string;
-  userPk: string;
-  content: string;
-}
+// export interface Chat {
+//   chatTime: string;
+//   userPk: string;
+//   content: string;
+// }
 
 export interface QuizUser {
   host?: boolean;
@@ -49,6 +49,7 @@ export interface chatUser {
   userPk: string;
   content: string;
   chatTime: string;
+  userName: string;
 }
 
 export interface QuizInfo {

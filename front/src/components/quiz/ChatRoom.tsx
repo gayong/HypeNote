@@ -11,8 +11,8 @@ interface QuizRoomProps {
 }
 export default function ChatRoom(props: QuizRoomProps) {
   const [message, setMessage] = useState("");
-  const [chatMessages, setChatMessages] = useState<Array<chatUser>>([]);
-  const { sendMessage } = useContext(SocketContext);
+
+  const { sendMessage, chatMessages } = useContext(SocketContext);
   const chatEndRef = useRef<null | HTMLDivElement>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,13 +21,16 @@ export default function ChatRoom(props: QuizRoomProps) {
 
   const handleSendMessage = () => {
     console.log(message, "를 보냈다.");
+
     const messageInput = {
       userPk: "2",
+      userName: "자롱이",
       content: message,
       chatTime: new Date().toLocaleString(),
     };
+
     sendMessage(props.roomId, messageInput);
-    setChatMessages([...chatMessages, messageInput]);
+    // setChatMessages([...chatMessages, messageInput]);
     setMessage("");
   };
 
@@ -45,15 +48,6 @@ export default function ChatRoom(props: QuizRoomProps) {
             {chatMessages.map((chat, idx) =>
               chat.userPk === "2" ? <MyChat key={idx} {...chat} /> : <YourChat key={idx} {...chat} />
             )}
-
-            {/* 
-            <YourChat userPk="2" content="최상익 바보" chatTime="20231027 02:05" />
-            <MyChat userPk="2" content="안녕 나는 자현이야 만나서 반가워." chatTime="20231027 02:05" />
-            <MyChat userPk="2" content="최상익 바보" chatTime="20231027 02:05" />
-            <MyChat userPk="1" content="최상익 바보" chatTime="20231027 02:05" />
-            <MyChat userPk="3" content="최상익 바보" chatTime="20231027 02:05" />
-            <YourChat userPk="5" content="최상익 바보" chatTime="20231027 02:05" />
-            <YourChat userPk="2" content="최상익 바보" chatTime="20231027 02:05" /> */}
           </div>
 
           <div className="flex justify-between items-center p-2">
