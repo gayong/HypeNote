@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function IntroPage() {
   return (
-    <section className="h-[400vh] bg-primary">
+    <section className="overflow-hidden h-[5500px] bg-primary">
       <Intro />
     </section>
   );
