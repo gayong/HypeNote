@@ -134,7 +134,7 @@ export const SocketProvider: React.FC<Props> = ({ children }) => {
 
   //퇴장
   const sendOutRoom = (roomId: number) => {
-    console.log("퇴장");
+    console.log("퇴장!");
     client.unsubscribe(`/sub/quiz/${roomId}`);
 
     // setRoom(null);
