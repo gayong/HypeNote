@@ -17,7 +17,7 @@ interface QuizRoomProps {
 export default function QuizRoom(props: QuizRoomProps) {
   const { room, quizs } = useContext(SocketContext);
   const [quizRoom, setQuizRoom] = useState<QuizRoomInfo | null>(null);
-  const [ready, setReady] = useState<boolean>(false);
+  const [ready, setReady] = useState<"unready" | "ready">("unready");
   const stompClient = useWebSocket();
 
   const router = useRouter();
@@ -31,25 +31,24 @@ export default function QuizRoom(props: QuizRoomProps) {
       stompClient.send(`/pub/quizroom/in/${props.roomId}`, {}, JSON.stringify(data));
     }
   }, []);
+  useEffect(() => {
+    const data = {
+      userPk: 2,
+      action: ready === "ready" ? "ready" : "unready",
+    };
+    if (stompClient) {
+      console.log("보냄");
+      stompClient.send(`/pub/quizroom/ready/${props.roomId}`, {}, JSON.stringify(data));
+    }
+  }, [ready]);
 
   useEffect(() => {
     setQuizRoom(room);
   }, [room]);
 
   const outRoom = () => {
-    // sendOutRoom(props.roomId);
     router.push("/quiz/room");
-    // setRoomNumber(null);
-  };
-
-  const readyBtn = () => {
-    // if (ready) {
-    //   sendUnReady(props.roomId);
-    // } else {
-    //   sendReady(props.roomId);
-    // }
-
-    setReady(!ready);
+    console.log("방나가기");
   };
 
   return (
@@ -81,8 +80,8 @@ export default function QuizRoom(props: QuizRoomProps) {
             className="dark:border dark:border-font_primary"
             style={{ fontFamily: "preRg", backgroundColor: "#2946A2" }}
             type="primary"
-            onClick={() => readyBtn()}>
-            {ready ? "언레디" : "레디"}
+            onClick={() => setReady(ready === "ready" ? "unready" : "ready")}>
+            {ready === "ready" ? "unready" : "ready"}
           </Button>
           <QuizResult />
           <ChatRoom roomId={props.roomId} />
