@@ -4,7 +4,7 @@ import SockJS from "sockjs-client";
 import { useEffect, useState, createContext, useRef } from "react";
 import { Stomp, CompatClient } from "@stomp/stompjs";
 import React, { ReactNode } from "react";
-import { QuizRoomInfo, QuizInfo, QuizResultInfo } from "@/types/quiz";
+import { QuizRoomInfo, QuizInfo, QuizResultInfo, chatUser } from "@/types/quiz";
 
 interface Props {
   children: ReactNode;
@@ -17,6 +17,7 @@ export const SocketContext = createContext<{
   quizs: Array<QuizInfo>;
   quizResults: Array<QuizResultInfo>;
   quizRanking: Array<number>;
+  chatMessages: Array<chatUser>;
   setRoomNumber: (roomNumber: number | null) => void;
   sendReady: (roomNumber: number) => void;
   sendUnReady: (roomNumber: number) => void;
@@ -31,6 +32,7 @@ export const SocketContext = createContext<{
   quizs: [],
   quizResults: [],
   quizRanking: [],
+  chatMessages: [],
   setRoomNumber: () => {},
   sendReady: () => {},
   sendUnReady: () => {},
@@ -52,6 +54,8 @@ export const SocketProvider: React.FC<Props> = ({ children }) => {
   const [quizs, setQuizs] = useState<Array<QuizInfo>>([]);
   const [quizResults, setQuizResults] = useState<Array<QuizResultInfo>>([]);
   const [quizRanking, setQuizRanking] = useState<Array<number>>([]);
+
+  const [chatMessages, setChatMessages] = useState<Array<chatUser>>([]);
 
   // const clientRef = useRef<CompatClient | null>(null);
 
@@ -142,14 +146,15 @@ export const SocketProvider: React.FC<Props> = ({ children }) => {
 
   //퇴장
   const sendOutRoom = (roomId: number) => {
+    setRoomNumber(null);
+
     const data = {
       userPk: "2",
     };
 
-    setRoomNumber(null);
     client.send(`/pub/quizroom/out/${roomId}`, {}, JSON.stringify(data));
-
-    client.unsubscribe(`/sub/quiz/${roomId}`);
+    // sendUnReady(roomId);
+    // client.unsubscribe(`/sub/quiz/${roomId}`);
 
     setQuizs([]);
     setQuizResults([]);
@@ -179,8 +184,12 @@ export const SocketProvider: React.FC<Props> = ({ children }) => {
 
   //채팅방 구독
   const subscribeChat = (roomId: number) => {
-    client.subscribe(`/sub/chat/${roomId}`, (message) => {
-      console.log("채팅", message);
+    client.subscribe(`/sub/chat/${roomId}`, (mes) => {
+      console.log("채팅", mes.body);
+      const message = JSON.parse(mes.body);
+      setChatMessages((prevChatMessages) => [...prevChatMessages, message]);
+      console.log("@@@@@@@@");
+      console.log(chatMessages);
     });
   };
   // 채팅 전송
@@ -209,6 +218,7 @@ export const SocketProvider: React.FC<Props> = ({ children }) => {
         quizs,
         quizRanking,
         quizResults,
+        chatMessages,
       }}>
       {children}
     </SocketContext.Provider>

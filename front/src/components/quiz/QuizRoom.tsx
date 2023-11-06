@@ -21,6 +21,9 @@ export default function QuizRoom(props: QuizRoomProps) {
 
   useEffect(() => {
     setRoomNumber(props.roomId);
+  }, []);
+
+  useEffect(() => {
     if (room) {
       setQuizRoom(room);
     }
@@ -29,6 +32,7 @@ export default function QuizRoom(props: QuizRoomProps) {
   const outRoom = () => {
     sendOutRoom(props.roomId);
     router.push("/quiz/room");
+    setRoomNumber(null);
   };
 
   const readyBtn = () => {
