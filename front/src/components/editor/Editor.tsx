@@ -21,9 +21,9 @@ export default function Editor({ id }: Props) {
   const colors = ["#958DF1", "#F98181", "#FBBC88", "#FAF594", "#70CFF8", "#94FADB", "#B9F18D"];
   const names = ["Lea Thompson", "Cyndi Lauper", "Tom Cruise", "Madonna"];
 
-  const getRandomElement = (list) => list[Math.floor(Math.random() * list.length)];
-  const getRandomColor = () => getRandomElement(colors);
-  const getRandomName = () => getRandomElement(names);
+  // const getRandomElement = (list) => list[Math.floor(Math.random() * list.length)];
+  // const getRandomColor = () => getRandomElement(colors);
+  // const getRandomName = () => getRandomElement(names);
   // // 웹 소켓 연결
   // const [stompClient, setStompClient] = useState<CompatClient | null>(null);
   // const testNote = useRef({});
@@ -96,9 +96,9 @@ export default function Editor({ id }: Props) {
     <>
       <NovelEditor
         defaultValue={{}}
-        onUpdate={(editor) => {
-          editorHandler(editor);
-        }}
+        // onUpdate={(editor) => {
+        //   editorHandler(editor);
+        // }}
         className={styles["editor-container"]}
         disableLocalStorage={true}
         extensions={[
@@ -109,10 +109,10 @@ export default function Editor({ id }: Props) {
           Collaboration.configure({
             fragment: store.fragment,
           }),
-          CollaborationCursor.configure({
-            provider: webrtcProvider(id),
-            user: { name: getRandomName(), color: getRandomColor() },
-          }),
+          // CollaborationCursor.configure({
+          //   provider: webrtcProvider(id),
+          //   user: { name: getRandomName(), color: getRandomColor() },
+          // }),
         ]}
       />
     </>
