@@ -1,6 +1,6 @@
 "use client";
 
-import { SocketProvider } from "@/context/SocketProvider";
+import SocketProvider from "@/context/SocketProvider";
 
 export default function QuizLayout({ children }: { children: React.ReactNode }) {
   return (

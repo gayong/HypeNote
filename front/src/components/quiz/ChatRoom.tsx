@@ -3,7 +3,7 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { MyChat, YourChat } from "../ui/chat";
 import { Button, Input } from "antd";
-import { SocketContext } from "@/context/SocketProvider";
+import { SocketContext } from "@/context/SubscribeProvider";
 import { chatUser } from "@/types/quiz";
 
 interface QuizRoomProps {
@@ -12,7 +12,7 @@ interface QuizRoomProps {
 export default function ChatRoom(props: QuizRoomProps) {
   const [message, setMessage] = useState("");
 
-  const { sendMessage, chatMessages } = useContext(SocketContext);
+  const { chatMessages } = useContext(SocketContext);
   const chatEndRef = useRef<null | HTMLDivElement>(null);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,7 +29,7 @@ export default function ChatRoom(props: QuizRoomProps) {
       chatTime: new Date().toLocaleString(),
     };
 
-    sendMessage(props.roomId, messageInput);
+    // sendMessage(props.roomId, messageInput);
     // setChatMessages([...chatMessages, messageInput]);
     setMessage("");
   };

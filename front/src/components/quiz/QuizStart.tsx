@@ -1,5 +1,5 @@
 "use client";
-import { SocketContext } from "@/context/SocketProvider";
+import { SocketContext } from "@/context/SubscribeProvider";
 import { useContext, useEffect } from "react";
 import Card from "../ui/Card";
 
