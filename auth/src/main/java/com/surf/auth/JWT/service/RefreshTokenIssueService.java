@@ -16,6 +16,7 @@ import java.util.Map;
 public class RefreshTokenIssueService {
 
     private final TokenProvider tokenProvider;
+    private final RedisRefreshTokenSaveService redisRefreshTokenSaveService;
 
     @Value("${jwt.refresh-token-expiration-time}")
     private long EXPIRATION_TIME;
@@ -38,5 +39,8 @@ public class RefreshTokenIssueService {
         refreshTokenCookie.setPath(REFRESH_TOKEN_COOKIE_PATH);
         refreshTokenCookie.setHttpOnly(true);
         response.addCookie(refreshTokenCookie);
+
+        redisRefreshTokenSaveService.saveRefreshToken(EXPIRATION_TIME, refreshToken, userInfo);
+
     }
 }

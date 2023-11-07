@@ -22,12 +22,14 @@ public class TokenProvider {
 
     public String createToken(Map<String, Object> claims, User userInfo, long expirationTime) {
 
+        int userId = userInfo.getUserId();
         String email = userInfo.getEmail();
         String nickName = userInfo.getNickName();
         String profileImage = userInfo.getProfileImage();
         List<String> documentsRoots = userInfo.getDocumentsRoots();
         String role = userInfo.getRole();
 
+        claims.put("userId", userId);
         claims.put("email", email);
         claims.put("nickName", nickName);
         claims.put("profileImage", profileImage);
