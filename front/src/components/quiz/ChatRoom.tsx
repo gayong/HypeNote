@@ -3,8 +3,9 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import { MyChat, YourChat } from "../ui/chat";
 import { Button, Input } from "antd";
-import { SocketContext } from "@/context/SocketProvider";
+import { SocketContext } from "@/context/SubscribeProvider";
 import { chatUser } from "@/types/quiz";
+import { useWebSocket } from "@/context/SocketProvider";
 
 interface QuizRoomProps {
   roomId: number;
@@ -12,8 +13,9 @@ interface QuizRoomProps {
 export default function ChatRoom(props: QuizRoomProps) {
   const [message, setMessage] = useState("");
 
-  const { sendMessage, chatMessages } = useContext(SocketContext);
+  const { chatMessages } = useContext(SocketContext);
   const chatEndRef = useRef<null | HTMLDivElement>(null);
+  const stompClient = useWebSocket();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
@@ -28,8 +30,10 @@ export default function ChatRoom(props: QuizRoomProps) {
       content: message,
       chatTime: new Date().toLocaleString(),
     };
-
-    sendMessage(props.roomId, messageInput);
+    if (stompClient) {
+      stompClient.send(`/pub/chat/${props.roomId}`, {}, JSON.stringify(messageInput));
+    }
+    // sendMessage(props.roomId, messageInput);
     // setChatMessages([...chatMessages, messageInput]);
     setMessage("");
   };
@@ -61,8 +65,7 @@ export default function ChatRoom(props: QuizRoomProps) {
             />
 
             <Button
-              className="dark:border dark:border-font_primary"
-              style={{ fontFamily: "preRg", backgroundColor: "#2946A2" }}
+              className="bg-primary dark:border dark:border-font_primary font-preRg"
               type="primary"
               onClick={handleSendMessage}>
               전송

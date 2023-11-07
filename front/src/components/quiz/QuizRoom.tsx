@@ -1,6 +1,7 @@
 "use client";
 
-import { SocketContext } from "@/context/SocketProvider";
+import { useWebSocket } from "@/context/SocketProvider";
+import { SocketContext } from "@/context/SubscribeProvider";
 import { useContext, useEffect, useState } from "react";
 import { QuizRoomInfo } from "@/types/quiz";
 import { Button } from "antd";
@@ -8,46 +9,51 @@ import { useRouter } from "next/navigation";
 import ChatRoom from "./ChatRoom";
 import QuizStart from "./QuizStart";
 import QuizResult from "./QuizResult";
+
 interface QuizRoomProps {
   roomId: number;
 }
 
 export default function QuizRoom(props: QuizRoomProps) {
-  const { setRoomNumber, room, sendReady, sendOutRoom, sendUnReady, quizs } = useContext(SocketContext);
+  const { room, quizs } = useContext(SocketContext);
   const [quizRoom, setQuizRoom] = useState<QuizRoomInfo | null>(null);
-  const [ready, setReady] = useState<boolean>(false);
+  const [ready, setReady] = useState<"unready" | "ready">("unready");
+  const stompClient = useWebSocket();
 
   const router = useRouter();
 
   useEffect(() => {
-    setRoomNumber(props.roomId);
+    const data = {
+      userPk: "2",
+      userName: "isc",
+    };
+    if (stompClient) {
+      stompClient.send(`/pub/quizroom/in/${props.roomId}`, {}, JSON.stringify(data));
+    }
   }, []);
+  useEffect(() => {
+    const data = {
+      userPk: 2,
+      action: ready === "ready" ? "ready" : "unready",
+    };
+    if (stompClient) {
+      console.log("보냄");
+      stompClient.send(`/pub/quizroom/ready/${props.roomId}`, {}, JSON.stringify(data));
+    }
+  }, [ready]);
 
   useEffect(() => {
-    if (room) {
-      setQuizRoom(room);
-    }
+    setQuizRoom(room);
   }, [room]);
 
   const outRoom = () => {
-    sendOutRoom(props.roomId);
     router.push("/quiz/room");
-    setRoomNumber(null);
-  };
-
-  const readyBtn = () => {
-    if (ready) {
-      sendUnReady(props.roomId);
-    } else {
-      sendReady(props.roomId);
-    }
-
-    setReady(!ready);
+    console.log("방나가기");
   };
 
   return (
     <div>
-      <h1 className="text-3xl font-bold">{quizRoom?.roomName}</h1>
+      <h1 className="text-3xl font-bold">{room?.roomName}</h1>
       <div>{props.roomId}</div>
       <Button
         className="dark:border dark:border-font_primary"
@@ -62,20 +68,19 @@ export default function QuizRoom(props: QuizRoomProps) {
       ) : (
         // 퀴즈 게임 전
         <>
-          <div>레디 중 : {quizRoom?.readyCnt}</div>
+          <div>레디 중 : {room?.readyCnt}</div>
           <div>
-            {quizRoom?.roomCnt}/{quizRoom?.roomMax}
+            {room?.roomCnt}/{room?.roomMax}
           </div>
-          {quizRoom?.users.map((user) => {
+          {room?.users.map((user) => {
             return <div key={user.userPk}>{user.userName}</div>;
           })}
 
           <Button
-            className="dark:border dark:border-font_primary"
-            style={{ fontFamily: "preRg", backgroundColor: "#2946A2" }}
+            className="dark:border dark:border-font_primary font-preRg bg-primary"
             type="primary"
-            onClick={() => readyBtn()}>
-            {ready ? "언레디" : "레디"}
+            onClick={() => setReady(ready === "ready" ? "unready" : "ready")}>
+            {ready === "ready" ? "레디 취소" : "레디"}
           </Button>
           <QuizResult />
           <ChatRoom roomId={props.roomId} />

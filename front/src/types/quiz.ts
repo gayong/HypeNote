@@ -4,6 +4,7 @@ export interface QuizRoom {
   sharePages: Array<number>;
   quizCnt: number;
   single: boolean;
+  content: string;
   users?: Array<object>;
 }
 export interface QuizRoomGroup extends QuizRoom {
@@ -18,6 +19,7 @@ export interface QuizRoomDetail {
 
 export interface QuizRoomInfo {
   id: number;
+  content: string;
   roomName: string;
   roomMax: number;
   roomCnt: number;

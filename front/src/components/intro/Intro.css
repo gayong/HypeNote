@@ -14,53 +14,8 @@
   animation: fadeInUp 1s;
 }
 
-.three {
-  position: relative;
-  display: inline-block;
-  padding: 1.2em 2em;
-  text-decoration: none;
+#page {
   text-align: center;
-  cursor: pointer;
-  user-select: none;
-  color: white;
-
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    background: transparent;
-    border-radius: 4px;
-    transition: box-shadow 0.5s ease, transform 0.2s ease;
-    will-change: transform;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    transform: translateY(var(--ty, 0)) rotateX(var(--rx, 0)) rotateY(var(--ry, 0)) translateZ(var(--tz, -12px));
-  }
-
-  &:hover::before {
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  }
-
-  &::after {
-    position: relative;
-    display: inline-block;
-    content: attr(data-title);
-    transition: transform 0.2s ease;
-    font-weight: bold;
-    letter-spacing: 0.01em;
-    will-change: transform;
-    transform: translateY(var(--ty, 0)) rotateX(var(--rx, 0)) rotateY(var(--ry, 0));
-  }
-}
-
-.img-box img.img-hover {
-  display: none;
-}
-.img-box:hover img.img {
-  display: none;
-}
-.img-box:hover img.img-hover {
-  display: block;
+  opacity: 0;
+  transition: all 0.5s;
 }

@@ -14,7 +14,7 @@ const config: Config = {
         "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
       },
       animation: {
-        "spin-slow": "spin 8s linear infinite",
+        "spin-slow": "spin 11s linear infinite",
       },
     },
     colors: {
@@ -27,6 +27,11 @@ const config: Config = {
       transparent: "transparent",
       dark_primary: "#4F4F4F",
       dark_background: "#424242",
+    },
+    fontFamily: {
+      preRg: ["preRg"],
+      PreLt: ["PreLtv"],
+      PreBd: ["PreBd"],
     },
   },
   plugins: [],
