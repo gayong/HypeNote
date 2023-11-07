@@ -62,21 +62,21 @@ public class EditorService {
         try{
             //루트 게시글 찾기
 //            List<String> byParentIdAndUserId = editorRepository.findByParentIdAndUserId(null, userId).orElse(null);
-            Editor findEditor = savedEditor;
-            Editor parentEditor = new Editor();
-            while (true){
-                parentEditor = editorRepository.findByParentId(findEditor.getParentId()).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
-
-                if(parentEditor.equals(null)){
-                    break;
-                }
-
-                findEditor = parentEditor;
-            }
+//            Editor findEditor = savedEditor;
+//            Editor parentEditor = new Editor();
+//            while (true){
+//                parentEditor = editorRepository.findByParentId(findEditor.getParentId()).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
+//
+//                if(parentEditor.equals(null)){
+//                    break;
+//                }
+//
+//                findEditor = parentEditor;
+//            }
 
             MemberEditorSaveRequestDto memberEditorSaveRequestDto = MemberEditorSaveRequestDto.builder()
                     .userId(userId)
-                    .root(parentEditor.getParentId()) //추가 필요
+                    .root(savedEditor.getId()) //추가 필요
                     .build();
 
             memberOpenFeign.MemberEditorSave(memberEditorSaveRequestDto);
