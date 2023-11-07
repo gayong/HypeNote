@@ -17,7 +17,7 @@ export default function QuizMain() {
     <SoloContext.Provider value={{ isSolo, setIsSolo }}>
       <div className="w-full">
         <div className="mx-auto max-w-2xl text-center">
-          <h2 className="text-primary dark:text-[#6789f0] text-base font-['preBd'] ">Quiz</h2>
+          <h2 className="text-primary dark:text-[#6789f0] text-base font-preBd">Quiz</h2>
           <p className="text-[13px] text-lg leading-8">
             공부한 내용을 퀴즈로 풀어보며 복습해보세요. <br /> 공부한 노트 페이지들을 퀴즈 범위로 지정하고, 혼자 풀거나
             친구들을 초대해 대결해보세요.

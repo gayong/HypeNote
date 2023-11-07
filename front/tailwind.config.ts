@@ -28,6 +28,11 @@ const config: Config = {
       dark_primary: "#4F4F4F",
       dark_background: "#424242",
     },
+    fontFamily: {
+      preRg: ["preRg"],
+      PreLt: ["PreLtv"],
+      PreBd: ["PreBd"],
+    },
   },
   plugins: [],
 };

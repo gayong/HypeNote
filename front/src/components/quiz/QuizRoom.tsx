@@ -77,11 +77,10 @@ export default function QuizRoom(props: QuizRoomProps) {
           })}
 
           <Button
-            className="dark:border dark:border-font_primary"
-            style={{ fontFamily: "preRg", backgroundColor: "#2946A2" }}
+            className="dark:border dark:border-font_primary font-preRg bg-primary"
             type="primary"
             onClick={() => setReady(ready === "ready" ? "unready" : "ready")}>
-            {ready === "ready" ? "unready" : "ready"}
+            {ready === "ready" ? "레디 취소" : "레디"}
           </Button>
           <QuizResult />
           <ChatRoom roomId={props.roomId} />
