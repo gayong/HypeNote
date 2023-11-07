@@ -31,7 +31,7 @@ public class ReissueService {
         return userInfo;
     }
 
-    public String findFreshTokenByUserId(String userId) {
+    public String findRefreshTokenByUserId(String userId) {
 
         return redisTemplate.opsForValue().get(userId);
     }
