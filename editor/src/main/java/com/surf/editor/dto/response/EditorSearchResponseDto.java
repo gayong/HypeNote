@@ -7,7 +7,7 @@ import java.util.List;
 
 @Getter
 @Builder(toBuilder = true)
-public class EditorSearchResponse {
+public class EditorSearchResponseDto {
     List<Editors> notes;
 
     @Getter
