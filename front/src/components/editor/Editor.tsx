@@ -5,13 +5,9 @@ import { Editor as NovelEditor } from "novel";
 import styles from "./Editor.module.css";
 
 import Document from "@tiptap/extension-document";
-import { useState, useEffect, useRef } from "react";
-import { CompatClient, Frame, Stomp } from "@stomp/stompjs";
-import SockJS from "sockjs-client";
 import Placeholder from "@tiptap/extension-placeholder";
-import CollaborationCursor from "@tiptap/extension-collaboration-cursor";
 import Collaboration from "@tiptap/extension-collaboration";
-import { store, webrtcProvider } from "./store";
+import { store } from "./store";
 
 type Props = {
   id: string; // id를 문자열로 지정

@@ -21,9 +21,7 @@ export default function QuizMaker() {
   const [isSolo] = useAtom(isSoloAtom);
   const { createRoomMutation, inviteUserInfo, inviteUserMutation, roomInfo } = useCreateRoom();
 
-  useEffect(() => {
-    console.log("혼자냐?", "규렬 왈 : ", isSolo);
-  }, [isSolo]);
+  useEffect(() => {}, [isSolo]);
 
   // 퀴즈 방 만들기 STEP 1
   const handleCreateRoom = () => {
@@ -32,6 +30,7 @@ export default function QuizMaker() {
       pages: [1, 2, 3],
       sharePages: [1, 2],
       quizCnt: 10,
+      content: "오늘 퀴즈는 완벽하게 다 맞춰야지!",
       single: false,
     });
   };

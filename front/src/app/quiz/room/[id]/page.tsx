@@ -1,5 +1,6 @@
 "use client";
 
+import Loading from "@/app/loading";
 import QuizRoom from "@/components/quiz/QuizRoom";
 import { useContext, useEffect } from "react";
 import { useWebSocket } from "@/context/SocketProvider";
@@ -27,7 +28,9 @@ export default function QuizRoomPage({ params: { id } }: Props) {
 
   return (
     <SubscribeProvider roomId={id}>
-      <QuizRoom roomId={id} />
+      <section className="mx-5 my-20">
+        <QuizRoom roomId={id} />
+      </section>
     </SubscribeProvider>
   );
 }
