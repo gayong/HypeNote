@@ -21,7 +21,7 @@ public class AccessTokenIssueService {
 
     private final Date date = new Date(System.currentTimeMillis());
 
-    @Value("${jwt.secretKey}")
+    @Value("${jwt.secret}")
     private String SECRET;
 
     @Value("${jwt.access-token-expiration-time")
