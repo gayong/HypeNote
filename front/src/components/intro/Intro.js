@@ -6,6 +6,7 @@ import React, { useEffect, useRef, useState } from "react";
 import intro from "./intro_logo.png";
 import logo from "./logo.png";
 import logo_blue from "./logo_blue.png";
+import logokr from "./krlogo.png";
 import white from "./download.svg";
 import plate from "./plate.png";
 import signin from "./signin.png";
@@ -52,6 +53,15 @@ export default function Intro() {
             src={logo_blue}
             alt="logo"
           />
+        </div>
+
+        {/* 랜딩페이지 문구 */}
+        <div className="load absolute top-[6.6%] left-[60%]" style={{ display: "flex", alignItems: "end" }}>
+          <Image className="w-[20vw]" src={logokr} alt="logokr" />
+          <span className="text-font_primary text-[44px] font-['preLt'] mb-[-5px]">의</span>
+        </div>
+        <div className="load absolute top-[8.3%] left-[60%]" style={{ display: "flex", alignItems: "end" }}>
+          <span className="animate-pulse text-font_primary text-[44px] font-['preLt'] ml-4">한입 사용법(가제)</span>
         </div>
 
         <div className="mt-[120px]" id="page">

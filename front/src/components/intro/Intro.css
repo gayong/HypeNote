@@ -10,7 +10,7 @@
 }
 
 .load {
-  position: relative;
+  /* position: relative; */
   animation: fadeInUp 1s;
 }
 
