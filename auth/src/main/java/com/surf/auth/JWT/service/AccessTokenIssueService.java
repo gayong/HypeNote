@@ -25,7 +25,7 @@ public class AccessTokenIssueService {
     private String SECRET;
 
     @Value("${jwt.access-token-expiration-time")
-    private String EXPIRATION_TIME;
+    private long EXPIRATION_TIME;
 
     public String accessTokenIssue(User userInfo) {
         Map<String, Object> claims = new HashMap<>();
@@ -33,8 +33,6 @@ public class AccessTokenIssueService {
     }
 
     private String createToken(Map<String, Object> claims, User userInfo) {
-
-        long expirationTime = Long.parseLong(EXPIRATION_TIME);
 
         String email = userInfo.getEmail();
         String nickName = userInfo.getNickName();
@@ -52,7 +50,7 @@ public class AccessTokenIssueService {
                 .claims(claims)
                 .subject(email)
                 .issuedAt(date)
-                .expiration(new Date(System.currentTimeMillis() + expirationTime))
+                .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
                 .signWith(getSignKey())
                 .compact();
     }
