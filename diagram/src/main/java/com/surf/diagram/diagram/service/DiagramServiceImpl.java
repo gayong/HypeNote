@@ -14,11 +14,12 @@ import com.surf.diagram.diagram.repository.NodeRepository;
 import kr.co.shineware.nlp.komoran.constant.DEFAULT_MODEL;
 import kr.co.shineware.nlp.komoran.core.Komoran;
 import kr.co.shineware.nlp.komoran.model.Token;
+import org.apache.commons.lang3.tuple.Pair;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
-
+import java.text.DecimalFormat;
 
 import java.io.*;
 import java.util.Comparator;
@@ -33,6 +34,7 @@ public class DiagramServiceImpl implements DiagramService {
     private final NodeRepository nodeRepository;
     private final LinkRepository linkRepository;
     private static final Set<String> STOPWORDS = new HashSet<>();
+    private final DecimalFormat df = new DecimalFormat("#.###");
 
     static {
         try {
@@ -265,16 +267,17 @@ public class DiagramServiceImpl implements DiagramService {
             for (int i = 0; i < categoryNodes.size() - 1; i++) {
                 Node sourceNode = categoryNodes.get(i);
                 // 가장 유사도 높은 노드 찾기
-                Node targetNode = findMostSimilarNode(categoryNodes, sourceNode, i + 1);
-
+                Pair<Node, Double> pair = findMostSimilarNode(categoryNodes, sourceNode, i + 1);
+                Node targetNode = pair.getLeft();
+                double maxSimilarity = pair.getRight();
                 // 이미 있는 게 아니라면 저장하기
-                saveLinkIfNotExists(sourceNode, targetNode, userId);
+                saveLinkIfNotExists(sourceNode, targetNode, maxSimilarity, userId);
             }
         }
     }
 
     // 가장 유사도 높은 노드 찾기
-    private Node findMostSimilarNode(List<Node> nodes, Node sourceNode, int startIndex) {
+    private Pair<Node, Double> findMostSimilarNode(List<Node> nodes, Node sourceNode, int startIndex) {
         double maxSimilarity = Double.MIN_VALUE;
         Node mostSimilarNode = null;
         for (int j = startIndex; j < nodes.size(); j++) {
@@ -286,11 +289,11 @@ public class DiagramServiceImpl implements DiagramService {
                 maxSimilarity = similarity;
             }
         }
-        return mostSimilarNode;
+        return Pair.of(mostSimilarNode, maxSimilarity);
     }
 
     // 이미 있는 게 아니라면 저장하기
-    private void saveLinkIfNotExists(Node sourceNode, Node targetNode, int userId) {
+    private void saveLinkIfNotExists(Node sourceNode, Node targetNode, double maxSimilarity, int userId) {
         if (targetNode != null) {
             int source = sourceNode.getId().intValue();
             int target = targetNode.getId().intValue();
@@ -299,6 +302,7 @@ public class DiagramServiceImpl implements DiagramService {
                 Link link = new Link();
                 link.setSource(source);
                 link.setTarget(target);
+                link.setSimilarity(Double.parseDouble(df.format(maxSimilarity)));
                 link.setUserId(userId);
                 linkRepository.save(link);
             }
@@ -426,7 +430,7 @@ public class DiagramServiceImpl implements DiagramService {
             }
 
             if (bestMatch != null) {
-                LinkResponseDto linkDto = new LinkResponseDto(node1.getId().intValue(), bestMatch.getId().intValue(), userId);
+                LinkResponseDto linkDto = new LinkResponseDto(node1.getId().intValue(), bestMatch.getId().intValue(), Double.parseDouble(df.format(maxSimilarity)), userId);
                 linkDtoList.add(linkDto);
             }
         }
@@ -439,7 +443,7 @@ public class DiagramServiceImpl implements DiagramService {
     }
 
     private LinkResponseDto convertLinkToDto(Link link) {
-        return new LinkResponseDto(link.getSource(), link.getTarget(), link.getUserId());
+        return new LinkResponseDto(link.getSource(), link.getTarget(), link.getSimilarity(), link.getUserId());
     }
 
 

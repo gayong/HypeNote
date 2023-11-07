@@ -16,5 +16,6 @@ public class Link {
     private String id;
     private int source;
     private int target;
+    private double similarity;
     private int userId;
 }

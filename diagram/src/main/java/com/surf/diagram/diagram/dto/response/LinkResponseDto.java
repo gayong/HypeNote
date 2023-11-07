@@ -11,5 +11,6 @@ import lombok.Setter;
 public class LinkResponseDto {
     private int source;
     private int target;
+    private double similarity;
     private int userId;
 }
