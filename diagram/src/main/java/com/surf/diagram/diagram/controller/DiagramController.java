@@ -68,9 +68,16 @@ public class DiagramController {
 
 
     @PostMapping("/share/{userId}/{targetUserId}")
-    @Operation(summary = "쉐어 노드")
+    @Operation(summary = "1인 쉐어")
     public BaseResponse<DiagramResponseDto> linkNodesByShare(@PathVariable int userId, @PathVariable int targetUserId) throws Exception {
         DiagramResponseDto responseDto = diagramService.linkNodesByShare(userId, targetUserId);
+        return new BaseResponse<>(responseDto);
+    }
+
+    @PostMapping("/share/{userId}")
+    @Operation(summary = "다인 쉐어")
+    public BaseResponse<DiagramResponseDto> linkNodesByShares(@PathVariable int userId, @RequestBody List<Integer> targetIds ) throws Exception {
+        DiagramResponseDto responseDto = diagramService.linkNodesByShares(userId, targetIds);
         return new BaseResponse<>(responseDto);
     }
 }
