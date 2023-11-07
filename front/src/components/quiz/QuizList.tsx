@@ -26,7 +26,7 @@ export default function QuizList() {
   return (
     <>
       <div className="mx-10 my-20">
-        <h1 className="text-3xl font-bold mb-2 text-center dark:text-[#6789f0] text-primary">퀴즈 리스트</h1>
+        <h1 className="text-3xl font-bold mb-2 text-center dark:text-dark_font text-primary">퀴즈 리스트</h1>
 
         {quizRooms.length > 0 ? (
           <>
@@ -40,11 +40,11 @@ export default function QuizList() {
             </div>
             <br />
 
-            <div className="grid gap-6 mb-8 md:grid-cols-2">
+            <div className="grid gap-6 mb-8 md:grid-cols-3">
               {quizRooms.map((room) => (
                 <div key={room.id}>
                   <Link href={`/quiz/room/${room.id}`}>
-                    <div className="hover:border-2 dark:hover:border-font_primary hover:border-primary bg-font_primary bg-opacity-50 min-w-0 p-4 text-font_primary rounded-lg shadow-lg dark:bg-dark_primary">
+                    <div className="w-96 hover:outline hover:outline-offset-2 hover:outline-4 dark:hover:border-font_primary hover:outline-primary bg-font_primary bg-opacity-50 min-w-0 p-4 text-font_primary rounded-lg shadow-lg dark:bg-dark_primary">
                       <h4 className="text-xl font-bold text-dark_primary dark:text-font_primary">{room.roomName}</h4>
                       <p className="text-sm text-line_primary text-opacity-60 dark:text-opacity-40 mb-4 dark:text-font_primary">
                         {room.createdDate}

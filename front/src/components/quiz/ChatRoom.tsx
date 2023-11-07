@@ -40,37 +40,36 @@ export default function ChatRoom(props: QuizRoomProps) {
 
   useEffect(() => {
     if (chatEndRef.current) {
-      chatEndRef.current.scrollIntoView({ behavior: "smooth" });
+      chatEndRef.current.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
   }, [chatMessages]);
 
   return (
     <>
-      <div className="flex flex-col items-center justify-center w-screen min-h-screen p-10">
-        <div className="flex flex-col flex-grow w-full max-w-xl rounded-lg overflow-hidden">
-          <div className="flex flex-col flex-grow h-0 p-4 overflow-auto">
-            {chatMessages.map((chat, idx) =>
-              chat.userPk === "2" ? <MyChat key={idx} {...chat} /> : <YourChat key={idx} {...chat} />
-            )}
-          </div>
+      <div className="outline outline-offset-2 outline-2 outline-line_primary flex flex-col h-[60vh] flex-grow w-full rounded-lg overflow-hidden">
+        <div className="flex flex-col flex-grow h-0 p-4 overflow-auto min-h-min">
+          {chatMessages.map((chat, idx) =>
+            chat.userPk === "2" ? <MyChat key={idx} {...chat} /> : <YourChat key={idx} {...chat} />
+          )}
+          <div ref={chatEndRef} />
+        </div>
 
-          <div className="flex justify-between items-center p-2">
-            <Input
-              className="flex-grow mr-2"
-              type="text"
-              placeholder="메세지를 입력하시오."
-              value={message}
-              onChange={handleInputChange}
-              onPressEnter={handleSendMessage}
-            />
+        <div className="flex justify-between items-center p-2">
+          <Input
+            className="flex-grow mr-2 dark:bg-dark_primary dark:text-font_primary"
+            type="text"
+            placeholder="메세지를 입력하시오."
+            value={message}
+            onChange={handleInputChange}
+            onPressEnter={handleSendMessage}
+          />
 
-            <Button
-              className="bg-primary dark:border dark:border-font_primary font-preRg"
-              type="primary"
-              onClick={handleSendMessage}>
-              전송
-            </Button>
-          </div>
+          <Button
+            className="bg-primary dark:border-none dark:border-font_primary font-preRg"
+            type="primary"
+            onClick={handleSendMessage}>
+            전송
+          </Button>
         </div>
       </div>
     </>
