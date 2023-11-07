@@ -5,7 +5,6 @@ import "@blocknote/core/style.css";
 import styles from "./Editor.module.css";
 import { uploadToTmpFilesDotOrg_DEV_ONLY } from "@blocknote/core";
 import * as store from "./store";
-import { useState, useEffect } from "react";
 type WindowWithProseMirror = Window & typeof globalThis & { ProseMirror: any };
 
 type Props = {
