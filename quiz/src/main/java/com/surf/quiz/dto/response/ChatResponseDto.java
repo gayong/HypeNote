@@ -9,7 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ChatResponseDto {
     String chatTime;
-    String userPk;
+    int userPk;
     String userName;
     String userImg;
     String content;

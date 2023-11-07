@@ -21,7 +21,7 @@ public class QuizChatService {
     public ChatResponseDto convertAndSetChatTime(ChatRequestDto body) {
         ChatResponseDto chatDto = new ChatResponseDto();
         chatDto.setContent(body.getContent());
-        chatDto.setUserPk(body.getUserPk());
+        chatDto.setUserPk(Integer.parseInt(body.getUserPk()));
         chatDto.setUserName(body.getUserName());
         chatDto.setUserImg(body.getUserImg());
         String formattedDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));

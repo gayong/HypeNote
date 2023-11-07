@@ -284,7 +284,7 @@ public class QuizRoomService {
         quiz.setCreatedDate(formattedDateTime);
         quiz.setQuizCnt(createdQuizroom.getQuizCnt());
         quiz.setRoomName(createdQuizroom.getRoomName());
-
+        quiz.setUsers(createdQuizroom.getUsers());
 
 
         QuestionDto question1 = new QuestionDto();

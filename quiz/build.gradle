@@ -30,9 +30,9 @@ repositories {
 dependencies {
 
 	// For MSA -인식문의
-//	 implementation 'org.springframework.cloud:spring-cloud-starter'
-//	 implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
-//	 implementation 'org.springframework.cloud:spring-cloud-starter-config'
+	 implementation 'org.springframework.cloud:spring-cloud-starter'
+	 implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+	 implementation 'org.springframework.cloud:spring-cloud-starter-config'
 
 	// 잡다
 	compileOnly 'org.projectlombok:lombok'

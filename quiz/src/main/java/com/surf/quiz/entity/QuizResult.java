@@ -1,5 +1,6 @@
 package com.surf.quiz.entity;
 
+import com.surf.quiz.dto.MemberDto;
 import com.surf.quiz.dto.QuestionResultDto;
 import lombok.*;
 
@@ -14,7 +15,7 @@ public class QuizResult {
     private Long quizId;
     private int roomId;
     private String roomName;
-    private Long userPk;
+    private MemberDto user;
     private int totals;
     private int Correct;
     private String examStart;

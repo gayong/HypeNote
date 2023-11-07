@@ -18,9 +18,9 @@ import com.surf.quiz.service.ChatCompletionService;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -36,15 +36,6 @@ public class EditorController {
     private final ChatCompletionService chatCompletionService;
 
     private final EditorRepository editorRepository;
-    @PostMapping("/editor")
-    @Operation(summary = "에디터 받기")
-    public BaseResponse<Void> getEditor(@RequestBody EditorRequestDto editorDto) {
-        System.out.println("editorDto = " + editorDto.getEditorId());
-
-        return new BaseResponse<>(BaseResponseStatus.SUCCESS);
-    }
-
-
 
     @GetMapping("/editor/{userId}")
     @Operation(summary = "에디터 받기")
@@ -63,7 +54,7 @@ public class EditorController {
     @PostMapping("/gpt")
     @Operation(summary = "gpt/{cnt}")
     public BaseResponse<List<QuestionDto>> getGpt(@RequestParam int cnt, @RequestBody String content) {
-        String abc = chatCompletionService.chatCompletions(cnt, content);
+        List<String> abc = chatCompletionService.chatCompletions(cnt, content);
         System.out.println("abc = " + abc);
 
         // ObjectMapper 객체 생성
@@ -71,7 +62,12 @@ public class EditorController {
 
         try {
             // JSON 문자열을 객체로 담고 있는 리스트로 변환
-            List<QuestionDto> questionList = objectMapper.readValue(abc, new TypeReference<>() {});
+            List<QuestionDto> questionList = new ArrayList<>();
+            for (String json : abc) {
+                QuestionDto questionDto = objectMapper.readValue(json, new TypeReference<>() {});
+                questionList.add(questionDto);
+            }
+
             // 변환된 리스트 사용
             for (QuestionDto question : questionList) {
                 System.out.println(question.getQuestion());

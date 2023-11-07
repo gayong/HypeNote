@@ -1,5 +1,6 @@
 package com.surf.quiz.entity;
 
+import com.surf.quiz.dto.MemberDto;
 import com.surf.quiz.dto.QuestionDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,6 +37,7 @@ public class Quiz {
     Map<String, Map<Integer, String>> userAnswers = new HashMap<>();
 
     private boolean complete;
+    private List<MemberDto> users;
 
 
 

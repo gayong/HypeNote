@@ -60,9 +60,9 @@ public class ChatCompletionService {
     @Value("${apikey}")
     private String apikey;
 
-    public String chatCompletions(int cnt, final String question) {
+    public List<String> chatCompletions(int cnt, final String question) {
         if (cnt < 0 || question == null || question.trim().isEmpty()){
-            return "실패";
+            return null;
         }
 
         // 텍스트 전처리
@@ -73,6 +73,7 @@ public class ChatCompletionService {
 
         // 키워드가 포함된 문장 추출
         String analysisInput = extractKeywordSentences(content, keywords);
+        System.out.println("analysisInput = " + analysisInput);
 
         Message systemMessage = Message.builder()
                 .role("system")
@@ -103,8 +104,41 @@ public class ChatCompletionService {
                         "      \"answer\": \"정답\",\n" +
                         "      \"commentary\": \"해설 내용\"\n" +
                         "    }\n" +
-                        "문제의 갯수는"+ cnt +"개로 List로 응답해줘, 60초 안에 응답해줘\n")
+                        "문제의 갯수는"+ cnt +"개로 List로 응답해줘\n")
                 .build();
+
+
+//        Message systemMessage = Message.builder()
+//                .role("system")
+//                .content("I would like to create Computer Science problems.\n" +
+//                        "These problems should be in a multiple-choice question format with the following structure:\n" +
+//                        "{\n" +
+//                        "  \"id\": Problem number,\n" +
+//                        "  \"question\": \"Problem content\",\n" +
+//                        "  \"example\": [\n" +
+//                        "    {\n" +
+//                        "      \"ex\": \"1\",\n" +
+//                        "      \"content\": \"Option content\"\n" +
+//                        "    },\n" +
+//                        "    {\n" +
+//                        "      \"ex\": \"2\",\n" +
+//                        "      \"content\": \"Option content\"\n" +
+//                        "    },\n" +
+//                        "    {\n" +
+//                        "      \"ex\": \"3\",\n" +
+//                        "      \"content\": \"Option content\"\n" +
+//                        "    },\n" +
+//                        "    {\n" +
+//                        "      \"ex\": \"4\",\n" +
+//                        "      \"content\": \"Option content\"\n" +
+//                        "    }\n" +
+//                        "  ],\n" +
+//                        "  \"answer\": \"Correct answer\",\n" +
+//                        "  \"commentary\": \"Explanation content\"\n" +
+//                        "}\n" +
+//                        "Please provide the total number of problems as " + cnt + " and present them in List format.\"")
+//                .build();
+
 
         Message message = Message.builder()
                 .role(ROLE_USER)
@@ -121,13 +155,14 @@ public class ChatCompletionService {
         Usage usage = chatResponse.getUsage();
         System.out.println("Usage: " + usage);
 
-        return chatResponse
+        // 응답을 List에 넣기
+        List<String> responses = chatResponse
                 .getChoices()
                 .stream()
-                .findFirst()
-                .orElseThrow()
-                .getMessage()
-                .getContent();
+                .map(choice -> choice.getMessage().getContent())
+                .collect(Collectors.toList());
+
+        return responses;
 
     }
 
@@ -184,9 +219,4 @@ public class ChatCompletionService {
 
         return String.join("|||", sentences);
     }
-
-
-
-
-
 }

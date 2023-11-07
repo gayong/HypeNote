@@ -71,6 +71,7 @@ public class QuizController {
 
         Quiz quiz = quizRepository.findByRoomId(roomId).orElseThrow(() -> new IllegalArgumentException("Invalid roomId: " + roomId));
         quiz.setUserCnt(quizroom.getUsers().toArray().length);
+        quiz.setUsers(quizroom.getUsers());
         String formattedDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
         quiz.setCreatedDate(formattedDateTime);
         quizroom.setRoomStatus(true);
@@ -112,7 +113,7 @@ public class QuizController {
     @GetMapping("/{userId}")
     @Operation(summary = "나의 퀴즈 기록")
     public BaseResponse<QuizResultResponseDto> getMyQuizHistory(@PathVariable Long userId) {
-        List<QuizResult> quizResults = quizResultRepository.findByUserPk(userId);
+        List<QuizResult> quizResults = quizResultRepository.findByUser_UserPk(userId);
         QuizResultResponseDto quizResultResponseDto = new QuizResultResponseDto();
 
         quizResultResponseDto.setQuizCnt((long) quizResults.size());
@@ -138,7 +139,7 @@ public class QuizController {
     @GetMapping("/{userId}/{quizId}")
     @Operation(summary = "나의 퀴즈 기록 단일")
     public BaseResponse<QuizResult> getMyQuizResultDetail(@PathVariable Long userId, @PathVariable int quizId) {
-        QuizResult result = quizResultRepository.findByUserPkAndRoomId(userId, quizId);
+        QuizResult result = quizResultRepository.findByUser_UserPkAndRoomId(userId, quizId);
         return new BaseResponse<>(result);
     }
 

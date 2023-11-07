@@ -9,8 +9,8 @@ import java.util.List;
 @Repository
 public interface QuizResultRepository extends MongoRepository<QuizResult, String> {
     List<QuizResult> findByRoomId(int roomId);
-    QuizResult findByUserPkAndRoomId(Long userId, int roomId);
-    List<QuizResult> findByUserPk(Long userPk);
+    QuizResult findByUser_UserPkAndRoomId(Long userId, int roomId);
+    List<QuizResult> findByUser_UserPk(Long userPk);
     long countByRoomId(int roomId);
 
 }

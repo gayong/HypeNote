@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import java.util.stream.Collectors;
+
 
 @Service
 public class QuizResultService {
@@ -105,7 +105,7 @@ public class QuizResultService {
         quizResult.setQuizId(quiz.getId());
         quizResult.setRoomId(quiz.getRoomId());
         quizResult.setRoomName(quiz.getRoomName());
-        quizResult.setUserPk(user.getUserPk());
+        quizResult.setUser(user);
         quizResult.setTotals(quiz.getQuestion().size());
         String formattedDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
         quizResult.setExamDone(formattedDateTime);
@@ -158,10 +158,25 @@ public class QuizResultService {
             List<QuizResult> results = quizResultRepository.findByRoomId(Integer.parseInt(roomId));
             results.sort((o1, o2) -> o2.getCorrect() - o1.getCorrect());
 
-            // 각 QuizResult에서 userPk를 추출하여 ranking 리스트 생성
-            List<Long> ranking = results.stream()
-                    .map(QuizResult::getUserPk)
-                    .collect(Collectors.toList());
+            // 각 QuizResult에서 필요한 정보를 추출하여 ranking 리스트 생성
+            List<Map<String, Object>> ranking = new ArrayList<>();
+            int rank = 1;
+            int prevCorrect = -1;
+            for (QuizResult result : results) {
+                Map<String, Object> userRanking = new HashMap<>();
+                userRanking.put("userPk", result.getUser().getUserPk());
+                userRanking.put("userName", result.getUser().getUserName()); // userName 필드 가정
+                userRanking.put("userImg", result.getUser().getUserImg()); // userImg 필드 가정
+                // 이전 점수와 현재 점수를 비교
+                if (result.getCorrect() != prevCorrect) {
+                    rank = ranking.size() + 1; // 이전 점수와 현재 점수가 다르면, 현재 등수를 ranking 리스트의 크기 + 1로 설정
+                }
+                userRanking.put("ranking", rank);
+                prevCorrect = result.getCorrect();
+                userRanking.put("correct", result.getCorrect());
+                userRanking.put("total", result.getTotals()); // total 필드 가정
+                ranking.add(userRanking);
+            }
 
             // results와 ranking을 하나의 객체에 담아 보냄
             Map<String, Object> payload = new HashMap<>();
