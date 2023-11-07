@@ -8,6 +8,8 @@ import com.surf.auth.auth.dto.LogInDto;
 import com.surf.auth.auth.dto.TokenDto;
 import com.surf.auth.auth.entity.User;
 import com.surf.auth.auth.repository.UserRepository;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -44,11 +46,11 @@ public class LoginService {
         return authenticationResultDto;
     }
 
-    public TokenDto sendToken (User userInfo) {
+    public TokenDto sendToken (User userInfo, HttpServletResponse response) {
         TokenDto issuedToken = new TokenDto();
 
         issuedToken.setAccessToken(accessTokenIssueService.accessTokenIssue(userInfo));
-        issuedToken.setRefreshToken(refreshTokenIssueService.refreshTokenIssue(userInfo));
+        refreshTokenIssueService.refreshTokenIssue(userInfo, response);
         issuedToken.setMessage("정상적으로 로그인이 되었습니다.");
 
         return issuedToken;
