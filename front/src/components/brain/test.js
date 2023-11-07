@@ -65,7 +65,7 @@ const ThreeScene = () => {
         nodeStrokeWidth = 2.5, // 노드 테두리 굵기
         nodeStrokeOpacity = 1, // node stroke opacity
         nodeRadius = 10, // node radius, in pixels
-        nodeStrength = -100, // 노드끼리 밀어내는 힘, 절댓값 클수록 많이 밀어냄
+        nodeStrength = -50, // 노드끼리 밀어내는 힘, 절댓값 클수록 많이 밀어냄
         linkSource = ({ source }) => source, // given d in links, returns a node identifier string
         linkTarget = ({ target }) => target, // given d in links, returns a node identifier string
         linkStroke = "#999", // link stroke color
@@ -148,7 +148,7 @@ const ThreeScene = () => {
       node
         .append("circle")
         .attr("r", nodeRadius)
-        .attr("fill", (d) => color(d.userId))
+        .attr("fill", (d) => color(d.group))
         .attr("stroke-width", nodeStrokeWidth)
         .on("click", function (d) {
           router.push(`/editor/${d.editorId}`);
