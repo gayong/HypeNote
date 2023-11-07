@@ -2,8 +2,9 @@
 
 import Loading from "@/app/loading";
 import QuizRoom from "@/components/quiz/QuizRoom";
-import { SocketContext } from "@/context/SocketProvider";
-import { useEffect, useContext } from "react";
+import { useContext, useEffect } from "react";
+import { useWebSocket } from "@/context/SocketProvider";
+import SubscribeProvider from "@/context/SubscribeProvider";
 
 type Props = {
   params: {
@@ -12,15 +13,24 @@ type Props = {
 };
 
 export default function QuizRoomPage({ params: { id } }: Props) {
-  const { setRoomNumber, room } = useContext(SocketContext);
+  const stompClient = useWebSocket();
 
   useEffect(() => {
-    setRoomNumber(id);
+    if (stompClient) {
+      const data = {
+        userPk: "2",
+        userName: "isc",
+      };
+
+      stompClient.send(`/pub/quizroom/in/${id}`, {}, JSON.stringify(data));
+    }
   }, []);
 
   return (
-    <div>
-      <QuizRoom roomId={id} />
-    </div>
+    <SubscribeProvider roomId={id}>
+      <section className="mx-5 my-20">
+        <QuizRoom roomId={id} />
+      </section>
+    </SubscribeProvider>
   );
 }

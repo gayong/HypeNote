@@ -6,7 +6,7 @@ import type { SelectProps, RadioChangeEvent } from "antd";
 import { useAtom } from "jotai";
 import { isSoloAtom } from "../../store/isSolo";
 import { useCreateRoom } from "@/hooks/useCreateRoom";
-import { useMutation } from "react-query";
+// import { useMutation } from "react-query";
 import Loading from "@/app/loading";
 
 const handleChange = (value: string | string[]) => {
@@ -21,19 +21,16 @@ export default function QuizMaker() {
   const [isSolo] = useAtom(isSoloAtom);
   const { createRoomMutation, inviteUserInfo, inviteUserMutation, roomInfo } = useCreateRoom();
 
-  console.log("혼자냐?", "규렬 왈 : ", isSolo);
-  useEffect(() => {
-    console.log("혼자냐?", "규렬 왈 : ", isSolo);
-  }, [isSolo]);
+  useEffect(() => {}, [isSolo]);
 
   // 퀴즈 방 만들기 STEP 1
   const handleCreateRoom = () => {
-    console.log("만드를어");
     createRoomMutation.mutate({
-      roomName: "테스트1",
+      roomName: "방방방방",
       pages: [1, 2, 3],
       sharePages: [1, 2],
       quizCnt: 10,
+      content: "오늘 퀴즈는 완벽하게 다 맞춰야지!",
       single: false,
     });
   };

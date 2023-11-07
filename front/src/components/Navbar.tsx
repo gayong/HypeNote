@@ -12,7 +12,7 @@ export default function Navbar() {
   const [mode, setMode] = useState(false);
   const pathname = usePathname();
 
-  if (pathname === "/signin" || pathname == "/signup") {
+  if (pathname === "/signin" || pathname == "/signup" || pathname == "/intro") {
     return null;
   }
 

@@ -11,8 +11,10 @@ const config: Config = {
     extend: {
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+        "gradient-conic": "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      },
+      animation: {
+        "spin-slow": "spin 11s linear infinite",
       },
     },
     colors: {
@@ -25,9 +27,15 @@ const config: Config = {
       transparent: "transparent",
       dark_primary: "#4F4F4F",
       dark_background: "#424242",
+      dark_font: "#6789f0",
+    },
+    fontFamily: {
+      preRg: ["preRg"],
+      PreLt: ["PreLtv"],
+      PreBd: ["PreBd"],
     },
   },
-  plugins: [],
+  plugins: [require("tailwind-scrollbar-hide")],
 };
 
 export default config;

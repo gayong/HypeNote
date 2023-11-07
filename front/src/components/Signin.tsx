@@ -45,7 +45,7 @@ export default function Signin() {
             <div>
               <Label text="이메일" />
               <div className="mt-2">
-                <Input text="email" />
+                {/* <Input text="email" /> */}
               </div>
             </div>
 
@@ -54,7 +54,7 @@ export default function Signin() {
                 <Label text="비밀번호" />
               </div>
               <div className="mt-2">
-                <Input text="Password" />
+                {/* <Input text="Password" /> */}
               </div>
             </div>
 
