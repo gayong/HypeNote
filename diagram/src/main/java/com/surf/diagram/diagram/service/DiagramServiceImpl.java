@@ -60,7 +60,7 @@ public class DiagramServiceImpl implements DiagramService {
 
 
     // 노드 불러오기
-    public void classifyAndSaveEmptyCategoryNodes(int userId) throws Exception {
+    public void classifyAndSaveEmptyCategoryNodes(int userId){
         try {
             // category가 빈 칸인 Node들을 불러옵니다.
             List<Node> nodes = getEmptyCategoryNodesByUserId(userId);
@@ -206,8 +206,10 @@ public class DiagramServiceImpl implements DiagramService {
     public void linkNodesByCategoryAndConfidence(int userId) {
         // 노드 가져오기
         List<Node> nodes = fetchNodesByUserId(userId);
+
         // 노드 카테고리 분류
         Map<String, List<Node>> categoryNodeMap = categorizeNodes(nodes);
+
         // 링크 생성
         createLinksFromNodes(categoryNodeMap, userId);
     }
@@ -238,6 +240,7 @@ public class DiagramServiceImpl implements DiagramService {
                 Node sourceNode = categoryNodes.get(i);
                 // 가장 유사도 높은 노드 찾기
                 Node targetNode = findMostSimilarNode(categoryNodes, sourceNode, i + 1);
+
                 // 이미 있는 게 아니라면 저장하기
                 saveLinkIfNotExists(sourceNode, targetNode, userId);
             }
@@ -424,4 +427,36 @@ public class DiagramServiceImpl implements DiagramService {
                 .map(this::convertLinkToDto)
                 .collect(Collectors.toList());
     }
+
+
+    public DiagramResponseDto linkNodesByShares(int userId, List<Integer> targetUserIds) {
+        List<Node> nodes1 = nodeRepository.findByUserId(userId);
+        List<Link> links1 = linkRepository.findByUserId(userId);
+
+        List<NodeResponseDto> nodeDtoList = new ArrayList<>();
+        List<LinkResponseDto> linkDtoList = new ArrayList<>();
+
+        // 링크들을 LinkResponseDto로 변환
+        linkDtoList.addAll(convertLinksToDtos(links1));
+
+        // 노드들을 NodeResponseDto로 변환
+        nodeDtoList.addAll(convertNodesToDtos(nodes1, userId));
+
+        for (Integer targetUserId : targetUserIds) {
+            List<Node> nodes2 = nodeRepository.findByUserId(targetUserId);
+            List<Link> links2 = linkRepository.findByUserId(targetUserId);
+
+            // 링크들을 LinkResponseDto로 변환
+            linkDtoList.addAll(convertLinksToDtos(links2));
+
+            // 노드들을 NodeResponseDto로 변환
+            nodeDtoList.addAll(convertNodesToDtos(nodes2, targetUserId));
+
+            // 유사도가 가장 높은 노드끼리 링크를 생성
+            linkDtoList.addAll(getBestMatchLinks(nodes1, nodes2, userId));
+        }
+
+        return new DiagramResponseDto(nodeDtoList, linkDtoList);
+    }
+
 }
