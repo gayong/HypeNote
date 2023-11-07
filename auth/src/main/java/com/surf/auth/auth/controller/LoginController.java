@@ -3,8 +3,12 @@ package com.surf.auth.auth.controller;
 import com.surf.auth.JWT.service.AccessTokenIssueService;
 import com.surf.auth.JWT.service.RefreshTokenIssueService;
 import com.surf.auth.auth.dto.LogInDto;
+import com.surf.auth.auth.dto.TokenDto;
 import com.surf.auth.auth.service.LoginService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,20 +22,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class LoginController {
 
     private final LoginService loginService;
-    private final AccessTokenIssueService accessTokenIssueService;
-    private final RefreshTokenIssueService refreshTokenIssueService;
 
     @PostMapping("/login")
-    public String LogIn(@RequestBody LogInDto loginInfo) {
+    public ResponseEntity<TokenDto> LogIn(@RequestBody LogInDto loginInfo) {
+        TokenDto fail = new TokenDto();
         if (loginService.authentication(loginInfo)) {
 
-            accessTokenIssueService.accessTokenIssue();
-            refreshTokenIssueService.refreshTokenIssue();
-
-            return "나중에 여기다 토큰 정보 넣기";
-
-        } else {
-            return "로그인 정보가 없습니다.";
+            return ResponseEntity.ok(loginService.sendToken());
         }
+        fail.setRefreshToken(null);
+        fail.setAccessToken(null);
+        fail.setMessage("로그인 정보가 일치하지 않습니다.");
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(fail);
     }
 }
