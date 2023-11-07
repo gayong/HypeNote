@@ -46,7 +46,7 @@ public class User implements UserDetails {
     private String profileImage;
 
     @ElementCollection
-    private List<Integer> documentsRoot;
+    private List<String> documentsRoots;
 
     private String role;
 
