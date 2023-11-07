@@ -25,7 +25,7 @@ public class AccessTokenIssueService {
     private String SECRET;
 
     @Value("${jwt.access-token-expiration-time")
-    private long EXPIRATION_TIME;
+    private Long EXPIRATION_TIME;
 
     public String accessTokenIssue(User userInfo) {
         Map<String, Object> claims = new HashMap<>();
