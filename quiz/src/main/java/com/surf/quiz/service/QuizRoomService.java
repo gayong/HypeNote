@@ -137,6 +137,7 @@ public class QuizRoomService {
         member.setReady(createQuizRoom.isSingle());
         member.setUserPk(1L);
         member.setUserName("csi");
+        member.setUserImg("default");
         List<MemberDto> members = new ArrayList<>();
         members.add(member);
         createQuizRoom.setUsers(members);

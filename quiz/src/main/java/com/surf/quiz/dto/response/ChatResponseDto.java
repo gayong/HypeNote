@@ -11,6 +11,7 @@ public class ChatResponseDto {
     String chatTime;
     String userPk;
     String userName;
+    String userImg;
     String content;
 
 }

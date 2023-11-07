@@ -61,9 +61,9 @@ public class EditorController {
     }
 
     @PostMapping("/gpt")
-    @Operation(summary = "gpt")
-    public BaseResponse<List<QuestionDto>> getGpt(@RequestBody String content) {
-        String abc = chatCompletionService.chatCompletions(content);
+    @Operation(summary = "gpt/{cnt}")
+    public BaseResponse<List<QuestionDto>> getGpt(@RequestParam int cnt, @RequestBody String content) {
+        String abc = chatCompletionService.chatCompletions(cnt, content);
         System.out.println("abc = " + abc);
 
         // ObjectMapper 객체 생성
@@ -71,7 +71,7 @@ public class EditorController {
 
         try {
             // JSON 문자열을 객체로 담고 있는 리스트로 변환
-            List<QuestionDto> questionList = objectMapper.readValue(abc, new TypeReference<List<QuestionDto>>() {});
+            List<QuestionDto> questionList = objectMapper.readValue(abc, new TypeReference<>() {});
             // 변환된 리스트 사용
             for (QuestionDto question : questionList) {
                 System.out.println(question.getQuestion());

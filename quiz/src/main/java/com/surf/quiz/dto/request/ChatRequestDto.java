@@ -10,5 +10,6 @@ import lombok.Setter;
 public class ChatRequestDto {
     String userPk;
     String userName;
+    String userImg;
     String content;
 }

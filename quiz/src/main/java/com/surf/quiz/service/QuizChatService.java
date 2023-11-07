@@ -23,6 +23,7 @@ public class QuizChatService {
         chatDto.setContent(body.getContent());
         chatDto.setUserPk(body.getUserPk());
         chatDto.setUserName(body.getUserName());
+        chatDto.setUserImg(body.getUserImg());
         String formattedDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
         chatDto.setChatTime(formattedDateTime);
         return chatDto;

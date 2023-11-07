@@ -9,6 +9,7 @@ public class MemberDto {
 
     private Long userPk;
     private String userName;
+    private String userImg;
 
     // True == 방장, False == 일반
     private boolean host;
