@@ -2,13 +2,32 @@
 @tailwind components;
 @tailwind utilities;
 
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
 html,
 body {
   max-width: 100vw;
   height: 100vh;
   overflow-x: hidden;
   background: #faf5ef;
-  font-family: "preRg";
   color: #424242;
   cursor: url("../../public/assets/cursor.png"), auto;
 }

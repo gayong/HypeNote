@@ -65,8 +65,7 @@ export default function ChatRoom(props: QuizRoomProps) {
             />
 
             <Button
-              className="dark:border dark:border-font_primary"
-              style={{ fontFamily: "preRg", backgroundColor: "#2946A2" }}
+              className="bg-primary dark:border dark:border-font_primary font-preRg"
               type="primary"
               onClick={handleSendMessage}>
               전송
