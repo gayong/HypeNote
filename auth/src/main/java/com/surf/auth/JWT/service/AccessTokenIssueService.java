@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -14,17 +15,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
 public class AccessTokenIssueService {
 
     private final Date date = new Date(System.currentTimeMillis());
 
     @Value("${jwt.secretKey}")
-    private static String SECRET;
+    private String SECRET;
 
     @Value("${jwt.access-token-expiration-time")
-    private static long EXPIRATION_TIME;
+    private String EXPIRATION_TIME;
 
     public String accessTokenIssue(User userInfo) {
         Map<String, Object> claims = new HashMap<>();
@@ -32,6 +33,8 @@ public class AccessTokenIssueService {
     }
 
     private String createToken(Map<String, Object> claims, User userInfo) {
+
+        long expirationTime = Long.parseLong(EXPIRATION_TIME);
 
         String email = userInfo.getEmail();
         String nickName = userInfo.getNickName();
@@ -49,7 +52,7 @@ public class AccessTokenIssueService {
                 .claims(claims)
                 .subject(email)
                 .issuedAt(date)
-                .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .expiration(new Date(System.currentTimeMillis() + expirationTime))
                 .signWith(getSignKey())
                 .compact();
     }
