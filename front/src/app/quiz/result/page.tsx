@@ -28,7 +28,7 @@ export default function QuizResultPage() {
       origin: { y: 0.7 },
     };
 
-    function fire(particleRatio, opts) {
+    function fire(particleRatio:any, opts:any) {
       confetti({
         ...defaults,
         ...opts,
