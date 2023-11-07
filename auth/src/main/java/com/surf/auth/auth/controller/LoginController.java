@@ -2,8 +2,10 @@ package com.surf.auth.auth.controller;
 
 import com.surf.auth.JWT.service.AccessTokenIssueService;
 import com.surf.auth.JWT.service.RefreshTokenIssueService;
+import com.surf.auth.auth.dto.AuthenticationResultDto;
 import com.surf.auth.auth.dto.LogInDto;
 import com.surf.auth.auth.dto.TokenDto;
+import com.surf.auth.auth.entity.User;
 import com.surf.auth.auth.service.LoginService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -26,9 +28,11 @@ public class LoginController {
     @PostMapping("/login")
     public ResponseEntity<TokenDto> LogIn(@RequestBody LogInDto loginInfo) {
         TokenDto fail = new TokenDto();
-        if (loginService.authentication(loginInfo)) {
 
-            return ResponseEntity.ok(loginService.sendToken());
+        AuthenticationResultDto authenticationResultDto = loginService.authentication(loginInfo);
+        if (authenticationResultDto.isResult()) {
+            User userInfo = authenticationResultDto.getUserInfo();
+            return ResponseEntity.ok(loginService.sendToken(userInfo));
         }
         fail.setRefreshToken(null);
         fail.setAccessToken(null);
