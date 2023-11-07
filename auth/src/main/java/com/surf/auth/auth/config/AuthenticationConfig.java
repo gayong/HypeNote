@@ -1,4 +1,4 @@
-package com.surf.auth.security.config;
+package com.surf.auth.auth.config;
 
 
 import lombok.AllArgsConstructor;
@@ -21,7 +21,7 @@ public class AuthenticationConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize -> authorize
-                        .requestMatchers("/api/auth/login").permitAll()
+                        .requestMatchers("/api/auth/login", "/api/auth/signup").permitAll()
                         .anyRequest().authenticated()))
                 .authenticationProvider(authenticationProvider)
                 .sessionManagement((sessionManagement) ->
