@@ -35,7 +35,7 @@ const config: Config = {
       PreBd: ["PreBd"],
     },
   },
-  plugins: [],
+  plugins: [require("tailwind-scrollbar-hide")],
 };
 
 export default config;
