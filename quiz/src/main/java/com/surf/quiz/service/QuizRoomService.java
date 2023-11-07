@@ -166,8 +166,10 @@ public class QuizRoomService {
         Object userPk = payload.get("userPk");
         if (userPk instanceof Number) {
             id = ((Number) userPk).longValue();
+            System.out.println("id = " + id);
         } else {
             id = Long.parseLong((String) userPk);
+            System.out.println("id = " + id);
         }
 
         String action = (String) payload.get("action");

@@ -41,3 +41,4 @@ out/
 
 application-gpt.yml
 .application-gpt.yml
+/src/main/resources/application-*.yml

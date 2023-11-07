@@ -110,6 +110,7 @@ public class QuizResultService {
         String formattedDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
         quizResult.setExamDone(formattedDateTime);
         quizResult.setExamStart(quiz.getCreatedDate());
+
         return quizResult;
     }
 

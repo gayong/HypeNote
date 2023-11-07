@@ -1,7 +1,5 @@
 package com.surf.quiz.fegin;
 
-
-import com.surf.quiz.dto.diagram.DiagramResponseDto;
 import com.surf.quiz.dto.editor.ApiResponse;
 import com.surf.quiz.dto.editor.EditorCheckResponse;
 import org.springframework.cloud.openfeign.FeignClient;

@@ -20,5 +20,6 @@ public class QuizResult {
     private String examStart;
     private String examDone;
     List<QuestionResultDto> questionResult;
+    private List<String> pageLst;
 
 }
