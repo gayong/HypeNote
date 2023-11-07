@@ -6,6 +6,8 @@ import ChatRoom from "@/components/quiz/ChatRoom";
 import { Metadata } from "next";
 import { Button } from "antd";
 import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import confetti from "canvas-confetti";
 
 const metadata: Metadata = {
   title: "QuizResult",
@@ -14,10 +16,49 @@ const metadata: Metadata = {
 
 export default function QuizResultPage() {
   const router = useRouter();
+
   const outQuiz = () => {
     router.push("/quiz/");
     console.log("퀴즈 나가기");
   };
+
+  useEffect(() => {
+    var count = 200;
+    var defaults = {
+      origin: { y: 0.7 },
+    };
+
+    function fire(particleRatio, opts) {
+      confetti({
+        ...defaults,
+        ...opts,
+        particleCount: Math.floor(count * particleRatio),
+      });
+    }
+
+    fire(0.25, {
+      spread: 26,
+      startVelocity: 55,
+    });
+    fire(0.2, {
+      spread: 60,
+    });
+    fire(0.35, {
+      spread: 120,
+      decay: 0.91,
+      scalar: 0.8,
+    });
+    fire(0.1, {
+      spread: 160,
+      startVelocity: 25,
+      decay: 0.92,
+      scalar: 1.2,
+    });
+    fire(0.1, {
+      spread: 160,
+      startVelocity: 45,
+    });
+  }, []);
 
   return (
     <section className="px-2 pr-6 grid grid-cols-2 h-screen w-full max-w-full items-center">
