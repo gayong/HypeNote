@@ -36,7 +36,7 @@ public class SignUpService {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 사용 중인 닉네임입니다.");
         }
 
-        List<Integer> documentsRoot = new ArrayList<>();
+        List<String> documentsRoots = new ArrayList<>();
 
         userRepository.save(User.builder()
                 .email(signupInfo.getEmail())
@@ -44,7 +44,7 @@ public class SignUpService {
                 .nickName(signupInfo.getNickName())
                 .role("ROLE_USER")
                 .profileImage(profileUploadService.profileUpLoad(signupInfo.getProfileImage()))
-                .documentsRoot(documentsRoot)
+                .documentsRoots(documentsRoots)
                 .build());
         return ResponseEntity.status(HttpStatus.OK).body("정상적인 가입이 되었습니다.");
     }

@@ -1,37 +1,5 @@
-#spring:
-#  application:
-#    name: server-auth
-#  config:
-#    import: optional:configserver:http://config:8888
-
 spring:
-  data:
-    redis:
-      host: www.hype-note.com
-      port: 6379
-      password:
-
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://rds-mysql-instance-1.canwisarlokp.ap-northeast-2.rds.amazonaws.com:3306/auth
-    username: lesser
-    password:
-  jpa:
-    hibernate:
-      ddl-auto: update
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.MySQLDialect
-cloud:
-  aws:
-    credentials:
-      access-key:
-      secret-key:
-    s3:
-      bucket: s3-hype-note
-    region:
-      static: ap-northeast-2
-    stack:
-      auto: false
+  application:
+    name: server-auth
+  config:
+    import: optional:configserver:http://config:8888

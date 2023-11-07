@@ -9,5 +9,5 @@ import lombok.Setter;
 public class RootDto {
 
     private int userId;
-    private Integer root;
+    private String root;
 }

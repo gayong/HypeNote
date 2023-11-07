@@ -22,7 +22,7 @@ public class RootSaveService {
         if (userOptional.isPresent()) {
             User user = userOptional.get();
 
-            user.getDocumentsRoot().add(root.getRoot());
+            user.getDocumentsRoots().add(root.getRoot());
 
             userRepository.save(user);
 
