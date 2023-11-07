@@ -67,10 +67,6 @@ body {
   background: #faf5ef;
 }
 
-:where(.css-dev-only-do-not-override-qgg3xn).ant-radio-button-wrapper > .ant-radio-button {
-  background-color: #2946a2;
-}
-
 /* :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
