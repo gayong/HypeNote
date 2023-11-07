@@ -34,8 +34,6 @@ public class LoginController {
             User userInfo = authenticationResultDto.getUserInfo();
             return ResponseEntity.ok(loginService.sendToken(userInfo, response));
         }
-        fail.setRefreshToken(null);
-        fail.setAccessToken(null);
         fail.setMessage("로그인 정보가 일치하지 않습니다.");
         return ResponseEntity.status(HttpStatus.CONFLICT).body(fail);
     }

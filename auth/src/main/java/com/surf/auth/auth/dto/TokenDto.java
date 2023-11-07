@@ -10,6 +10,6 @@ import lombok.*;
 public class TokenDto {
 
     private String message;
-    private String accessToken;
-    private String refreshToken;
+    private String accessToken = null;
+    private String refreshToken = null;
 }
