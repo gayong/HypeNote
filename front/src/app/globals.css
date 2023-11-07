@@ -53,6 +53,27 @@ body {
   font-style: normal;
 }
 
+@font-face {
+  font-family: "Marker";
+  font-weight: 400;
+  src: url("/fonts/marker.ttf") format("woff2");
+}
+@font-face {
+  font-family: "Result";
+  src: url("/fonts/result.ttf") format("woff2");
+}
+@font-face {
+  font-family: "ResultIta";
+  src: url("/fonts/result_italic.ttf") format("woff2");
+}
+@font-face {
+  font-family: "Shrik";
+  src: url("/fonts/shrik.ttf") format("woff2");
+}
+@font-face {
+  font-family: "my";
+  src: url("/fonts/my.ttf") format("woff2");
+}
 ::selection {
   background-color: #cb443c;
   color: white;
