@@ -1434,6 +1434,11 @@
   resolved "https://registry.npmjs.org/@tootallnate/once/-/once-2.0.0.tgz"
   integrity sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==
 
+"@types/canvas-confetti@^1.6.3":
+  version "1.6.3"
+  resolved "https://registry.npmjs.org/@types/canvas-confetti/-/canvas-confetti-1.6.3.tgz"
+  integrity sha512-yKVMDzWJ6g0s8TDI3VERfLMCOh0oHqZUnfK+o3VVjR2mFsLynUgb2lR+3IRaEJMza3BKbV9pkoirmM23YhKozA==
+
 "@types/debug@^4.0.0":
   version "4.1.10"
   resolved "https://registry.npmjs.org/@types/debug/-/debug-4.1.10.tgz"
