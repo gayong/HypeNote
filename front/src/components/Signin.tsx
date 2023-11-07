@@ -44,18 +44,14 @@ export default function Signin() {
           <form className="space-y-6" action="#" method="POST">
             <div>
               <Label text="이메일" />
-              <div className="mt-2">
-                <Input text="email" />
-              </div>
+              <div className="mt-2">{/* <Input text="email" type="email" /> */}</div>
             </div>
 
             <div>
               <div className="flex items-center justify-between">
                 <Label text="비밀번호" />
               </div>
-              <div className="mt-2">
-                <Input text="Password" />
-              </div>
+              <div className="mt-2">{/* <Input text="Password" /> */}</div>
             </div>
 
             <div>
