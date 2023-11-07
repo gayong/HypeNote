@@ -29,10 +29,10 @@ public class AccessTokenIssueService {
 
     public String accessTokenIssue(User userInfo) {
         Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, userInfo);
+        return createToken(claims, userInfo, EXPIRATION_TIME);
     }
 
-    private String createToken(Map<String, Object> claims, User userInfo) {
+    String createToken(Map<String, Object> claims, User userInfo, long expirationTime) {
 
         String email = userInfo.getEmail();
         String nickName = userInfo.getNickName();
@@ -50,7 +50,7 @@ public class AccessTokenIssueService {
                 .claims(claims)
                 .subject(email)
                 .issuedAt(date)
-                .expiration(new Date(System.currentTimeMillis() + EXPIRATION_TIME))
+                .expiration(new Date(System.currentTimeMillis() + expirationTime))
                 .signWith(getSignKey())
                 .compact();
     }
