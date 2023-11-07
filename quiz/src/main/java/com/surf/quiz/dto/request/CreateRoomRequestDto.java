@@ -10,6 +10,7 @@ import java.util.List;
 @Setter
 public class CreateRoomRequestDto {
     String roomName;
+    String content;
     int quizCnt;
     boolean single;
     List<Integer> pages;

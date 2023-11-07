@@ -78,6 +78,7 @@ public class QuizRoomService {
     public SearchMemberResponseDto createSearchMemberResponseDto(SearchMemberRequestDto SearchMemberRequestDto) {
         SearchMemberResponseDto roomDto = new SearchMemberResponseDto();
         roomDto.setRoomName(SearchMemberRequestDto.getRoomName());
+        roomDto.setContent(SearchMemberRequestDto.getContent());
         roomDto.setQuizCnt(SearchMemberRequestDto.getQuizCnt());
         roomDto.setPages(SearchMemberRequestDto.getPages());
         roomDto.setSharePages(SearchMemberRequestDto.getSharePages());
@@ -115,6 +116,7 @@ public class QuizRoomService {
 
         QuizRoom createQuizRoom = QuizRoom.builder()
                 .roomName(createRoomRequestDto.getRoomName())
+                .content(createRoomRequestDto.getContent())
                 .quizCnt(createRoomRequestDto.getQuizCnt())
                 .createdDate(formattedDateTime)
                 .sharePages(createRoomRequestDto.getSharePages())

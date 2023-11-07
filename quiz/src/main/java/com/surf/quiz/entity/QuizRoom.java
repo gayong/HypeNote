@@ -26,6 +26,7 @@ public class QuizRoom {
     @Id
     private Long id;
     private String roomName;
+    private String content;
 
     private int roomMax;
     private int roomCnt;
