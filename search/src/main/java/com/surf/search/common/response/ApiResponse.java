@@ -1,4 +1,4 @@
-package com.surf.search.common;
+package com.surf.search.common.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

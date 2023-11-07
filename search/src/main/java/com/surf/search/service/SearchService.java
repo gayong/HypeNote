@@ -1,6 +1,11 @@
 package com.surf.search.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.surf.search.common.error.ErrorCode;
+import com.surf.search.common.error.exception.BaseException;
+import com.surf.search.dto.SearchGetResponseDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -18,16 +23,30 @@ public class SearchService {
 
     private static final String GOOGLE_URL = "https://www.googleapis.com/customsearch/v1?key=%s&cx=%s&q=%s";
 
-    public Mono<String> searchGet(String query) {
-        WebClient webClient = WebClient.create();
-        String url = String.format(GOOGLE_URL,
-                API_KEY, SEARCH_ENGINE_ID, query);
+    @Autowired
+    private ObjectMapper objectMapper;
 
-        Mono<String> stringMono = webClient.get()
-                .uri(url)
-                .retrieve()
-                .bodyToMono(String.class);
+    public SearchGetResponseDto searchGet(String query) {
+        try{
+            WebClient webClient = WebClient.create();
+            String url = String.format(GOOGLE_URL,
+                    API_KEY,SEARCH_ENGINE_ID, query);
 
-        return stringMono;
+            Mono<String> stringMono = webClient.get()
+                    .uri(url)
+                    .retrieve()
+                    .bodyToMono(String.class);
+
+            return stringMono.map(jsonString -> {
+                        try{
+                            return objectMapper.readValue(jsonString, SearchGetResponseDto.class);
+
+                        }catch (Exception e){
+                            throw new RuntimeException("failsed to parse Json",e);
+                        }
+                    }).block();
+        }catch (Exception e){
+            throw new BaseException(ErrorCode.ILLEGAL_ARGUMENT_EXCEPTION);
+        }
     }
 }
