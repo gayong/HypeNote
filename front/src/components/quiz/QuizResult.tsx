@@ -105,7 +105,7 @@ export default function QuizResult() {
                     return (
                       <div
                         key={index}
-                        className="hover:-translate-y-2 duration-300 p-5 flex items-center justify-center mr-5 bg-font_primary shadow-lg dark:shadow-black rounded-xl w-[150px] h-[170px]">
+                        className="hover:-translate-y-2 duration-300 p-5 flex items-center justify-center mr-5 bg-font_primary shadow-lg dark:shadow-font_secondary rounded-xl w-[150px] h-[170px]">
                         <div>
                           <Image src={second} className="w-[80px] h-auto absolute ml-[-40px] mt-[-31px]" alt="2" />
                           <div className="mb-2 ml-2 mr-2 rounded-full w-16 h-16 bg-cover bg-[url('/assets/profile.jpg')]" />
@@ -121,7 +121,7 @@ export default function QuizResult() {
                     return (
                       <div
                         key={index}
-                        className="hover:-translate-y-2 duration-300 p-5 flex items-center justify-center mr-5 bg-font_primary shadow-lg dark:shadow-black rounded-xl w-[180px] h-[190px]">
+                        className="hover:-translate-y-2 duration-300 p-5 flex items-center justify-center mr-5 bg-font_primary shadow-lg dark:shadow-font_secondary rounded-xl w-[180px] h-[190px]">
                         <div>
                           <Image src={first} className="w-[100px] h-auto absolute ml-[-60px] mt-[-43px]" alt="1" />
                           <div className="mb-2 ml-2 mr-2 rounded-full w-16 h-16 bg-cover bg-[url('/assets/profile.jpg')]" />
@@ -137,7 +137,7 @@ export default function QuizResult() {
                     return (
                       <div
                         key={index}
-                        className="hover:-translate-y-2 duration-300 p-5 flex items-center justify-center bg-font_primary shadow-lg dark:shadow-black rounded-xl w-[150px] h-[170px]">
+                        className="hover:-translate-y-2 duration-300 p-5 flex items-center justify-center bg-font_primary shadow-lg dark:shadow-font_secondary rounded-xl w-[150px] h-[170px]">
                         <div>
                           <Image src={third} className="w-[80px] h-auto absolute ml-[-40px] mt-[-31px]" alt="3" />
                           <div className="mb-2 ml-2 mr-2 rounded-full w-16 h-16 bg-cover bg-[url('/assets/profile.jpg')]" />
@@ -157,7 +157,7 @@ export default function QuizResult() {
                     return (
                       <div
                         key={index}
-                        className="hover:-translate-y-2 duration-300 p-5 flex items-center justify-center mr-5 bg-font_primary shadow-lg dark:shadow-black rounded-xl w-[180px] h-[190px]">
+                        className="hover:-translate-y-2 duration-300 p-5 flex items-center justify-center mr-5 bg-font_primary shadow-lg dark:shadow-font_secondary rounded-xl w-[180px] h-[190px]">
                         <div>
                           <Image src={first} className="w-[100px] h-auto absolute ml-[-60px] mt-[-43px]" alt="1" />
                           <div className="mb-2 ml-2 mr-2 rounded-full w-16 h-16 bg-cover bg-[url('/assets/profile.jpg')]" />
@@ -173,7 +173,7 @@ export default function QuizResult() {
                     return (
                       <div
                         key={index}
-                        className="hover:-translate-y-2 duration-300 p-5 flex items-center justify-center mr-5 bg-font_primary shadow-lg dark:shadow-black rounded-xl w-[150px] h-[170px]">
+                        className="hover:-translate-y-2 duration-300 p-5 flex items-center justify-center mr-5 bg-font_primary shadow-lg dark:shadow-font_secondary rounded-xl w-[150px] h-[170px]">
                         <div>
                           <Image src={second} className="w-[80px] h-auto absolute ml-[-40px] mt-[-31px]" alt="2" />
                           <div className="mb-2 ml-2 mr-2 rounded-full w-16 h-16 bg-cover bg-[url('/assets/profile.jpg')]" />
@@ -191,7 +191,7 @@ export default function QuizResult() {
                   return (
                     <div
                       key={index}
-                      className="hover:-translate-y-2 duration-300 p-5 flex items-center justify-center mr-5 bg-font_primary shadow-lg dark:shadow-black rounded-xl w-[180px] h-[190px]">
+                      className="hover:-translate-y-2 duration-300 p-5 flex items-center justify-center mr-5 bg-font_primary shadow-lg dark:shadow-font_secondary rounded-xl w-[180px] h-[190px]">
                       <div>
                         <Image src={first} className="w-[100px] h-auto absolute ml-[-60px] mt-[-43px]" alt="1" />
                         <div className="mb-2 ml-2 mr-2 rounded-full w-16 h-16 bg-cover bg-[url('/assets/profile.jpg')]" />
