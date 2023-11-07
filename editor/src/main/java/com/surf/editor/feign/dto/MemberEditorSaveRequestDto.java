@@ -9,5 +9,5 @@ import java.util.List;
 @Builder(toBuilder = true)
 public class MemberEditorSaveRequestDto {
     private int userId;
-    private List<String> documentsRoots;
+    private String root;
 }
