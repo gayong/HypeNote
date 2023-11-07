@@ -20,9 +20,7 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
 import java.util.Comparator;
 import java.util.List;
 import java.util.*;
@@ -34,11 +32,36 @@ public class DiagramServiceImpl implements DiagramService {
 
     private final NodeRepository nodeRepository;
     private final LinkRepository linkRepository;
-    private static final Set<String> STOPWORDS = new HashSet<>(Arrays.asList(
-            "그리고", "그런데", "그러나", "그래서", "또한", "하지만", "따라서", "은", "는",
-            "이", "그", "저", "것", "들", "인", "있", "하", "겠", "들", "같", "되", "수", "이", "보", "않", "없", "나", "사람", "주", "아니", "등", "같", "우리", "때", "년", "가", "한", "지", "대하", "오", "말", "일", "그렇", "위하"
-    )); // 불용어 리스트
-    private static final Set<String> PUNCTUATIONS = new HashSet<>(Arrays.asList(".", ",", "!", "?", ";", ":", "/", "(", ")", "[", "]", "{", "}", "", "<", ">", "-", "=", "+", ",", "_", "#", "/", "\\", "?", ":", "^", "$", ".", "@", "*", "\"", "※", "~", "&", "%", "ㆍ", "!", "』", "\\", "‘", "|", "(", ")", "[", "]", "<", ">", "`", "'", "…", "》"));
+    private static final Set<String> STOPWORDS = new HashSet<>();
+
+    static {
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("src/main/resources/static/stopwords.txt"));
+            String line;
+            while ((line = br.readLine()) != null) {
+                STOPWORDS.add(line.trim());
+            }
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private static final Set<String> PUNCTUATIONS = new HashSet<>();
+
+    static {
+        try {
+            BufferedReader br = new BufferedReader(new FileReader("src/main/resources/static/punctuations.txt"));
+            String line;
+            while ((line = br.readLine()) != null) {
+                PUNCTUATIONS.add(line.trim());
+            }
+            br.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
 
     public DiagramServiceImpl(NodeRepository nodeRepository, LinkRepository linkRepository) {
         this.nodeRepository = nodeRepository;
@@ -54,6 +77,7 @@ public class DiagramServiceImpl implements DiagramService {
         for (Element element : elements) {
             texts.add(element.text());
         }
+
 
         return String.join(". ", texts); // '|'를 구분자로 사용
     }
@@ -85,7 +109,7 @@ public class DiagramServiceImpl implements DiagramService {
     private List<Node> getEmptyCategoryNodesByUserId(int userId) {
         return nodeRepository.findByUserId(userId)
                 .stream()
-                .filter(n -> n.getCategory() == null || n.getCategory().isEmpty())
+//                .filter(n -> n.getCategory() == null || n.getCategory().isEmpty())
                 .toList();
     }
 
@@ -182,6 +206,8 @@ public class DiagramServiceImpl implements DiagramService {
     // 키워드 추출
     private List<String> extractKeywordsWithKomoran(String content, int topN) {
         Komoran komoran = new Komoran(DEFAULT_MODEL.FULL);
+//        komoran.setUserDic("path/to/userdic.txt");
+
         Map<String, Integer> wordCount = new HashMap<>();
 
         List<Token> tokens = komoran.analyze(content).getTokenList();
@@ -279,7 +305,7 @@ public class DiagramServiceImpl implements DiagramService {
         }
     }
 
-
+// // 2-gram
 //    private double calculateSimilarity(String text1, String text2) {
 //        Map<String, Integer> wordCount1 = getWordCount(text1, 2);
 //        Map<String, Integer> wordCount2 = getWordCount(text2, 2);
@@ -360,6 +386,7 @@ public class DiagramServiceImpl implements DiagramService {
 
     // 공유 링크
     public DiagramResponseDto linkNodesByShare(int userId, int targetUserId) {
+
         List<Node> nodes1 = nodeRepository.findByUserId(userId);
         List<Node> nodes2 = nodeRepository.findByUserId(targetUserId);
         List<Link> links1 = linkRepository.findByUserId(userId);
