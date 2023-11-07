@@ -30,15 +30,22 @@ public class Editor {
     private List<String> childId;
     private List<String> hyperLink;
 
-    public static Editor editorCreate(){
-        return Editor.builder()
+    private List<Integer> writePermission;
+
+    public static Editor editorCreate(int userId){
+        Editor editor = Editor.builder()
                 .id(null)
+                .userId(userId)
                 .content(null)
                 .title(null)
                 .parentId(null)
                 .childId(new ArrayList<>())
                 .hyperLink(new ArrayList<>())
                 .build();
+
+        editor.getWritePermission().add(userId);
+
+        return editor;
     }
 
     public void write(String title, String content){

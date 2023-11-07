@@ -6,16 +6,17 @@ import com.surf.editor.common.error.exception.NotFoundException;
 import com.surf.editor.domain.Editor;
 import com.surf.editor.dto.request.EditorHyperLinkRequestDto;
 import com.surf.editor.dto.request.EditorRelationRequestDto;
+import com.surf.editor.dto.request.EditorShareRequestDto;
 import com.surf.editor.dto.request.EditorWriteRequestDto;
 import com.surf.editor.dto.response.EditorCheckResponseDto;
 import com.surf.editor.dto.response.EditorCreateResponseDto;
 import com.surf.editor.dto.response.EditorSearchResponseDto;
 import com.surf.editor.feign.client.DiagramOpenFeign;
 import com.surf.editor.feign.client.MemberOpenFeign;
+import com.surf.editor.feign.client.MemberShareOpenFeign;
 import com.surf.editor.feign.client.QuizOpenFeign;
-import com.surf.editor.feign.dto.DiagramEditorSaveRequestDto;
 import com.surf.editor.feign.dto.MemberEditorSaveRequestDto;
-import com.surf.editor.feign.dto.QuizEditorSaveRequestDto;
+import com.surf.editor.feign.dto.MemberShareRequestDto;
 import com.surf.editor.repository.EditorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -33,7 +33,7 @@ public class EditorService {
     private final DiagramOpenFeign diagramOpenFeign;
     private final MemberOpenFeign memberOpenFeign;
     private final QuizOpenFeign quizOpenFeign;
-
+    private final MemberShareOpenFeign memberShareOpenFeign;
 
     @Transactional
     public EditorCreateResponseDto editorCreate(int userId) {
@@ -42,7 +42,7 @@ public class EditorService {
             /**
              * 새로 만들면 부모가 null, 자식도 새로 만들어진다.
              */
-            savedEditor = editorRepository.save(Editor.editorCreate());
+            savedEditor = editorRepository.save(Editor.editorCreate(userId));
         }catch (Exception e){
             throw new BaseException(ErrorCode.FAIL_CREATE_EDITOR);
         }
@@ -195,4 +195,40 @@ public class EditorService {
 
         editorRepository.save(findEditor);
     }
+
+    /**
+     * 유저 : 유저 테이블에 공유 문서 루트 값 저장(루트 노드 저장한 것 처럼) -> 공유 문서 테이블 1:N 관계 만드는거 필요
+     * 에디터 : 유저한테 공유 문서 루트 값 전송, 여기서 공유 문서는 부모와 자식 관계가 겹쳐도 그냥 보내준다.
+     *
+     */
+    public void editorShare(EditorShareRequestDto editorShareRequestDto) {
+        try{
+            Editor editor = editorRepository.findById(editorShareRequestDto.getEditorId()).orElseThrow(
+                    ()-> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
+
+            feignShare(editorShareRequestDto.getUserId(), editor);
+
+        }catch (Exception e){
+            throw new BaseException(ErrorCode.MEMBER_SHARE_FAIL);
+        }
+    }
+
+    private void feignShare(int userId, Editor savedEditor) {
+        try {
+            MemberShareRequestDto memberShareRequestDto = MemberShareRequestDto.builder()
+                    .userId(userId)
+                    .root(savedEditor.getId()) //추가 필요
+                    .build();
+
+            memberShareOpenFeign.MemberShare(memberShareRequestDto);
+        } catch (Exception e) {
+            throw new BaseException(ErrorCode.MEMBER_SHARE_FAIL);
+        }
+    }
+
+    /**
+     *  에디터 쓰기 권한
+     *  에디터 별로 쓰기 리스트 생성한 후 쓰기 설정하면 유저 id를 넣어주고 아니면 빼준다.
+     *  유저가 해당 에디터에 접속할 때 에디터 상세정보에서 쓰기 권한 true,false를 리턴해준다.
+     */
 }

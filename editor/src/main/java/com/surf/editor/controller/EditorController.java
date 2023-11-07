@@ -3,6 +3,7 @@ package com.surf.editor.controller;
 import com.surf.editor.common.response.ApiResponse;
 import com.surf.editor.dto.request.EditorHyperLinkRequestDto;
 import com.surf.editor.dto.request.EditorRelationRequestDto;
+import com.surf.editor.dto.request.EditorShareRequestDto;
 import com.surf.editor.dto.request.EditorWriteRequestDto;
 import com.surf.editor.dto.response.EditorCheckResponseDto;
 import com.surf.editor.dto.response.EditorCreateResponseDto;
@@ -108,6 +109,19 @@ public class EditorController {
                 .message("문서 검색")
                 .status(OK.value())
                 .data(editorSearchResponse)
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @PostMapping("share")
+    public ResponseEntity<ApiResponse> editorShare(@RequestBody EditorShareRequestDto editorShareRequestDto){
+        editorService.editorShare(editorShareRequestDto);
+
+        ApiResponse apiResponse = ApiResponse.builder()
+                .message("문서 공유 완료")
+                .status(OK.value())
+                .data(null)
                 .build();
 
         return ResponseEntity.ok(apiResponse);
