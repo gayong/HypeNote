@@ -47,7 +47,7 @@ public class EditorService {
         }
 
         //feign member, quiz, diagram DB에도 저장
-        feign(userId, savedEditor);
+//        feign(userId, savedEditor);
 
         EditorCreateResponseDto editorCreateResponseDto = EditorCreateResponseDto.builder()
                 .id(savedEditor.getId())
