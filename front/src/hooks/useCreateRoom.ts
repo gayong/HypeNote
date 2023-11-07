@@ -13,14 +13,16 @@ export const useCreateRoom = () => {
       sharePages,
       quizCnt,
       single,
+      content,
     }: {
       roomName: string;
       pages: Array<number>;
       sharePages: Array<number>;
       quizCnt: number;
       single: boolean;
+      content: string;
     }) => {
-      const response = await createQuizRoom(roomName, pages, sharePages, quizCnt, single);
+      const response = await createQuizRoom(roomName, pages, sharePages, quizCnt, single, content);
       console.log(response.data.result);
       setRoomInfo(response.data.result);
     },
@@ -38,6 +40,7 @@ export const useCreateRoom = () => {
       quizCnt,
       single,
       users,
+      content,
     }: {
       roomName: string;
       pages: Array<number>;
@@ -45,8 +48,9 @@ export const useCreateRoom = () => {
       quizCnt: number;
       single: boolean;
       users: Array<QuizUser>;
+      content: string;
     }) => {
-      const response = await inviteUser(roomName, pages, sharePages, quizCnt, single, users);
+      const response = await inviteUser(roomName, pages, sharePages, quizCnt, single, users, content);
       console.log(response.data.result);
     },
     {
