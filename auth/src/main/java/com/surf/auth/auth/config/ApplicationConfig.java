@@ -1,7 +1,6 @@
-package com.surf.auth.security.config;
+package com.surf.auth.auth.config;
 
-import com.surf.auth.security.repository.UserRepository;
-import lombok.AllArgsConstructor;
+import com.surf.auth.auth.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,20 +26,20 @@ public class ApplicationConfig {
 
     @Bean
     public UserDetailsService UserDetailsService() {
-        return (username) -> userRepository.findByEmail(username)
+        return (email) -> userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("사용자가 존재하지 않습니다."));
     }
 
-    @Bean
-    public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-        authenticationProvider.setUserDetailsService(UserDetailsService());
-        authenticationProvider.setPasswordEncoder(passwordEncoder());
-        return authenticationProvider;
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
-        return configuration.getAuthenticationManager();
-    }
+//    @Bean
+//    public AuthenticationProvider authenticationProvider() {
+//        DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+//        authenticationProvider.setUserDetailsService(UserDetailsService());
+//        authenticationProvider.setPasswordEncoder(passwordEncoder());
+//        return authenticationProvider;
+//    }
+//
+//    @Bean
+//    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+//        return configuration.getAuthenticationManager();
+//    }
 }

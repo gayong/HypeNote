@@ -1,5 +1,6 @@
-package com.surf.auth.security.entity;
+package com.surf.auth.auth.entity;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -39,6 +40,13 @@ public class User implements UserDetails {
     @Length(min = 1, max = 10, message = "닉네임은 10자 이하로 작성해주세요.")
     @Column(unique = true)
     private String nickName;
+
+    @Nullable
+//    @Column(unique = true)
+    private String profileImage;
+
+    @ElementCollection
+    private List<Integer> documentsRoot;
 
     private String role;
 

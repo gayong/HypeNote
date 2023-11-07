@@ -1,4 +1,4 @@
-package com.surf.auth.security.dto;
+package com.surf.auth.auth.dto;
 
 import lombok.Getter;
 
