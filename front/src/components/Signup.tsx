@@ -5,14 +5,49 @@ import Button from "./ui/Button";
 import Input from "./ui/Input";
 import Label from "./ui/Label";
 
+import { message } from "antd";
+
 import logoImg from "../../public/assets/logo_blue.png";
 import darkLogoImg from "../../public/assets/logo.png";
 import krLogoImg from "../../public/assets/krlogo_blue.png";
 import darkKrLogoImg from "../../public/assets/krlogo.png";
+import { useState } from "react";
+import useSignup from "@/hooks/useSignup";
 
 export default function Signup() {
-  const handleSignup = () => {
-    console.log("회원가입하마");
+  // 각 입력 필드에 대한 State들을 생성합니다.
+  const [nickName, setNickName] = useState<string>("");
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const [password2, setPassword2] = useState<string>("");
+  const [profileImage, setProfileImage] = useState("");
+
+  // 입력 필드가 변경될 때 마다 해당 State를 업데이트합니다.
+  const handleNickNameChange = (e: any) => setNickName(e.target.value);
+  const handleEmailChange = (e: any) => setEmail(e.target.value);
+  const handlePasswordChange = (e: any) => setPassword(e.target.value);
+  const handlePassword2Change = (e: any) => setPassword2(e.target.value);
+  const handleImageChange = (e: any) => setProfileImage(e.target.files[0]);
+
+  const { signup } = useSignup();
+
+  const handleSignup = async () => {
+    console.log("회원가입 실행");
+    // 비밀번호와 비밀번호 확인이 일치하는지 검사합니다.
+    if (password !== password2) {
+      message.error("비밀번호가 일치하지 않습니다.");
+      return;
+    }
+
+    const success = await signup(email, password, nickName, profileImage);
+
+    if (success === "success") {
+      // 회원가입 성공 처리
+      console.log("회원가입 성공!");
+    } else {
+      // 회원가입 실패 처리
+      console.log("회원가입 실패..");
+    }
   };
 
   return (
@@ -49,13 +84,13 @@ export default function Signup() {
             <div>
               <Label text="닉네임" />
               <div className="mt-2">
-                <Input text="text" />
+                <Input text="NickName" type="text" onChange={handleNickNameChange} />
               </div>
             </div>
             <div>
               <Label text="이메일" />
               <div className="mt-2">
-                <Input text="email" />
+                <Input text="Email" type="email" onChange={handleEmailChange} autoComplete="email" />
               </div>
             </div>
 
@@ -64,7 +99,7 @@ export default function Signup() {
                 <Label text="비밀번호" />
               </div>
               <div className="mt-2">
-                <Input text="Password" />
+                <Input text="Password" type="password" onChange={handlePasswordChange} autoComplete="new-password" />
               </div>
             </div>
 
@@ -73,7 +108,26 @@ export default function Signup() {
                 <Label text="비밀번호 확인" />
               </div>
               <div className="mt-2 ">
-                <Input text="Password2" />
+                <Input text="Password2" type="password" onChange={handlePassword2Change} autoComplete="new-password" />
+              </div>
+            </div>
+
+            <div>
+              <Label text="프로필 사진" />
+              <div className="mt-2">
+                <label className="block">
+                  <input
+                    type="file"
+                    className="block w-full text-sm text-slate-500
+                              file:mr-4 file:py-1 file:px-3
+                              file:rounded-md file:border-0
+                              file:text-xs
+                              file:bg-primary file:text-font_primary
+                              hover:file:bg-hover_primary
+                              "
+                    onChange={handleImageChange}
+                  />
+                </label>
               </div>
             </div>
 
