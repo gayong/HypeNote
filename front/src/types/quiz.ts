@@ -45,6 +45,7 @@ export interface QuizUser {
   ready?: boolean;
   userName: string;
   userPk: number;
+  profileImg?: string;
 }
 
 export interface chatUser {
@@ -52,6 +53,7 @@ export interface chatUser {
   content: string;
   chatTime: string;
   userName: string;
+  profileImg?: string;
 }
 
 export interface QuizInfo {

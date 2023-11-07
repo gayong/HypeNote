@@ -27,6 +27,7 @@ const config: Config = {
       transparent: "transparent",
       dark_primary: "#4F4F4F",
       dark_background: "#424242",
+      dark_font: "#6789f0",
     },
     fontFamily: {
       preRg: ["preRg"],

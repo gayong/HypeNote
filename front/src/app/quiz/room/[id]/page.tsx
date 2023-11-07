@@ -27,7 +27,9 @@ export default function QuizRoomPage({ params: { id } }: Props) {
 
   return (
     <SubscribeProvider roomId={id}>
-      <QuizRoom roomId={id} />
+      <section className="mx-5 my-20">
+        <QuizRoom roomId={id} />
+      </section>
     </SubscribeProvider>
   );
 }
