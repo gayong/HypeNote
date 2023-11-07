@@ -1,4 +1,4 @@
-package com.surf.auth.auth.controller;
+package com.surf.auth.JWT.controller;
 
 import com.surf.auth.JWT.service.ReissueService;
 import lombok.RequiredArgsConstructor;
