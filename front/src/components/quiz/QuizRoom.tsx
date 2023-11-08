@@ -106,7 +106,7 @@ export default function QuizRoom(props: QuizRoomProps) {
               </div>
             </div>
 
-            <div className="col-span-5 pl-10 min-h-full">
+            <div className="col-span-5 pl-10 min-h-full mt-12">
               <div className="flex-col justify-between">
                 <ChatRoom roomId={props.roomId} />
                 <br />
@@ -120,7 +120,6 @@ export default function QuizRoom(props: QuizRoomProps) {
             </div>
           </section>
 
-          <QuizResult />
         </>
       )}
     </>

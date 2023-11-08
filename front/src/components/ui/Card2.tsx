@@ -8,7 +8,7 @@ interface Card2Props {
 }
 export default function Card2({ user }: Card2Props) {
   return (
-    <div className="h-64 w-52 flex bg-font_primary bg-opacity-50 shadow-lg items-center rounded-lg sm:flex-col">
+    <div className="h-64 w-40 flex bg-font_primary bg-opacity-50 shadow-lg items-center rounded-lg sm:flex-col">
       {user ? (
         <>
           {user.profileImg ? (

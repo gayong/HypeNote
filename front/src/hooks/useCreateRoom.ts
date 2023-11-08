@@ -5,7 +5,7 @@ import { useMutation } from "react-query";
 
 export const useCreateRoom = () => {
   const [roomInfo, setRoomInfo] = useState<QuizRoomGroup>();
-
+  const [roomId, setRoomId] = useState()
   const createRoomMutation = useMutation(
     async ({
       roomName,
@@ -51,7 +51,7 @@ export const useCreateRoom = () => {
       content: string;
     }) => {
       const response = await inviteUser(roomName, pages, sharePages, quizCnt, single, users, content);
-      console.log(response.data.result);
+      setRoomId(response.data.result.id);
     },
     {
       onError: (error) => {
@@ -65,5 +65,6 @@ export const useCreateRoom = () => {
     inviteUserInfo: roomInfo ? roomInfo.inviteUsers : undefined,
     roomInfo: roomInfo,
     inviteUserMutation: inviteUserMutation,
+    roomId:roomId
   };
 };
