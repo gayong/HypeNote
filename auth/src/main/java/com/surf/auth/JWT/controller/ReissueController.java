@@ -23,7 +23,7 @@ public class ReissueController {
 
         User userInfo = reissueService.parsingRefreshToken(refreshToken);
 
-        String storedRefreshToken = reissueService.findRefreshTokenByUserId(String.valueOf(userInfo.getUserId()));
+        String storedRefreshToken = reissueService.findRefreshTokenByUserPk(String.valueOf(userInfo.getUserPk()));
 
         TokenDto fail = new TokenDto();
 

@@ -20,7 +20,7 @@ public class RootSaveService {
     public HttpStatus rootSaveService(RootDto root) {
 
         log.info("루트 받아오기:" + root);
-        Optional<User> userOptional = userRepository.findByUserId(root.getUserId());
+        Optional<User> userOptional = userRepository.findByUserPk(root.getUserPk());
 
         if (userOptional.isPresent()) {
             User user = userOptional.get();

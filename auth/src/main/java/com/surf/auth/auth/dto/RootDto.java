@@ -8,6 +8,6 @@ import lombok.Setter;
 @Setter
 public class RootDto {
 
-    private int userId;
+    private int userPk;
     private String root;
 }

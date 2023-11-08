@@ -1,13 +1,16 @@
 package com.surf.auth.JWT.service;
 
+import com.surf.auth.JWT.provider.SignKeyProvider;
 import com.surf.auth.auth.dto.TokenDto;
 import com.surf.auth.auth.entity.User;
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+
+import javax.crypto.SecretKey;
 import java.util.Objects;
 
 @RequiredArgsConstructor
@@ -16,24 +19,37 @@ public class ReissueService {
 
     private final StringRedisTemplate redisTemplate;
     private final AccessTokenIssueService accessTokenIssueService;
+    private final SignKeyProvider signKeyProvider;
 
-    @Value("${jwt.secret}")
-    private String SECRET;
     public User parsingRefreshToken(String refreshToken) {
+
+
+        SecretKey secretKey = signKeyProvider.getSignKey();
 
         User userInfo = new User();
 
-        userInfo.setUserId();
-        userInfo.setEmail();
-        userInfo.setNickName();
-        userInfo.setProfileImage();
+        Jws<Claims> userClaims = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(refreshToken);
+
+        Claims userClaim = userClaims.getPayload();
+
+        int userPk = userClaim.get("userPk", int.class);
+        String email = userClaim.get("email", String.class);
+        String nickName = userClaim.get("nickName", String.class);
+        String profileImage = userClaim.get("profileImage", String.class);
+        String role = userClaim.get("role", String.class);
+
+        userInfo.setUserPk(userPk);
+        userInfo.setEmail(email);
+        userInfo.setNickName(nickName);
+        userInfo.setProfileImage(profileImage);
+        userInfo.setRole(role);
 
         return userInfo;
     }
 
-    public String findRefreshTokenByUserId(String userId) {
+    public String findRefreshTokenByUserPk(String userPk) {
 
-        return redisTemplate.opsForValue().get(userId);
+        return redisTemplate.opsForValue().get(userPk);
     }
 
     public boolean refreshTokenAuthentication(String refreshToken, String storedRefreshToken) {
