@@ -291,11 +291,7 @@ public class QuizRoomService {
     }
 
     private void handleEmptyQuizRoom(Long roomId, QuizRoom quizRoom, MemberDto memberDto) {
-        if (quizRoom.getQuizCnt()==0) {
-            delete(quizRoom);
-            deleteQuiz(roomId.intValue());
-        }
-        if (quizRoom.getUsers().isEmpty()) {
+        if (quizRoom.getRoomCnt()==0) {
             delete(quizRoom);
             deleteQuiz(roomId.intValue());
         } else {
