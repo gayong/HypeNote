@@ -5,28 +5,31 @@ import { useContext, useEffect, useState } from "react";
 import { useWebSocket } from "@/context/SocketProvider";
 import { QuizRoomInfo } from "@/types/quiz";
 import Loading from "@/app/loading";
+import { useAtom } from "jotai";
+import { userAtom } from "@/store/authAtom";
 
 export default function QuizList() {
   // const { quizRooms } = useContext(SocketContext);
   const [quizRooms, setQuizRooms] = useState<Array<QuizRoomInfo>>([]);
   const stompClient = useWebSocket();
+  const [user] = useAtom(userAtom);
 
   useEffect(() => {
     if (stompClient) {
-      const roomListSubscription = stompClient.subscribe("/sub/quizroom/roomList", (roomList) => {
+      const roomListSubscription = stompClient.subscribe(`/sub/quizroom/roomList/${user.userPk}`, (roomList) => {
         // console.log(roomList);
         console.log("방리스트 구독한거 나온대");
         setQuizRooms(JSON.parse(roomList.body));
       });
-      stompClient.send("/pub/quizroom/roomList", {});
+      stompClient.send(`/pub/quizroom/roomList/${user.userPk}`, {});
     }
-    return stompClient?.unsubscribe("/sub/quizroom/roomList");
+    return stompClient?.unsubscribe(`/sub/quizroom/roomList/${user.userPk}`);
   }, [stompClient]);
 
   return (
     <>
-      <div className="mx-10 my-20">
-        <h1 className="text-3xl font-bold mb-2 text-center dark:text-dark_font text-primary">퀴즈 리스트</h1>
+      <div className="pr-[50px] p-10">
+        <h1 className="mt-4 text-3xl font-bold mb-2 text-center dark:text-dark_font text-primary">퀴즈 리스트</h1>
 
         {quizRooms.length > 0 ? (
           <>
@@ -44,7 +47,7 @@ export default function QuizList() {
               {quizRooms.map((room) => (
                 <div key={room.id}>
                   <Link href={`/quiz/room/${room.id}`}>
-                    <div className="w-96 hover:outline hover:outline-offset-2 hover:outline-4 dark:hover:border-font_primary hover:outline-primary bg-font_primary bg-opacity-50 min-w-0 p-4 text-font_primary rounded-lg shadow-lg dark:bg-dark_primary">
+                    <div className="w-80 hover:outline hover:outline-offset-2 hover:outline-4 dark:hover:border-font_primary hover:outline-primary bg-font_primary bg-opacity-50 min-w-0 p-4 text-font_primary rounded-lg shadow-lg dark:bg-dark_primary">
                       <h4 className="text-xl font-bold text-dark_primary dark:text-font_primary">{room.roomName}</h4>
                       <p className="text-sm text-line_primary text-opacity-60 dark:text-opacity-40 mb-4 dark:text-font_primary">
                         {room.createdDate}

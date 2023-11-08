@@ -1,4 +1,5 @@
 "use client";
+import { Provider } from "jotai";
 
 import { ThemeProvider } from "next-themes";
 import React from "react";
@@ -9,12 +10,14 @@ import { ReactQueryDevtools } from "react-query/devtools";
 const Providers = ({ children }: { children: React.ReactNode }) => {
   const [client] = React.useState(new QueryClient());
   return (
-    <ThemeProvider attribute="class">
-      <QueryClientProvider client={client}>
-        {children}
-        <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
-    </ThemeProvider>
+    <Provider>
+      <ThemeProvider attribute="class">
+        <QueryClientProvider client={client}>
+          {children}
+          <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
+      </ThemeProvider>
+    </Provider>
   );
 };
 

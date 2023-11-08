@@ -7,18 +7,16 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import DarkModeBtn from "./darkmode/DarkmodeBtn";
 import Category from "./category/Category";
+import { useAtom } from "jotai";
+import { userAtom } from "@/store/authAtom";
 
 export default function Navbar() {
-  const [mode, setMode] = useState(false);
+  const [user] = useAtom(userAtom);
   const pathname = usePathname();
 
   if (pathname === "/signin" || pathname == "/signup" || pathname == "/intro") {
     return null;
   }
-
-  const changeMode = () => {
-    setMode(!mode);
-  };
 
   return (
     <>
@@ -31,7 +29,7 @@ export default function Navbar() {
             </Link>
             <DarkModeBtn />
           </div>
-          <h1 className="text-start text-font_primary text-[15px] ml-3">가영님, 안녕하세요</h1>
+          <h1 className="text-start text-font_primary text-[15px] ml-3">{`${user.nickName}님, 안녕하세요`}</h1>
           {/* <div className="my-2 bg-gray-600 h-[1px]"></div> */}
           <br />
         </div>
@@ -65,12 +63,11 @@ export default function Navbar() {
         {/* 제일큰 노트 map으로 호출 */}
         <Category title="MY CS BOOK" value={1} key={1} />
         <div
-          className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-hover_primary hover:bg-opacity-50 dark:hover:bg-line_primary dark:hover:bg-opacity-50"
+          className="p-1.5 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-line_primary hover:bg-opacity-50 dark:hover:bg-line_primary dark:hover:bg-opacity-50"
           // onclick="dropdown()"
         >
-          <i className="bi bi-chat-left-text-fill"></i>
           <div className="flex justify-between w-full items-center">
-            <span className="text-[15px] ml-2 text-white">+ 페이지 추가</span>
+            <span className="text-[15px] text-white">+ 페이지 추가</span>
           </div>
         </div>
         <br />

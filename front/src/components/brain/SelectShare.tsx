@@ -29,12 +29,12 @@ export default function SelectShare({ onReceive }: { onReceive: (sharedData: any
   };
 
   return (
-    <>
+    <div className="absolute mt-4 ml-4">
       <Select
         mode="tags"
         size="middle"
-        placeholder="공유받을 친구를 선택하세요"
-        style={{ width: 300, marginTop: "10px", zIndex: 9999 }}
+        placeholder="내 노트와 친구 노트를 합쳐보세요!"
+        style={{ width: 230, marginTop: "10px", zIndex: 9999 }}
         options={[
           { value: 2, label: "2번" },
           { value: 3, label: "3번" },
@@ -42,12 +42,11 @@ export default function SelectShare({ onReceive }: { onReceive: (sharedData: any
         onChange={handleSelectChange}
       />
       <Button
-        className="dark:border dark:border-font_primary"
-        style={{ fontFamily: "preRg", backgroundColor: "#2946A2", zIndex: 9999 }}
+        className="dark:border dark:border-font_primary h-[30px] w-[53px] ml-2 font-preBd hover:bg-dark_font bg-primary z-50"
         type="primary"
         onClick={handleReceive}>
-        받기
+        GO
       </Button>
-    </>
+    </div>
   );
 }
