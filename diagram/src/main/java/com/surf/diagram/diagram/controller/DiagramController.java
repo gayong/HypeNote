@@ -43,7 +43,7 @@ public class DiagramController {
                 .collect(Collectors.toList());
 
         List<LinkResponseDto> linkResponseDtos = links.stream()
-                .map(link -> new LinkResponseDto(link.getSource(), link.getTarget(), link.getSimilarity(), link.getUserId()))
+                .map(link -> new LinkResponseDto(link.getSource(), link.getTarget(),  link.getSimilarity() * 1 + 1, link.getUserId()))
                 .collect(Collectors.toList());
 
         DiagramResponseDto response = new DiagramResponseDto(nodeResponseDtos, linkResponseDtos);
