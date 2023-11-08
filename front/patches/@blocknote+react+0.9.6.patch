@@ -1,0 +1,33 @@
+diff --git a/node_modules/@blocknote/react/src/defaultThemes.ts b/node_modules/@blocknote/react/src/defaultThemes.ts
+index 1a08ac5..41b50d6 100644
+--- a/node_modules/@blocknote/react/src/defaultThemes.ts
++++ b/node_modules/@blocknote/react/src/defaultThemes.ts
+@@ -89,23 +89,23 @@ export const lightDefaultTheme: Theme = {
+ export const darkDefaultTheme: Theme = {
+   colors: {
+     editor: {
+-      text: defaultColorScheme[2],
++      text: defaultColorScheme[0],
+       background: defaultColorScheme[6],
+     },
+     menu: {
+-      text: defaultColorScheme[2],
++      text: defaultColorScheme[0],
+       background: defaultColorScheme[6],
+     },
+     tooltip: {
+-      text: defaultColorScheme[2],
++      text: defaultColorScheme[0],
+       background: defaultColorScheme[7],
+     },
+     hovered: {
+-      text: defaultColorScheme[2],
++      text: defaultColorScheme[0],
+       background: defaultColorScheme[7],
+     },
+     selected: {
+-      text: defaultColorScheme[2],
++      text: defaultColorScheme[0],
+       background: defaultColorScheme[8],
+     },
+     disabled: {

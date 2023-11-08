@@ -1,11 +1,14 @@
 "use client";
 
+import { useAtom } from "jotai";
+import { themeAtom } from "../../store/theme";
 import { useEffect, useState } from "react";
 import { BlockNoteView, useBlockNote } from "@blocknote/react";
 import "@blocknote/core/style.css";
 import styles from "./Editor.module.css";
 import { uploadToTmpFilesDotOrg_DEV_ONLY } from "@blocknote/core";
 import * as store from "./store";
+
 type WindowWithProseMirror = Window & typeof globalThis & { ProseMirror: any };
 
 type Props = {
@@ -13,29 +16,8 @@ type Props = {
 };
 
 function TestEditor({ id }: Props) {
-  const [theme, setTheme] = useState<"light" | "dark">("light");
-
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const localTheme = window.localStorage.getItem("theme");
-      setTheme(localTheme === "light" ? "light" : "dark");
-    }
-  }, [theme]);
-
-  useEffect(() => {
-    const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === "theme") {
-        setTheme(e.newValue === "light" ? "light" : "dark");
-      }
-    };
-
-    window.addEventListener("storage", handleStorageChange);
-
-    // 컴포넌트가 언마운트될 때 이벤트 리스너를 제거
-    return () => {
-      window.removeEventListener("storage", handleStorageChange);
-    };
-  }, []);
+  // const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [theme, setTheme] = useAtom<any>(themeAtom);
 
   const editor = useBlockNote({
     onEditorContentChange: (editor) => {
@@ -45,7 +27,6 @@ function TestEditor({ id }: Props) {
       editor: {
         class: styles.editor,
         "data-test": "editor",
-        theme: theme,
       },
     },
     uploadFile: uploadToTmpFilesDotOrg_DEV_ONLY,
