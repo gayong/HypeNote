@@ -2,6 +2,7 @@ package com.surf.auth.JWT.service;
 
 import com.surf.auth.JWT.provider.SignKeyProvider;
 import com.surf.auth.auth.dto.TokenDto;
+import com.surf.auth.auth.dto.UserDto;
 import com.surf.auth.auth.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -22,12 +23,12 @@ public class ReissueService {
     private final AccessTokenIssueService accessTokenIssueService;
     private final SignKeyProvider signKeyProvider;
 
-    public User parsingRefreshToken(String refreshToken) {
+    public UserDto parsingRefreshToken(String refreshToken) {
 
 
         SecretKey secretKey = signKeyProvider.getSignKey();
 
-        User userInfo = new User();
+        UserDto userInfo = new UserDto();
 
         Jws<Claims> userClaims = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(refreshToken);
 
@@ -57,7 +58,7 @@ public class ReissueService {
         return Objects.equals(refreshToken, storedRefreshToken);
     }
 
-    public TokenDto reissueAccessToken(User userInfo) {
+    public TokenDto reissueAccessToken(UserDto userInfo) {
 
         TokenDto tokenIssueResult = new TokenDto();
 

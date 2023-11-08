@@ -1,5 +1,6 @@
 package com.surf.auth.JWT.service;
 
+import com.surf.auth.auth.dto.UserDto;
 import com.surf.auth.auth.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -12,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 public class RedisRefreshTokenSaveService {
     private final StringRedisTemplate redisTemplate;
 
-    public void saveRefreshToken(long EXPIRATION_TIME, String refreshToken, User userInfo) {
+    public void saveRefreshToken(long EXPIRATION_TIME, String refreshToken, UserDto userInfo) {
 
         int refreshTokenKey = userInfo.getUserPk();
 

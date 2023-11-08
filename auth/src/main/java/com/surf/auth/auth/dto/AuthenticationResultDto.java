@@ -13,5 +13,5 @@ import lombok.Setter;
 public class AuthenticationResultDto {
 
     private boolean result = false;
-    private User userInfo;
+    private UserDto userInfo;
 }

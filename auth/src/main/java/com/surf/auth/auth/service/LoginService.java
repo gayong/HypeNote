@@ -6,6 +6,7 @@ import com.surf.auth.JWT.service.RefreshTokenIssueService;
 import com.surf.auth.auth.dto.AuthenticationResultDto;
 import com.surf.auth.auth.dto.LogInDto;
 import com.surf.auth.auth.dto.TokenDto;
+import com.surf.auth.auth.dto.UserDto;
 import com.surf.auth.auth.entity.User;
 import com.surf.auth.auth.repository.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;
@@ -33,9 +34,15 @@ public class LoginService {
 
             User user = userOptional.get();
 
+            UserDto userInfo = new UserDto();
+            userInfo.setUserPk(user.getUserPk());
+            userInfo.setEmail(user.getEmail());
+            userInfo.setNickName(user.getNickName());
+            userInfo.setProfileImage(user.getProfileImage());
+
             if (bCryptPasswordEncoder.matches(loginInfo.getPassword(), user.getPassword())) {
                 authenticationResultDto.setResult(true);
-                authenticationResultDto.setUserInfo(user);
+                authenticationResultDto.setUserInfo(userInfo);
                 return authenticationResultDto;
             }
             return authenticationResultDto;
@@ -43,7 +50,7 @@ public class LoginService {
         return authenticationResultDto;
     }
 
-    public TokenDto sendToken (User userInfo, HttpServletResponse response) {
+    public TokenDto sendToken (UserDto userInfo, HttpServletResponse response) {
         TokenDto tokenIssueResult = new TokenDto();
 
         tokenIssueResult.setAccessToken(accessTokenIssueService.accessTokenIssue(userInfo));

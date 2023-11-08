@@ -1,6 +1,7 @@
 package com.surf.auth.JWT.service;
 
 import com.surf.auth.JWT.provider.TokenProvider;
+import com.surf.auth.auth.dto.UserDto;
 import com.surf.auth.auth.entity.User;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
@@ -30,7 +31,7 @@ public class RefreshTokenIssueService {
     @Value("${jwt.refresh-token-cookie-max-age}")
     private int REFRESH_TOKEN_COOKIE_MAX_AGE;
 
-    public void refreshTokenIssue(User userInfo, HttpServletResponse response) {
+    public void refreshTokenIssue(UserDto userInfo, HttpServletResponse response) {
         Map<String, Object> claims = new HashMap<>();
         String refreshToken = tokenProvider.createToken(claims, userInfo, EXPIRATION_TIME);
 
