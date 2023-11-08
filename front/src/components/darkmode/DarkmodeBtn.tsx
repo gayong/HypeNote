@@ -4,11 +4,14 @@ import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 import { BiSolidSun } from "react-icons/bi";
 import { BsFillMoonFill, BsThreeDots } from "react-icons/bs";
+import { useAtom } from "jotai";
+import { themeAtom } from "../../store/theme";
 
 export default function DarkModeBtn() {
   const [mounted, setMounted] = useState(false);
   const [currentTheme, setCurrentTheme] = useState<"light" | "dark" | null>(null);
   const { setTheme } = useTheme();
+  const [editorTheme, setEditorTheme] = useAtom(themeAtom);
 
   useEffect(() => {
     setMounted(true);
@@ -30,6 +33,7 @@ export default function DarkModeBtn() {
 
   const changeTheme = () => {
     setCurrentTheme((current) => (current === "dark" ? "light" : "dark"));
+    setEditorTheme((editorTheme) => (editorTheme === "dark" ? "light" : "dark"));
   };
 
   // 클라이언트 측에서만 버튼을 렌더링
