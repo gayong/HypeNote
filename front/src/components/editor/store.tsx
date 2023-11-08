@@ -68,15 +68,18 @@ stompClient.connect({}, (frame: Frame) => {
 // Function to send Yjs updates to other clients
 function sendYjsUpdate(update: update) {
   // Publish the update to a SockJS topic
-  stompClient.send("/pub/note/1", {}, JSON.stringify(update));
+  console.log(JSON.stringify(update));
+  stompClient.send("/pub/note/2", {}, JSON.stringify(update));
 }
 
 // Define Yjs updates handler
 yDoc.on("update", (update) => {
-  const encodeValue = Y.encodeStateAsUpdate(yDoc);
+  const encodeValue = Y.encodeStateVector(yDoc);
+  console.log(encodeValue);
   updateValue = Array.from(encodeValue);
+  console.log(JSON.stringify({ content: yDoc }));
   // Handle Yjs updates and send them to other clients
-  const payload = { content: Array.from(encodeValue), type: "" };
+  const payload = { content: updateValue, type: "" };
   sendYjsUpdate(payload);
 });
 

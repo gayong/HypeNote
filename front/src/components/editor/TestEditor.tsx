@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { BlockNoteView, useBlockNote } from "@blocknote/react";
 import "@blocknote/core/style.css";
 import styles from "./Editor.module.css";
@@ -12,6 +13,30 @@ type Props = {
 };
 
 function TestEditor({ id }: Props) {
+  const [theme, setTheme] = useState<"light" | "dark">("light");
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const localTheme = window.localStorage.getItem("theme");
+      setTheme(localTheme === "light" ? "light" : "dark");
+    }
+  }, [theme]);
+
+  useEffect(() => {
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === "theme") {
+        setTheme(e.newValue === "light" ? "light" : "dark");
+      }
+    };
+
+    window.addEventListener("storage", handleStorageChange);
+
+    // 컴포넌트가 언마운트될 때 이벤트 리스너를 제거
+    return () => {
+      window.removeEventListener("storage", handleStorageChange);
+    };
+  }, []);
+
   const editor = useBlockNote({
     onEditorContentChange: (editor) => {
       console.log(editor.topLevelBlocks);
@@ -20,6 +45,7 @@ function TestEditor({ id }: Props) {
       editor: {
         class: styles.editor,
         "data-test": "editor",
+        theme: theme,
       },
     },
     uploadFile: uploadToTmpFilesDotOrg_DEV_ONLY,
@@ -47,7 +73,7 @@ function TestEditor({ id }: Props) {
   // Give tests a way to get prosemirror instance
   (window as WindowWithProseMirror).ProseMirror = editor?._tiptapEditor;
 
-  return <BlockNoteView editor={editor} />;
+  return <BlockNoteView editor={editor} theme={theme} />;
 }
 
 export default TestEditor;
