@@ -44,6 +44,9 @@ dependencies {
 
 	//open feign
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
+	//redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 }
 
 // For MSA -인식문의
