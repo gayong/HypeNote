@@ -17,8 +17,6 @@ export default function QuizList() {
   useEffect(() => {
     if (stompClient) {
       const roomListSubscription = stompClient.subscribe(`/sub/quizroom/roomList/${user.userPk}`, (roomList) => {
-        // console.log(roomList);
-        console.log("방리스트 구독한거 나온대");
         setQuizRooms(JSON.parse(roomList.body));
       });
       stompClient.send(`/pub/quizroom/roomList/${user.userPk}`, {});

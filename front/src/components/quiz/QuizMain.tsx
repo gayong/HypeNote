@@ -32,7 +32,7 @@ export default function QuizMain() {
               className="mr-[-10rem] group bg-font_primary hover:bg-font_primary bg-cover bg-[url('/assets/alone.gif')] rounded-3xl flex text-center justify-center align-center items-center h-[25rem] w-[20rem] shadow-lg dark:shadow-font_secondary
         hover:-translate-y-1 hover:scale-105 duration-300 cursor-pointer">
               <div
-                className="transition-all invisible flex group-hover:visible hover:text-[20px] hover:text-primary hover:font-['preBd']
+                className="transition-all invisible flex group-hover:visible hover:text-[20px] hover:text-primary hover:font-preBd
              w-full h-full hover:border-4 hover:border-primary hover:bg-font_primary hover:bg-opacity-70 rounded-3xl items-center justify-center">
                 혼자 풀기
               </div>
@@ -46,7 +46,7 @@ export default function QuizMain() {
               className="group bg-font_primary hover:bg-font_primary bg-cover bg-[url('/assets/toge.gif')] rounded-3xl flex text-center justify-center align-center items-center h-[25rem] w-[20rem] shadow-lg dark:shadow-font_secondary
         hover:-translate-y-1 hover:scale-105 duration-300 cursor-pointer">
               <div
-                className="transition-all invisible flex group-hover:visible hover:text-[20px] hover:text-primary hover:font-['preBd'] w-full h-full 
+                className="transition-all invisible flex group-hover:visible hover:text-[20px] hover:text-primary hover:font-preBd w-full h-full 
             hover:border-4 hover:border-primary hover:bg-font_primary hover:bg-opacity-70 rounded-3xl items-center justify-center">
                 같이 풀기
               </div>

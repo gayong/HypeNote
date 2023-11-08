@@ -6,7 +6,9 @@ import { Stomp, CompatClient } from "@stomp/stompjs";
 import React, { ReactNode } from "react";
 import { useWebSocket } from "./SocketProvider";
 import { QuizRoomInfo, QuizInfo, QuizResultInfo, chatUser } from "@/types/quiz";
-
+import { useAtom } from "jotai";
+import { userAtom } from "@/store/authAtom";
+import { message } from "antd";
 interface Props {
   roomId: number;
   children: ReactNode;
@@ -37,17 +39,16 @@ export default function SubscribeProvider({ roomId, children }: { roomId: number
   const [quizResults, setQuizResults] = useState<Array<QuizResultInfo>>([]);
   const [quizRanking, setQuizRanking] = useState<Array<number>>([]);
   const [chatMessages, setChatMessages] = useState<Array<chatUser>>([]);
+  const [user] = useAtom(userAtom);
 
   useEffect(() => {
-    console.log(stompClient?.connected);
+    console.log("나 돌아가");
     if (stompClient) {
-      console.log(roomId);
-
+      console.log("구독할거야.");
       // 방 구독
-      // const roomSubscription =
       stompClient.subscribe(`/sub/quiz/${roomId}`, (response) => {
-        console.log("방구독");
         const responseBody = JSON.parse(response.body);
+        console.log("나와다!!!!");
         console.log(responseBody);
         // 방 정보
         if (responseBody.type === "detail") {
@@ -55,6 +56,7 @@ export default function SubscribeProvider({ roomId, children }: { roomId: number
         }
         // 퀴즈
         else if (responseBody.type == "quiz") {
+          message.warning(`퀴즈가 시작됩니다! ${responseBody.result.question.length * 30}초 이내에 푸십시오`);
           console.log("퀴즈", responseBody.result.question);
           setQuizs(responseBody.result.question);
         }
@@ -67,7 +69,6 @@ export default function SubscribeProvider({ roomId, children }: { roomId: number
 
       // 채팅방 구독
       stompClient.subscribe(`/sub/chat/${roomId}`, (mes) => {
-        console.log("채팅", mes.body);
         const message = JSON.parse(mes.body);
         setChatMessages((prevChatMessages) => [...prevChatMessages, message]);
       });
@@ -76,7 +77,7 @@ export default function SubscribeProvider({ roomId, children }: { roomId: number
     return () => {
       // 방나가기
       const data = {
-        userPk: "2",
+        userPk: user.userPk,
       };
       if (stompClient) {
         stompClient.send(`/pub/quizroom/out/${roomId}`, {}, JSON.stringify(data));
