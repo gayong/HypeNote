@@ -7,18 +7,16 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import DarkModeBtn from "./darkmode/DarkmodeBtn";
 import Category from "./category/Category";
+import { useAtom } from "jotai";
+import { userAtom } from "@/store/authAtom";
 
 export default function Navbar() {
-  const [mode, setMode] = useState(false);
+  const [user] = useAtom(userAtom);
   const pathname = usePathname();
 
   if (pathname === "/signin" || pathname == "/signup" || pathname == "/intro") {
     return null;
   }
-
-  const changeMode = () => {
-    setMode(!mode);
-  };
 
   return (
     <>
@@ -31,7 +29,7 @@ export default function Navbar() {
             </Link>
             <DarkModeBtn />
           </div>
-          <h1 className="text-start text-font_primary text-[15px] ml-3">가영님, 안녕하세요</h1>
+          <h1 className="text-start text-font_primary text-[15px] ml-3">{`${user.nickName}님, 안녕하세요`}</h1>
           {/* <div className="my-2 bg-gray-600 h-[1px]"></div> */}
           <br />
         </div>

@@ -4,8 +4,11 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { MyChat, YourChat } from "../ui/chat";
 import { Button, Input } from "antd";
 import { SocketContext } from "@/context/SubscribeProvider";
-import { chatUser } from "@/types/quiz";
+// import { chatUser } from "@/types/quiz";
 import { useWebSocket } from "@/context/SocketProvider";
+
+import { useAtom } from "jotai";
+import { userAtom } from "@/store/authAtom";
 
 interface QuizRoomProps {
   roomId: number;
@@ -17,6 +20,8 @@ export default function ChatRoom(props: QuizRoomProps) {
   const chatEndRef = useRef<null | HTMLDivElement>(null);
   const stompClient = useWebSocket();
 
+  const [user] = useAtom(userAtom);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
   };
@@ -25,8 +30,8 @@ export default function ChatRoom(props: QuizRoomProps) {
     console.log(message, "를 보냈다.");
 
     const messageInput = {
-      userPk: "2",
-      userName: "자롱이",
+      userPk: user.userPk,
+      userName: user.nickName,
       content: message,
       chatTime: new Date().toLocaleString(),
     };
@@ -49,7 +54,7 @@ export default function ChatRoom(props: QuizRoomProps) {
       <div className="outline outline-offset-2 outline-2 outline-line_primary flex flex-col h-[60vh] flex-grow w-full rounded-lg overflow-hidden">
         <div className="flex flex-col flex-grow h-0 p-4 overflow-auto min-h-min">
           {chatMessages.map((chat, idx) =>
-            chat.userPk === 2 ? <MyChat key={idx} {...chat} /> : <YourChat key={idx} {...chat} />
+            chat.userPk === user.userPk ? <MyChat key={idx} {...chat} /> : <YourChat key={idx} {...chat} />
           )}
           <div ref={chatEndRef} />
         </div>
