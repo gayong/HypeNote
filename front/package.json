@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@blocknote/react": "^0.9.6",
@@ -31,6 +32,7 @@
     "next": "13.5.6",
     "next-themes": "^0.2.1",
     "novel": "^0.1.22",
+    "patch-package": "^8.0.0",
     "react": "^18",
     "react-dom": "^18",
     "react-icons": "^4.11.0",
