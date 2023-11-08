@@ -1,5 +1,6 @@
 package com.surf.auth.auth.dto;
 
+import com.surf.auth.auth.entity.User;
 import lombok.*;
 
 @Builder
@@ -11,5 +12,5 @@ public class TokenDto {
 
     private String message;
     private String accessToken = null;
-    private String refreshToken = null;
+    private User userInfo;
 }
