@@ -1,9 +1,12 @@
 import { chatUser } from "@/types/quiz";
+import Image from "next/image";
 
 export function YourChat(props: chatUser) {
   return (
     <div className="flex w-full mt-2 space-x-3 max-w-xs">
-      <div className="flex-shrink-0 h-10 w-10 rounded-full">{props.userName}얼굴</div>
+      <div className="flex-shrink-0 h-10 w-10 rounded-full">
+        <Image src={props.userImg} alt="이미지" width={30} height={30}></Image>
+      </div>
       <div>
         <div className="bg-primary text-font_primary p-3 rounded-r-lg rounded-bl-lg">
           <p className="text-sm">{props.content}</p>
@@ -15,6 +18,7 @@ export function YourChat(props: chatUser) {
 }
 
 export function MyChat(props: chatUser) {
+  console.log(props);
   return (
     <div className="flex w-full mt-2 space-x-3 max-w-xs ml-auto justify-end">
       <div>
@@ -23,7 +27,9 @@ export function MyChat(props: chatUser) {
         </div>
         <span className="text-xs text-gray-500 leading-none">{props.chatTime}</span>
       </div>
-      <div className="flex-shrink-0 h-10 w-10 rounded-full">{props.userName}얼굴</div>
+      <div className="flex-shrink-0 h-10 w-10 rounded-full">
+        <Image src={props.userImg} alt="이미지" width={30} height={30}></Image>
+      </div>
     </div>
   );
 }

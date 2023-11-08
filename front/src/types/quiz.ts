@@ -32,6 +32,7 @@ export interface QuizRoomInfo {
   sharePages: Array<number>;
   single: boolean;
   inviteUsers: Array<QuizUser>;
+  host?: number;
 }
 
 // export interface Chat {
@@ -45,7 +46,7 @@ export interface QuizUser {
   ready?: boolean;
   userName: string;
   userPk: number;
-  profileImg?: string;
+  userImg: string;
 }
 
 export interface chatUser {
@@ -53,7 +54,7 @@ export interface chatUser {
   content: string;
   chatTime: string;
   userName: string;
-  profileImg?: string;
+  userImg: string;
 }
 
 export interface QuizInfo {

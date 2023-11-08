@@ -11,11 +11,11 @@ export default function Card2({ user }: Card2Props) {
     <div className="h-64 w-40 flex bg-font_primary bg-opacity-50 shadow-lg items-center rounded-lg sm:flex-col">
       {user ? (
         <>
-          {user.profileImg ? (
+          {user.userImg ? (
             <>
               <Image
                 className="w-28 sm:rounded-none sm:rounded-l-lg py-6"
-                src="/assets/유령.png"
+                src={user.userImg}
                 alt="인물사진"
                 width={200}
                 height={200}
@@ -25,7 +25,7 @@ export default function Card2({ user }: Card2Props) {
             <>
               <Image
                 className="w-28 sm:rounded-none sm:rounded-l-lg py-6"
-                src="/assets/유령2.png"
+                src="/assets/유령3.png"
                 alt="인물사진"
                 width={200}
                 height={200}

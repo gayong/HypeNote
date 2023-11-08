@@ -4,12 +4,13 @@ import { useWebSocket } from "@/context/SocketProvider";
 import { SocketContext } from "@/context/SubscribeProvider";
 import { useContext, useEffect, useState } from "react";
 import { QuizRoomInfo } from "@/types/quiz";
-import { Button } from "antd";
+import { Button, message } from "antd";
 import { useRouter } from "next/navigation";
 import ChatRoom from "./ChatRoom";
 import QuizStart from "./QuizStart";
-import QuizResult from "./QuizResult";
 import Card2 from "../ui/Card2";
+import { useAtom } from "jotai";
+import { userAtom } from "@/store/authAtom";
 
 interface QuizRoomProps {
   roomId: number;
@@ -18,13 +19,17 @@ interface QuizRoomProps {
 const notYet = {
   userName: "기다리는 중",
   userPk: 0,
+  userImg: "/assets/유령5.png",
 };
 
 export default function QuizRoom(props: QuizRoomProps) {
   const { room, quizs } = useContext(SocketContext);
   const [quizRoom, setQuizRoom] = useState<QuizRoomInfo | null>(null);
   const [ready, setReady] = useState<"unready" | "ready">("unready");
+  const [start, setStart] = useState<boolean>(false);
+
   const stompClient = useWebSocket();
+  const [user] = useAtom(userAtom);
 
   const router = useRouter();
 
@@ -37,9 +42,10 @@ export default function QuizRoom(props: QuizRoomProps) {
       stompClient.send(`/pub/quizroom/in/${props.roomId}`, {}, JSON.stringify(data));
     }
   }, [stompClient]);
+
   useEffect(() => {
     const data = {
-      userPk: 2,
+      userPk: user.userPk,
       action: ready === "ready" ? "ready" : "unready",
     };
     if (stompClient) {
@@ -47,6 +53,14 @@ export default function QuizRoom(props: QuizRoomProps) {
       stompClient.send(`/pub/quizroom/ready/${props.roomId}`, {}, JSON.stringify(data));
     }
   }, [ready]);
+
+  // 퀴즈 시작
+  useEffect(() => {
+    if (stompClient && start) {
+      console.log("퀴즈시작");
+      stompClient.send(`/pub/quiz/${props.roomId}`, {});
+    }
+  }, [start]);
 
   useEffect(() => {
     setQuizRoom(room);
@@ -110,12 +124,43 @@ export default function QuizRoom(props: QuizRoomProps) {
               <div className="flex-col justify-between">
                 <ChatRoom roomId={props.roomId} height={60} />
                 <br />
-                <Button
-                  className="dark:border-none dark:border-font_primary font-preRg bg-primary w-full h-16 text-3xl tracking-widest font-bold"
-                  type="primary"
-                  onClick={() => setReady(ready === "ready" ? "unready" : "ready")}>
-                  {ready === "ready" ? "UNREADY" : "READY"}
-                </Button>
+                {quizRoom?.host === user.userPk ? (
+                  // 방장일 경우
+                  // 시작 가능
+                  quizRoom.roomCnt === quizRoom.readyCnt ? (
+                    <Button
+                      className="dark:border-none dark:border-font_primary font-preRg bg-primary w-full h-16 text-3xl tracking-widest font-bold"
+                      type="primary"
+                      onClick={() => setStart(!start)}>
+                      START
+                    </Button>
+                  ) : (
+                    // 시작 불가능
+                    <Button
+                      className="dark:border-none dark:border-font_primary font-preRg bg-[#4096ff] w-full h-16 text-3xl tracking-widest font-bold hover:bg-primary hover:text-font_primary"
+                      type="primary"
+                      onClick={() => message.warning("모두가 READY할 때까지 기다려주세요.")}>
+                      WAIT
+                    </Button>
+                  )
+                ) : // 방장이 아닐 경우
+                // 레디한경우
+                ready === "ready" ? (
+                  <Button
+                    className="dark:border-none dark:border-font_primary font-preRg bg-primary w-full h-16 text-3xl tracking-widest font-bold"
+                    type="primary"
+                    onClick={() => setReady("unready")}>
+                    UNREADY
+                  </Button>
+                ) : (
+                  // 레디안한경우
+                  <Button
+                    className="dark:border-none dark:border-font_primary font-preRg bg-[#4096ff] text-font_primary w-full h-16 text-3xl tracking-widest font-bold hover:bg-primary hover:text-font_primary"
+                    // type="primary"
+                    onClick={() => setReady("ready")}>
+                    READY
+                  </Button>
+                )}
               </div>
             </div>
           </section>

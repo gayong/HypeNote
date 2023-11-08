@@ -35,6 +35,7 @@ export default function ChatRoom(props: QuizRoomProps) {
       userName: user.nickName,
       content: message,
       chatTime: new Date().toLocaleString(),
+      userImg: user.profileImage,
     };
     if (stompClient) {
       stompClient.send(`/pub/chat/${props.roomId}`, {}, JSON.stringify(messageInput));
