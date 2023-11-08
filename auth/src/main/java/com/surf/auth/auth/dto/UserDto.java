@@ -15,6 +15,6 @@ public class UserDto {
     private String email;
     private String nickName;
     private String profileImage;
-//    private List<String> documentsRoots;
+    private List<String> documentsRoots;
     private String role;
 }

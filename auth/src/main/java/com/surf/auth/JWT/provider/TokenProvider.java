@@ -29,14 +29,14 @@ public class TokenProvider {
         String email = userInfo.getEmail();
         String nickName = userInfo.getNickName();
         String profileImage = userInfo.getProfileImage();
-//        List<String> documentsRoots = userInfo.getDocumentsRoots();
+        List<String> documentsRoots = userInfo.getDocumentsRoots();
         String role = userInfo.getRole();
 
         claims.put("userPk", userPk);
         claims.put("email", email);
         claims.put("nickName", nickName);
         claims.put("profileImage", profileImage);
-//        claims.put("documentsRoots", documentsRoots);
+        claims.put("documentsRoots", documentsRoots);
         claims.put("role", role);
 
         return Jwts.builder()
