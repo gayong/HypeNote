@@ -9,50 +9,46 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAllDiagram } from "@/hooks/useAllDiagram";
 
+import SelectShare from "./SelectShare";
+
 const ThreeScene = () => {
   const router = useRouter();
   const ref = useRef();
   const { data: response, isLoading, error } = useAllDiagram();
   const [nodes, setNodes] = useState([]);
   const [links, setLinks] = useState([]);
+  const [myNodes, setMyNodes] = useState([]);
+  const [myLinks, setMyLinks] = useState([]);
+  const [shareNodes, setShareNodes] = useState([]);
+  const [shareLinks, setShareLinks] = useState([]);
 
   useEffect(() => {
     if (response) {
       console.log("날 뇌에 담아줘!", response.data.result);
       console.log("노드", response.data.result.nodes);
       setNodes(response.data.result.nodes);
+      setMyNodes(response.data.result.nodes);
       console.log("링크", response.data.result.links);
+      setMyLinks(response.data.result.links);
       setLinks(response.data.result.links);
     }
   }, [response]);
 
-  // const nodes = [
-  //   { id: "네트워크", group: 1 },
-  //   { id: "운영체제", group: 1 },
-  //   { id: "프레임워크", group: 2 },
-  //   { id: "자료구조", group: 2 },
-  //   { id: "node5", group: 2 },
-  //   { id: "node6", group: 3 },
-  //   { id: "node7", group: 3 },
-  //   { id: "node8", group: 4 },
-  //   { id: "node9", group: 4 },
-  //   { id: "node10", group: 4 },
-  // ];
-
-  // const links = [
-  //   { source: "네트워크", target: "운영체제" },
-  //   { source: "운영체제", target: "프레임워크" },
-  //   { source: "네트워크", target: "자료구조" },
-  //   { source: "네트워크", target: "node7" },
-  //   { source: "자료구조", target: "node5" },
-  //   { source: "node5", target: "node6" },
-  //   { source: "자료구조", target: "node6" },
-  //   { source: "node8", target: "node9" },
-  //   { source: "node8", target: "node10" },
-  // ];
+  const handleReceive = (sharedData) => {
+    if (!sharedData) {
+      setShareNodes([...myNodes]);
+      setShareLinks([...myLinks]);
+    } else {
+      setShareNodes([...sharedData.nodes]);
+      setShareLinks([...sharedData.links]);
+      setNodes([...sharedData.nodes]);
+      setLinks([...sharedData.links]);
+    }
+  };
 
   useEffect(() => {
     console.log("zz", nodes, links);
+
     function ForceGraph(
       { nodes, links },
       {
@@ -65,7 +61,7 @@ const ThreeScene = () => {
         nodeStrokeWidth = 2.5, // 노드 테두리 굵기
         nodeStrokeOpacity = 1, // node stroke opacity
         nodeRadius = 10, // node radius, in pixels
-        nodeStrength = -100, // 노드끼리 밀어내는 힘, 절댓값 클수록 많이 밀어냄
+        nodeStrength = -50, // 노드끼리 밀어내는 힘, 절댓값 클수록 많이 밀어냄
         linkSource = ({ source }) => source, // given d in links, returns a node identifier string
         linkTarget = ({ target }) => target, // given d in links, returns a node identifier string
         linkStroke = "#999", // link stroke color
@@ -148,7 +144,7 @@ const ThreeScene = () => {
       node
         .append("circle")
         .attr("r", nodeRadius)
-        .attr("fill", (d) => color(d.userId))
+        .attr("fill", (d) => color(d.group))
         .attr("stroke-width", nodeStrokeWidth)
         .on("click", function (d) {
           router.push(`/editor/${d.editorId}`);
@@ -232,13 +228,22 @@ const ThreeScene = () => {
       }
     }
 
-    if (nodes.length > 0 && links.length > 0) {
-      ForceGraph({ nodes, links });
-    }
-  }, [nodes, links]);
+    // 기존 그래프 삭제
+    d3.select(ref.current).selectAll("svg").remove();
 
-  // return <div ref={ref} />;
-  return <div ref={ref} style={{ width: "100%", height: "100%" }} />;
+    // 그래프 그리기
+    if (shareNodes.length > 0) {
+      ForceGraph({ nodes: [...shareNodes], links: [...shareLinks] });
+    } else if (nodes.length > 0) {
+      ForceGraph({ nodes: [...nodes], links: [...links] });
+    }
+  }, [shareNodes, shareLinks, nodes, links]);
+
+  return (
+    <div ref={ref} style={{ width: "100%", height: "100%" }}>
+      <SelectShare onReceive={handleReceive} />
+    </div>
+  );
 };
 
 export default ThreeScene;
