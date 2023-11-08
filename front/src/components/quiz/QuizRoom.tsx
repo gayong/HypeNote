@@ -24,7 +24,7 @@ const notYet = {
 
 export default function QuizRoom(props: QuizRoomProps) {
   const { room, quizs } = useContext(SocketContext);
-  const [quizRoom, setQuizRoom] = useState<QuizRoomInfo | null>(null);
+  // const [quizRoom, setQuizRoom] = useState<QuizRoomInfo | null>(null);
   const [ready, setReady] = useState<"unready" | "ready">("unready");
   const [start, setStart] = useState<boolean>(false);
 
@@ -35,8 +35,9 @@ export default function QuizRoom(props: QuizRoomProps) {
 
   useEffect(() => {
     const data = {
-      userPk: "2",
-      userName: "isc",
+      userPk: user.userPk,
+      userName: user.nickName,
+      userImg: user.profileImage,
     };
     if (stompClient) {
       stompClient.send(`/pub/quizroom/in/${props.roomId}`, {}, JSON.stringify(data));
@@ -44,12 +45,15 @@ export default function QuizRoom(props: QuizRoomProps) {
   }, [stompClient]);
 
   useEffect(() => {
+    // setQuizRoom(room);
+  }, [room]);
+
+  useEffect(() => {
     const data = {
       userPk: user.userPk,
       action: ready === "ready" ? "ready" : "unready",
     };
     if (stompClient) {
-      console.log("보냄");
       stompClient.send(`/pub/quizroom/ready/${props.roomId}`, {}, JSON.stringify(data));
     }
   }, [ready]);
@@ -57,14 +61,15 @@ export default function QuizRoom(props: QuizRoomProps) {
   // 퀴즈 시작
   useEffect(() => {
     if (stompClient && start) {
+      const data = {
+        userPk: user.userPk,
+        action: "ready",
+      };
       console.log("퀴즈시작");
+      stompClient.send(`/pub/quizroom/ready/${props.roomId}`, {}, JSON.stringify(data));
       stompClient.send(`/pub/quiz/${props.roomId}`, {});
     }
   }, [start]);
-
-  useEffect(() => {
-    setQuizRoom(room);
-  }, [room]);
 
   const outRoom = () => {
     router.push("/quiz/room");
@@ -83,9 +88,9 @@ export default function QuizRoom(props: QuizRoomProps) {
             <div className="col-span-7 flex flex-col">
               <div className="flex justify-center items-center relative">
                 <span
-                  className="text-xl font-PreBd font-normal text-dark_background dark:text-font_primary absolute left-0"
+                  className="hover:text-hover_primary text-lg font-PreBd font-normal text-dark_background dark:text-font_primary absolute left-0 p-1 rounded-md outline outline-2 outline-font_primary"
                   onClick={() => outRoom()}>
-                  {"<< 나가기  "}
+                  {"<< 나가기"}
                 </span>
                 <div className="text-center">
                   <h1 className="text-5xl my-4 font-bold dark:text-dark_font text-primary">
@@ -124,14 +129,14 @@ export default function QuizRoom(props: QuizRoomProps) {
               <div className="flex-col justify-between">
                 <ChatRoom roomId={props.roomId} height={60} />
                 <br />
-                {quizRoom?.host === user.userPk ? (
+                {room?.host === user.userPk ? (
                   // 방장일 경우
                   // 시작 가능
-                  quizRoom.roomCnt === quizRoom.readyCnt ? (
+                  room.roomCnt === room.readyCnt + 1 ? (
                     <Button
                       className="dark:border-none dark:border-font_primary font-preRg bg-primary w-full h-16 text-3xl tracking-widest font-bold"
                       type="primary"
-                      onClick={() => setStart(!start)}>
+                      onClick={() => setStart(true)}>
                       START
                     </Button>
                   ) : (

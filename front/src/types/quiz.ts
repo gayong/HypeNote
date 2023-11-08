@@ -5,7 +5,7 @@ export interface QuizRoom {
   quizCnt: number;
   single: boolean;
   content: string;
-  users?: Array<object>;
+  users: Array<object>;
 }
 export interface QuizRoomGroup extends QuizRoom {
   inviteUsers: Array<QuizUser>;
@@ -32,7 +32,7 @@ export interface QuizRoomInfo {
   sharePages: Array<number>;
   single: boolean;
   inviteUsers: Array<QuizUser>;
-  host?: number;
+  host: number;
 }
 
 // export interface Chat {

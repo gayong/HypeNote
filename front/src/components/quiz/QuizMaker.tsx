@@ -10,6 +10,8 @@ import { useCreateRoom } from "@/hooks/useCreateRoom";
 // import { useMutation } from "react-query";
 import Loading from "@/app/loading";
 import { useRouter } from "next/navigation";
+import { userAtom } from "@/store/authAtom";
+import { stompClient } from "../editor/store";
 
 const handleChange = (value: string | string[]) => {
   console.log(`Selected: ${value}`);
@@ -28,6 +30,8 @@ export default function QuizMaker() {
 
   const handleTitleChange = (e: any) => setTitle(e.target.value);
   const handleContentChange = (e: any) => setContent(e.target.value);
+  const [user] = useAtom(userAtom);
+
   const router = useRouter();
 
   useEffect(() => {}, [isSolo]);
@@ -54,8 +58,9 @@ export default function QuizMaker() {
 
   // 퀴즈 방 만들기 STEP 2
   const users = [
+    { userPk: user.userPk, userName: user.nickName, userImg: user.profileImage },
     { userPk: 1, userName: "csi", userImg: "성공" },
-    { userPk: 2, userName: "isc", userImg: "성공" },
+    { userPk: 5, userName: "isc", userImg: "성공" },
   ];
 
   const handleSumbitCreateRoom = () => {
@@ -64,10 +69,12 @@ export default function QuizMaker() {
       inviteUserMutation.mutate({ ...roomInfo, users: users });
     }
   };
+
   useEffect(() => {
     if (inviteUserMutation.isSuccess) {
       message.success("방을 만들었어요! 잠시 후 이동합니다.");
-      setTimeout(() => router.push(`/quiz/room/${roomId}`), 3000);
+      // router.push(`/quiz/room/${roomId}`);
+      setTimeout(() => router.push(`/quiz/room/${roomId}`), 1000);
     } else if (inviteUserMutation.isError) {
       message.error("에러가 발생했어요. 잠시 후 다시 만들어주세요.");
     }
@@ -128,8 +135,8 @@ export default function QuizMaker() {
         content: (
           <div>
             <h1
-              className="dark:text-font_primary text-dark_primary text-2xl"
-              style={{ fontFamily: "preBd", marginTop: "30px", marginBottom: "10px", padding: 0 }}>
+              className="dark:text-font_primary text-dark_primary text-2xl font-preBd"
+              style={{ marginTop: "30px", marginBottom: "10px", padding: 0 }}>
               퀴즈 범위
             </h1>
             <h1 className="dark:text-font_primary" style={{ marginBottom: "60px", padding: 0 }}>
@@ -144,8 +151,8 @@ export default function QuizMaker() {
         content: (
           <div>
             <h1
-              className="dark:text-font_primary text-dark_primary text-2xl"
-              style={{ fontFamily: "preBd", marginTop: "30px", marginBottom: "10px", padding: 0 }}>
+              className="dark:text-font_primary text-dark_primary text-2xl font-preBd"
+              style={{ marginTop: "30px", marginBottom: "10px", padding: 0 }}>
               문제 개수
             </h1>
             <h1 className="dark:text-font_primary" style={{ marginBottom: "60px", padding: 0 }}>
@@ -171,8 +178,8 @@ export default function QuizMaker() {
               content: (
                 <div>
                   <h1
-                    className="dark:text-font_primary text-dark_primary text-2xl"
-                    style={{ fontFamily: "preBd", marginTop: "30px", marginBottom: "10px", padding: 0 }}>
+                    className="dark:text-font_primary text-dark_primary text-2xl font-preBd"
+                    style={{ marginTop: "30px", marginBottom: "10px", padding: 0 }}>
                     방 정보
                   </h1>
                   <h1 className="dark:text-font_primary" style={{ marginBottom: "60px", padding: 0 }}>
@@ -194,8 +201,8 @@ export default function QuizMaker() {
               content: (
                 <div>
                   <h1
-                    className="dark:text-font_primary text-dark_primary text-2xl"
-                    style={{ fontFamily: "preBd", marginTop: "30px", marginBottom: "10px", padding: 0 }}>
+                    className="dark:text-font_primary text-dark_primary text-2xl font-preBd"
+                    style={{ marginTop: "30px", marginBottom: "10px", padding: 0 }}>
                     친구 초대
                   </h1>
                   <h1 className="dark:text-font_primary" style={{ marginBottom: "60px", padding: 0 }}>
@@ -285,8 +292,6 @@ export default function QuizMaker() {
           </div>
         )}
       </div>
-      {/* 퀴즈 친구들 받아오기 그리고 여기서 누구누구 선택하면 담기겠지? */}
-      {/* <div>{inviteUserInfo && inviteUserInfo.map((user) => <div key={user.userPk}>{user.userName}</div>)}</div> */}
     </div>
   );
 }
