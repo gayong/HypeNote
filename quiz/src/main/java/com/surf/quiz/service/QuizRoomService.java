@@ -358,7 +358,7 @@ public class QuizRoomService {
                 .build();
         payload.put("type", "detail");
         payload.put("result", response);
-        scheduler.schedule(() -> messageTemplate.convertAndSend("/sub/quiz/" + quizRoom.getId(), payload), 5, TimeUnit.SECONDS);
+        scheduler.schedule(() -> messageTemplate.convertAndSend("/sub/quiz/" + quizRoom.getId(), payload), 2, TimeUnit.SECONDS);
     }
 
 
