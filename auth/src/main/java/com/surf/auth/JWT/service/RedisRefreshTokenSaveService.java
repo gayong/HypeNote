@@ -14,7 +14,7 @@ public class RedisRefreshTokenSaveService {
 
     public void saveRefreshToken(long EXPIRATION_TIME, String refreshToken, User userInfo) {
 
-        int refreshTokenKey = userInfo.getUserId();
+        int refreshTokenKey = userInfo.getUserPk();
 
         redisTemplate.opsForValue().set(String.valueOf(refreshTokenKey), refreshToken, EXPIRATION_TIME, TimeUnit.MILLISECONDS);
     }

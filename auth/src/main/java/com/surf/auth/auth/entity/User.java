@@ -23,7 +23,7 @@ public class User implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int userId;
+    private int userPk;
 
     @Email(message = "올바른 이메일 주소를 입력해주세요.")
     @NotBlank(message = "이메일 주소를 입력해주세요.")
