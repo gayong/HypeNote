@@ -61,15 +61,23 @@ export default function QuizRoom(props: QuizRoomProps) {
   // 퀴즈 시작
   useEffect(() => {
     if (stompClient && start) {
-      const data = {
-        userPk: user.userPk,
-        action: "ready",
-      };
-      console.log("퀴즈시작");
-      stompClient.send(`/pub/quizroom/ready/${props.roomId}`, {}, JSON.stringify(data));
+      console.log("퀴즈시작 된다");
+      console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@22");
       stompClient.send(`/pub/quiz/${props.roomId}`, {});
     }
   }, [start]);
+
+  const startQuiz = () => {
+    const data = {
+      userPk: user.userPk,
+      action: "ready",
+    };
+    setStart(true);
+    if (stompClient) {
+      stompClient.send(`/pub/quizroom/ready/${props.roomId}`, {}, JSON.stringify(data));
+      // stompClient.send(`/pub/quiz/${props.roomId}`, {});
+    }
+  };
 
   const outRoom = () => {
     router.push("/quiz/room");
@@ -136,7 +144,7 @@ export default function QuizRoom(props: QuizRoomProps) {
                     <Button
                       className="dark:border-none dark:border-font_primary font-preRg bg-primary w-full h-16 text-3xl tracking-widest font-bold"
                       type="primary"
-                      onClick={() => setStart(true)}>
+                      onClick={() => startQuiz()}>
                       START
                     </Button>
                   ) : (

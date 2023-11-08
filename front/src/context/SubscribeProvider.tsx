@@ -42,11 +42,13 @@ export default function SubscribeProvider({ roomId, children }: { roomId: number
   const [user] = useAtom(userAtom);
 
   useEffect(() => {
+    console.log("나 돌아가");
     if (stompClient) {
       console.log("구독할거야.");
       // 방 구독
       stompClient.subscribe(`/sub/quiz/${roomId}`, (response) => {
         const responseBody = JSON.parse(response.body);
+        console.log("나와다!!!!");
         console.log(responseBody);
         // 방 정보
         if (responseBody.type === "detail") {
