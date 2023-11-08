@@ -11,6 +11,7 @@ import com.surf.diagram.diagram.repository.NodeRepository;
 import com.surf.diagram.diagram.service.DiagramService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -34,7 +35,8 @@ public class DiagramController {
 
     @GetMapping("/{userId}")
     @Operation(summary = "내 노드와 링크 조회")
-    public BaseResponse<DiagramResponseDto> getNodes(@PathVariable int userId) {
+    public BaseResponse<DiagramResponseDto> getNodes(@PathVariable int userId, HttpServletRequest request) {
+        String token = request.getHeader("Authorization");
         List<Node> nodes = nodeRepository.findByUserId(userId);
         List<Link> links = linkRepository.findByUserId(userId);
 
