@@ -2,12 +2,14 @@
 
 import React, { useMemo, useEffect, useState } from "react";
 import { TreeSelect, Select, Button, message, Steps, theme } from "antd";
+import Input from "../ui/Input";
 import type { SelectProps, RadioChangeEvent } from "antd";
 import { useAtom } from "jotai";
 import { isSoloAtom } from "../../store/isSolo";
 import { useCreateRoom } from "@/hooks/useCreateRoom";
 // import { useMutation } from "react-query";
 import Loading from "@/app/loading";
+import { useRouter } from "next/navigation";
 
 const handleChange = (value: string | string[]) => {
   console.log(`Selected: ${value}`);
@@ -19,18 +21,25 @@ export default function QuizMaker() {
   const [value, setValue] = useState(["0-0-0"]);
   const { SHOW_PARENT } = TreeSelect;
   const [isSolo] = useAtom(isSoloAtom);
-  const { createRoomMutation, inviteUserInfo, inviteUserMutation, roomInfo } = useCreateRoom();
+  const { createRoomMutation, inviteUserInfo, inviteUserMutation, roomInfo,roomId } = useCreateRoom();
+  
+  const [title, setTitle] = useState("")
+  const [content, setContent] = useState("")
+
+  const handleTitleChange = (e: any) => setTitle(e.target.value);
+  const handleContentChange = (e: any) => setContent(e.target.value);
+  const router = useRouter()
 
   useEffect(() => {}, [isSolo]);
 
   // 퀴즈 방 만들기 STEP 1
   const handleCreateRoom = () => {
     createRoomMutation.mutate({
-      roomName: "방방방방",
+      roomName: title,
       pages: [1, 2, 3],
       sharePages: [1, 2],
       quizCnt: 10,
-      content: "오늘 퀴즈는 완벽하게 다 맞춰야지!",
+      content: content,
       single: false,
     });
   };
@@ -54,13 +63,20 @@ export default function QuizMaker() {
       // const { inviteUsers, ...rest } = roomInfo;
       inviteUserMutation.mutate({ ...roomInfo, users: users });
     }
-    if (inviteUserMutation.isSuccess) {
-      message.success("생성 완료!");
-      // 방입장 시키던지..뭐 어케해야할듯..?
-    } else if (inviteUserMutation.isError) {
-      message.error("삐빕 에러에러");
-    }
+
   };
+  useEffect(() => {
+    if (inviteUserMutation.isSuccess) {
+      message.success("방을 만들었어요! 잠시 후 이동합니다.");
+      setTimeout(() => router.push(`/quiz/room/${roomId}`), 3000);
+
+    } else if (inviteUserMutation.isError) {
+      message.error("에러가 발생했어요. 잠시 후 다시 만들어주세요.");
+    }
+  }, [roomId])
+  
+
+
 
   const treeData = [
     {
@@ -113,7 +129,7 @@ export default function QuizMaker() {
   const steps = useMemo(
     () => [
       {
-        title: <h1 className="dark:text-font_primary">퀴즈 범위를 선택해주세요</h1>,
+        title: <h1 className="dark:text-font_primary">퀴즈 범위</h1>,
         content: (
           <div>
             <h1
@@ -129,7 +145,7 @@ export default function QuizMaker() {
         ),
       },
       {
-        title: <h1 className="dark:text-font_primary">문제 개수를 선택해주세요</h1>,
+        title: <h1 className="dark:text-font_primary">문제 개수</h1>,
         content: (
           <div>
             <h1
@@ -155,8 +171,35 @@ export default function QuizMaker() {
       ...(isSolo
         ? []
         : [
+          {
+            title: <h1 className="dark:text-font_primary">방 정보</h1>,
+            content: (
+              <div>
+                <h1
+                  className="dark:text-font_primary text-dark_primary text-2xl"
+                  style={{ fontFamily: "preBd", marginTop: "30px", marginBottom: "10px", padding: 0 }}>
+                  방 정보
+                </h1>
+                <h1 className="dark:text-font_primary" style={{ marginBottom: "60px", padding: 0 }}>
+                  방 제목과 방 내용을 작성해주세요.
+                </h1>
+                <Input type="text"
+                text="Title"
+                onChange={handleTitleChange}
+                placeholder="방 제목을 입력해주세요."
+                />
+                <br />
+                <Input type="text"
+                text="Title"
+                onChange={handleContentChange}
+                placeholder="방 내용을 입력해주세요."
+
+                />
+              </div>
+            ),
+          },
             {
-              title: <h1 className="dark:text-font_primary">같이 풀 친구를 초대하세요</h1>,
+              title: <h1 className="dark:text-font_primary">친구 초대</h1>,
               content: (
                 <div>
                   <h1
@@ -179,6 +222,7 @@ export default function QuizMaker() {
                 </div>
               ),
             },
+
           ]),
     ],
     [userOptions]
@@ -187,7 +231,7 @@ export default function QuizMaker() {
   const next = () => {
     setCurrent(current + 1);
 
-    if (current === 1) {
+    if (current === 2) {
       handleCreateRoom();
     }
   };
