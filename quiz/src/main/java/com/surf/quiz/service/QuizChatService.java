@@ -24,6 +24,9 @@ public class QuizChatService {
         chatDto.setUserPk(Integer.parseInt(body.getUserPk()));
         chatDto.setUserName(body.getUserName());
         chatDto.setUserImg(body.getUserImg());
+        if (body.getUserImg().equals("성공")) {
+            chatDto.setUserImg("/assets/유령.png");
+        }
         String formattedDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
         chatDto.setChatTime(formattedDateTime);
         return chatDto;
