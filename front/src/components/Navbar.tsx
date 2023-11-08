@@ -55,9 +55,7 @@ export default function Navbar() {
             <span className="text-[15px] ml-2 font-bold">퀴즈</span>
           </div>
         </Link>
-
         {/* <div className="my-4 bg-gray-500 h-[1px]"></div> */}
-
         <div className="inline-flex items-center justify-center w-full">
           <hr className="w-full h-px my-1 bg-line_primary border-0"></hr>
           <span className="text-[13px] absolute px-3 text-gray-300 -translate-x-1/2 bg-[#2946A2] left-1/2  dark:bg-dark_primary">
@@ -65,7 +63,16 @@ export default function Navbar() {
           </span>
         </div>
         {/* 제일큰 노트 map으로 호출 */}
-        <Category title="MY CS BOOK" key={1} />
+        <Category title="MY CS BOOK" value={1} key={1} />
+        <div
+          className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-hover_primary hover:bg-opacity-50 dark:hover:bg-line_primary dark:hover:bg-opacity-50"
+          // onclick="dropdown()"
+        >
+          <i className="bi bi-chat-left-text-fill"></i>
+          <div className="flex justify-between w-full items-center">
+            <span className="text-[15px] ml-2 text-white">+ 페이지 추가</span>
+          </div>
+        </div>
         <br />
         <div className="inline-flex items-center justify-center w-full">
           <hr className="w-full h-px my-1 bg-line_primary border-0"></hr>
@@ -74,8 +81,7 @@ export default function Navbar() {
           </span>
         </div>
         {/* 공유받은 페이지 map으로 호출 */}
-        <Category title="1주차 스터디" key={2} />
-
+        <Category title="1주차 스터디" value={2} key={2} />
         <Link href="/signin">
           <h1 className="inline underline text-font_primary">signIn / </h1>
         </Link>
