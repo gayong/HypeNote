@@ -39,6 +39,8 @@ public class LoginService {
             userInfo.setEmail(user.getEmail());
             userInfo.setNickName(user.getNickName());
             userInfo.setProfileImage(user.getProfileImage());
+            userInfo.setDocumentsRoots(user.getDocumentsRoots());
+            userInfo.setRole(user.getRole());
 
             if (bCryptPasswordEncoder.matches(loginInfo.getPassword(), user.getPassword())) {
                 authenticationResultDto.setResult(true);
