@@ -88,6 +88,12 @@ body {
   background: #faf5ef;
 }
 
+:where(.css-dev-only-do-not-override-2i2tap).ant-input-search
+  > .ant-input-group
+  > .ant-input-group-addon:last-child
+  .ant-input-search-button {
+  background-color: #2946a2;
+}
 /* :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
