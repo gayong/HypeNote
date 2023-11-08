@@ -430,7 +430,7 @@ public class DiagramServiceImpl implements DiagramService {
             }
 
             if (bestMatch != null) {
-                LinkResponseDto linkDto = new LinkResponseDto(node1.getId().intValue(), bestMatch.getId().intValue(), Math.exp(Double.parseDouble(df.format(maxSimilarity)))*1+1, userId);
+                LinkResponseDto linkDto = new LinkResponseDto(node1.getId().intValue(), bestMatch.getId().intValue(), Math.exp(Double.parseDouble(df.format(maxSimilarity)))*1, userId);
                 linkDtoList.add(linkDto);
             }
         }
@@ -443,7 +443,7 @@ public class DiagramServiceImpl implements DiagramService {
     }
 
     private LinkResponseDto convertLinkToDto(Link link) {
-        return new LinkResponseDto(link.getSource(), link.getTarget(), Math.exp(link.getSimilarity()) * 1 + 1, link.getUserId());
+        return new LinkResponseDto(link.getSource(), link.getTarget(), Math.exp(link.getSimilarity()) * 1, link.getUserId());
     }
 
 
