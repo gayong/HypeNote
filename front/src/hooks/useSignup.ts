@@ -5,7 +5,6 @@ const useSignup = () => {
     console.log("회원가입!!!!!!!!");
     try {
       const response = await createUser(email, password, nickName, profileImage);
-      console.log(response);
       return "success";
     } catch (error) {
       console.log(error);

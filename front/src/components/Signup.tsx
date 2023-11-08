@@ -11,6 +11,9 @@ import logoImg from "../../public/assets/logo_blue.png";
 import darkLogoImg from "../../public/assets/logo.png";
 import krLogoImg from "../../public/assets/krlogo_blue.png";
 import darkKrLogoImg from "../../public/assets/krlogo.png";
+
+import { useRouter } from "next/navigation";
+
 import { useRef, useState } from "react";
 import useSignup from "@/hooks/useSignup";
 
@@ -31,9 +34,11 @@ export default function Signup() {
 
   const { signup } = useSignup();
   const imgRef = useRef<HTMLInputElement>(null);
-  const handleSignup = async () => {
-    console.log("회원가입 실행");
-    // 비밀번호와 비밀번호 확인이 일치하는지 검사합니다.
+  const router = useRouter();
+
+  const handleSignup = async (event: any) => {
+    event.preventDefault();
+
     if (password !== password2) {
       message.error("비밀번호가 일치하지 않습니다.");
       return;
@@ -43,12 +48,12 @@ export default function Signup() {
 
     if (success === "success") {
       // 회원가입 성공 처리
-      console.log("회원가입 성공!");
+      message.success("회원가입에 성공했습니다. 로그인 후 사이트 이용해 주세요☺");
+      router.push("/signin");
     } else {
       // 회원가입 실패 처리
-      console.log("회원가입 실패..");
+      message.error("회원가입에 실패했습니다. 잠시 후 다시 시도해주세요.");
     }
-    alert("회원가입실행");
   };
   const handleImageChange = (e: any) => {
     setFile(e.target.files[0]);
@@ -91,7 +96,7 @@ export default function Signup() {
         </div>
 
         <div className="mt-4 sm:mx-auto sm:w-full sm:max-w-sm">
-          <div className="space-y-3">
+          <form className="space-y-3" onSubmit={handleSignup}>
             <div>
               <Label text="닉네임" />
               <div className="mt-2">
@@ -125,13 +130,18 @@ export default function Signup() {
 
             <div>
               <Label text="프로필 사진" />
-              <Image
-                src={profileImage ? profileImage : `/assets/유령.png`}
-                alt="프로필 이미지"
-                width={30}
-                height={30}
-                // className="rounded"
-              />
+              <div className="flex items-center">
+                <Image
+                  src={profileImage ? profileImage : `/assets/유령.png`}
+                  alt="프로필 이미지"
+                  width={70}
+                  height={70}
+                  className="rounded-full object-cover"
+                />
+
+                <span className="text-sm font-medium ml-3">미 입력시 해당 유령사진으로 대체됩니다.</span>
+              </div>
+
               <div className="mt-2">
                 <label className="block">
                   <input
@@ -152,9 +162,11 @@ export default function Signup() {
             </div>
 
             <div className="pt-5">
-              <Button text="회원가입" onClick={handleSignup} wFull={true}></Button>
+              <button className="w-full flex text-font_primary justify-center rounded-md bg-primary px-3 py-1.5 text-sm font-semibold leading-6 shadow-sm hover:bg-hover_primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                회원가입
+              </button>
             </div>
-          </div>
+          </form>
         </div>
       </div>
     </>

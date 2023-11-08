@@ -3,6 +3,7 @@ export interface User {
   userPk: number;
   nickName: string;
   email: string;
+  profileImage: string;
   documents: Array<any>;
 }
 

@@ -5,22 +5,25 @@ import { useContext, useEffect, useState } from "react";
 import { useWebSocket } from "@/context/SocketProvider";
 import { QuizRoomInfo } from "@/types/quiz";
 import Loading from "@/app/loading";
+import { useAtom } from "jotai";
+import { userAtom } from "@/store/authAtom";
 
 export default function QuizList() {
   // const { quizRooms } = useContext(SocketContext);
   const [quizRooms, setQuizRooms] = useState<Array<QuizRoomInfo>>([]);
   const stompClient = useWebSocket();
+  const [user] = useAtom(userAtom);
 
   useEffect(() => {
     if (stompClient) {
-      const roomListSubscription = stompClient.subscribe("/sub/quizroom/roomList", (roomList) => {
+      const roomListSubscription = stompClient.subscribe(`/sub/quizroom/roomList/${user.userPk}`, (roomList) => {
         // console.log(roomList);
         console.log("방리스트 구독한거 나온대");
         setQuizRooms(JSON.parse(roomList.body));
       });
-      stompClient.send("/pub/quizroom/roomList", {});
+      stompClient.send(`/pub/quizroom/roomList/${user.userPk}`, {});
     }
-    return stompClient?.unsubscribe("/sub/quizroom/roomList");
+    return stompClient?.unsubscribe(`/sub/quizroom/roomList/${user.userPk}`);
   }, [stompClient]);
 
   return (
