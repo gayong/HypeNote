@@ -1,10 +1,14 @@
 "use client";
 
+import { useAtom } from "jotai";
+import { themeAtom } from "../../store/theme";
+import { useEffect, useState } from "react";
 import { BlockNoteView, useBlockNote } from "@blocknote/react";
 import "@blocknote/core/style.css";
 import styles from "./Editor.module.css";
 import { uploadToTmpFilesDotOrg_DEV_ONLY } from "@blocknote/core";
 import * as store from "./store";
+
 type WindowWithProseMirror = Window & typeof globalThis & { ProseMirror: any };
 
 type Props = {
@@ -12,6 +16,9 @@ type Props = {
 };
 
 function TestEditor({ id }: Props) {
+  // const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [theme, setTheme] = useAtom<any>(themeAtom);
+
   const editor = useBlockNote({
     onEditorContentChange: (editor) => {
       console.log(editor.topLevelBlocks);
@@ -47,7 +54,7 @@ function TestEditor({ id }: Props) {
   // Give tests a way to get prosemirror instance
   (window as WindowWithProseMirror).ProseMirror = editor?._tiptapEditor;
 
-  return <BlockNoteView editor={editor} />;
+  return <BlockNoteView editor={editor} theme={theme} />;
 }
 
 export default TestEditor;
