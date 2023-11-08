@@ -6,10 +6,7 @@ import com.surf.auth.auth.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -19,7 +16,7 @@ public class ReissueController {
     private final ReissueService reissueService;
 
     @PostMapping("/reissue")
-    public ResponseEntity<TokenDto> reissue(@RequestBody String refreshToken) {
+    public ResponseEntity<TokenDto> reissue(@CookieValue(name = "refreshToken", required = true) String refreshToken) {
 
         User userInfo = reissueService.parsingRefreshToken(refreshToken);
 
