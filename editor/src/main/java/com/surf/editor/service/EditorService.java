@@ -7,15 +7,15 @@ import com.surf.editor.domain.Editor;
 import com.surf.editor.dto.request.EditorHyperLinkRequestDto;
 import com.surf.editor.dto.request.EditorRelationRequestDto;
 import com.surf.editor.dto.request.EditorWriteRequestDto;
+import com.surf.editor.dto.request.EditorWriterPermissionRequestDto;
 import com.surf.editor.dto.response.EditorCheckResponseDto;
 import com.surf.editor.dto.response.EditorCreateResponseDto;
 import com.surf.editor.dto.response.EditorSearchResponseDto;
 import com.surf.editor.feign.client.DiagramOpenFeign;
 import com.surf.editor.feign.client.MemberOpenFeign;
+import com.surf.editor.feign.client.MemberShareOpenFeign;
 import com.surf.editor.feign.client.QuizOpenFeign;
-import com.surf.editor.feign.dto.DiagramEditorSaveRequestDto;
 import com.surf.editor.feign.dto.MemberEditorSaveRequestDto;
-import com.surf.editor.feign.dto.QuizEditorSaveRequestDto;
 import com.surf.editor.repository.EditorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,16 +23,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class EditorService {
     private final EditorRepository editorRepository;
-    private final DiagramOpenFeign diagramOpenFeign;
     private final MemberOpenFeign memberOpenFeign;
-    private final QuizOpenFeign quizOpenFeign;
 
 
     @Transactional
@@ -42,7 +39,7 @@ public class EditorService {
             /**
              * 새로 만들면 부모가 null, 자식도 새로 만들어진다.
              */
-            savedEditor = editorRepository.save(Editor.editorCreate());
+            savedEditor = editorRepository.save(Editor.editorCreate(userId));
         }catch (Exception e){
             throw new BaseException(ErrorCode.FAIL_CREATE_EDITOR);
         }
@@ -60,20 +57,6 @@ public class EditorService {
 
     private void feign(int userId, Editor savedEditor) {
         try{
-            //루트 게시글 찾기
-//            List<String> byParentIdAndUserId = editorRepository.findByParentIdAndUserId(null, userId).orElse(null);
-//            Editor findEditor = savedEditor;
-//            Editor parentEditor = new Editor();
-//            while (true){
-//                parentEditor = editorRepository.findByParentId(findEditor.getParentId()).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
-//
-//                if(parentEditor.equals(null)){
-//                    break;
-//                }
-//
-//                findEditor = parentEditor;
-//            }
-
             MemberEditorSaveRequestDto memberEditorSaveRequestDto = MemberEditorSaveRequestDto.builder()
                     .userId(userId)
                     .root(savedEditor.getId()) //추가 필요
@@ -83,30 +66,6 @@ public class EditorService {
         }catch (Exception e){
             throw new BaseException(ErrorCode.MEMBER_SAVE_FAIL);
         }
-
-//        try{
-//            DiagramEditorSaveRequestDto diagramEditorSaveRequestDto = DiagramEditorSaveRequestDto.builder()
-//                    .userId(userId)
-//                    .documentId(savedEditor.getId())
-//                    .title(savedEditor.getTitle())
-//                    .content(savedEditor.getContent())
-//                    .build();
-//
-//            diagramOpenFeign.DiagramEditorSave(diagramEditorSaveRequestDto);
-//        }catch (Exception e){
-//            throw new BaseException(ErrorCode.DIAGRAM_SAVE_FAIL);
-//        }
-
-//        try{
-//            QuizEditorSaveRequestDto quizEditorSaveRequestDto = QuizEditorSaveRequestDto.builder()
-//                    .userId(userId)
-//                    .documentId(savedEditor.getId())
-//                    .build();
-//
-//            quizOpenFeign.QuizEditorSave(quizEditorSaveRequestDto);
-//        }catch (Exception e){
-//            throw new BaseException(ErrorCode.QUIZ_SAVE_FAIL);
-//        }
     }
 
     public void editorWrite(String editorId, EditorWriteRequestDto editorWriteRequest) {
@@ -195,4 +154,29 @@ public class EditorService {
 
         editorRepository.save(findEditor);
     }
+
+    /**
+     *  에디터 쓰기 권한
+     *  에디터 별로 쓰기 리스트 생성한 후 쓰기 설정하면 유저 id를 넣어주고 아니면 빼준다.
+     *  유저가 해당 에디터에 접속할 때 에디터 상세정보에서 쓰기 권한 true,false를 리턴해준다.
+     */
+    public void editorWriterPermission(EditorWriterPermissionRequestDto editorWriterPermissionRequestDto) {
+        Editor editor = editorRepository.findById(editorWriterPermissionRequestDto.getEditorId()).orElseThrow(
+                ()-> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
+
+        try{
+            if(editorWriterPermissionRequestDto.isWritePermission()){
+                editor.writerPermissionAdd(editorWriterPermissionRequestDto.getSharedId());
+            }else{
+                if(editor.getWritePermission().contains(editorWriterPermissionRequestDto.getEditorId())){
+                    editor.writerPermissionSub(editorWriterPermissionRequestDto.getSharedId());
+                }
+            }
+        }catch (Exception e){
+            throw new BaseException(ErrorCode.WRITER_PERMISSION_FAIL);
+        }
+
+    }
+
+
 }
