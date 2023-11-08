@@ -65,12 +65,11 @@ export default function Navbar() {
         {/* 제일큰 노트 map으로 호출 */}
         <Category title="MY CS BOOK" value={1} key={1} />
         <div
-          className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-hover_primary hover:bg-opacity-50 dark:hover:bg-line_primary dark:hover:bg-opacity-50"
+          className="p-1.5 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-line_primary hover:bg-opacity-50 dark:hover:bg-line_primary dark:hover:bg-opacity-50"
           // onclick="dropdown()"
         >
-          <i className="bi bi-chat-left-text-fill"></i>
           <div className="flex justify-between w-full items-center">
-            <span className="text-[15px] ml-2 text-white">+ 페이지 추가</span>
+            <span className="text-[15px] text-white">+ 페이지 추가</span>
           </div>
         </div>
         <br />
