@@ -118,8 +118,8 @@ public class QuizRoomService {
 
     private List<UserDto> createInviteUsers() {
         List<UserDto> inviteUsers = new ArrayList<>();
-        inviteUsers.add(createUser(1L, "csi"));
-        inviteUsers.add(createUser(2L, "isc"));
+        inviteUsers.add(createUser(2020L, "csi"));
+        inviteUsers.add(createUser(3030L, "isc"));
 
         return inviteUsers;
     }
@@ -128,7 +128,6 @@ public class QuizRoomService {
         UserDto user = new UserDto();
         user.setUserPk(userPk);
         user.setUserName(userName);
-
         return user;
     }
 
@@ -158,11 +157,15 @@ public class QuizRoomService {
         MemberDto member = new MemberDto();
         member.setHost(true);
         member.setReady(createQuizRoom.isSingle());
-        member.setUserPk(1L);
-        member.setUserName("csi");
-        member.setUserImg("default");
+        member.setUserPk(createRoomRequestDto.getUsers().get(0).getUserPk());
+        member.setUserName(createRoomRequestDto.getUsers().get(0).getUserName());
+        member.setUserImg(createRoomRequestDto.getUsers().get(0).getUserImg());
+        if (createRoomRequestDto.getUsers().get(0).getUserImg().equals("성공")) {
+            member.setUserImg("/assets/유령.png");
+        }
         List<MemberDto> members = new ArrayList<>();
         members.add(member);
+
         createQuizRoom.setUsers(members);
         createQuizRoom.setRoomCnt(1);
 
