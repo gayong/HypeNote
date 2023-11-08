@@ -52,6 +52,11 @@ public class QuizRoomService {
         return quizRepo.findById(Id);
     }
 
+    public List<QuizRoom> findByInviteUser(Long userPk) {
+        {
+            return quizRepo.findByInviteUsers_UserPk(userPk);
+        }
+    }
     public List<QuizRoom> findAll() {
 
         return quizRepo.findAll();
@@ -66,13 +71,31 @@ public class QuizRoomService {
         }
     }
 
-
-    public void findAllAndSend() {
+    public void findAllSend() {
         List<QuizRoom> roomList = this.findAll().stream()
                 .filter(room -> !room.isSingle())
                 .collect(Collectors.toList());
         scheduler.schedule(() -> messageTemplate.convertAndSend("/sub/quizroom/roomList", roomList), 1, TimeUnit.SECONDS);
     }
+
+    public void findAllMySend(Long userPk) {
+        List<QuizRoom> roomList = this.findByInviteUser(userPk).stream()
+                .filter(room -> !room.isSingle())
+                .collect(Collectors.toList());
+        scheduler.schedule(() -> messageTemplate.convertAndSend("/sub/quizroom/roomList/"+userPk, roomList), 1, TimeUnit.SECONDS);
+    }
+
+
+    public void findAllAndSend(QuizRoom quizRoom) {
+        for (UserDto user : quizRoom.getInviteUsers()) {
+            List<QuizRoom> roomList = this.findByInviteUser(user.getUserPk()).stream()
+                    .filter(room -> !room.isSingle())
+                    .toList();
+            scheduler.schedule(() -> messageTemplate.convertAndSend("/sub/quizroom/roomList/" + user.getUserPk(), roomList), 1, TimeUnit.SECONDS);
+        }
+        }
+/// 구독을 userpk로 구독하게하기
+    /// roomlist를 찾을 때 구독한 userPk로 보내게 하기
 
 
     public SearchMemberResponseDto createSearchMemberResponseDto(SearchMemberRequestDto SearchMemberRequestDto) {
@@ -153,7 +176,7 @@ public class QuizRoomService {
         quizRepository.save(quiz);
 
         // 스레드 스케줄러
-        this.findAllAndSend();
+        this.findAllAndSend(createdQuizroom);
 
         return createdQuizroom;
     }
@@ -187,7 +210,7 @@ public class QuizRoomService {
             saveAndSendQuizRoom(roomId, quizRoom);
         }
 
-        this.findAllAndSend();
+        this.findAllAndSend(quizRoom);
     }
 
     private void updateReadyCount(QuizRoom quizRoom, String action) {
@@ -210,7 +233,7 @@ public class QuizRoomService {
         quizRoom.setRoomCnt(quizRoom.getRoomCnt() + 1);
         // 저장
         saveAndSendQuizRoom(roomId, quizRoom);
-        this.findAllAndSend();
+        this.findAllAndSend(quizRoom);
     }
 
     private boolean canEnterQuizRoom(QuizRoom quizRoom, MemberDto memberDto) {
@@ -239,7 +262,7 @@ public class QuizRoomService {
         // 빈 방이면 삭제, 빈 방 아니면 다른 녀석에 방장 주기
         handleEmptyQuizRoom(roomId, quizRoom, memberDto);
         this.save(quizRoom);
-        this.findAllAndSend();
+        this.findAllAndSend(quizRoom);
     }
 
     private Optional<MemberDto> findMemberInQuizRoom(QuizRoom quizRoom, MemberDto memberDto) {
