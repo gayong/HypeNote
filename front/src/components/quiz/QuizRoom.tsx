@@ -108,7 +108,7 @@ export default function QuizRoom(props: QuizRoomProps) {
 
             <div className="col-span-5 pl-10 min-h-full mt-12">
               <div className="flex-col justify-between">
-                <ChatRoom roomId={props.roomId} />
+                <ChatRoom roomId={props.roomId} height={60} />
                 <br />
                 <Button
                   className="dark:border-none dark:border-font_primary font-preRg bg-primary w-full h-16 text-3xl tracking-widest font-bold"
@@ -119,7 +119,6 @@ export default function QuizRoom(props: QuizRoomProps) {
               </div>
             </div>
           </section>
-
         </>
       )}
     </>
