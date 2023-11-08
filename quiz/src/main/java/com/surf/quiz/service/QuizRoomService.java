@@ -163,6 +163,7 @@ public class QuizRoomService {
         MemberDto member = new MemberDto();
         member.setHost(true);
         member.setReady(createQuizRoom.isSingle());
+        System.out.println("createRoomRequestDto.getUsers().get(0) = " + createRoomRequestDto.getUsers().get(0));
         member.setUserPk(createRoomRequestDto.getUsers().get(0).getUserPk());
         member.setUserName(createRoomRequestDto.getUsers().get(0).getUserName());
         member.setUserImg(createRoomRequestDto.getUsers().get(0).getUserImg());
@@ -191,6 +192,7 @@ public class QuizRoomService {
 
         // 스레드 스케줄러
         this.findAllAndSend(createdQuizroom);
+        this.SendQuizRoom(createdQuizroom);
 
         return createdQuizroom;
     }
@@ -289,6 +291,10 @@ public class QuizRoomService {
     }
 
     private void handleEmptyQuizRoom(Long roomId, QuizRoom quizRoom, MemberDto memberDto) {
+        if (quizRoom.getQuizCnt()==0) {
+            delete(quizRoom);
+            deleteQuiz(roomId.intValue());
+        }
         if (quizRoom.getUsers().isEmpty()) {
             delete(quizRoom);
             deleteQuiz(roomId.intValue());
@@ -330,6 +336,31 @@ public class QuizRoomService {
         payload.put("result", response);
         messageTemplate.convertAndSend("/sub/quiz/" + roomId, payload);
     }
+
+    private void SendQuizRoom(QuizRoom quizRoom) {
+        Map<String, Object> payload = new HashMap<>();
+        DetailResponseDto response = DetailResponseDto.builder()
+                .id(quizRoom.getId())
+                .roomName(quizRoom.getRoomName())
+                .roomCnt(quizRoom.getRoomCnt())
+                .roomMax(quizRoom.getRoomMax())
+                .roomStatus(quizRoom.isRoomStatus())
+                .quizCnt(quizRoom.getQuizCnt())
+                .users(quizRoom.getUsers())
+                .readyCnt(quizRoom.getReadyCnt())
+                .content(quizRoom.getContent())
+                .createdDate(quizRoom.getCreatedDate())
+                .inviteUsers(quizRoom.getInviteUsers())
+                .single(quizRoom.isSingle())
+                .pages(quizRoom.getPages())
+                .sharePages(quizRoom.getSharePages())
+                .host(quizRoom.getInviteUsers().get(0).getUserPk())
+                .build();
+        payload.put("type", "detail");
+        payload.put("result", response);
+        scheduler.schedule(() -> messageTemplate.convertAndSend("/sub/quiz/" + quizRoom.getId(), payload), 1, TimeUnit.SECONDS);
+    }
+
 
 
 
