@@ -12,5 +12,5 @@ public class TokenDto {
 
     private String message;
     private String accessToken = null;
-    private User userInfo;
+    private UserDto userInfo;
 }

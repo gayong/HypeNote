@@ -2,6 +2,7 @@ package com.surf.auth.JWT.controller;
 
 import com.surf.auth.JWT.service.ReissueService;
 import com.surf.auth.auth.dto.TokenDto;
+import com.surf.auth.auth.dto.UserDto;
 import com.surf.auth.auth.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,7 +19,7 @@ public class ReissueController {
     @PostMapping("/reissue")
     public ResponseEntity<TokenDto> reissue(@CookieValue(name = "refreshToken", required = true) String refreshToken) {
 
-        User userInfo = reissueService.parsingRefreshToken(refreshToken);
+        UserDto userInfo = reissueService.parsingRefreshToken(refreshToken);
 
         String storedRefreshToken = reissueService.findRefreshTokenByUserPk(String.valueOf(userInfo.getUserPk()));
 

@@ -5,6 +5,7 @@ import com.surf.auth.JWT.service.RefreshTokenIssueService;
 import com.surf.auth.auth.dto.AuthenticationResultDto;
 import com.surf.auth.auth.dto.LogInDto;
 import com.surf.auth.auth.dto.TokenDto;
+import com.surf.auth.auth.dto.UserDto;
 import com.surf.auth.auth.entity.User;
 import com.surf.auth.auth.service.LoginService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -31,7 +32,7 @@ public class LoginController {
 
         AuthenticationResultDto authenticationResultDto = loginService.authentication(loginInfo);
         if (authenticationResultDto.isResult()) {
-            User userInfo = authenticationResultDto.getUserInfo();
+            UserDto userInfo = authenticationResultDto.getUserInfo();
             return ResponseEntity.ok(loginService.sendToken(userInfo, response));
         }
         fail.setMessage("로그인 정보가 일치하지 않습니다.");
