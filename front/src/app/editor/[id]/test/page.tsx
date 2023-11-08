@@ -12,9 +12,9 @@ export default function EditorPage({ params: { id } }: Props) {
   const TestEditor = dynamic(() => import("@/components/editor/TestEditor"), { ssr: false });
 
   return (
-    <>
+    <div>
       {/* <Editor id={id} /> */}
       <TestEditor id={id} />
-    </>
+    </div>
   );
 }

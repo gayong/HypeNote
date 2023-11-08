@@ -12,6 +12,7 @@ import { userAtom } from "@/store/authAtom";
 
 interface QuizRoomProps {
   roomId: number;
+  height: number;
 }
 export default function ChatRoom(props: QuizRoomProps) {
   const [message, setMessage] = useState("");
@@ -51,7 +52,9 @@ export default function ChatRoom(props: QuizRoomProps) {
 
   return (
     <>
-      <div className="outline outline-offset-2 outline-2 outline-line_primary flex flex-col h-[60vh] flex-grow w-full rounded-lg overflow-hidden">
+      <div
+        style={{ height: `${props.height}vh` }}
+        className="outline outline-offset-2 outline-2 outline-line_primary flex flex-col flex-grow w-full rounded-lg overflow-hidden">
         <div className="flex flex-col flex-grow h-0 p-4 overflow-auto min-h-min">
           {chatMessages.map((chat, idx) =>
             chat.userPk === user.userPk ? <MyChat key={idx} {...chat} /> : <YourChat key={idx} {...chat} />

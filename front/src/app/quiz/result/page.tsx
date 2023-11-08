@@ -28,7 +28,7 @@ export default function QuizResultPage() {
       origin: { y: 0.7 },
     };
 
-    function fire(particleRatio:any, opts:any) {
+    function fire(particleRatio: any, opts: any) {
       confetti({
         ...defaults,
         ...opts,
@@ -63,8 +63,8 @@ export default function QuizResultPage() {
   return (
     <section className="px-2 pr-6 grid grid-cols-2 h-screen w-full max-w-full items-center">
       <QuizResult />
-      <div>
-        <ChatRoom roomId={10} />
+      <div className="pl-2">
+        <ChatRoom roomId={10} height={80} />
         <Button
           className="mt-4 dark:border-none dark:border-font_primary font-preRg bg-primary w-full h-14 text-lg "
           type="primary"
