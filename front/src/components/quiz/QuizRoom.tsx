@@ -65,7 +65,7 @@ export default function QuizRoom(props: QuizRoomProps) {
       ) : (
         // 퀴즈 게임 전
         <>
-          <section className="grid grid-cols-12 h-[70vh]">
+          <section className="grid grid-cols-12">
             <div className="col-span-7 flex flex-col">
               <div className="flex justify-center items-center relative">
                 <span

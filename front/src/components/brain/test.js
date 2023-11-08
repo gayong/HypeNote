@@ -66,12 +66,12 @@ const ThreeScene = () => {
         linkTarget = ({ target }) => target, // given d in links, returns a node identifier string
         linkStroke = "#999", // link stroke color
         linkStrokeOpacity = 0.6, // link stroke opacity
-        linkStrokeWidth = (d) => d.similarity, // given d in links, returns a stroke width in pixels
+        linkStrokeWidth = (d) => d.similarity * 2, // given d in links, returns a stroke width in pixels
         linkStrokeLinecap = "round", // link stroke linecap
         linkStrength,
         // colors = d3.schemeTableau10, // an array of color strings, for the node groups
-        width = window.innerWidth, // outer width, in pixels
-        height = window.innerHeight, // outer height, in pixels
+        width = window.innerWidth - 350, // outer width, in pixels
+        height = window.innerHeight - 35, // outer height, in pixels
         invalidation, // when this promise resolves, stop the simulation
       } = {}
     ) {
@@ -242,6 +242,18 @@ const ThreeScene = () => {
   return (
     <div ref={ref} style={{ width: "100%", height: "100%" }}>
       <SelectShare onReceive={handleReceive} />
+      {nodes.length === 0 && (
+        <div
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            textAlign: "center",
+          }}>
+          <h1 className="text-3xl">텅!!!!</h1>
+        </div>
+      )}
     </div>
   );
 };
