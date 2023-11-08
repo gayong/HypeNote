@@ -11,10 +11,27 @@ import logoImg from "../../public/assets/logo_blue.png";
 import darkLogoImg from "../../public/assets/logo.png";
 import krLogoImg from "../../public/assets/krlogo_blue.png";
 import darkKrLogoImg from "../../public/assets/krlogo.png";
+import { useState } from "react";
+import useSignin from "@/hooks/useSiginin";
 
 export default function Signin() {
-  const handleSignin = () => {
+  const [email, setEmail] = useState<string>("");
+  const [password, setPassword] = useState<string>("");
+  const handleEmailChange = (e: any) => setEmail(e.target.value);
+  const handlePasswordChange = (e: any) => setPassword(e.target.value);
+  const { signin } = useSignin();
+
+  const handleSignin = async () => {
     console.log("로그인하마");
+    const success = await signin(email, password);
+
+    // if (success === "success") {
+    //   // 회원가입 성공 처리
+    //   console.log("회원가입 성공!");
+    // } else {
+    //   // 회원가입 실패 처리
+    //   console.log("회원가입 실패..");
+    // }
   };
   return (
     <>
@@ -41,23 +58,27 @@ export default function Signin() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-6" action="#" method="POST">
+          <div className="space-y-6">
             <div>
               <Label text="이메일" />
-              <div className="mt-2">{/* <Input text="email" type="email" /> */}</div>
+              <div className="mt-2">
+                <Input text="Email" type="email" onChange={handleEmailChange} autoComplete="email" />
+              </div>
             </div>
 
             <div>
               <div className="flex items-center justify-between">
                 <Label text="비밀번호" />
               </div>
-              <div className="mt-2">{/* <Input text="Password" /> */}</div>
+              <div className="mt-2">
+                <Input text="Password" type="password" onChange={handlePasswordChange} autoComplete="new-password" />
+              </div>
             </div>
 
             <div>
               <Button text="로그인" onClick={handleSignin} wFull={true}></Button>
             </div>
-          </form>
+          </div>
 
           <div className="relative my-3">
             <div className="relative flex items-center">

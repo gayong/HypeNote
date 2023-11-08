@@ -11,7 +11,7 @@ export const createQuizRoom = (
   single: boolean,
   content: string
 ) =>
-  api.post(`quiz/quizroom`, {
+  api.post(`/api/quiz/quizroom`, {
     roomName,
     pages,
     sharePages,
