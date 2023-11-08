@@ -7,6 +7,7 @@ import com.surf.quiz.dto.QuestionDto;
 import com.surf.quiz.dto.UserDto;
 import com.surf.quiz.dto.request.CreateRoomRequestDto;
 import com.surf.quiz.dto.request.SearchMemberRequestDto;
+import com.surf.quiz.dto.response.DetailResponseDto;
 import com.surf.quiz.dto.response.SearchMemberResponseDto;
 import com.surf.quiz.entity.Quiz;
 import com.surf.quiz.entity.QuizRoom;
@@ -295,8 +296,25 @@ public class QuizRoomService {
     private void saveAndSendQuizRoom(Long roomId, QuizRoom quizRoom) {
         this.save(quizRoom);
         Map<String, Object> payload = new HashMap<>();
+        DetailResponseDto response = DetailResponseDto.builder()
+                .id(quizRoom.getId())
+                .roomName(quizRoom.getRoomName())
+                .roomCnt(quizRoom.getRoomCnt())
+                .roomMax(quizRoom.getRoomMax())
+                .roomStatus(quizRoom.isRoomStatus())
+                .quizCnt(quizRoom.getQuizCnt())
+                .users(quizRoom.getUsers())
+                .readyCnt(quizRoom.getReadyCnt())
+                .content(quizRoom.getContent())
+                .createdDate(quizRoom.getCreatedDate())
+                .inviteUsers(quizRoom.getInviteUsers())
+                .single(quizRoom.isSingle())
+                .pages(quizRoom.getPages())
+                .sharePages(quizRoom.getSharePages())
+                .host(quizRoom.getInviteUsers().get(0).getUserPk())
+                .build();
         payload.put("type", "detail");
-        payload.put("result", quizRoom);
+        payload.put("result", response);
         messageTemplate.convertAndSend("/sub/quiz/" + roomId, payload);
     }
 
