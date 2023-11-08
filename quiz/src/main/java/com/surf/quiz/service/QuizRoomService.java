@@ -280,8 +280,6 @@ public class QuizRoomService {
 
         // 빈 방이면 삭제, 빈 방 아니면 다른 녀석에 방장 주기
         handleEmptyQuizRoom(roomId, quizRoom, memberDto);
-        this.save(quizRoom);
-        this.findAllAndSend(quizRoom);
     }
 
     private Optional<MemberDto> findMemberInQuizRoom(QuizRoom quizRoom, MemberDto memberDto) {
@@ -299,6 +297,8 @@ public class QuizRoomService {
                 quizRoom.getUsers().get(0).setHost(true);
             }
             saveAndSendQuizRoom(roomId, quizRoom);
+            this.save(quizRoom);
+            this.findAllAndSend(quizRoom);
         }
     }
 
