@@ -66,7 +66,7 @@ const ThreeScene = () => {
         linkTarget = ({ target }) => target, // given d in links, returns a node identifier string
         linkStroke = "#999", // link stroke color
         linkStrokeOpacity = 0.6, // link stroke opacity
-        linkStrokeWidth = 1.5, // given d in links, returns a stroke width in pixels
+        linkStrokeWidth = (d) => d.similarity, // given d in links, returns a stroke width in pixels
         linkStrokeLinecap = "round", // link stroke linecap
         linkStrength,
         // colors = d3.schemeTableau10, // an array of color strings, for the node groups
