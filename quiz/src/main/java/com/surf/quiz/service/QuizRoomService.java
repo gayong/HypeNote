@@ -1,6 +1,7 @@
 package com.surf.quiz.service;
 
 
+import com.surf.quiz.common.BaseResponse;
 import com.surf.quiz.dto.ExampleDto;
 import com.surf.quiz.dto.MemberDto;
 import com.surf.quiz.dto.QuestionDto;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -28,16 +30,18 @@ import java.util.stream.Collectors;
 public class QuizRoomService {
     private final QuizRoomRepository quizRepo;
     private final QuizRepository quizRepository;
+    private final FeignService feignService;
     private final SimpMessagingTemplate messageTemplate; // 메시지 브로커를 통해 클라이언트와 서버 간의 실시간 메시지 교환을 처리
 
     // 일정한 시간 간격으로 작업(태스크)를 실행하거나 지연 실행할 수 있는 스레드 풀 기반의 스케줄링 서비스
     //단일 스레드로 동작하는 스케줄링 서비스(ScheduledExecutorService) 객체를 생성하고, 이 객체(scheduler)에 대한 참조를 유지
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
-    public QuizRoomService(QuizRoomRepository quizRepo, SimpMessagingTemplate messageTemplate, QuizRepository quizRepository) {
+    public QuizRoomService(QuizRoomRepository quizRepo, FeignService feignService, SimpMessagingTemplate messageTemplate, QuizRepository quizRepository) {
         this.quizRepo = quizRepo;
         this.messageTemplate = messageTemplate;
         this.quizRepository = quizRepository;
+        this.feignService = feignService;
     }
 
 
@@ -119,16 +123,17 @@ public class QuizRoomService {
 
     private List<UserDto> createInviteUsers() {
         List<UserDto> inviteUsers = new ArrayList<>();
-        inviteUsers.add(createUser(2020L, "csi"));
-        inviteUsers.add(createUser(3030L, "isc"));
+        inviteUsers.add(createUser(2020L, "csi", "/assets/유령.png"));
+        inviteUsers.add(createUser(3030L, "isc", "/assets/유령2.png"));
 
         return inviteUsers;
     }
 
-    private UserDto createUser(Long userPk, String userName) {
+    private UserDto createUser(Long userPk, String userName, String userImg) {
         UserDto user = new UserDto();
         user.setUserPk(userPk);
         user.setUserName(userName);
+        user.setUserImg(userImg);
         return user;
     }
 
@@ -174,10 +179,15 @@ public class QuizRoomService {
 
 
 
-
-        // 퀴즈 생성
-        Quiz quiz = this.createQuiz(createdQuizroom);
-        quizRepository.save(quiz);
+        // 퀴즈 생성 작업을 비동기로 수행
+        CompletableFuture.runAsync(() -> {
+            Quiz quiz = this.createQuiz(createdQuizroom);
+            quizRepository.save(quiz);
+        }).exceptionally(ex -> {
+            // 오류 처리 코드
+            System.out.println("퀴즈 생성 중 오류 발생: " + ex.getMessage());
+            return null;
+        });
 
         // 스레드 스케줄러
         this.findAllAndSend(createdQuizroom);
@@ -231,6 +241,9 @@ public class QuizRoomService {
         // 이미 방에 있으면 리턴
         if (!canEnterQuizRoom(quizRoom, memberDto)) {
             return;
+        }
+        if (memberDto.getUserImg().equals("성공")) {
+            memberDto.setUserImg("/assets/유령.png");
         }
         //입장
         quizRoom.memberIn(memberDto);
@@ -321,8 +334,8 @@ public class QuizRoomService {
 
 
     public Quiz createQuiz(QuizRoom createdQuizroom) {
+        String res = feignService.getEditorInfoQuiz("6549f6984cce962b0ff0a058");
         Quiz quiz = new Quiz();
-
         quiz.setRoomId(createdQuizroom.getId().intValue());
         String formattedDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
         quiz.setCreatedDate(formattedDateTime);
@@ -330,6 +343,16 @@ public class QuizRoomService {
         quiz.setRoomName(createdQuizroom.getRoomName());
         quiz.setUsers(createdQuizroom.getUsers());
 
+
+        try {
+            BaseResponse<List<QuestionDto>> questionsResponse = feignService.getGpt(1, res);
+            List<QuestionDto> question = questionsResponse.getResult();
+            quiz.setQuestion(question);
+            quiz.setComplete(false);
+            return quiz;
+        } catch (Exception e) {
+            // 예외 처리 코드를 작성합니다.
+        }
 
         QuestionDto question1 = new QuestionDto();
         question1.setQuestion("IP(Internet Protocol) 주소는 어떻게 구성되며, 어떤 역할을 담당하고 있나요?");
@@ -366,7 +389,6 @@ public class QuizRoomService {
         questions.add(question2);
 
         quiz.setQuestion(questions);
-
         quiz.setComplete(false);
 
         return quiz;
