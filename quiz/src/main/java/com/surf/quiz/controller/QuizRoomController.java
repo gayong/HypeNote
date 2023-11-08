@@ -90,8 +90,16 @@ public class QuizRoomController {
     @MessageMapping("/quizroom/roomList")
     public void getQuizRooms() {
         // 스레드 스케줄러
-        quizRoomService.findAllAndSend();
+        quizRoomService.findAllSend();
     }
+
+
+    @MessageMapping("/quizroom/roomList/{userPk}")
+    public void getMyQuizRooms(@DestinationVariable Long userPk) {
+        // 스레드 스케줄러
+        quizRoomService.findAllMySend(userPk);
+    }
+
 
     @MessageMapping("/quizroom/{roomId}")
     public void getQuizRoom(@DestinationVariable Long roomId) {
