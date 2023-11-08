@@ -430,7 +430,7 @@ public class DiagramServiceImpl implements DiagramService {
             }
 
             if (bestMatch != null) {
-                LinkResponseDto linkDto = new LinkResponseDto(node1.getId().intValue(), bestMatch.getId().intValue(), Double.parseDouble(df.format(maxSimilarity)), userId);
+                LinkResponseDto linkDto = new LinkResponseDto(node1.getId().intValue(), bestMatch.getId().intValue(), Math.exp(Double.parseDouble(df.format(maxSimilarity)))*1+1, userId);
                 linkDtoList.add(linkDto);
             }
         }
@@ -443,7 +443,7 @@ public class DiagramServiceImpl implements DiagramService {
     }
 
     private LinkResponseDto convertLinkToDto(Link link) {
-        return new LinkResponseDto(link.getSource(), link.getTarget(), link.getSimilarity(), link.getUserId());
+        return new LinkResponseDto(link.getSource(), link.getTarget(), Math.exp(link.getSimilarity()) * 1 + 1, link.getUserId());
     }
 
 
@@ -464,14 +464,19 @@ public class DiagramServiceImpl implements DiagramService {
         List<Node> nodes1 = nodeRepository.findByUserId(userId);
         List<Link> links1 = linkRepository.findByUserId(userId);
 
-        List<NodeResponseDto> nodeDtoList = new ArrayList<>();
-        List<LinkResponseDto> linkDtoList = new ArrayList<>();
+//        List<NodeResponseDto> nodeDtoList = new ArrayList<>();
+//        List<LinkResponseDto> linkDtoList = new ArrayList<>();
+//
+//        // 링크들을 LinkResponseDto로 변환
+//        linkDtoList.addAll(convertLinksToDtos(links1));
+//
+//        // 노드들을 NodeResponseDto로 변환
+//        nodeDtoList.addAll(convertNodesToDtos(nodes1, userId));
+//
 
-        // 링크들을 LinkResponseDto로 변환
-        linkDtoList.addAll(convertLinksToDtos(links1));
+        List<LinkResponseDto> linkDtoList = new ArrayList<>(convertLinksToDtos(links1));
+        List<NodeResponseDto> nodeDtoList = new ArrayList<>(convertNodesToDtos(nodes1, userId));
 
-        // 노드들을 NodeResponseDto로 변환
-        nodeDtoList.addAll(convertNodesToDtos(nodes1, userId));
 
         for (Integer targetUserId : targetUserIds) {
             List<Node> nodes2 = nodeRepository.findByUserId(targetUserId);
