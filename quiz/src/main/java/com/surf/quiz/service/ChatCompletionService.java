@@ -78,7 +78,7 @@ public class ChatCompletionService {
         Message systemMessage = Message.builder()
                 .role("system")
                 .content("Computer Science에 대한 문제를 만들고 싶어\n" +
-                        "문제는 4지선다 문제로\n" +
+                        "문제는 4지선다 문제로\n 정답은 1개야" +
                         "아래 형식으로 만들고 싶어\n" +
                         "    {\n" +
                         "      \"id\": 번호,\n" +
