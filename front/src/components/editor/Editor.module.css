@@ -1,7 +1,8 @@
 /* Editor 컴포넌트 스타일링 */
 .editor {
-  margin: 0 calc((100% - 731px) / 2);
+  margin: 40px 0;
   height: 100%;
+  background-color: transparent !important;
 }
 
 .editor-container {
@@ -20,8 +21,7 @@
 .editor-container h4,
 .editor-container h5,
 .editor-container h6 {
-  font-family: "PreRg"; /* 모든 제목 태그의 폰트 설정 */
-  font-weight: bold;
+  font-family: "PreBd"; /* 모든 제목 태그의 폰트 설정 */
   margin-top: 10px; /* 위쪽 마진을 10px로 설정 */
   margin-bottom: 10px; /* 아래쪽 마진을 10px로 설정 */
 }
