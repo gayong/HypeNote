@@ -3,7 +3,7 @@ import api from "../instances/api";
 
 // 게시글 document 만들기
 export const fetchCreateDocument = (userId: number) => {
-  api.post(`editor/${userId}`);
+  return api.post(`editor/${userId}`);
 };
 
 // 게시글 작성

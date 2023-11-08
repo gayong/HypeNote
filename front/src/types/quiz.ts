@@ -49,7 +49,7 @@ export interface QuizUser {
 }
 
 export interface chatUser {
-  userPk: string;
+  userPk: number;
   content: string;
   chatTime: string;
   userName: string;

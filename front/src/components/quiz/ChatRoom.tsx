@@ -49,7 +49,7 @@ export default function ChatRoom(props: QuizRoomProps) {
       <div className="outline outline-offset-2 outline-2 outline-line_primary flex flex-col h-[60vh] flex-grow w-full rounded-lg overflow-hidden">
         <div className="flex flex-col flex-grow h-0 p-4 overflow-auto min-h-min">
           {chatMessages.map((chat, idx) =>
-            chat.userPk === "2" ? <MyChat key={idx} {...chat} /> : <YourChat key={idx} {...chat} />
+            chat.userPk === 2 ? <MyChat key={idx} {...chat} /> : <YourChat key={idx} {...chat} />
           )}
           <div ref={chatEndRef} />
         </div>
