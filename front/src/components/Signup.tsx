@@ -11,7 +11,7 @@ import logoImg from "../../public/assets/logo_blue.png";
 import darkLogoImg from "../../public/assets/logo.png";
 import krLogoImg from "../../public/assets/krlogo_blue.png";
 import darkKrLogoImg from "../../public/assets/krlogo.png";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import useSignup from "@/hooks/useSignup";
 
 export default function Signup() {
@@ -27,10 +27,10 @@ export default function Signup() {
   const handleEmailChange = (e: any) => setEmail(e.target.value);
   const handlePasswordChange = (e: any) => setPassword(e.target.value);
   const handlePassword2Change = (e: any) => setPassword2(e.target.value);
-  const handleImageChange = (e: any) => setProfileImage(e.target.files[0]);
+  const [file, setFile] = useState(null);
 
   const { signup } = useSignup();
-
+  const imgRef = useRef<HTMLInputElement>(null);
   const handleSignup = async () => {
     console.log("회원가입 실행");
     // 비밀번호와 비밀번호 확인이 일치하는지 검사합니다.
@@ -48,6 +48,17 @@ export default function Signup() {
       // 회원가입 실패 처리
       console.log("회원가입 실패..");
     }
+    alert("회원가입실행");
+  };
+  const handleImageChange = (e: any) => {
+    setFile(e.target.files[0]);
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      if (reader.result) {
+        setProfileImage(reader.result as string);
+      }
+    };
+    reader.readAsDataURL(e.target.files[0]);
   };
 
   return (
@@ -80,7 +91,7 @@ export default function Signup() {
         </div>
 
         <div className="mt-4 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-3" action="#" method="POST">
+          <div className="space-y-3">
             <div>
               <Label text="닉네임" />
               <div className="mt-2">
@@ -114,17 +125,26 @@ export default function Signup() {
 
             <div>
               <Label text="프로필 사진" />
+              <Image
+                src={profileImage ? profileImage : `/assets/유령.png`}
+                alt="프로필 이미지"
+                width={30}
+                height={30}
+                // className="rounded"
+              />
               <div className="mt-2">
                 <label className="block">
                   <input
                     type="file"
                     className="block w-full text-sm text-slate-500
-                              file:mr-4 file:py-1 file:px-3
-                              file:rounded-md file:border-0
-                              file:text-xs
-                              file:bg-primary file:text-font_primary
-                              hover:file:bg-hover_primary
-                              "
+            file:mr-4 file:py-1 file:px-3
+            file:rounded-md file:border-0
+            file:text-xs
+            file:bg-primary file:text-font_primary
+            hover:file:bg-hover_primary
+            "
+                    accept="image/*"
+                    ref={imgRef}
                     onChange={handleImageChange}
                   />
                 </label>
@@ -134,7 +154,7 @@ export default function Signup() {
             <div className="pt-5">
               <Button text="회원가입" onClick={handleSignup} wFull={true}></Button>
             </div>
-          </form>
+          </div>
         </div>
       </div>
     </>
