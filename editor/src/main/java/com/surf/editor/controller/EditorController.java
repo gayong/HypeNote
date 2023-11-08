@@ -1,10 +1,7 @@
 package com.surf.editor.controller;
 
 import com.surf.editor.common.response.ApiResponse;
-import com.surf.editor.dto.request.EditorHyperLinkRequestDto;
-import com.surf.editor.dto.request.EditorRelationRequestDto;
-import com.surf.editor.dto.request.EditorShareRequestDto;
-import com.surf.editor.dto.request.EditorWriteRequestDto;
+import com.surf.editor.dto.request.*;
 import com.surf.editor.dto.response.EditorCheckResponseDto;
 import com.surf.editor.dto.response.EditorCreateResponseDto;
 import com.surf.editor.dto.response.EditorSearchResponseDto;
@@ -114,12 +111,12 @@ public class EditorController {
         return ResponseEntity.ok(apiResponse);
     }
 
-    @PostMapping("share")
-    public ResponseEntity<ApiResponse> editorShare(@RequestBody EditorShareRequestDto editorShareRequestDto){
-        editorService.editorShare(editorShareRequestDto);
+    @PostMapping("/permission")
+    public ResponseEntity<ApiResponse> editorWriterPermission(@RequestBody EditorWriterPermissionRequestDto editorWriterPermissionRequestDto){
+        editorService.editorWriterPermission(editorWriterPermissionRequestDto);
 
         ApiResponse apiResponse = ApiResponse.builder()
-                .message("문서 공유 완료")
+                .message("쓰기 권한 설정 완료")
                 .status(OK.value())
                 .data(null)
                 .build();

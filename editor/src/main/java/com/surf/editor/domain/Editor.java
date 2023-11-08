@@ -68,4 +68,12 @@ public class Editor {
             childId.remove(child);
         }
     }
+
+    public void writerPermissionAdd(int userId){
+        this.writePermission.add(userId);
+    }
+
+    public void writerPermissionSub(int userId){
+        this.writePermission.remove(userId);
+    }
 }
