@@ -47,6 +47,7 @@ public class LoginService {
         TokenDto tokenIssueResult = new TokenDto();
 
         tokenIssueResult.setAccessToken(accessTokenIssueService.accessTokenIssue(userInfo));
+        tokenIssueResult.setUserInfo(userInfo);
         refreshTokenIssueService.refreshTokenIssue(userInfo, response);
         tokenIssueResult.setMessage("정상적으로 로그인이 되었습니다.");
 
