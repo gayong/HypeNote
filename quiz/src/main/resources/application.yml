@@ -12,3 +12,4 @@ spring:
            connectTimeout: 100000
            readTimeout: 100000
            loggerLevel: basic
+
