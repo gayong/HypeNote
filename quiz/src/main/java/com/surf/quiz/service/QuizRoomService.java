@@ -175,6 +175,7 @@ public class QuizRoomService {
 
         createQuizRoom.setUsers(members);
         createQuizRoom.setRoomCnt(1);
+        createQuizRoom.setReadyCnt(1);
 
         QuizRoom createdQuizroom = this.save(createQuizRoom);
 
