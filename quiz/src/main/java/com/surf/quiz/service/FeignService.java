@@ -50,11 +50,14 @@ public class FeignService {
             // JSON 문자열을 객체로 담고 있는 리스트로 변환
             List<QuestionDto> questionList = new ArrayList<>();
             for (String json : abc) {
-                QuestionDto questionDto = objectMapper.readValue(json, new TypeReference<>() {});
-                questionDto.setId(id);
-                questionList.add(questionDto);
+                if (json.startsWith("[")) { // JSON 문자열이 배열인 경우
+                    List<QuestionDto> tempList = objectMapper.readValue(json, new TypeReference<List<QuestionDto>>() {});
+                    questionList.addAll(tempList);
+                } else { // JSON 문자열이 객체인 경우
+                    QuestionDto questionDto = objectMapper.readValue(json, QuestionDto.class);
+                    questionList.add(questionDto);
+                }
             }
-
             // 변환된 리스트 사용
             for (QuestionDto question : questionList) {
                 System.out.println(question.getQuestion());
