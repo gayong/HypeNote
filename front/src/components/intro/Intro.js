@@ -72,6 +72,10 @@ export default function Intro() {
         setTimeout(shoot, 800);
         setTimeout(shoot, 900);
         setTimeout(shoot, 1000);
+        setTimeout(shoot, 1100);
+        setTimeout(shoot, 1200);
+        setTimeout(shoot, 1300);
+        setTimeout(shoot, 1400);
       }
     }
   };
@@ -244,16 +248,8 @@ export default function Intro() {
           </div>
           <Image className="animate-spin-slow w-[430px] absolute top-[46%] left-[11%]" src={bottom} alt="bottom" />
           <Image className="animate-spin-slow w-[430px] absolute top-[46%] left-[11%] " src={lettuce} alt="lettuce" />
-          <Image
-            className="z-10 animate-spin-slow w-[430px] absolute top-[46%] left-[11%] patty except"
-            src={patty}
-            alt="patty"
-          />
-          <Image
-            className="z-20 animate-spin-slow w-[430px] absolute top-[46%] left-[11%] patty except"
-            src={cheese}
-            alt="cheese"
-          />
+          <Image className="z-10 animate-spin-slow w-[430px] absolute top-[46%] left-[11%] " src={patty} alt="patty" />
+          <Image className="z-20 animate-spin-slow w-[430px] absolute top-[46%] left-[11%]" src={cheese} alt="cheese" />
           <Image className="top-[48.2%] right-[39%] w-[23vw] absolute " src={line2} alt="first1" />
           <h1 className="text-yellow italic font-preBd text-[120px] absolute top-[45.7%] left-[56.2%] z-20 ">2</h1>
           <h1 className="text-yellow font-preBd text-[40px] absolute top-[48%] left-[62%] z-20 " ref={sectionRef[2]}>
@@ -293,21 +289,9 @@ export default function Intro() {
           </div>
           <Image className="animate-spin-slow w-[430px] absolute top-[67%] left-[11%]" src={bottom} alt="bottom" />
           <Image className="animate-spin-slow w-[430px] absolute top-[67%] left-[11%] " src={lettuce} alt="lettuce" />
-          <Image
-            className="z-10 animate-spin-slow w-[430px] absolute top-[67%] left-[11%] patty except"
-            src={patty}
-            alt="patty"
-          />
-          <Image
-            className="z-20 animate-spin-slow w-[430px] absolute top-[67%] left-[11%] patty except"
-            src={cheese}
-            alt="cheese"
-          />
-          <Image
-            className="z-30 animate-spin-slow w-[430px] absolute top-[67%] left-[11%] patty except"
-            src={top}
-            alt="top"
-          />
+          <Image className="z-10 animate-spin-slow w-[430px] absolute top-[67%] left-[11%] " src={patty} alt="patty" />
+          <Image className="z-20 animate-spin-slow w-[430px] absolute top-[67%] left-[11%]" src={cheese} alt="cheese" />
+          <Image className="z-30 animate-spin-slow w-[430px] absolute top-[67%] left-[11%] " src={top} alt="top" />
           <Image className="top-[67.4%] right-[39%] w-[23vw] absolute " src={line3} alt="first1" />
           <h1 className="text-yellow italic font-preBd text-[120px] absolute top-[66.8%] left-[56.2%] z-20">3</h1>
           <h1 className="text-yellow font-preBd text-[40px] absolute top-[69%] left-[62%] z-20" ref={sectionRef[3]}>
@@ -406,13 +390,13 @@ export default function Intro() {
         {/* 위아래 화살표 */}
         <Image
           onClick={toPrev}
-          className="w-[4vw] fixed top-[77%] right-[2%] rotate-180 animate-pulse hover:-translate-y-1 hover:scale-102 duration-300"
+          className="w-[4vw] fixed top-[77%] right-[2%] rotate-180 tong hover:-translate-y-1 hover:scale-110 duration-300"
           src={arrow}
           alt="arrow"
         />
         <Image
           onClick={toNext}
-          className="w-[4vw] fixed top-[86%] right-[2%] animate-pulse hover:translate-y-1 hover:scale-102 duration-300"
+          className="w-[4vw] fixed top-[86%] right-[2%] hover:translate-y-1 tong hover:scale-110 duration-300"
           src={arrow}
           alt="arrow"
         />
