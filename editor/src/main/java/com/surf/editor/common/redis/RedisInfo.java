@@ -1,4 +1,4 @@
-package com.surf.editor.redis;
+package com.surf.editor.common.redis;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

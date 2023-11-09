@@ -1,4 +1,4 @@
-package com.surf.editor.redis;
+package com.surf.editor.common.redis;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
