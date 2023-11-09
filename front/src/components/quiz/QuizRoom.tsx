@@ -53,7 +53,10 @@ export default function QuizRoom(props: QuizRoomProps) {
       userPk: user.userPk,
       action: ready === "ready" ? "ready" : "unready",
     };
-    if (stompClient) {
+    if (room && stompClient && user.userPk != room?.host) {
+      console.log("레디레ㅐ디 변경된거");
+      console.log(user.userPk, room?.host);
+      console.log(typeof user.userPk, typeof room?.host);
       stompClient.send(`/pub/quizroom/ready/${props.roomId}`, {}, JSON.stringify(data));
     }
   }, [ready]);
@@ -62,22 +65,10 @@ export default function QuizRoom(props: QuizRoomProps) {
   useEffect(() => {
     if (stompClient && start) {
       console.log("퀴즈시작 된다");
-      console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@22");
+      console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
       stompClient.send(`/pub/quiz/${props.roomId}`, {});
     }
   }, [start]);
-
-  const startQuiz = () => {
-    const data = {
-      userPk: user.userPk,
-      action: "ready",
-    };
-    setStart(true);
-    if (stompClient) {
-      stompClient.send(`/pub/quizroom/ready/${props.roomId}`, {}, JSON.stringify(data));
-      // stompClient.send(`/pub/quiz/${props.roomId}`, {});
-    }
-  };
 
   const outRoom = () => {
     router.push("/quiz/room");
@@ -140,11 +131,11 @@ export default function QuizRoom(props: QuizRoomProps) {
                 {room?.host === user.userPk ? (
                   // 방장일 경우
                   // 시작 가능
-                  room.roomCnt === room.readyCnt + 1 ? (
+                  room.roomCnt === room.readyCnt ? (
                     <Button
                       className="dark:border-none dark:border-font_primary font-preRg bg-primary w-full h-16 text-3xl tracking-widest font-bold"
                       type="primary"
-                      onClick={() => startQuiz()}>
+                      onClick={() => setStart(true)}>
                       START
                     </Button>
                   ) : (
