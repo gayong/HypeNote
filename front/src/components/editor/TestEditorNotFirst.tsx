@@ -19,7 +19,7 @@ type Props = {
   id: string;
 };
 
-function TestEditor({ id }: Props) {
+function TestEditorNotFirst({ id }: Props) {
   // const [theme, setTheme] = useState<"light" | "dark">("light");
   const [theme, setTheme] = useAtom<any>(themeAtom);
   const [open] = useAtom(isSearchOpen);
@@ -30,29 +30,9 @@ function TestEditor({ id }: Props) {
   }, [id]);
 
   const editor = useBlockNote({
-    initialContent: [
-      {
-        id: "d91d6999-f308-4d23-adea-4e69e22b50ea",
-        type: "paragraph",
-        props: {
-          textColor: "default",
-          backgroundColor: "default",
-          textAlignment: "left",
-        },
-        content: [],
-        children: [],
-      },
-    ],
-    onEditorReady(editor) {
-      const getBlocks = async () => {
-        const blocks = await editor.HTMLToBlocks(val);
-        editor.replaceBlocks(editor.topLevelBlocks, blocks);
-      };
-
-      getBlocks();
-    },
     onEditorContentChange: (editor) => {
       console.log(editor.topLevelBlocks, "blcok value");
+      console.log(editor.domElement.innerHTML);
     },
     domAttributes: {
       editor: {
@@ -95,4 +75,4 @@ function TestEditor({ id }: Props) {
   );
 }
 
-export default TestEditor;
+export default TestEditorNotFirst;
