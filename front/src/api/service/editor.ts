@@ -23,3 +23,14 @@ export const fetchDeleteNote = (edittorId: number) => {
 export const fetchNoteDetail = (editorId: string) => {
   api.get(`editor/${editorId}`);
 };
+
+// 웹 서칭 검색결과 조회
+export const fetchSearchResult = (query: string) => {
+  api.get("search", { params: { query } });
+};
+
+// 내 문서 검색결과 조회
+export const fetchSearchMyNote = (query: string | undefined) => {
+  api.get("editor", { params: { query } });
+  console.log("여기");
+};

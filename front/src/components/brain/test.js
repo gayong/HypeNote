@@ -242,18 +242,6 @@ const ThreeScene = () => {
   return (
     <div ref={ref} style={{ width: "100%", height: "100%" }}>
       <SelectShare onReceive={handleReceive} />
-      {nodes.length === 0 && (
-        <div
-          style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            textAlign: "center",
-          }}>
-          <h1 className="text-3xl">텅!!!!</h1>
-        </div>
-      )}
     </div>
   );
 };
