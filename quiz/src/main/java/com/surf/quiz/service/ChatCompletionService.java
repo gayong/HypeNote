@@ -117,24 +117,32 @@ public class ChatCompletionService {
                 .role(ROLE_USER)
                 .content(analysisInput)
                 .build();
+
         ChatRequest chatRequest = ChatRequest.builder()
                 .model(MODEL)
                 .messages(Arrays.asList(systemMessage, message))
                 .build();
         logger.info("Chat Request: {}", chatRequest);
-        ChatResponse chatResponse = chatCompletionClient
-                .chatCompletions(apikey, chatRequest);
-        logger.info("chatResponse: {}", chatResponse);
-        Usage usage = chatResponse.getUsage();
-        System.out.println("Usage: " + usage);
 
-        // 응답을 List에 넣기
-        return chatResponse
-                .getChoices()
-                .stream()
-                .map(choice -> choice.getMessage().getContent())
-                .collect(Collectors.toList());
 
+        try {
+            ChatResponse chatResponse = chatCompletionClient
+                    .chatCompletions(apikey, chatRequest);
+
+            logger.info("chatResponse: {}", chatResponse);
+            Usage usage = chatResponse.getUsage();
+            System.out.println("Usage: " + usage);
+
+            // 응답을 List에 넣기
+            return chatResponse
+                    .getChoices()
+                    .stream()
+                    .map(choice -> choice.getMessage().getContent())
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     // 텍스트 전처리
