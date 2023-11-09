@@ -24,7 +24,6 @@ const notYet = {
 
 export default function QuizRoom(props: QuizRoomProps) {
   const { room, quizs } = useContext(SocketContext);
-  // const [quizRoom, setQuizRoom] = useState<QuizRoomInfo | null>(null);
   const [ready, setReady] = useState<"unready" | "ready">("unready");
   const [start, setStart] = useState<boolean>(false);
 
@@ -44,16 +43,14 @@ export default function QuizRoom(props: QuizRoomProps) {
     }
   }, [stompClient]);
 
-  useEffect(() => {
-    // setQuizRoom(room);
-  }, [room]);
+  useEffect(() => {}, [room]);
 
   useEffect(() => {
     const data = {
       userPk: user.userPk,
       action: ready === "ready" ? "ready" : "unready",
     };
-    if (stompClient) {
+    if (room && stompClient && user.userPk != room?.host) {
       stompClient.send(`/pub/quizroom/ready/${props.roomId}`, {}, JSON.stringify(data));
     }
   }, [ready]);
@@ -61,23 +58,17 @@ export default function QuizRoom(props: QuizRoomProps) {
   // 퀴즈 시작
   useEffect(() => {
     if (stompClient && start) {
-      console.log("퀴즈시작 된다");
-      console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@22");
       stompClient.send(`/pub/quiz/${props.roomId}`, {});
+
+      // 0.5초 후 퀴즈 배열 확인
+      setTimeout(() => {
+        if (quizs.length === 0) {
+          message.loading("퀴즈를 만들고 있는 중이에요. 잠시 후 다시 시도해주세요.");
+          setStart(false);
+        }
+      }, 500);
     }
   }, [start]);
-
-  const startQuiz = () => {
-    const data = {
-      userPk: user.userPk,
-      action: "ready",
-    };
-    setStart(true);
-    if (stompClient) {
-      stompClient.send(`/pub/quizroom/ready/${props.roomId}`, {}, JSON.stringify(data));
-      // stompClient.send(`/pub/quiz/${props.roomId}`, {});
-    }
-  };
 
   const outRoom = () => {
     router.push("/quiz/room");
@@ -87,8 +78,8 @@ export default function QuizRoom(props: QuizRoomProps) {
   return (
     <>
       {quizs.length > 0 ? (
-        // 퀴즈게임중
-        <QuizStart />
+        // 퀴즈 게임 중
+        <QuizStart roomId={props.roomId} />
       ) : (
         // 퀴즈 게임 전
         <>
@@ -140,11 +131,11 @@ export default function QuizRoom(props: QuizRoomProps) {
                 {room?.host === user.userPk ? (
                   // 방장일 경우
                   // 시작 가능
-                  room.roomCnt === room.readyCnt + 1 ? (
+                  room.roomCnt === room.readyCnt ? (
                     <Button
                       className="dark:border-none dark:border-font_primary font-preRg bg-primary w-full h-16 text-3xl tracking-widest font-bold"
                       type="primary"
-                      onClick={() => startQuiz()}>
+                      onClick={() => setStart(true)}>
                       START
                     </Button>
                   ) : (
