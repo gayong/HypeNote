@@ -29,9 +29,11 @@ public class MessageController {
     }
 
     @MessageMapping("/note/connection/{noteId}")
-    public void editorConnection(@DestinationVariable("noteId") String noteId, EditorConnectionRequestDto editorConnectionRequestDto){
+    public EditorConnectionRequestDto editorConnection(@DestinationVariable("noteId") String noteId, EditorConnectionRequestDto editorConnectionRequestDto){
         List<Integer> userList = editorConnection.editorConnection(noteId,editorConnectionRequestDto);
         simpMessagingTemplate.convertAndSend("/sub/note"+noteId, userList);
+
+        return editorConnectionRequestDto;
     }
 
 
