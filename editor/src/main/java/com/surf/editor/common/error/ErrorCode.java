@@ -27,11 +27,13 @@ public enum ErrorCode {
 
     DIAGRAM_SAVE_FAIL(400,"다이어그램에 문서 정보 저장 실패했습니다"),
     MEMBER_SAVE_FAIL(400,"유저에 문서 정보 저장 실패했습니다."),
-    QUIZ_SAVE_FAIL(400,"퀴즈에 문서 정보 저장 실패했습니다.")
+    QUIZ_SAVE_FAIL(400,"퀴즈에 문서 정보 저장 실패했습니다."),
+
+    WRITER_PERMISSION_FAIL(400,"문서 쓰기 권한 설정에 실패 했습니다"),
+
+    REDIS_SAVE_FAIL(400,"Redis 저장에 실패했습니다."),
+    REDIS_GET_FAIL(400,"Redis 조회에 실패했습니다")
     ;
-
-
-
 
     private int status;
     private String message;
