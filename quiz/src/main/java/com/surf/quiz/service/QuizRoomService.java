@@ -162,7 +162,7 @@ public class QuizRoomService {
 
         MemberDto member = new MemberDto();
         member.setHost(true);
-        member.setReady(createQuizRoom.isSingle());
+        member.setReady(true);
         System.out.println("createRoomRequestDto.getUsers().get(0) = " + createRoomRequestDto.getUsers().get(0));
         member.setUserPk(createRoomRequestDto.getUsers().get(0).getUserPk());
         member.setUserName(createRoomRequestDto.getUsers().get(0).getUserName());
