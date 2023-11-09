@@ -360,6 +360,23 @@ public class QuizRoomService {
     }
 
 
+    public CompletableFuture<BaseResponse<List<QuestionDto>>> getGptWithRetry(int retry, int index, String res) {
+        return CompletableFuture.supplyAsync(() -> {
+            for (int i = 0; i < retry; i++) {
+                try {
+                    return feignService.getGpt(1, res, index + 1);
+                } catch (Exception e) {
+                    // 예외 발생 시 로그 출력 및 재시도
+                    System.out.println("재시도: " + (i + 1));
+                    if (i == retry - 1) {
+                        // 최대 재시도 횟수를 넘었을 때 null 반환
+                        return null;
+                    }
+                }
+            }
+            return null;
+        });
+    }
 
 
     public Quiz createQuiz(QuizRoom createdQuizroom) {
@@ -375,13 +392,7 @@ public class QuizRoomService {
         // GPT 문제 생성 보내기
         try {
             List<CompletableFuture<BaseResponse<List<QuestionDto>>>> futures = IntStream.range(0, createdQuizroom.getQuizCnt())
-                    .mapToObj(i -> CompletableFuture.supplyAsync(() -> {
-                        try {
-                            return feignService.getGpt(1, res, i+1);
-                        } catch (Exception e) {
-                            return null;  // 예외 발생 시 null 반환
-                        }
-                    }))
+                    .mapToObj(i -> getGptWithRetry(3, i, res))  // 재시도 횟수를 3으로 설정
                     .toList();
 
             CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
@@ -391,6 +402,10 @@ public class QuizRoomService {
                     .filter(Objects::nonNull)  // null 제외
                     .flatMap(response -> response.getResult().stream())  // List<QuestionDto>를 QuestionDto 스트림으로 변환
                     .collect(Collectors.toList());
+            // 각 QuestionDto의 id 설정
+            for (int i = 0; i < question.size(); i++) {
+                question.get(i).setId(i + 1);
+            }
 
             quiz.setQuestion(question);
             quiz.setComplete(false);
