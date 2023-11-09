@@ -9,8 +9,8 @@ spring:
      client:
        config:
          default:
-           connectTimeout: 5000
-           readTimeout: 5000
+           connectTimeout: 70000
+           readTimeout: 70000
            loggerLevel: basic
 logging:
   level:
