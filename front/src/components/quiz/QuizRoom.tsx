@@ -24,7 +24,6 @@ const notYet = {
 
 export default function QuizRoom(props: QuizRoomProps) {
   const { room, quizs } = useContext(SocketContext);
-  // const [quizRoom, setQuizRoom] = useState<QuizRoomInfo | null>(null);
   const [ready, setReady] = useState<"unready" | "ready">("unready");
   const [start, setStart] = useState<boolean>(false);
 
@@ -44,9 +43,7 @@ export default function QuizRoom(props: QuizRoomProps) {
     }
   }, [stompClient]);
 
-  useEffect(() => {
-    // setQuizRoom(room);
-  }, [room]);
+  useEffect(() => {}, [room]);
 
   useEffect(() => {
     const data = {
@@ -54,9 +51,6 @@ export default function QuizRoom(props: QuizRoomProps) {
       action: ready === "ready" ? "ready" : "unready",
     };
     if (room && stompClient && user.userPk != room?.host) {
-      console.log("레디레ㅐ디 변경된거");
-      console.log(user.userPk, room?.host);
-      console.log(typeof user.userPk, typeof room?.host);
       stompClient.send(`/pub/quizroom/ready/${props.roomId}`, {}, JSON.stringify(data));
     }
   }, [ready]);
@@ -64,8 +58,6 @@ export default function QuizRoom(props: QuizRoomProps) {
   // 퀴즈 시작
   useEffect(() => {
     if (stompClient && start) {
-      console.log("퀴즈시작 된다");
-      console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
       stompClient.send(`/pub/quiz/${props.roomId}`, {});
     }
   }, [start]);
@@ -78,7 +70,7 @@ export default function QuizRoom(props: QuizRoomProps) {
   return (
     <>
       {quizs.length > 0 ? (
-        // 퀴즈게임중
+        // 퀴즈 게임 중
         <QuizStart />
       ) : (
         // 퀴즈 게임 전
