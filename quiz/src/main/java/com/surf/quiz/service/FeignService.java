@@ -40,8 +40,8 @@ public class FeignService {
         return new BaseResponse<>(response);
     }
 
-    public BaseResponse<List<QuestionDto>> getGpt(int cnt, String content) {
-        List<String> abc = chatCompletionService.chatCompletions(cnt, content);
+    public BaseResponse<List<QuestionDto>> getGpt(int cnt, String content, int id) {
+        List<String> abc = chatCompletionService.chatCompletions(cnt, content, id);
 
         // ObjectMapper 객체 생성
         ObjectMapper objectMapper = new ObjectMapper();

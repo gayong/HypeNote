@@ -39,8 +39,8 @@ public class EditorController {
         return feignService.getEditorInfo(userId);
     }
 
-    @PostMapping("/gpt")
-    public BaseResponse<List<QuestionDto>> getGpt(@RequestParam int cnt, @RequestBody String content) {
-        return feignService.getGpt(cnt, content);
-    }
+//    @PostMapping("/gpt")
+//    public BaseResponse<List<QuestionDto>> getGpt(@RequestParam int cnt, @RequestBody String content) {
+//        return feignService.getGpt(cnt, content);
+//    }
 }

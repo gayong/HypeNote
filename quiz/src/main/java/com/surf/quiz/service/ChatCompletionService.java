@@ -60,7 +60,7 @@ public class ChatCompletionService {
     @Value("${apikey}")
     private String apikey;
 
-    public List<String> chatCompletions(int cnt, final String question) {
+    public List<String> chatCompletions(int cnt, final String question, int id) {
         if (cnt < 0 || question == null || question.trim().isEmpty()){
             return null;
         }
@@ -82,7 +82,7 @@ public class ChatCompletionService {
                         "There is only one correct answer" +
                         "I want to make it in the format below\n" +
                         "    {\n" +
-                        "      \"id\": number,\n" +
+                        "      \"id\":" + id +
                         "      \"question\": \"question content\",\n" +
                         "      \"example\": [\n" +
                         "        {\n" +
@@ -102,10 +102,11 @@ public class ChatCompletionService {
                         "          \"content\": \"example content\"\n" +
                         "        }\n" +
                         "      ],\n" +
-                        "      \"answer\": \"correct answer\",\n" +
+                        "      \"answer\": \"ex number\",\n" +
                         "      \"commentary\": \"commentary content\"\n" +
                         "    }\n" +
-                        "The number of quizzes is"+ cnt +" Please respond with a List\n")
+                        "The number of quizzes is"+ cnt +" Please respond with a List\n"+
+                        "Please answer all in Korean.")
                 .build();
 
 

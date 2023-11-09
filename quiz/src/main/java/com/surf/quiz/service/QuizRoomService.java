@@ -378,7 +378,7 @@ public class QuizRoomService {
                     .parallel()
                     .mapToObj(i -> {
                         try {
-                            BaseResponse<List<QuestionDto>> questionsResponse = feignService.getGpt(1, res);
+                            BaseResponse<List<QuestionDto>> questionsResponse = feignService.getGpt(1, res, i+1);
                             return questionsResponse.getResult();
                         } catch (Exception e) {
                             // 예외 처리 코드를 작성합니다.
