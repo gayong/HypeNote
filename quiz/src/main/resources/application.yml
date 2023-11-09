@@ -12,9 +12,6 @@ spring:
            connectTimeout: 70000
            readTimeout: 70000
            loggerLevel: basic
-logging:
-  level:
-    com.surf.quiz.service.ChatCompletionService: INFO
 
 
 ## For Local -인식 문의

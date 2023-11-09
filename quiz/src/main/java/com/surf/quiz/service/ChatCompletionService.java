@@ -166,7 +166,7 @@ public class ChatCompletionService {
 
     // 키워드 추출
     private List<String> extractKeywords(String content) {
-        return extractKeywordsWithKomoran(content, 3); // 상위 3개 키워드 추출
+        return extractKeywordsWithKomoran(content, 5); // 상위 5개 키워드 추출
     }
 
     // 코모란
