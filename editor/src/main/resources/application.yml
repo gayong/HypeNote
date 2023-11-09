@@ -1,5 +1,5 @@
 # For MSA -인식 문의
- spring:
+spring:
    application:
      name: server-editor
    config:
