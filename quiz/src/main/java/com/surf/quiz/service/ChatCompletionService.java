@@ -67,6 +67,7 @@ public class ChatCompletionService {
         if (cnt < 0 || question == null || question.trim().isEmpty()){
             return null;
         }
+        System.out.println("id = " + id);
 
         // 텍스트 전처리
         String content = preprocessContent(question);
@@ -86,7 +87,7 @@ public class ChatCompletionService {
                         "There is only one correct answer" +
                         "I want to make it in the format below\n" +
                         "    {\n" +
-                        "      \"id\":" + id +
+                        "      \"id\":" + "number" +
                         "      \"question\": \"question content\",\n" +
                         "      \"example\": [\n" +
                         "        {\n" +
@@ -109,9 +110,12 @@ public class ChatCompletionService {
                         "      \"answer\": \"ex number\",\n" +
                         "      \"commentary\": \"commentary content\"\n" +
                         "    }\n" +
-                        "The number of quizzes is"+ cnt +" Please respond with a List\n"+
-                        "Please answer all in Korean.")
+                        " Please respond with a List\n"+
+                        "The number of quizzes is"+ cnt +"Please answer all in Korean.")
                 .build();
+
+//
+
 
         Message message = Message.builder()
                 .role(ROLE_USER)

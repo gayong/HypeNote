@@ -371,59 +371,27 @@ public class QuizRoomService {
 
         // GPT 문제 생성 보내기
         try {
-            ExecutorService executor = Executors.newFixedThreadPool(createdQuizroom.getQuizCnt());
-            List<CompletableFuture<List<QuestionDto>>> futures = IntStream.range(0, createdQuizroom.getQuizCnt())
-                    .mapToObj(i ->
-                            CompletableFuture.supplyAsync(() -> {
-                                try {
-                                    BaseResponse<List<QuestionDto>> questionsResponse = feignService.getGpt(1, res, i+1);
-                                    return questionsResponse.getResult();
-                                } catch (Exception e) {
-                                    // 예외 처리 코드를 작성합니다.
-                                    return null;
-                                }
-                            }, executor)
-                    )
+            List<CompletableFuture<BaseResponse<List<QuestionDto>>>> futures = IntStream.range(0, createdQuizroom.getQuizCnt())
+                    .mapToObj(i -> CompletableFuture.supplyAsync(() -> {
+                        try {
+                            return feignService.getGpt(1, res, i+1);
+                        } catch (Exception e) {
+                            return null;  // 예외 발생 시 null 반환
+                        }
+                    }))
                     .toList();
 
-            CompletableFuture<Void> allFutures = CompletableFuture.allOf(
-                    futures.toArray(new CompletableFuture[0])
-            );
+            CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
 
-            CompletableFuture<List<List<QuestionDto>>> allPageContentsFuture = allFutures.thenApply(v ->
-                    futures.stream()
-                            .map(CompletableFuture::join)
-                            .collect(Collectors.toList())
-            );
-
-            List<QuestionDto> question = allPageContentsFuture.get().stream()
-                    .filter(Objects::nonNull)
-                    .flatMap(List::stream)
+            List<QuestionDto> question = futures.stream()
+                    .map(CompletableFuture::join)
+                    .filter(Objects::nonNull)  // null 제외
+                    .flatMap(response -> response.getResult().stream())  // List<QuestionDto>를 QuestionDto 스트림으로 변환
                     .collect(Collectors.toList());
 
             quiz.setQuestion(question);
             quiz.setComplete(false);
-
-            executor.shutdown(); // executor를 정리합니다.
             return quiz;
-////            List<QuestionDto> question = IntStream.range(0, createdQuizroom.getQuizCnt())
-//            List<QuestionDto> question = IntStream.range(0, 3)
-//                    .parallel()
-//                    .mapToObj(i -> {
-//                        try {
-//                            BaseResponse<List<QuestionDto>> questionsResponse = feignService.getGpt(1, res, i+1);
-//                            return questionsResponse.getResult();
-//                        } catch (Exception e) {
-//                            // 예외 처리 코드를 작성합니다.
-//                            return null;  // 예외 발생 시 null 반환
-//                        }
-//                    })
-//                    .filter(Objects::nonNull)  // null 제외
-//                    .flatMap(List::stream)  // List<QuestionDto>를 QuestionDto 스트림으로 변환
-//                    .collect(Collectors.toList());
-//            quiz.setQuestion(question);
-//            quiz.setComplete(false);
-//            return quiz;
         } catch (Exception e) {
             // 예외 처리 코드를 작성합니다.
         }
