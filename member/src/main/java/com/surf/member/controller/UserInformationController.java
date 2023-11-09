@@ -16,7 +16,7 @@ import java.util.Optional;
 @RequestMapping("/api/member")
 public class UserInformationController {
 
-    private UserInformationService userInformationService;
+    private final UserInformationService userInformationService;
 
     @PostMapping("/user-info")
     private ResponseEntity<UserInfoResponseDto> userInformationController (@RequestBody UserInfoRequestDto userInfoRequest) {
