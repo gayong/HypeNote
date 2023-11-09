@@ -5,6 +5,8 @@ import QuizRoom from "@/components/quiz/QuizRoom";
 import { useContext, useEffect } from "react";
 import { useWebSocket } from "@/context/SocketProvider";
 import SubscribeProvider from "@/context/SubscribeProvider";
+import { useAtom } from "jotai";
+import { userAtom } from "@/store/authAtom";
 
 type Props = {
   params: {
@@ -14,12 +16,16 @@ type Props = {
 
 export default function QuizRoomPage({ params: { id } }: Props) {
   const stompClient = useWebSocket();
+  const [user] = useAtom(userAtom);
 
   useEffect(() => {
     if (stompClient) {
+      // stompClient.subscribe(`/sub/quiz/${id}`, (response) => {});
+
       const data = {
-        userPk: "2",
-        userName: "isc",
+        userPk: user.userPk,
+        userName: user.nickName,
+        userImg: user.profileImage,
       };
 
       stompClient.send(`/pub/quizroom/in/${id}`, {}, JSON.stringify(data));
@@ -28,7 +34,7 @@ export default function QuizRoomPage({ params: { id } }: Props) {
 
   return (
     <SubscribeProvider roomId={id}>
-      <section className="mx-5 my-20">
+      <section className="h-[100vh] flex items-center justify-center">
         <QuizRoom roomId={id} />
       </section>
     </SubscribeProvider>

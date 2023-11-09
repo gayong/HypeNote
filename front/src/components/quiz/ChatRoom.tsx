@@ -28,13 +28,12 @@ export default function ChatRoom(props: QuizRoomProps) {
   };
 
   const handleSendMessage = () => {
-    console.log(message, "를 보냈다.");
-
     const messageInput = {
       userPk: user.userPk,
       userName: user.nickName,
       content: message,
       chatTime: new Date().toLocaleString(),
+      userImg: user.profileImage,
     };
     if (stompClient) {
       stompClient.send(`/pub/chat/${props.roomId}`, {}, JSON.stringify(messageInput));
@@ -56,8 +55,8 @@ export default function ChatRoom(props: QuizRoomProps) {
         style={{ height: `${props.height}vh` }}
         className="outline outline-offset-2 outline-2 outline-line_primary flex flex-col flex-grow w-full rounded-lg overflow-hidden">
         <div className="flex flex-col flex-grow h-0 p-4 overflow-auto min-h-min">
-          {chatMessages.map((chat, idx) =>
-            chat.userPk === user.userPk ? <MyChat key={idx} {...chat} /> : <YourChat key={idx} {...chat} />
+          {chatMessages.map((chat, index) =>
+            chat.userPk === user.userPk ? <MyChat key={index} {...chat} /> : <YourChat key={index} {...chat} />
           )}
           <div ref={chatEndRef} />
         </div>

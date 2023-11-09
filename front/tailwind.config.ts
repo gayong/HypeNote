@@ -28,6 +28,7 @@ const config: Config = {
       dark_primary: "#4F4F4F",
       dark_background: "#424242",
       dark_font: "#6789f0",
+      yellow: "#FEC107",
     },
     fontFamily: {
       preRg: ["preRg"],
