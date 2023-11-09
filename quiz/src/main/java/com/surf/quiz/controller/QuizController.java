@@ -85,7 +85,7 @@ public class QuizController {
         messageTemplate.convertAndSend("/sub/quiz/" + roomId, payload);
 
         // 시간 제한 퀴즈 종료 스케줄러 작동
-        int delay = quiz.getQuizCnt() * 30;
+        int delay = (quiz.getQuizCnt() * 30) + 5;
         scheduler.schedule(() -> completeQuizScheduled(quiz), delay, TimeUnit.SECONDS);
     }
 

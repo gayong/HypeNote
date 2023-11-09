@@ -51,6 +51,7 @@ public class FeignService {
             List<QuestionDto> questionList = new ArrayList<>();
             for (String json : abc) {
                 QuestionDto questionDto = objectMapper.readValue(json, new TypeReference<>() {});
+                questionDto.setId(id);
                 questionList.add(questionDto);
             }
 

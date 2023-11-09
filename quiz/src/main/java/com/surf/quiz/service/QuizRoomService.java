@@ -374,23 +374,45 @@ public class QuizRoomService {
 
         // GPT 문제 생성 보내기
         try {
-            List<QuestionDto> question = IntStream.range(0, createdQuizroom.getQuizCnt())
-                    .parallel()
-                    .mapToObj(i -> {
+            List<CompletableFuture<BaseResponse<List<QuestionDto>>>> futures = IntStream.range(0, createdQuizroom.getQuizCnt())
+                    .mapToObj(i -> CompletableFuture.supplyAsync(() -> {
                         try {
-                            BaseResponse<List<QuestionDto>> questionsResponse = feignService.getGpt(1, res, i+1);
-                            return questionsResponse.getResult();
+                            return feignService.getGpt(1, res, i+1);
                         } catch (Exception e) {
-                            // 예외 처리 코드를 작성합니다.
                             return null;  // 예외 발생 시 null 반환
                         }
-                    })
+                    }))
+                    .toList();
+
+            CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
+
+            List<QuestionDto> question = futures.stream()
+                    .map(CompletableFuture::join)
                     .filter(Objects::nonNull)  // null 제외
-                    .flatMap(List::stream)  // List<QuestionDto>를 QuestionDto 스트림으로 변환
+                    .flatMap(response -> response.getResult().stream())  // List<QuestionDto>를 QuestionDto 스트림으로 변환
                     .collect(Collectors.toList());
+
             quiz.setQuestion(question);
             quiz.setComplete(false);
             return quiz;
+//        try {
+//            List<QuestionDto> question = IntStream.range(0, createdQuizroom.getQuizCnt())
+//                    .parallel()
+//                    .mapToObj(i -> {
+//                        try {
+//                            BaseResponse<List<QuestionDto>> questionsResponse = feignService.getGpt(1, res, i+1);
+//                            return questionsResponse.getResult();
+//                        } catch (Exception e) {
+//                            // 예외 처리 코드를 작성합니다.
+//                            return null;  // 예외 발생 시 null 반환
+//                        }
+//                    })
+//                    .filter(Objects::nonNull)  // null 제외
+//                    .flatMap(List::stream)  // List<QuestionDto>를 QuestionDto 스트림으로 변환
+//                    .collect(Collectors.toList());
+//            quiz.setQuestion(question);
+//            quiz.setComplete(false);
+//            return quiz;
         } catch (Exception e) {
             // 예외 처리 코드를 작성합니다.
         }
