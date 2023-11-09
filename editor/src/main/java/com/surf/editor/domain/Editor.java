@@ -41,6 +41,7 @@ public class Editor {
                 .parentId(null)
                 .childId(new ArrayList<>())
                 .hyperLink(new ArrayList<>())
+                .writePermission(new ArrayList<>())
                 .build();
 
         editor.getWritePermission().add(userId);
