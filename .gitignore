@@ -176,3 +176,5 @@ $RECYCLE.BIN/
 
 application-gpt.yml
 .application-gpt.yml
+/quiz/src/main/resources/application-*.yml
+/quiz/src/main/resources/application-gpt.yml
