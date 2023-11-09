@@ -17,4 +17,13 @@ public class RedisInfo {
     @Id
     public String key;
     public List<Integer> value;
+
+    public void addValue(Integer userId){
+        value.add(userId);
+    }
+
+    public void subValue(Integer userId){
+        value.remove(userId);
+    }
+
 }
