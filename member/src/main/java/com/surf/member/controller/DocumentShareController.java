@@ -16,14 +16,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/member")
 public class DocumentShareController {
 
-    private final UserPkAuthenticator userPkAuthentication;
+    private final UserPkAuthenticator userPkAuthenticator;
     private final DocumentShareService documentShareService;
 
     @PostMapping("/share")
     private ResponseEntity<String> documentShareController (@RequestBody DocumentShareRequestDto documentShareRequestDto) {
 
         int userPk = documentShareRequestDto.getUserPk();
-        if (userPkAuthentication.userPkAuthentication(userPk)){
+        if (userPkAuthenticator.userPkAuthentication(userPk)){
             documentShareService.saveDocumentShare(documentShareRequestDto);
 
             return ResponseEntity.ok("성공적으로 공유되었습니다.");
