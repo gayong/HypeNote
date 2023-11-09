@@ -9,6 +9,7 @@ import DarkModeBtn from "./darkmode/DarkmodeBtn";
 import Category from "./category/Category";
 import { useAtom } from "jotai";
 import { userAtom } from "@/store/authAtom";
+import MySearch from "@/components/MySearch";
 
 export default function Navbar() {
   const [user] = useAtom(userAtom);
@@ -33,14 +34,15 @@ export default function Navbar() {
           {/* <div className="my-2 bg-gray-600 h-[1px]"></div> */}
           <br />
         </div>
-        <div className="w-[97%] mx-auto py-1.5 flex items-center rounded-lg duration-300 bg-[#FFFFFF] bg-opacity-75 text-dark_primary">
+        {/* <div className="w-[97%] mx-auto py-1.5 flex items-center rounded-lg duration-300 bg-[#FFFFFF] bg-opacity-75 text-dark_primary">
           <i className="bi bi-search text-sm"></i>
           <input
             type="text"
             placeholder="🔎 게시글을 검색하세요"
             className="w-full bg-transparent text-[15px] mx-3 focus:outline-none placeholder-gray-600"
           />
-        </div>
+        </div> */}
+        <MySearch />
         <Link href="/">
           <div className="py-2 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-hover_primary hover:bg-opacity-50 dark:hover:bg-line_primary dark:hover:bg-opacity-50">
             <i className="bi bi-house-door-fill"></i>
