@@ -23,7 +23,7 @@ public class RedisService {
         RedisInfo redisInfo = editorRedisRepository.findById(key).orElse(null);
 
         if(redisInfo==null){
-            RedisInfo redis = new RedisInfo(key, null);
+            RedisInfo redis = new RedisInfo(key, new ArrayList<>());
             redis.addValue(editorConnectionRequestDto.getUserId());
 
             RedisInfo saved = editorRedisRepository.save(redis);
@@ -41,7 +41,7 @@ public class RedisService {
         RedisInfo redisInfo = editorRedisRepository.findById(key).orElse(null);
 
         if(redisInfo==null){
-            return null;
+            return new ArrayList<>();
         }
 
         redisInfo.subValue(editorDisConnectionRequestDto.getUserId());
