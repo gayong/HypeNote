@@ -2,10 +2,12 @@
 
 // import MySearch from "@/components/MySearch";
 // import { Metadata } from "next";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useGetSearchMyNote } from "@/hooks/useGetSearchMyNote";
 import { NoteType } from "@/types/ediotr";
+import MySearch from "@/components/MySearch";
 
 // export const metadata: Metadata = {
 //   title: "Search",
@@ -39,17 +41,24 @@ export default function SearchPage() {
   }, [response]);
 
   return (
-    <section className="h-screen">
+    <div className="h-screen pt-16">
       {/* <MySearch /> */}
-      <h1 className="text-3xl mx-auto text-center">{search}검색 결과입니다.</h1>
+      <h1 className="text-[25px] mx-auto text-center">
+        <span className="font-bold">{search}</span>에 대한 검색 결과입니다.
+      </h1>
+      <div className="w-[600px] mx-auto my-10">
+        <MySearch />
+      </div>
       {results.length > 0 &&
         results.map((item, index) => (
-          <div key={index}>
-            <h1>title:{item.title}</h1>
+          <div key={index} className="px-40">
+            <Link href={`/editor/${item.id}`}>
+              <h1 className="underline hover:text-dark_font">titddle:{item.title}</h1>
+            </Link>
             <h1>content:{item.content}</h1>
             <br />
           </div>
         ))}
-    </section>
+    </div>
   );
 }
