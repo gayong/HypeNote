@@ -21,10 +21,10 @@ repositories {
 	mavenCentral()
 }
 
-// For MSA - 인식 문의
-ext {
-	set('springCloudVersion', "2022.0.4")
-}
+//// For MSA - 인식 문의
+//ext {
+//	set('springCloudVersion', "2022.0.4")
+//}
 
 
 dependencies {
@@ -39,19 +39,19 @@ dependencies {
 
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
-	// For MSA -인식문의
-	implementation 'org.springframework.cloud:spring-cloud-starter'
-	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
-	implementation 'org.springframework.cloud:spring-cloud-starter-config'
+//	// For MSA -인식문의
+//	implementation 'org.springframework.cloud:spring-cloud-starter'
+//	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+//	implementation 'org.springframework.cloud:spring-cloud-starter-config'
 
 }
 
-// For MSA -인식문의
-dependencyManagement {
-	imports {
-		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
-	}
-}
+//// For MSA -인식문의
+//dependencyManagement {
+//	imports {
+//		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+//	}
+//}
 
 
 tasks.named('test') {
