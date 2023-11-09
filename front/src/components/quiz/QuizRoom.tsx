@@ -59,6 +59,14 @@ export default function QuizRoom(props: QuizRoomProps) {
   useEffect(() => {
     if (stompClient && start) {
       stompClient.send(`/pub/quiz/${props.roomId}`, {});
+
+      // 0.5초 후 퀴즈 배열 확인
+      setTimeout(() => {
+        if (quizs.length === 0) {
+          message.loading("퀴즈를 만들고 있는 중이에요. 잠시 후 다시 시도해주세요.");
+          setStart(false);
+        }
+      }, 500);
     }
   }, [start]);
 
@@ -71,7 +79,7 @@ export default function QuizRoom(props: QuizRoomProps) {
     <>
       {quizs.length > 0 ? (
         // 퀴즈 게임 중
-        <QuizStart />
+        <QuizStart roomId={props.roomId} />
       ) : (
         // 퀴즈 게임 전
         <>
