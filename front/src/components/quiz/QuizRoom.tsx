@@ -11,6 +11,8 @@ import QuizStart from "./QuizStart";
 import Card2 from "../ui/Card2";
 import { useAtom } from "jotai";
 import { userAtom } from "@/store/authAtom";
+import QuizResult from "./QuizResult";
+import Loading from "@/app/loading";
 
 interface QuizRoomProps {
   roomId: number;
@@ -23,9 +25,10 @@ const notYet = {
 };
 
 export default function QuizRoom(props: QuizRoomProps) {
-  const { room, quizs } = useContext(SocketContext);
+  const { room, quizs, quizResults } = useContext(SocketContext);
   const [ready, setReady] = useState<"unready" | "ready">("unready");
   const [start, setStart] = useState<boolean>(false);
+  const [submit, setSubmit] = useState<boolean>(false);
 
   const stompClient = useWebSocket();
   const [user] = useAtom(userAtom);
@@ -60,13 +63,13 @@ export default function QuizRoom(props: QuizRoomProps) {
     if (stompClient && start) {
       stompClient.send(`/pub/quiz/${props.roomId}`, {});
 
-      // 0.5초 후 퀴즈 배열 확인
+      // 1초 후 퀴즈 배열 확인
       setTimeout(() => {
         if (quizs.length === 0) {
-          message.loading("퀴즈를 만들고 있는 중이에요. 잠시 후 다시 시도해주세요.");
+          message.loading("퀴즈를 만들고 있는 중이에요. 잠시 후 다시 시도해주세요.", 2);
           setStart(false);
         }
-      }, 500);
+      }, 1000);
     }
   }, [start]);
 
@@ -77,9 +80,18 @@ export default function QuizRoom(props: QuizRoomProps) {
 
   return (
     <>
-      {quizs.length > 0 ? (
+      {submit && quizResults.length > 0 ? (
+        // 퀴즈 모두 다 푼 경우 => 랭킹 보여줌
+        <QuizResult />
+      ) : submit && quizResults.length === 0 ? (
+        // 제출했지만 결과가 아직 없는 경우 => 로딩 화면
+        <div>
+          <Loading />
+          <h1>다른 친구들이 다 풀 때까지 잠시만 기다려 주세요.</h1>
+        </div>
+      ) : quizs.length > 0 ? (
         // 퀴즈 게임 중
-        <QuizStart roomId={props.roomId} />
+        <QuizStart roomId={props.roomId} setSubmit={setSubmit} />
       ) : (
         // 퀴즈 게임 전
         <>
@@ -87,7 +99,7 @@ export default function QuizRoom(props: QuizRoomProps) {
             <div className="col-span-7 flex flex-col">
               <div className="flex justify-center items-center relative">
                 <span
-                  className="hover:text-hover_primary text-lg font-PreBd font-normal text-dark_background dark:text-font_primary absolute left-0 p-1 rounded-md outline outline-2 outline-font_primary"
+                  className="hover:text-hover_primary text-lg font-PreBd font-normal text-dark_background dark:text-font_primary absolute left-0 p-1 rounded-md outline outline-2 outline-dark_font dark:outline-font_primary "
                   onClick={() => outRoom()}>
                   {"<< 나가기"}
                 </span>

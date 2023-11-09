@@ -1,15 +1,17 @@
 "use client";
 import { SocketContext } from "@/context/SubscribeProvider";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { TreeSelect, Select, Button, message, Steps, theme } from "antd";
 import { useSendQuizAnswer } from "@/hooks/useSendQuizAnswer";
 import { userAtom } from "@/store/authAtom";
 import { useAtom } from "jotai";
 
 import Quiz from "../ui/Quiz";
+import { useRouter } from "next/navigation";
 
 interface QuizRoomProps {
   roomId: number;
+  setSubmit: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export default function QuizStart(props: QuizRoomProps) {
@@ -20,6 +22,8 @@ export default function QuizStart(props: QuizRoomProps) {
   const { quizs } = useContext(SocketContext);
 
   const [user] = useAtom(userAtom);
+  const router = useRouter();
+
   const handleAnswerChange = (questionId: string, answer: string) => {
     setAnswers({
       ...answers,
@@ -45,7 +49,21 @@ export default function QuizStart(props: QuizRoomProps) {
     });
   };
 
-  const items = quizs.map((quiz) => ({ key: quiz.id, title: quiz.id + "번" }));
+  useEffect(() => {
+    if (sendQuizAnswer.isSuccess) {
+      message.success("답안을 제출했어요.");
+      // 결과 페이지 이동
+      // router.replace(`/quiz/room/${props.roomId}/result`);
+      props.setSubmit(true);
+    } else if (sendQuizAnswer.isError) {
+      message.error("답안 제출 에러가 발생했어요. 잠시 후 다시 제출해주세요.");
+    }
+  }, [sendQuizAnswer]);
+
+  const items = quizs.map((quiz) => ({
+    key: quiz.id,
+    title: <div className="dark:text-font_primary text-md font-semibold">{quiz.id}번</div>,
+  }));
 
   // 모든 퀴즈 질문에 "모르겠어요" 옵션 추가
   const quizsWithExtraOption = quizs.map((quiz) => ({
@@ -57,13 +75,13 @@ export default function QuizStart(props: QuizRoomProps) {
     <>
       {quizs && quizs.length > 0 && (
         <>
-          <div className="my-24 flex-cols items-center justify-center h-screen mx-16 w-full">
+          <div className="my-24 flex-cols items-center justify-center h-screen mx-16 w-full pt-10 ">
             <Steps
               status="process"
               type="navigation"
               percent={((step + 1) / quizs.length) * 100}
               size="small"
-              className="site-navigation-steps"
+              className="site-navigation-steps dark:text-font_primary"
               current={step}
               items={items}
             />
@@ -78,7 +96,7 @@ export default function QuizStart(props: QuizRoomProps) {
                 example={quizsWithExtraOption[step].example}
                 questionId={quizsWithExtraOption[step].id}
                 onAnswerChange={handleAnswerChange}
-                selectedAnswer={answers[quizsWithExtraOption[step].id]}
+                selectedAnswer={answers[quizsWithExtraOption[step].id] || ""}
               />
             </div>
 

@@ -42,7 +42,7 @@ export default function QuizMaker() {
       roomName: title,
       pages: [1, 2, 3],
       sharePages: [1, 2],
-      quizCnt: 10,
+      quizCnt: 2,
       content: content,
       single: false,
     });
@@ -273,8 +273,7 @@ export default function QuizMaker() {
             )}
             {current < steps.length - 1 && (
               <Button
-                className="dark:border dark:border-font_primary"
-                style={{ fontFamily: "preRg", backgroundColor: "#2946A2" }}
+                className="dark:border dark:border-font_primary font-preRg bg-primary"
                 type="primary"
                 onClick={() => next()}>
                 다음
@@ -282,8 +281,7 @@ export default function QuizMaker() {
             )}
             {current === steps.length - 1 && (
               <Button
-                className="dark:border dark:border-font_primary"
-                style={{ fontFamily: "preRg", backgroundColor: "#2946A2" }}
+                className="dark:border dark:border-font_primary font-preRg bg-primary"
                 type="primary"
                 onClick={() => handleSumbitCreateRoom()}>
                 생성하기
