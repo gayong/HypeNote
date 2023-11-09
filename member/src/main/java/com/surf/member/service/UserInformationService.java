@@ -15,10 +15,6 @@ public class UserInformationService {
 
     private final UserRepository userRepository;
 
-    public boolean userPkAuthentication (int userPk) {
-        return userRepository.findByUserPk(userPk).isPresent();
-    }
-
     public UserInfoResponseDto sendUserInformation (int userPk) {
 
         Optional<User> optionalUser = userRepository.findByUserPk(userPk);
