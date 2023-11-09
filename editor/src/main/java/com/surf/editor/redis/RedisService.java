@@ -1,6 +1,8 @@
 package com.surf.editor.redis;
 
 
+import com.surf.editor.websocket.dto.EditorConnectionRequestDto;
+import com.surf.editor.websocket.dto.EditorDisconnectionRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,22 +19,34 @@ public class RedisService {
 
     private final EditorRedisRepository editorRedisRepository;
 
-    public List<Integer> addKey(String key, int value){
+    public List<Integer> addKey(String key, EditorConnectionRequestDto editorConnectionRequestDto){
         RedisInfo redisInfo = editorRedisRepository.findById(key).orElse(null);
 
         if(redisInfo==null){
-            List<Integer> userList = new ArrayList<>();
-            userList.add(value);
-            editorRedisRepository.save(new RedisInfo(key, userList));
+            RedisInfo redis = new RedisInfo(key, null);
+            redis.addValue(editorConnectionRequestDto.getUserId());
 
-            return userList;
+            RedisInfo saved = editorRedisRepository.save(redis);
+
+            return saved.getValue();
         }
 
-        List<Integer> redisInfoValue = redisInfo.getValue();
-        redisInfoValue.add(value);
-        editorRedisRepository.save(redisInfo);
+        redisInfo.addValue(editorConnectionRequestDto.getUserId());
+        RedisInfo saved = editorRedisRepository.save(redisInfo);
 
-        return redisInfoValue;
+        return saved.getValue();
+    }
 
+    public List<Integer> subKey(String key, EditorDisconnectionRequestDto editorDisConnectionRequestDto) {
+        RedisInfo redisInfo = editorRedisRepository.findById(key).orElse(null);
+
+        if(redisInfo==null){
+            return null;
+        }
+
+        redisInfo.subValue(editorDisConnectionRequestDto.getUserId());
+        RedisInfo saved = editorRedisRepository.save(redisInfo);
+
+        return saved.getValue();
     }
 }
