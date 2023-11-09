@@ -20,7 +20,7 @@ public class ItemsResponseDto {
     @Getter
     public static class CseThumbnailDto{
         private String src;
-        private String width;
-        private String height;
+        private Integer width;
+        private Integer height;
     }
 }
