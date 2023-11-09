@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class testingController {
+public class TestingController {
 
     @GetMapping("/api/member/testing")
     public String testing () {
