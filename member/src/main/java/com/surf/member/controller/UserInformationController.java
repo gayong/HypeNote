@@ -31,6 +31,5 @@ public class UserInformationController {
 
             return ResponseEntity.status(HttpStatus.CONFLICT).body(userInformationService.userNotFound());
         }
-
     }
 }
