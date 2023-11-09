@@ -99,7 +99,7 @@ public class EditorController {
     }
 
     @GetMapping()
-    public ResponseEntity<ApiResponse> editorSearch(@RequestParam(value = "search")String search){
+    public ResponseEntity<ApiResponse> editorSearch(@RequestParam(value = "query")String search){
         EditorSearchResponseDto editorSearchResponse = editorService.editorSearch(search);
 
         ApiResponse apiResponse = ApiResponse.builder()
