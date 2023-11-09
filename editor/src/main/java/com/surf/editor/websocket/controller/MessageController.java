@@ -1,6 +1,7 @@
 package com.surf.editor.websocket.controller;
 
 import com.surf.editor.websocket.dto.EditorConnectionRequestDto;
+import com.surf.editor.websocket.dto.EditorDisconnectionRequestDto;
 import com.surf.editor.websocket.dto.WebSocketRequestDto;
 import com.surf.editor.websocket.service.EditorConnection;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,14 @@ public class MessageController {
         simpMessagingTemplate.convertAndSend("/sub/note/"+noteId, userList);
 
         return editorConnectionRequestDto;
+    }
+
+    @MessageMapping("/note/disconnection/{noteId}")
+    public EditorDisconnectionRequestDto editorDisconnection(@DestinationVariable("noteId") String noteId, EditorDisconnectionRequestDto editorDisConnectionRequestDto){
+        List<Integer> userList = editorConnection.editorDisconnection(noteId,editorDisConnectionRequestDto);
+        simpMessagingTemplate.convertAndSend("/sub/note/"+noteId, userList);
+
+        return editorDisConnectionRequestDto;
     }
 
 
