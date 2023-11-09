@@ -1,10 +1,14 @@
+"use client";
+
 import axios from "axios";
 import Link from "next/link";
+import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { Button, Drawer, Input } from "antd";
 import { useAtom } from "jotai";
 import { isSearchOpen } from "../../store/searchOpen";
 import { useGetSearchResult } from "@/hooks/useGetSearchResult";
+import { SearchType } from "@/types/ediotr";
 
 // 이건 서랍 속 검색
 export default function Search() {
@@ -13,7 +17,7 @@ export default function Search() {
   const [keyword, setKeyword] = useState("");
   const [enabled, setEnabled] = useState(false);
   const { data: response, isLoading, refetch } = useGetSearchResult(keyword, enabled);
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState<Array<SearchType>>([]);
 
   const showDrawer = () => {
     setOpen(true);
@@ -25,24 +29,36 @@ export default function Search() {
     console.log("서랍 닫았다");
   };
 
+  // const handleEnter = () => {
+  //   console.log("value", keyword);
+  //   // api get 요청
+  //   setEnabled(true);
+  //   refetch();
+  // };
   const handleEnter = () => {
     console.log("value", keyword);
     // api get 요청
     setEnabled(true);
-    refetch();
   };
+
+  useEffect(() => {
+    if (enabled) {
+      refetch();
+    }
+  }, [enabled]);
 
   const onChange = (e: any) => {
     setKeyword(e.target.value);
     console.log(e.target.value);
   };
 
-  // useEffect(() => {
-  //   if (response) {
-  //     console.log("응답", response.data);
-  //     setResults(response.data.items);
-  //   }
-  // }, [response]);
+  useEffect(() => {
+    if (response) {
+      console.log("여기", response.data.data.items);
+      // console.log("응답", response.data);
+      setResults(response.data.data.items);
+    }
+  }, [response]);
 
   // const getResult = () => {
   //   useGetSearchResult(keyword);
@@ -77,14 +93,22 @@ export default function Search() {
           onChange={onChange}
           onSearch={handleEnter}
         />
-        {/* {results.map((item, index) => (
-          <>
-            <p>{item.title}</p>
-            <p>{item.link}</p>
-            <p>{item.snippet}</p>
-            <p>{item.pagemap[0][0]}</p>
-          </>
-        ))} */}
+        {results &&
+          results.map((item, index) => (
+            <div key={index}>
+              {/* <Image
+                src={item.pagemap.cse_thumbnail[0].src}
+                alt="썸네일"
+                width={100}
+                height={100}
+                // width={item.pagemap.cse_thumbnail[0].width}
+                // height={item.pagemap.cse_thumbnail[0].height}
+              /> */}
+              <p>{item.title}</p>
+              <p>{item.link}</p>
+              <p>{item.snippet}</p>
+            </div>
+          ))}
       </Drawer>
     </div>
   );

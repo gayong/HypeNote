@@ -5,46 +5,64 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { Button, Drawer, Input } from "antd";
-
-type Item = {
-  title: string;
-  content: string;
-};
+import { useGetSearchMyNote } from "@/hooks/useGetSearchMyNote";
+import { NoteType } from "@/types/ediotr";
+import { useSearchParams } from "next/navigation";
 
 // 이건 네브바에 내 문서 검색!!!!!!
 export default function MySearch() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const search = searchParams.get("search");
   const { Search } = Input;
   const [keyword, setKeyword] = useState("");
-  const [results, setResults] = useState<Item[]>([]);
+  const [results, setResults] = useState<NoteType[]>([]);
+  const [enabled, setEnabled] = useState(false);
 
-  const getResult = async (keyword: string) => {
-    try {
-      const response = await axios.get("https://k9e101.p.ssafy.io/api/editor", {
-        params: { query: keyword },
-      });
-      console.log("오니?", response.data.data.notes);
-      if (response.data.data) {
-        setResults(response.data.data.notes);
-      }
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
+  const { data: response, isLoading, refetch } = useGetSearchMyNote(keyword, enabled);
+
+  // const getResult = async (keyword: string) => {
+  //   try {
+  //     const response = await axios.get("https://k9e101.p.ssafy.io/api/editor", {
+  //       params: { query: keyword },
+  //     });
+  //     console.log("오니?", response.data.data.notes);
+  //     if (response.data.data) {
+  //       setResults(response.data.data.notes);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //   }
+  // };
 
   const handleEnter = () => {
     console.log("value", keyword);
     // api get 요청
-    getResult(keyword);
-    router.push("/search");
+    // getResult(keyword);
+    // setEnabled(true);
+
+    // router.push("/search");
+    router.push(`/search?keyword=${encodeURIComponent(keyword)}`);
   };
+
+  // useEffect(() => {
+  //   if (enabled) {
+  //     refetch();
+  //   }
+  // }, [enabled]);
+
+  // useEffect(() => {
+  //   if (response) {
+  //     console.log("여기", response.data.data.notes);
+  //     // console.log("응답", response.data);
+  //     setResults(response.data.data.notes);
+  //   }
+  // }, [response]);
 
   const onChange = (e: any) => {
     setKeyword(e.target.value);
     console.log(e.target.value);
   };
-
-  useEffect(() => {}, []);
 
   return (
     <div>

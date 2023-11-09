@@ -26,11 +26,12 @@ export const fetchNoteDetail = (editorId: string) => {
 
 // 웹 서칭 검색결과 조회
 export const fetchSearchResult = (query: string) => {
-  api.get("search", { params: { query } });
+  const response = api.get("search", { params: { query } });
+  return response;
 };
 
 // 내 문서 검색결과 조회
 export const fetchSearchMyNote = (query: string | undefined) => {
-  api.get("editor", { params: { query } });
-  console.log("여기");
+  const response = api.get("editor", { params: { query } });
+  return response;
 };
