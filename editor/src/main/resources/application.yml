@@ -4,11 +4,7 @@ spring:
      name: server-editor
    config:
      import: optional:configserver:http://config:8888
-   data:
-      redis:
-        host: www.hype-note.com
-        port: 6379
-        password: "!esser101Panda"
+
 
 # spring:
 #   data:
