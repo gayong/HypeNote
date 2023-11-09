@@ -21,11 +21,14 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 @RequiredArgsConstructor
 public class ChatCompletionService {
     private final ChatCompletionClient chatCompletionClient;
+    private static final Logger logger = LoggerFactory.getLogger(ChatCompletionService.class);
     private final static String ROLE_USER = "user";
     private final static String MODEL = "gpt-3.5-turbo";
     private static final Set<String> STOPWORDS = new HashSet<>();
@@ -73,7 +76,8 @@ public class ChatCompletionService {
 
         // 키워드가 포함된 문장 추출
         String analysisInput = extractKeywordSentences(content, keywords);
-        System.out.println("analysisInput = " + analysisInput);
+        logger.info("analysisInput = " + analysisInput);
+        logger.info("apikey = " + apikey);
 
         Message systemMessage = Message.builder()
                 .role("system")
@@ -109,39 +113,6 @@ public class ChatCompletionService {
                         "Please answer all in Korean.")
                 .build();
 
-
-//        Message systemMessage = Message.builder()
-//                .role("system")
-//                .content("I would like to create Computer Science problems.\n" +
-//                        "These problems should be in a multiple-choice question format with the following structure:\n" +
-//                        "{\n" +
-//                        "  \"id\": Problem number,\n" +
-//                        "  \"question\": \"Problem content\",\n" +
-//                        "  \"example\": [\n" +
-//                        "    {\n" +
-//                        "      \"ex\": \"1\",\n" +
-//                        "      \"content\": \"Option content\"\n" +
-//                        "    },\n" +
-//                        "    {\n" +
-//                        "      \"ex\": \"2\",\n" +
-//                        "      \"content\": \"Option content\"\n" +
-//                        "    },\n" +
-//                        "    {\n" +
-//                        "      \"ex\": \"3\",\n" +
-//                        "      \"content\": \"Option content\"\n" +
-//                        "    },\n" +
-//                        "    {\n" +
-//                        "      \"ex\": \"4\",\n" +
-//                        "      \"content\": \"Option content\"\n" +
-//                        "    }\n" +
-//                        "  ],\n" +
-//                        "  \"answer\": \"Correct answer\",\n" +
-//                        "  \"commentary\": \"Explanation content\"\n" +
-//                        "}\n" +
-//                        "Please provide the total number of problems as " + cnt + " and present them in List format.\"")
-//                .build();
-
-
         Message message = Message.builder()
                 .role(ROLE_USER)
                 .content(analysisInput)
@@ -150,10 +121,10 @@ public class ChatCompletionService {
                 .model(MODEL)
                 .messages(Arrays.asList(systemMessage, message))
                 .build();
-
+        logger.info("Chat Request: {}", chatRequest);
         ChatResponse chatResponse = chatCompletionClient
                 .chatCompletions(apikey, chatRequest);
-
+        logger.info("chatResponse: {}", chatResponse);
         Usage usage = chatResponse.getUsage();
         System.out.println("Usage: " + usage);
 

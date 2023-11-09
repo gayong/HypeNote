@@ -12,7 +12,9 @@ spring:
            connectTimeout: 5000
            readTimeout: 5000
            loggerLevel: basic
-
+logging:
+  level:
+    com.surf.quiz.service.ChatCompletionService: INFO
 
 
 ## For Local -인식 문의
@@ -40,3 +42,7 @@ spring:
 #            readTimeout: 100000
 #            loggerLevel: basic
 #springdoc.swagger-ui.path: /swagger-ui.html
+#
+#logging:
+#  level:
+#    com.surf.quiz.service.ChatCompletionService: INFO
