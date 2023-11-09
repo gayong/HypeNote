@@ -25,6 +25,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 public class QuizRoomService {
@@ -371,10 +372,22 @@ public class QuizRoomService {
         quiz.setRoomName(createdQuizroom.getRoomName());
         quiz.setUsers(createdQuizroom.getUsers());
 
-
+        // GPT 문제 생성 보내기
         try {
-            BaseResponse<List<QuestionDto>> questionsResponse = feignService.getGpt(1, res);
-            List<QuestionDto> question = questionsResponse.getResult();
+            List<QuestionDto> question = IntStream.range(0, createdQuizroom.getQuizCnt())
+                    .parallel()
+                    .mapToObj(i -> {
+                        try {
+                            BaseResponse<List<QuestionDto>> questionsResponse = feignService.getGpt(1, res);
+                            return questionsResponse.getResult();
+                        } catch (Exception e) {
+                            // 예외 처리 코드를 작성합니다.
+                            return null;  // 예외 발생 시 null 반환
+                        }
+                    })
+                    .filter(Objects::nonNull)  // null 제외
+                    .flatMap(List::stream)  // List<QuestionDto>를 QuestionDto 스트림으로 변환
+                    .collect(Collectors.toList());
             quiz.setQuestion(question);
             quiz.setComplete(false);
             return quiz;
@@ -382,39 +395,25 @@ public class QuizRoomService {
             // 예외 처리 코드를 작성합니다.
         }
 
-        QuestionDto question1 = new QuestionDto();
-        question1.setQuestion("IP(Internet Protocol) 주소는 어떻게 구성되며, 어떤 역할을 담당하고 있나요?");
-        question1.setId(1);
-
-        List<ExampleDto> examples = new ArrayList<>();
-        examples.add(new ExampleDto("1", "IP 주소는 64비트로 구성되어 있으며, 데이터의 무결성을 검증한다."));
-        examples.add(new ExampleDto("2", "IP 주소는 4바이트로 이루어져 있으며, 컴퓨터의 주소 역할을 한다."));
-        examples.add(new ExampleDto("3", "IP 주소는 데이터의 재조합을 처리하며, 데이터의 순서를 조정한다."));
-        examples.add(new ExampleDto("4", "IP 주소는 하드웨어 고유의 식별번호인 MAC 주소와 동일하다."));
-
-        question1.setExample(examples);
-
-        question1.setAnswer("2");
-        question1.setCommentary("해설1");
-
-        QuestionDto question2 = new QuestionDto();
-        question2.setQuestion("TCP/IP는 어떤 두 가지 프로토콜로 구성되어 있으며, 어떤 역할을 각각 수행하고 있는가?");
-        question2.setId(2);
-
-        List<ExampleDto> examples2 = new ArrayList<>();
-        examples2.add(new ExampleDto("1", "TCP가 데이터의 추적을 처리하고, IP가 데이터의 배달을 담당한다."));
-        examples2.add(new ExampleDto("2", "IP가 데이터의 추적을 처리하고, TCP가 데이터의 배달을 담당한다."));
-        examples2.add(new ExampleDto("3", "TCP와 IP가 모두 데이터의 재조합을 처리한다."));
-        examples2.add(new ExampleDto("4", "TCP와 IP가 모두 데이터의 손실 여부를 확인한다."));
-
-        question2.setExample(examples2);
-
-        question2.setAnswer("1");
-        question2.setCommentary("해설2");
-
         List<QuestionDto> questions = new ArrayList<>();
-        questions.add(question1);
-        questions.add(question2);
+        for (int i = 0; i < createdQuizroom.getQuizCnt(); i++) {
+            QuestionDto question = new QuestionDto();
+            question.setQuestion("IP(Internet Protocol) 주소는 어떻게 구성되며, 어떤 역할을 담당하고 있나요?");
+            question.setId(i + 1);
+
+            List<ExampleDto> examples = new ArrayList<>();
+            examples.add(new ExampleDto("1", "IP 주소는 64비트로 구성되어 있으며, 데이터의 무결성을 검증한다."));
+            examples.add(new ExampleDto("2", "IP 주소는 4바이트로 이루어져 있으며, 컴퓨터의 주소 역할을 한다."));
+            examples.add(new ExampleDto("3", "IP 주소는 데이터의 재조합을 처리하며, 데이터의 순서를 조정한다."));
+            examples.add(new ExampleDto("4", "IP 주소는 하드웨어 고유의 식별번호인 MAC 주소와 동일하다."));
+
+            question.setExample(examples);
+
+            question.setAnswer("2");
+            question.setCommentary("IP 주소는 4바이트로 이루어져 있으며, 컴퓨터의 주소 역할을 한다.");
+
+            questions.add(question);
+        }
 
         quiz.setQuestion(questions);
         quiz.setComplete(false);

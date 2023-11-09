@@ -77,34 +77,35 @@ public class ChatCompletionService {
 
         Message systemMessage = Message.builder()
                 .role("system")
-                .content("Computer Science에 대한 문제를 만들고 싶어\n" +
-                        "문제는 4지선다 문제로\n 정답은 1개야" +
-                        "아래 형식으로 만들고 싶어\n" +
+                .content("I want to make a quiz about Computer Science\n" +
+                        "The problem is a four-choice question.\n" +
+                        "There is only one correct answer" +
+                        "I want to make it in the format below\n" +
                         "    {\n" +
-                        "      \"id\": 번호,\n" +
-                        "      \"question\": \"문제 내용\",\n" +
+                        "      \"id\": number,\n" +
+                        "      \"question\": \"question content\",\n" +
                         "      \"example\": [\n" +
                         "        {\n" +
                         "          \"ex\": \"1\",\n" +
-                        "          \"content\": \"보기 내용\"\n" +
+                        "          \"content\": \"example content\"\n" +
                         "        },\n" +
                         "        {\n" +
                         "          \"ex\": \"2\",\n" +
-                        "          \"content\": \"보기 내용\"\n" +
+                        "          \"content\": \"example content\"\n" +
                         "        },\n" +
                         "        {\n" +
                         "          \"ex\": \"3\",\n" +
-                        "          \"content\": \"보기 내용\"\n" +
+                        "          \"content\": \"example content\"\n" +
                         "        },\n" +
                         "        {\n" +
                         "          \"ex\": \"4\",\n" +
-                        "          \"content\": \"보기 내용\"\n" +
+                        "          \"content\": \"example content\"\n" +
                         "        }\n" +
                         "      ],\n" +
-                        "      \"answer\": \"정답\",\n" +
-                        "      \"commentary\": \"해설 내용\"\n" +
+                        "      \"answer\": \"correct answer\",\n" +
+                        "      \"commentary\": \"commentary content\"\n" +
                         "    }\n" +
-                        "문제의 갯수는"+ cnt +"개로 List로 응답해줘\n")
+                        "The number of quizzes is"+ cnt +" Please respond with a List\n")
                 .build();
 
 
@@ -156,13 +157,11 @@ public class ChatCompletionService {
         System.out.println("Usage: " + usage);
 
         // 응답을 List에 넣기
-        List<String> responses = chatResponse
+        return chatResponse
                 .getChoices()
                 .stream()
                 .map(choice -> choice.getMessage().getContent())
                 .collect(Collectors.toList());
-
-        return responses;
 
     }
 
@@ -182,12 +181,12 @@ public class ChatCompletionService {
             texts.add(element.text());
         }
 
-        return String.join(". ", texts); // '|'를 구분자로 사용
+        return String.join("|||", texts); // '|'를 구분자로 사용
     }
 
     // 키워드 추출
     private List<String> extractKeywords(String content) {
-        return extractKeywordsWithKomoran(content, 5); // 상위 5개 키워드 추출
+        return extractKeywordsWithKomoran(content, 3); // 상위 3개 키워드 추출
     }
 
     // 코모란
