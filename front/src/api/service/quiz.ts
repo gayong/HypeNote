@@ -42,7 +42,7 @@ export const inviteUser = (
 
 // 퀴즈 정답 전송
 export const sendQuiz = (roomId: number, userId: number, answers: object) =>
-  api.post(`quiz/quizroom/${roomId}/${userId}`, {
+  api.post(`quiz/${roomId}/${userId}`, {
     answers,
   });
 
