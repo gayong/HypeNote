@@ -4,6 +4,7 @@ import { syncedStore, getYjsDoc } from "@syncedstore/core";
 import SockJS from "sockjs-client";
 import { Stomp, Frame } from "@stomp/stompjs";
 import * as Y from "yjs";
+import type { CompatClient } from "@stomp/stompjs";
 
 type Todo = { completed: boolean; title: string };
 type update = { content: (number | number[])[]; type: string };
@@ -14,12 +15,15 @@ export let firstConnected = 1;
 let messageId = 0;
 const pendingUpdates = {};
 
-export function connectStompClient(id: string) {
-  const sock = new SockJS("https://hype-note.com/api/editor/ws");
-  const stompClient = Stomp.over(sock);
-  stompClient.connect({}, () => {
+export function connectStompClient(id: string, stompClient: CompatClient) {
+  if (stompClient) {
+    // const sock = new SockJS("https://hype-note.com/api/editor/ws");
+    // const stompClient = Stomp.over(sock);
+    // const stompClient = useEditorWebSocket();
+
+    // stompClient.connect({}, () => {
     // stompClient.subscribe(`/sub/note/${id}`, (message) => {
-      stompClient.subscribe(`/sub/note/5`, (message) => {
+    stompClient.subscribe(`/sub/note/5`, (message) => {
       const payload = JSON.parse(message.body);
       const enter = payload.type;
       if (enter === "1") {
@@ -61,30 +65,34 @@ export function connectStompClient(id: string) {
       // stompClient.send(`/pub/note/${id}`, {}, JSON.stringify({ type: "1" }));
       stompClient.send(`/pub/note/5`, {}, JSON.stringify({ type: "1" }));
     }
-  });
+    // });
 
-  function sendYjsUpdate(update) {
-    // stompClient.send(`/pub/note/${id}`, {}, JSON.stringify(update));
-    stompClient.send(`/pub/note/5`, {}, JSON.stringify(update));
-  }
-
-  yDoc.on("update", (update) => {
-    console.log(update);
-    chunkMessage(update);
-  });
-
-  function chunkMessage(update) {
-    const updateArray = Array.from(update);
-    const totalChunks = Math.ceil(updateArray.length / 3000);
-    for (let i = 0; i < totalChunks; i++) {
-      const chunk = updateArray.slice(i * 3000, (i + 1) * 3000);
-      const payload = {
-        content: [chunk, i, totalChunks, messageId],
-        type: "",
-      };
-      sendYjsUpdate(payload);
+    function sendYjsUpdate(update) {
+      // stompClient.send(`/pub/note/${id}`, {}, JSON.stringify(update));
+      stompClient.send(`/pub/note/5`, {}, JSON.stringify(update));
     }
-    messageId++;
+
+    yDoc.on("update", (update) => {
+      try {
+        chunkMessage(update);
+      } catch (error) {
+        console.log(error);
+      }
+    });
+
+    function chunkMessage(update) {
+      const updateArray = Array.from(update);
+      const totalChunks = Math.ceil(updateArray.length / 3000);
+      for (let i = 0; i < totalChunks; i++) {
+        const chunk = updateArray.slice(i * 3000, (i + 1) * 3000);
+        const payload = {
+          content: [chunk, i, totalChunks, messageId],
+          type: "",
+        };
+        sendYjsUpdate(payload);
+      }
+      messageId++;
+    }
   }
 }
 

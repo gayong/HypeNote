@@ -10,8 +10,7 @@ import styles from "./Editor.module.css";
 import { uploadToTmpFilesDotOrg_DEV_ONLY, Block, PartialBlock } from "@blocknote/core";
 import * as store from "./store";
 import Search from "@/components/editor/Search";
-import { fromJSON } from "postcss";
-import { element } from "three/examples/jsm/nodes/Nodes.js";
+import { useEditorWebSocket } from "@/context/SocketEditorProvider";
 
 type WindowWithProseMirror = Window & typeof globalThis & { ProseMirror: any };
 
@@ -23,11 +22,16 @@ function TestEditorNotFirst({ id }: Props) {
   // const [theme, setTheme] = useState<"light" | "dark">("light");
   const [theme, setTheme] = useAtom<any>(themeAtom);
   const [open] = useAtom(isSearchOpen);
-  const val = `<h1 class="_inlineContent_nstdf_297">가나다라 마바사</h1><p class="_inlineContent_nstdf_297">어ㄴ</p><p class="_inlineContent_nstdf_297">ㅁ나이ㅓ리ㅏㅁㄴ어리ㅏㅇㄴ</p><p class="_inlineContent_nstdf_297">ㄴㅁ아ㅣㅓ라ㅣㅇ널</p><p class="_inlineContent_nstdf_297"></p><p class="_inlineContent_nstdf_297">&#x3C;h1 class="_inlineContent_nstdf_297">가나다라 마바사&#x3C;/h1>&#x3C;p class="_inlineContent_nstdf_297">어ㄴ&#x3C;/p>&#x3C;p class="_inlineContent_nstdf_297">ㅁ나이ㅓ리ㅏㅁㄴ어리ㅏㅇㄴ&#x3C;/p>&#x3C;p class="_inlineContent_nstdf_297">ㄴㅁ아ㅣㅓ라ㅣㅇ널&#x3C;/p>&#x3C;p class="_inlineContent_nstdf_297">&#x3C;/p>&#x3C;p class="_inlineContent_nstdf_297">&#x3C;/p></p><p class="_inlineContent_nstdf_297"></p>`;
+  const stompClient = useEditorWebSocket();
 
   useEffect(() => {
-    store.connectStompClient(id);
-  }, [id]);
+    store.connectStompClient(id, stompClient);
+    return () => {
+      if (stompClient) {
+        stompClient.unsubscribe("/sub/note/5");
+      }
+    };
+  }, [id, stompClient]);
 
   const editor = useBlockNote({
     onEditorContentChange: (editor) => {
