@@ -1,5 +1,6 @@
 package com.surf.auth.JWT.controller;
 
+import com.surf.auth.JWT.decoder.TokenDecoder;
 import com.surf.auth.JWT.service.ReissueService;
 import com.surf.auth.auth.dto.TokenDto;
 import com.surf.auth.auth.dto.UserDto;
@@ -15,11 +16,12 @@ import org.springframework.web.bind.annotation.*;
 public class ReissueController {
 
     private final ReissueService reissueService;
+    private final TokenDecoder tokenDecoder;
 
     @PostMapping("/reissue")
     public ResponseEntity<TokenDto> reissue(@CookieValue(name = "refreshToken", required = true) String refreshToken) {
 
-        UserDto userInfo = reissueService.parsingRefreshToken(refreshToken);
+        UserDto userInfo = tokenDecoder.parsingRefreshToken(refreshToken);
 
         String storedRefreshToken = reissueService.findRefreshTokenByUserPk(String.valueOf(userInfo.getUserPk()));
 

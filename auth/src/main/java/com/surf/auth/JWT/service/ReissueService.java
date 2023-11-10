@@ -21,33 +21,6 @@ public class ReissueService {
 
     private final StringRedisTemplate redisTemplate;
     private final AccessTokenIssueService accessTokenIssueService;
-    private final SignKeyProvider signKeyProvider;
-
-    public UserDto parsingRefreshToken(String refreshToken) {
-
-
-        SecretKey secretKey = signKeyProvider.getSignKey();
-
-        UserDto userInfo = new UserDto();
-
-        Jws<Claims> userClaims = Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(refreshToken);
-
-        Claims userClaim = userClaims.getPayload();
-
-        int userPk = userClaim.get("userPk", int.class);
-        String email = userClaim.get("email", String.class);
-        String nickName = userClaim.get("nickName", String.class);
-        String profileImage = userClaim.get("profileImage", String.class);
-        String role = userClaim.get("role", String.class);
-
-        userInfo.setUserPk(userPk);
-        userInfo.setEmail(email);
-        userInfo.setNickName(nickName);
-        userInfo.setProfileImage(profileImage);
-        userInfo.setRole(role);
-
-        return userInfo;
-    }
 
     public String findRefreshTokenByUserPk(String userPk) {
 
