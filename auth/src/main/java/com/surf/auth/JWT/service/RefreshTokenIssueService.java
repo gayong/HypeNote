@@ -2,11 +2,10 @@ package com.surf.auth.JWT.service;
 
 import com.surf.auth.JWT.provider.TokenProvider;
 import com.surf.auth.auth.dto.UserDto;
-import com.surf.auth.auth.entity.User;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -35,13 +34,16 @@ public class RefreshTokenIssueService {
         Map<String, Object> claims = new HashMap<>();
         String refreshToken = tokenProvider.createToken(claims, userInfo, EXPIRATION_TIME);
 
-        Cookie refreshTokenCookie = new Cookie(REFRESH_TOKEN_COOKIE_NAME, refreshToken);
-        refreshTokenCookie.setMaxAge(REFRESH_TOKEN_COOKIE_MAX_AGE);
-        refreshTokenCookie.setPath(REFRESH_TOKEN_COOKIE_PATH);
-        refreshTokenCookie.setHttpOnly(true);
-        response.addCookie(refreshTokenCookie);
+        ResponseCookie responseTokenCookie = ResponseCookie.from(REFRESH_TOKEN_COOKIE_NAME, refreshToken)
+                .maxAge(REFRESH_TOKEN_COOKIE_MAX_AGE)
+                .path(REFRESH_TOKEN_COOKIE_PATH)
+                .httpOnly(true)
+                .sameSite("None")
+                .secure(true)
+                .build();
+
+        response.addHeader("Set-Cookie", responseTokenCookie.toString());
 
         redisRefreshTokenSaveService.saveRefreshToken(EXPIRATION_TIME, refreshToken, userInfo);
-
     }
 }
