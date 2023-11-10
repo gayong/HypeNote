@@ -1,32 +1,33 @@
 import axios from "axios";
+import { access } from "fs";
 import { validateHeaderValue } from "http";
 
 // axios 인스턴스 생성
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_SERVER_URL,
+  headers: { "X-Custom-Header": "foobar" },
 });
 
 // 요청 인터셉터 설정
-// api.interceptors.request.use(
-//   function (config) {
-//     // 요청이 전달되기 전에 작업 수행
+api.interceptors.request.use(
+  function (config) {
+    // 요청이 전달되기 전에 작업 수행
 
-//     // 토큰이 있는 경우
-//     const refreshToken = sessionStorage.getItem("refreshToken");
-//     const accessToken = localStorage.getItem("accessToken");
-//     if (accessToken) {
-//       // config.headers["Authorization"] = token;
-//       // config.headers['Authorization'] = `Bearer ${accessToken}`;
-//     }
-//     return config;
-//   },
-//   function (error) {
-//     // 요청 오류가 있는 작업 수행
-//     // 토큰이 없는 경우
-//     console.log(error);
-//     return Promise.reject(error);
-//   }
-// );
+    // 토큰이 있는 경우
+    const accessToken = localStorage.getItem("accessToken");
+    if (accessToken) {
+      // config.headers["Authorization"] = token;
+      config.headers["Authorization"] = `Bearer ${accessToken}`;
+    }
+    return config;
+  },
+  function (error) {
+    // 요청 오류가 있는 작업 수행
+    // 토큰이 없는 경우
+    console.log(error);
+    return Promise.reject(error);
+  }
+);
 
 // // 응답 인터셉터 추가하기
 // api.interceptors.response.use(
