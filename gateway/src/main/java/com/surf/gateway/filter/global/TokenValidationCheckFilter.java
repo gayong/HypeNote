@@ -1,7 +1,6 @@
 package com.surf.gateway.filter.global;
 
-import io.jsonwebtoken.*;
-import io.jsonwebtoken.security.Keys;
+import com.surf.gateway.authenticator.TokenAuthenticator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
@@ -11,14 +10,16 @@ import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
-import javax.crypto.SecretKey;
 
 @Component
 @Slf4j
 public class TokenValidationCheckFilter extends AbstractGatewayFilterFactory<TokenValidationCheckFilter.Config> {
 
-    public TokenValidationCheckFilter() {
+    private final TokenAuthenticator tokenAuthenticator;
+
+    public TokenValidationCheckFilter(TokenAuthenticator tokenAuthenticator) {
         super(Config.class);
+        this.tokenAuthenticator = tokenAuthenticator;
     }
 
     @Value("${jwt.secret}")
@@ -33,36 +34,25 @@ public class TokenValidationCheckFilter extends AbstractGatewayFilterFactory<Tok
             if (request.getHeaders().containsKey("accessToken")) {
                 String accessToken = request.getHeaders().getFirst("accessToken");
 
-                boolean isValidToken = validateToken(accessToken);
+                boolean isValidToken = tokenAuthenticator.validateToken(accessToken);
                 if (!isValidToken) {
                     response.setStatusCode(HttpStatus.UNAUTHORIZED);
                     return response.setComplete();
+                } else {
+                    return chain.filter(exchange).then(Mono.fromRunnable(() -> {
+                        log.info(String.valueOf(request.getHeaders()));
+                    }));
                 }
             }
             else {
                 response.setStatusCode(HttpStatus.BAD_REQUEST);
                 return response.setComplete();
             }
-
-            return chain.filter(exchange).then(Mono.fromRunnable(() -> {
-                log.info(String.valueOf(request.getHeaders()));
-            }));
         });
     }
 
-    public boolean validateToken(String accessToken) {
-        try {
-            SecretKey secretKey = Keys.hmacShaKeyFor(SECRET.getBytes());
-
-            Jwts.parser().decryptWith(secretKey).build().parseSignedClaims(accessToken);
-
-            return true;
-
-        } catch (JwtException e) {
-            return false;
-        }
-    }
-
     public static class Config{}
+
+
 
 }
