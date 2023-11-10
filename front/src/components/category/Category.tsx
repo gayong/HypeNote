@@ -67,11 +67,13 @@ export default function Category({ childProps, value }: categoryProps) {
           onClick={(event) => onClickPage(event, childProps.Id)}>
           <i className="bi bi-chat-left-text-fill"></i>
           <div className="group flex justify-between w-full items-center">
-            <span className="text-[15px] ml-2 text-white font-bold">{childProps.title}</span>
-            {childProps.children.length > 0 && icon}
-            <span className="text-sm rotate-180" id="arrow">
-              <i className="bi bi-chevron-down"></i>
-            </span>
+            <div className="text-[15px] ml-2 text-white font-bold flex items-center">
+              {childProps.title}
+              <div className="ml-3" style={{ fontSize: "20px" }}>
+                {childProps.children.length > 0 && icon}
+              </div>
+            </div>
+
             {value === 1 && (
               <h1
                 className="pb-[3px] m-0 text-right invisible group-hover:visible text-2xl leading-3"
@@ -91,7 +93,12 @@ export default function Category({ childProps, value }: categoryProps) {
             onClick={(event) => onClickPage(event, subject.Id)}>
             {/* 책 카테고리 */}
             <div className="group flex justify-between items-center cursor-pointer p-2 hover:bg-hover_primary hover:bg-opacity-50 dark:hover:bg-line_primary dark:hover:bg-opacity-50 rounded-md">
-              <h1 className="text-left flex items-center">{subject.title}</h1>
+              <h1 className="text-left flex items-center">
+                {subject.title}
+                <div className="ml-3" style={{ fontSize: "20px" }}>
+                  {subject.children.length > 0 && icon}
+                </div>
+              </h1>
               {value === 1 && (
                 <h1
                   className="pb-[3px] m-0 text-right invisible group-hover:visible text-2xl leading-3"
