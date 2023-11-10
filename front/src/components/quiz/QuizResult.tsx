@@ -63,13 +63,13 @@ export default function QuizResult() {
   }, []);
 
   return (
-    <section className="bg-white dark:bg-gray-900 w-full max-h-full pr-4">
+    <section className="bg-white dark:bg-gray-900 w-full max-h-full">
       <span
         className="hover:text-hover_primary text-lg font-PreBd font-normal text-dark_background dark:text-font_primary absolute left-0 p-1 rounded-md outline outline-2 outline-dark_background dark:outline-font_primary "
         onClick={() => outRoom()}>
         {"<< 나가기"}
       </span>
-      <div className="pt-6 flex justify-center">
+      <div className="-mt-7 flex justify-center">
         <Radio.Group defaultValue="rank" buttonStyle="solid">
           <Radio.Button
             value="rank"
@@ -118,15 +118,39 @@ export default function QuizResult() {
           ))}
         </div>
       ) : (
-        <div className="mr-2 mt-4 h-[620px] max-h-[620px] flex items-center justify-center">
-          {" "}
-          <h1>시험지를 다시 띄워달라</h1>
-          <div>
-            {quizResults?.questionResult.map((quiz) => (
-              <>
-                <h1>{quiz.question}</h1>
-                <h2>{quiz.myAnswer}</h2>
-              </>
+        <div className="mr-2 h-[620px] max-h-[620px] flex items-center justify-center mt-5 ">
+          <div className="overflow-y-scroll overflow-x-hidden mt-5 h-full">
+            {quizResults?.questionResult.map((quiz, index) => (
+              <div key={index} className="pt-16">
+                <div className="flex items-center relative px-10">
+                  <Image src="/assets/correct.png" alt="맞음" width={100} height={100} className="absolute -left-3" />
+
+                  <h1 className="text-4xl font-preBd text-dark_font">{quiz.id}.</h1>
+                  <span className="ml-2 mt-1 text-xl font-preBd dark:text-font_primary">{quiz.question}</span>
+                </div>
+
+                {/* <h2>{quiz.myAnswer}</h2> */}
+
+                <div className="ml-7">
+                  {quiz.example.map((ex, index) => (
+                    <p key={ex.ex} className="w-full">
+                      <p
+                        className={`pr-3 w-full py-3 mx-2 text-lg ${
+                          // 퀴즈 정답인 것
+                          quiz.answer === ex.ex ? "font-bold text-dark_font" : ""
+                        }
+                            ${
+                              quiz.myAnswer === ex.ex && quiz.myAnswer !== quiz.answer
+                                ? "underline decoration-[#ff4a4a] decoration-2 underline-offset-4 decoration-wavy font-bold"
+                                : ""
+                            }`}>
+                        {ex.ex}. {ex.content}
+                      </p>
+                    </p>
+                  ))}
+                </div>
+                <br />
+              </div>
             ))}
           </div>
         </div>
