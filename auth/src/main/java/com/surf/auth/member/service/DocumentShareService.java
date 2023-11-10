@@ -26,7 +26,7 @@ public class DocumentShareService {
 
         User user = userOptional.orElseThrow();
 
-        user.getSharedDocumentsRoots().add(documentShareRequestDto.getEditorId());
+        user.getSharedDocumentsRoots().add(documentShareRequestDto.getDocumentId());
 
         userRepository.save(user);
 
