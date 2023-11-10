@@ -71,7 +71,7 @@ const ThreeScene = () => {
         linkStrength,
         // colors = d3.schemeTableau10, // an array of color strings, for the node groups
         width = window.innerWidth - 350, // outer width, in pixels
-        height = window.innerHeight - 35, // outer height, in pixels
+        height = window.innerHeight - 90, // outer height, in pixels
         invalidation, // when this promise resolves, stop the simulation
       } = {}
     ) {
@@ -240,20 +240,8 @@ const ThreeScene = () => {
   }, [shareNodes, shareLinks, nodes, links]);
 
   return (
-    <div ref={ref} style={{ width: "100%", height: "100%" }}>
+    <div ref={ref} style={{ width: "100%", height: "100%" }} className="scrollbar-hide">
       <SelectShare onReceive={handleReceive} />
-      {nodes.length === 0 && (
-        <div
-          style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            textAlign: "center",
-          }}>
-          <h1 className="text-3xl">텅!!!!</h1>
-        </div>
-      )}
     </div>
   );
 };

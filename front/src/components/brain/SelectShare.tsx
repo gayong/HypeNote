@@ -29,7 +29,7 @@ export default function SelectShare({ onReceive }: { onReceive: (sharedData: any
   };
 
   return (
-    <div className="absolute mt-4 ml-4">
+    <div className="relative mt-4 ml-4">
       <Select
         mode="tags"
         size="middle"
@@ -42,7 +42,7 @@ export default function SelectShare({ onReceive }: { onReceive: (sharedData: any
         onChange={handleSelectChange}
       />
       <Button
-        className="dark:border dark:border-font_primary h-[30px] w-[53px] ml-2 font-preBd hover:bg-dark_font bg-primary z-50"
+        className="dark:border dark:border-font_primary h-[30px] w-[53px] ml-2 font-preBd hover:bg-dark_font bg-primary z-50 scrollbar-hide"
         type="primary"
         onClick={handleReceive}>
         GO

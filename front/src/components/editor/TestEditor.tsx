@@ -59,7 +59,7 @@ function TestEditor({ id }: Props) {
 
   return (
     <>
-      <div style={{ width: open ? "calc(100% - 300px)" : "100%" }}>
+      <div style={{ width: open ? "calc(100% - 380px)" : "100%" }}>
         <BlockNoteView editor={editor} theme={theme} />
       </div>
       <Search />
