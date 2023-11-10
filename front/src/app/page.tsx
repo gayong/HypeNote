@@ -5,7 +5,7 @@ import Image from "next/image";
 
 export default function Home() {
   return (
-    <>
+    <div className="flex h-screen max-h-screen scrollbar-hide">
       <Suspense
         fallback={
           <div className="flex mx-auto justify-center items-center">
@@ -14,6 +14,6 @@ export default function Home() {
         }>
         <ThreeScene />
       </Suspense>
-    </>
+    </div>
   );
 }
