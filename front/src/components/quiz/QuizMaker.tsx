@@ -182,7 +182,7 @@ export default function QuizMaker() {
                     style={{ marginTop: "30px", marginBottom: "10px", padding: 0 }}>
                     방 정보
                   </h1>
-                  <h1 className="dark:text-font_primary" style={{ marginBottom: "60px", padding: 0 }}>
+                  <h1 className="dark:text-font_primary" style={{ marginBottom: "40px", padding: 0 }}>
                     방 제목과 방 내용을 작성해주세요.
                   </h1>
                   <Input type="text" text="Title" onChange={handleTitleChange} placeholder="방 제목을 입력해주세요." />
