@@ -94,6 +94,19 @@ body {
   .ant-input-search-button {
   background-color: #2946a2;
 }
+
+/* 에디터 서랍 바디 */
+:where(.css-dev-only-do-not-override-2i2tap).ant-drawer .ant-drawer-body {
+  padding: 0;
+}
+
+/* 에디터 서랍 속 콜랩스 속 컨텐트 바디 */
+:where(.css-dev-only-do-not-override-2i2tap).ant-collapse-ghost
+  > .ant-collapse-item
+  > .ant-collapse-content
+  > .ant-collapse-content-box {
+  padding-top: 0;
+}
 /* :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;

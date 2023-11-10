@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { useGetSearchMyNote } from "@/hooks/useGetSearchMyNote";
 import { NoteType } from "@/types/ediotr";
 import MySearch from "@/components/MySearch";
-
+import "./search.css";
 // export const metadata: Metadata = {
 //   title: "Search",
 //   description: "Search my notes",
@@ -53,9 +53,11 @@ export default function SearchPage() {
         results.map((item, index) => (
           <div key={index} className="px-40">
             <Link href={`/editor/${item.id}`}>
-              <h1 className="underline hover:text-dark_font">titddle:{item.title}</h1>
+              <h1 className="underline hover:text-dark_font text-[16px] mb-1">제목 : {item.title}</h1>
             </Link>
-            <h1>content:{item.content}</h1>
+            <h1 className="search_content">{item.content}</h1>
+            <br />
+            <hr className="opacity-20" />
             <br />
           </div>
         ))}

@@ -4,7 +4,7 @@ import Image from "next/image";
 export default function Loading() {
   return (
     <>
-      <div className="flex mx-auto justify-center items-center">
+      <div className="flex mx-auto justify-center items-center h-screen">
         <Image src={loading} alt="로딩" priority />
       </div>
     </>

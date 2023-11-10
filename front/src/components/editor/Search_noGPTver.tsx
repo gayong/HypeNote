@@ -9,8 +9,6 @@ import { useAtom } from "jotai";
 import { isSearchOpen } from "../../store/searchOpen";
 import { useGetSearchResult } from "@/hooks/useGetSearchResult";
 import { SearchType } from "@/types/ediotr";
-import type { CollapseProps } from "antd";
-import { Collapse } from "antd";
 
 // 이건 서랍 속 검색!!!!!!
 export default function Search() {
@@ -69,33 +67,6 @@ export default function Search() {
   //   }
   // }, [response])
 
-  const items: CollapseProps["items"] = [
-    {
-      key: "1",
-      label: "웹 검색",
-      children: (
-        <>
-          <Search
-            placeholder="검색어를 입력해주세요"
-            value={keyword}
-            enterButton
-            onPressEnter={handleEnter}
-            onChange={onChange}
-            onSearch={handleEnter}
-            style={{ width: "95%", display: "flex", margin: "auto" }}
-          />
-          <br />
-          <h1 className="text-center">검색결과가 없습니다.</h1>
-        </>
-      ),
-    },
-    {
-      key: "2",
-      label: "Chat-GPT",
-      children: <h1 className="text-center">Chat-GPT를 기다려요..</h1>,
-    },
-  ];
-
   return (
     <div>
       <Button
@@ -114,8 +85,14 @@ export default function Search() {
         maskClosable={false}
         width={380}
         className="relative">
-        <Collapse defaultActiveKey={[""]} ghost items={items} />
-
+        <Search
+          placeholder="검색어를 입력해주세요"
+          value={keyword}
+          enterButton
+          onPressEnter={handleEnter}
+          onChange={onChange}
+          onSearch={handleEnter}
+        />
         {/* {results &&
           results.map((item, index) => (
             <div key={index}>

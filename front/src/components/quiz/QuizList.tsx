@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 import { useWebSocket } from "@/context/SocketProvider";
 import { QuizRoomInfo } from "@/types/quiz";
-import Loading from "@/app/loading";
+import Loading from "@/components/Loading";
 import { useAtom } from "jotai";
 import { userAtom } from "@/store/authAtom";
 
@@ -62,15 +62,16 @@ export default function QuizList() {
             </div>
           </>
         ) : (
-          <>
+          <div className="mt-20">
             <Loading />
-            <div className="font-PreBd text-center">
-              퀴즈 방을 불러오고 있어요
-              <br />
-              초대된 방이 없을 수도 있어요
+            <div className="font-PreBd text-center ">
+              <span className="text-lg text-yellow font-extrabold">당신이 초대된 퀴즈 방을 불러오고 있어요</span>
               <br />
               <br />
-              방을 만들어 볼까요?
+              초대된 방이 없을 수도 있어요 <br />
+              팩맨이 계속 돌아가도 기다리지 마세요 하하
+              <br />
+              <br />
             </div>
 
             <Link href="/quiz/maker">
@@ -78,7 +79,7 @@ export default function QuizList() {
                 방 만들기
               </div>
             </Link>
-          </>
+          </div>
         )}
       </div>
     </>
