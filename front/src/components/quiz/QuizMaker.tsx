@@ -11,7 +11,6 @@ import { useCreateRoom } from "@/hooks/useCreateRoom";
 import Loading from "@/app/loading";
 import { useRouter } from "next/navigation";
 import { userAtom } from "@/store/authAtom";
-import { stompClient } from "../editor/store";
 
 const handleChange = (value: string | string[]) => {
   console.log(`Selected: ${value}`);
