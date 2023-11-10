@@ -8,7 +8,7 @@ import java.util.List;
 
 @Getter
 @Setter
-@Builder(toBuilder = true)
+//@Builder(toBuilder = true)
 public class EditorListResponseDto {
     private String id;
     private String title;
