@@ -86,7 +86,7 @@ export default function QuizStart(props: QuizRoomProps) {
               items={items}
             />
 
-            <h1 className="text-3xl font-preBd mt-11">
+            <h1 className="text-3xl font-preBd mt-11 h-12">
               <span className="text-4xl">{step + 1}. </span>
 
               {quizsWithExtraOption[step].question}
@@ -100,7 +100,7 @@ export default function QuizStart(props: QuizRoomProps) {
               />
             </div>
 
-            <div className="flex justify-between">
+            <div className="flex justify-between mt-10">
               {step != 0 ? (
                 <Button className=" dark:border-font_primary font-preRg bg-white" type="primary" onClick={() => prev()}>
                   이전

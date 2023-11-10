@@ -64,26 +64,29 @@ export default function QuizRoom(props: QuizRoomProps) {
       stompClient.send(`/pub/quiz/${props.roomId}`, {});
 
       // 1초 후 퀴즈 배열 확인
-      setTimeout(() => {
-        if (quizs.length === 0) {
-          message.loading("퀴즈를 만들고 있는 중이에요. 잠시 후 다시 시도해주세요.", 2);
-          setStart(false);
-        }
-      }, 1000);
+      if (quizs.length === 0) {
+        message.loading("퀴즈를 만들고 있는 중이에요. 잠시 후 다시 시도해주세요.", 2);
+        setStart(false);
+      }
     }
   }, [start]);
 
   const outRoom = () => {
-    router.push("/quiz/room");
+    router.replace("/quiz/room");
     console.log("방나가기");
   };
 
   return (
     <>
-      {submit && quizResults.length > 0 ? (
+      {submit && quizResults ? (
         // 퀴즈 모두 다 푼 경우 => 랭킹 보여줌
-        <QuizResult />
-      ) : submit && quizResults.length === 0 ? (
+        <section className="px-2 pr-6 grid grid-cols-2 h-screen w-full max-w-full items-center">
+          <QuizResult />
+          <div className="pl-2">
+            <ChatRoom roomId={props.roomId} height={80} />
+          </div>
+        </section>
+      ) : submit && !quizResults ? (
         // 제출했지만 결과가 아직 없는 경우 => 로딩 화면
         <div>
           <Loading />
@@ -99,14 +102,14 @@ export default function QuizRoom(props: QuizRoomProps) {
             <div className="col-span-7 flex flex-col">
               <div className="flex justify-center items-center relative">
                 <span
-                  className="hover:text-hover_primary text-lg font-PreBd font-normal text-dark_background dark:text-font_primary absolute left-0 p-1 rounded-md outline outline-2 outline-dark_font dark:outline-font_primary "
+                  className="hover:text-hover_primary text-lg font-PreBd font-normal text-dark_background dark:text-font_primary absolute left-0 p-1 rounded-md outline outline-2 outline-dark_background dark:outline-font_primary "
                   onClick={() => outRoom()}>
                   {"<< 나가기"}
                 </span>
                 <div className="text-center">
-                  <h1 className="text-5xl my-4 font-bold dark:text-dark_font text-primary">
+                  <h1 className="text-4xl my-4 font-bold dark:text-dark_font text-primary">
                     {room?.roomName} {"   "}
-                    <span className="text-3xl font-normal text-dark_background dark:text-font_primary">
+                    <span className="text-2xl font-normal text-dark_background dark:text-font_primary">
                       {room?.roomCnt}명 / {room?.roomMax}명
                     </span>
                   </h1>

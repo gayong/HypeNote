@@ -1,7 +1,8 @@
+// 퀴즈 방 관련
 export interface QuizRoom {
   roomName: string;
-  pages: Array<number>;
-  sharePages: Array<number>;
+  pages: Array<string>;
+  sharePages: Array<string>;
   quizCnt: number;
   single: boolean;
   content: string;
@@ -9,12 +10,6 @@ export interface QuizRoom {
 }
 export interface QuizRoomGroup extends QuizRoom {
   inviteUsers: Array<QuizUser>;
-}
-
-export interface QuizRoomDetail {
-  result: object;
-  type: string;
-  ranking?: Array<number>;
 }
 
 export interface QuizRoomInfo {
@@ -35,11 +30,20 @@ export interface QuizRoomInfo {
   host: number;
 }
 
-// export interface Chat {
-//   chatTime: string;
-//   userPk: string;
-//   content: string;
-// }
+export interface QuizRanking {
+  correct: number;
+  ranking: number;
+  total: number;
+  userImg: string;
+  userName: string;
+  userPk: number;
+}
+
+export interface QuizRoomDetail {
+  result: object;
+  type: string;
+  ranking?: Array<number>;
+}
 
 export interface QuizUser {
   host?: boolean;
@@ -65,7 +69,7 @@ export interface QuizInfo {
   question: string;
 }
 export interface QuizInfoWithMyAnswer extends QuizInfo {
-  myAnswer: number;
+  myAnswer: string;
 }
 
 export interface QuizQuestion {
@@ -77,7 +81,7 @@ export interface QuizResultInfo {
   correct: number;
   examDone: string;
   examStart: string;
-  questionResult: Array<object>;
+  questionResult: Array<QuizInfoWithMyAnswer>;
   quizId: number;
   roomId: number;
   totals: number;
