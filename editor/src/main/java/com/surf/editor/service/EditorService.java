@@ -141,6 +141,15 @@ public class EditorService {
         findParentEditor.childRelation(editorRelationRequestDto.getChildId());
         findChildEditor.parentRelation(editorRelationRequestDto.getParentId());
 
+        // root가 아니라면 해당 기존의 parent에서 child값을 삭제해야 한다.
+        if(!findChildEditor.getParentId().equals("root")){
+            Editor findPreParentEditor = editorRepository.findById(findChildEditor.getParentId())
+                    .orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
+
+            findPreParentEditor.childDelete(findChildEditor.getId());
+            editorRepository.save(findPreParentEditor);
+        }
+
         editorRepository.save(findParentEditor);
         editorRepository.save(findChildEditor);
     }
