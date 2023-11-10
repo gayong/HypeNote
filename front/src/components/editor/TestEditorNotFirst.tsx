@@ -11,6 +11,9 @@ import { uploadToTmpFilesDotOrg_DEV_ONLY, Block, PartialBlock } from "@blocknote
 import * as store from "./store";
 import Search from "@/components/editor/Search";
 import { useEditorWebSocket } from "@/context/SocketEditorProvider";
+import { Button } from "antd";
+import ShardeBtn from "./SharedBtn";
+import ToShareBtn from "./ToShareBtn";
 
 type WindowWithProseMirror = Window & typeof globalThis & { ProseMirror: any };
 
@@ -25,10 +28,12 @@ function TestEditorNotFirst({ id }: Props) {
   const stompClient = useEditorWebSocket();
 
   useEffect(() => {
-    store.connectStompClient(id, stompClient);
+    if (stompClient) {
+      store.connectStompClient(id, stompClient);
+    }
     return () => {
       if (stompClient) {
-        stompClient.unsubscribe("/sub/note/5");
+        stompClient.unsubscribe(`/sub/note/${id}`);
       }
     };
   }, [id, stompClient]);
@@ -75,6 +80,9 @@ function TestEditorNotFirst({ id }: Props) {
         <BlockNoteView editor={editor} theme={theme} />
       </div>
       <Search />
+      {/* <Button className="absolute top-5 right-10">공유버튼</Button> */}
+      <ShardeBtn />
+      <ToShareBtn />
     </>
   );
 }

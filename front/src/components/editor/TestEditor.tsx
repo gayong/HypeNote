@@ -14,6 +14,8 @@ import Note from "@/hooks/useGetNote";
 import UpdateNote from "@/hooks/useUpdateNote";
 import { useRouter } from "next/navigation";
 import { useEditorWebSocket } from "@/context/SocketEditorProvider";
+import ShardeBtn from "./SharedBtn";
+import ToShareBtn from "./ToShareBtn";
 
 type WindowWithProseMirror = Window & typeof globalThis & { ProseMirror: any };
 
@@ -31,19 +33,23 @@ function TestEditor({ id }: Props) {
   // const val = `<h1 class="_inlineContent_nstdf_297">가나다라 마바사</h1><p class="_inlineContent_nstdf_297">어ㄴ</p><p class="_inlineContent_nstdf_297">ㅁ나이ㅓ리ㅏㅁㄴ어리ㅏㅇㄴ</p><p class="_inlineContent_nstdf_297">ㄴㅁ아ㅣㅓ라ㅣㅇ널</p><p class="_inlineContent_nstdf_297"></p><p class="_inlineContent_nstdf_297">&#x3C;h1 class="_inlineContent_nstdf_297">가나다라 마바사&#x3C;/h1>&#x3C;p class="_inlineContent_nstdf_297">어ㄴ&#x3C;/p>&#x3C;p class="_inlineContent_nstdf_297">ㅁ나이ㅓ리ㅏㅁㄴ어리ㅏㅇㄴ&#x3C;/p>&#x3C;p class="_inlineContent_nstdf_297">ㄴㅁ아ㅣㅓ라ㅣㅇ널&#x3C;/p>&#x3C;p class="_inlineContent_nstdf_297">&#x3C;/p>&#x3C;p class="_inlineContent_nstdf_297">&#x3C;/p></p><p class="_inlineContent_nstdf_297"></p>`;
 
   useEffect(() => {
-    store.connectStompClient(id, stompClient);
+    if (stompClient) {
+      store.connectStompClient(id, stompClient);
+    }
 
     // 컴포넌트가 언마운트될 때 실행되는 함수를 반환합니다.
     return () => {
       if (editor) {
         editor.blocksToHTML(editor.topLevelBlocks).then((update) => {
           const title = editor.topLevelBlocks[0].content;
-          console.log(title);
-          UpdateNote("654c7df82b88e74d89ae9a3a", title[0].text, update);
+          if (title && title[0]) {
+            // @ts-ignore
+            UpdateNote(id, title[0].text, update);
+          }
         });
       }
       if (stompClient) {
-        stompClient.unsubscribe("/sub/note/5");
+        stompClient.unsubscribe(`/sub/note/${id}`);
       }
     };
   }, [id, stompClient]); // editor가 변경될 때마다 이 훅을 실행합니다.
@@ -53,31 +59,38 @@ function TestEditor({ id }: Props) {
       {
         id: "d91d6999-f308-4d23-adea-4e69e22b50ea",
         type: "paragraph",
+
         props: {
+          //@ts-ignore
           textColor: "default",
+          //@ts-ignore
           backgroundColor: "default",
+          //@ts-ignore
           textAlignment: "left",
         },
+        //@ts-ignore
         content: [],
         children: [],
       },
     ],
     onEditorReady(editor) {
-      const getBlocks = async (val) => {
+      const getBlocks = async (val: string) => {
         const blocks = await editor.HTMLToBlocks(val);
         editor.replaceBlocks(editor.topLevelBlocks, blocks);
       };
 
-      Note("654c7df82b88e74d89ae9a3a")
+      Note(id)
         .then((content) => {
           console.log(content);
           getBlocks(content);
         })
         .catch((error) => {
-          router.push("/404");
+          // router.push("/404");
         });
     },
-    onEditorContentChange: (editor) => {},
+    onEditorContentChange: (editor) => {
+      console.log(editor.topLevelBlocks);
+    },
     domAttributes: {
       editor: {
         class: styles.editor,
@@ -115,6 +128,8 @@ function TestEditor({ id }: Props) {
         <BlockNoteView editor={editor} theme={theme} />
       </div>
       <Search />
+      <ShardeBtn />
+      <ToShareBtn />
     </>
   );
 }

@@ -6,6 +6,10 @@ import { Stomp, Frame } from "@stomp/stompjs";
 import * as Y from "yjs";
 import type { CompatClient } from "@stomp/stompjs";
 
+type Payload = {
+  content: (number | number[])[];
+  type: string;
+};
 type Todo = { completed: boolean; title: string };
 type update = { content: (number | number[])[]; type: string };
 
@@ -13,7 +17,7 @@ export const store = syncedStore({ todos: [] as Todo[], fragment: "xml" });
 const yDoc = getYjsDoc(store);
 export let firstConnected = 1;
 let messageId = 0;
-const pendingUpdates = {};
+let pendingUpdates: { [key: number]: any[] } = {};
 
 export function connectStompClient(id: string, stompClient: CompatClient) {
   if (stompClient) {
@@ -23,7 +27,7 @@ export function connectStompClient(id: string, stompClient: CompatClient) {
 
     // stompClient.connect({}, () => {
     // stompClient.subscribe(`/sub/note/${id}`, (message) => {
-    stompClient.subscribe(`/sub/note/5`, (message) => {
+    stompClient.subscribe(`/sub/note/${id}`, (message) => {
       const payload = JSON.parse(message.body);
       const enter = payload.type;
       if (enter === "1") {
@@ -63,13 +67,13 @@ export function connectStompClient(id: string, stompClient: CompatClient) {
     if (firstConnected === 1) {
       firstConnected = 0;
       // stompClient.send(`/pub/note/${id}`, {}, JSON.stringify({ type: "1" }));
-      stompClient.send(`/pub/note/5`, {}, JSON.stringify({ type: "1" }));
+      stompClient.send(`/pub/note/${id}`, {}, JSON.stringify({ type: "1" }));
     }
     // });
 
-    function sendYjsUpdate(update) {
+    function sendYjsUpdate(update: Payload) {
       // stompClient.send(`/pub/note/${id}`, {}, JSON.stringify(update));
-      stompClient.send(`/pub/note/5`, {}, JSON.stringify(update));
+      stompClient.send(`/pub/note/${id}`, {}, JSON.stringify(update));
     }
 
     yDoc.on("update", (update) => {
@@ -80,7 +84,7 @@ export function connectStompClient(id: string, stompClient: CompatClient) {
       }
     });
 
-    function chunkMessage(update) {
+    function chunkMessage(update: Uint8Array) {
       const updateArray = Array.from(update);
       const totalChunks = Math.ceil(updateArray.length / 3000);
       for (let i = 0; i < totalChunks; i++) {
