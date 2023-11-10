@@ -1,5 +1,4 @@
 "use client";
-import { FcGoogle } from "react-icons/fc";
 import Link from "next/link";
 import Image from "next/image";
 
@@ -33,7 +32,7 @@ export default function Signin() {
       message.success("로그인 성공!");
       router.push("/");
     } else {
-      message.success("로그인에 실패했습니다. 잠시 후 다시 시도해주세요.");
+      message.error(success);
     }
   };
 
