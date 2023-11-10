@@ -86,8 +86,8 @@ export default function QuizStart(props: QuizRoomProps) {
               items={items}
             />
 
-            <h1 className="text-3xl font-preBd mt-11 h-12">
-              <span className="text-4xl">{step + 1}. </span>
+            <h1 className="text-lg font-preBd mt-11 h-12">
+              <span className="text-lg">{step + 1}. </span>
 
               {quizsWithExtraOption[step].question}
             </h1>
@@ -102,10 +102,7 @@ export default function QuizStart(props: QuizRoomProps) {
 
             <div className="flex justify-center mt-10">
               {step != 0 ? (
-                <Button
-                  className=" dark:border-font_primary font-preRg bg-line_primary"
-                  type="primary"
-                  onClick={() => prev()}>
+                <Button className="font-preRg bg-line_primary" type="primary" onClick={() => prev()}>
                   이전
                 </Button>
               ) : (
@@ -116,7 +113,7 @@ export default function QuizStart(props: QuizRoomProps) {
                   다음
                 </Button>
               ) : (
-                <Button className=" font-preRg bg-primary" type="primary" onClick={() => submitAnswer()}>
+                <Button className=" font-preRg bg-primary ml-3 pl-3" type="primary" onClick={() => submitAnswer()}>
                   답안 제출
                 </Button>
               )}
