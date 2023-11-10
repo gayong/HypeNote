@@ -20,8 +20,7 @@ public class UserInformationService {
     public UserInfoResponseDto sendUserInformation (Map<String, String> request) {
 
         Optional<User> optionalUser;
-
-        if (!request.get("email").isEmpty()){
+        if (request.get("email") != null){
             optionalUser = userRepository.findByEmail(request.get("email"));
         } else {
             optionalUser = userRepository.findByNickName(request.get("nickName"));
@@ -38,13 +37,6 @@ public class UserInformationService {
                 .profileImage(userInfo.getProfileImage())
                 .documentsRoots(userInfo.getDocumentsRoots())
                 .role(userInfo.getRole())
-                .build();
-    }
-
-    public UserInfoResponseDto userNotFound () {
-
-        return UserInfoResponseDto.builder()
-                .message("해당 유저가 존재하지 않습니다.")
                 .build();
     }
 

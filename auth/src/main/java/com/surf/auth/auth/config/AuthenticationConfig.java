@@ -22,7 +22,7 @@ public class AuthenticationConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .cors(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((authorize -> authorize
-                        .requestMatchers("/api/auth/login", "/api/auth/signup").permitAll()
+                        .requestMatchers("/api/auth/login", "/api/auth/signup", "/api/auth/**").permitAll()
                         .anyRequest().authenticated()))
 //                .authenticationProvider(authenticationProvider)
                 .sessionManagement((sessionManagement) ->

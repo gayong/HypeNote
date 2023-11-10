@@ -50,6 +50,6 @@ public class TokenDecoder {
 
         Claims userClaim = userClaims.getPayload();
 
-        return userClaim.get("email", String.class);
+        return userClaim.getSubject();
     }
 }
