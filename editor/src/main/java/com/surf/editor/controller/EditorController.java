@@ -4,12 +4,15 @@ import com.surf.editor.common.response.ApiResponse;
 import com.surf.editor.dto.request.*;
 import com.surf.editor.dto.response.EditorCheckResponseDto;
 import com.surf.editor.dto.response.EditorCreateResponseDto;
+import com.surf.editor.dto.response.EditorListResponseDto;
 import com.surf.editor.dto.response.EditorSearchResponseDto;
 import com.surf.editor.service.EditorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 import static org.springframework.http.HttpStatus.OK;
 
@@ -124,4 +127,16 @@ public class EditorController {
         return ResponseEntity.ok(apiResponse);
     }
 
+    @PostMapping("/list")
+    public ResponseEntity<ApiResponse> editorList(@RequestBody EditorListRequestDto editorListRequestDto){
+        List<EditorListResponseDto> editorListResponseDtoList = editorService.editorList(editorListRequestDto);
+
+        ApiResponse apiResponse = ApiResponse.builder()
+                .message("문서 리스트 출력")
+                .status(OK.value())
+                .data(editorListResponseDtoList)
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
 }
