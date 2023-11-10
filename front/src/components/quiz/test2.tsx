@@ -5,9 +5,144 @@ import Image from "next/image";
 import confetti from "canvas-confetti";
 import { useRouter } from "next/navigation";
 import { Button, Radio } from "antd";
+const quizResults = {
+  quizId: 165,
+  roomId: 165,
+  roomName: "1111",
+  totals: 2,
+  examStart: "2023-11-10 11:29",
+  examDone: "2023-11-10 11:31",
+  questionResult: [
+    {
+      id: 1,
+      question: "TCP/IP 통신에서 흐름 제어와 혼잡 제어는 무엇을 해결하기 위한 기법인가요?",
+      example: [
+        {
+          ex: "1",
+          content: "신뢰적인 연결 방식",
+        },
+        {
+          ex: "2",
+          content: "손실된 패킷 문제",
+        },
+        {
+          ex: "3",
+          content: "패킷의 순서가 바뀌는 문제",
+        },
+        {
+          ex: "4",
+          content: "네트워크가 혼잡한 문제",
+        },
+      ],
+      answer: "4",
+      myAnswer: "3",
+      commentary:
+        "흐름 제어는 송신측과 수신측의 데이터 처리 속도 차이를 해결하기 위한 기법이며, 혼잡 제어는 송신측의 데이터 전달과 네트워크의 데이터 처리 속도 차이를 해결하기 위한 기법입니다.",
+    },
+    {
+      id: 2,
+      question: "TCP의 흐름 제어와 혼잡 제어에 대한 설명으로 옳은 것은?",
+      example: [
+        {
+          ex: "1",
+          content:
+            "TCP는 신뢰적인 연결 방식으로, packet의 손실 문제와 packet의 순서가 바뀌는 문제를 해결하기 위한 기법이다.",
+        },
+        {
+          ex: "2",
+          content: "흐름 제어는 송신측과 수신측의 데이터 처리 속도 차이를 해결하기 위한 기법이다.",
+        },
+        {
+          ex: "3",
+          content: "혼잡 제어는 네트워크가 혼잡한 문제와 receiver가 overload되는 문제를 해결하기 위한 기법이다.",
+        },
+        {
+          ex: "4",
+          content:
+            "흐름 제어와 혼잡 제어는 모두 송신측의 데이터 전달과 네트워크의 데이터 처리 속도 차이를 해결하기 위한 기법이다.",
+        },
+      ],
+      answer: "1",
+      myAnswer: "1",
+      commentary:
+        "TCP는 패킷의 손실 문제와 순서가 바뀌는 문제를 해결하기 위한 신뢰적인 연결 방식이다. 흐름 제어는 송신측과 수신측의 데이터 처리 속도 차이를 해결하기 위한 기법이고, 혼잡 제어는 네트워크가 혼잡한 문제와 수신측의 오버로드 문제를 해결하기 위한 기법이다.",
+    },
+    {
+      id: 1,
+      question: "TCP/IP 통신에서 흐름 제어와 혼잡 제어는 무엇을 해결하기 위한 기법인가요?",
+      example: [
+        {
+          ex: "1",
+          content: "신뢰적인 연결 방식",
+        },
+        {
+          ex: "2",
+          content: "손실된 패킷 문제",
+        },
+        {
+          ex: "3",
+          content: "패킷의 순서가 바뀌는 문제",
+        },
+        {
+          ex: "4",
+          content: "네트워크가 혼잡한 문제",
+        },
+      ],
+      answer: "4",
+      myAnswer: "3",
+      commentary:
+        "흐름 제어는 송신측과 수신측의 데이터 처리 속도 차이를 해결하기 위한 기법이며, 혼잡 제어는 송신측의 데이터 전달과 네트워크의 데이터 처리 속도 차이를 해결하기 위한 기법입니다.",
+    },
+    {
+      id: 1,
+      question: "TCP/IP 통신에서 흐름 제어와 혼잡 제어는 무엇을 해결하기 위한 기법인가요?",
+      example: [
+        {
+          ex: "1",
+          content: "신뢰적인 연결 방식",
+        },
+        {
+          ex: "2",
+          content: "손실된 패킷 문제",
+        },
+        {
+          ex: "3",
+          content: "패킷의 순서가 바뀌는 문제",
+        },
+        {
+          ex: "4",
+          content: "네트워크가 혼잡한 문제",
+        },
+      ],
+      answer: "4",
+      myAnswer: "3",
+      commentary:
+        "흐름 제어는 송신측과 수신측의 데이터 처리 속도 차이를 해결하기 위한 기법이며, 혼잡 제어는 송신측의 데이터 전달과 네트워크의 데이터 처리 속도 차이를 해결하기 위한 기법입니다.",
+    },
+  ],
+  correct: 0,
+};
 
-export default function QuizResult() {
-  const { quizResults, quizRanking } = useContext(SocketContext);
+const quizRanking = [
+  {
+    userImg: "/assets/유령.png",
+    total: 2,
+    correct: 2,
+    ranking: 1,
+    userName: "윤자현",
+    userPk: 2020,
+  },
+  {
+    userImg: "/assets/유령.png",
+    total: 2,
+    correct: 0,
+    ranking: 2,
+    userName: "csi",
+    userPk: 26,
+  },
+];
+
+export default function Test2() {
   const [tab, setTab] = useState("rank");
   const router = useRouter();
 

@@ -17,12 +17,6 @@ export default function Timer({ time }: TimerProps) {
     console.log("finished!");
   };
 
-  const onChange: CountdownProps["onChange"] = (val) => {
-    if (typeof val === "number" && 4.95 * 1000 < val && val < 5 * 1000) {
-      console.log("changed!");
-    }
-  };
-
   return (
     <div>
       <Countdown

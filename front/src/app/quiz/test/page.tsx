@@ -1,4 +1,5 @@
-import Test from "@/components/quiz/test";
+import ChatRoom from "@/components/quiz/ChatRoom";
+import Test from "@/components/quiz/test2";
 import Timer from "@/components/ui/Timer";
 import { Metadata } from "next";
 
@@ -10,10 +11,14 @@ export const metadata: Metadata = {
 export default function TestPage() {
   return (
     <>
-      {/* <button className="bg-primary flex mx-auto hover:bg-gray-300 text-secondary py-2 px-4 rounded">방 만들기</button> */}
       <section className="flex items-center justify-center ">
-        <Test />
-        <Timer time={20} />
+        <section className="px-2 pr-6 grid grid-cols-2 h-screen w-full max-w-full items-center">
+          <Test />
+
+          <div className="pl-2">
+            <ChatRoom roomId={10} height={80} />
+          </div>
+        </section>
       </section>
     </>
   );
