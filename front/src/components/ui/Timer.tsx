@@ -26,10 +26,10 @@ export default function Timer({ time }: TimerProps) {
   return (
     <div>
       <Countdown
-        title={<div className="text-[#cf1322]">제한시간</div>}
+        title={<div className="text-[#cf1322] ml-8 -mb-3">남은 시간</div>}
         value={deadline}
         onFinish={onFinish}
-        className="font-preBd"
+        className="font-preBd absolute top-5 right-10"
         valueStyle={{ color: "#cf1322", fontFamily: "PreBd" }}
       />
     </div>
