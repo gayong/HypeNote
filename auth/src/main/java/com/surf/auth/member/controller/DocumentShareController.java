@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/member")
+@RequestMapping("/api/auth")
 public class DocumentShareController {
 
     private final UserPkAuthenticator userPkAuthenticator;
