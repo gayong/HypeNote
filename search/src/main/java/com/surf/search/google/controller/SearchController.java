@@ -1,8 +1,8 @@
-package com.surf.search.controller;
+package com.surf.search.google.controller;
 
 import com.surf.search.common.response.ApiResponse;
-import com.surf.search.dto.SearchGetResponseDto;
-import com.surf.search.service.SearchService;
+import com.surf.search.google.dto.SearchGetResponseDto;
+import com.surf.search.google.service.SearchService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
