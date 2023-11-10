@@ -142,6 +142,7 @@ public class EditorService {
         findChildEditor.parentRelation(editorRelationRequestDto.getParentId());
 
         editorRepository.save(findParentEditor);
+        editorRepository.save(findChildEditor);
     }
 
     // 하이퍼 링크 부모는 바뀌지 않는다.
