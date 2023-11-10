@@ -31,7 +31,9 @@ public class UserInformationController {
     private final AccessTokenNotValidationHandler accessTokenNotValidationHandler;
 
     @GetMapping ("/user-info")
-    private ResponseEntity<UserInfoResponseDto> userInformationController (@RequestHeader String accessToken) {
+    private ResponseEntity<UserInfoResponseDto> userInformationController (@RequestHeader("Authorization") String accessTokenHeader) {
+
+        String accessToken = accessTokenHeader.substring(7);
 
         Map<String, String> request = new HashMap<>();
 
