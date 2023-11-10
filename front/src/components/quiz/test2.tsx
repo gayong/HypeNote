@@ -258,10 +258,11 @@ export default function Test2() {
             {quizResults?.questionResult.map((quiz, index) => (
               <div key={index} className="pt-16">
                 <div className="flex items-center relative px-10">
-                  <Image src="/assets/correct.png" alt="맞음" width={100} height={100} className="absolute -left-3" />
+                  <Image src="/assets/cor.png" alt="맞음" width={110} height={110} className="absolute left-0.5" />
+                  {/* <Image src="/assets/wr.png" alt="틀림" width={70} height={70} className="absolute left-6 -top-10" /> */}
 
-                  <h1 className="text-4xl font-preBd text-dark_font">{quiz.id}.</h1>
-                  <span className="ml-2 mt-1 text-xl font-preBd dark:text-font_primary">{quiz.question}</span>
+                  <h1 className="text-lg font-preBd text-dark_font">{quiz.id}.</h1>
+                  <span className="ml-2 mt-1 text-lg font-preBd dark:text-font_primary">{quiz.question}</span>
                 </div>
 
                 {/* <h2>{quiz.myAnswer}</h2> */}
@@ -270,7 +271,7 @@ export default function Test2() {
                   {quiz.example.map((ex, index) => (
                     <p key={ex.ex} className="w-full">
                       <p
-                        className={`pr-3 w-full py-3 mx-2 text-lg ${
+                        className={`pr-3 w-full py-3 mx-2 text-[16px] ${
                           // 퀴즈 정답인 것
                           quiz.answer === ex.ex ? "font-bold text-dark_font" : ""
                         }
