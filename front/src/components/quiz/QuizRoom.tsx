@@ -100,17 +100,19 @@ export default function QuizRoom(props: QuizRoomProps) {
         <>
           <section className="grid grid-cols-12">
             <div className="col-span-7 flex flex-col">
-              <div className="flex justify-center items-center relative">
+              <div className="h-16 flex justify-center items-center relative">
                 <span
-                  className="hover:text-hover_primary text-lg font-PreBd font-normal text-dark_background dark:text-font_primary absolute left-0 p-1 rounded-md outline outline-2 outline-dark_background dark:outline-font_primary "
+                  className="font-bold hover:text-hover_primary dark:hover:text-dark_font text-lg font-PreBd text-dark_background dark:text-font_primary absolute left-0 p-1 rounded-md"
                   onClick={() => outRoom()}>
-                  {"<< 나가기"}
+                  {"< 나가기"}
                 </span>
                 <div className="text-center">
-                  <h1 className="text-4xl my-4 font-bold dark:text-dark_font text-primary">
+                  <h1 className="text-3xl my-4 font-bold dark:text-dark_font text-primary flex">
                     {room?.roomName} {"   "}
-                    <span className="text-2xl font-normal text-dark_background dark:text-font_primary">
-                      {room?.roomCnt}명 / {room?.roomMax}명
+                    <span className="ml-2 mt-1 text-xl font-bolder dark:text-font_primary text-yellow rounded-2xl">
+                      {room?.roomCnt}
+                      {"   "} / {"   "}
+                      {room?.roomMax}명
                     </span>
                   </h1>
                 </div>

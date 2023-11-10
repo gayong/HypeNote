@@ -92,7 +92,21 @@ body {
   > .ant-input-group
   > .ant-input-group-addon:last-child
   .ant-input-search-button {
-  background-color: #2946a2;
+  background-color: #a5b3e2;
+}
+.ant-btn css-2i2tap ant-btn-primary ant-input-search-button {
+  background-color: #a5b3e2;
+}
+
+/* 검색에 사용되는 인풋, placeholder */
+:where(.css-dev-only-do-not-override-2i2tap).ant-input {
+  font-family: "preRg";
+}
+
+/* 뇌에 친구 select */
+.ant-select-show-search:where(.css-dev-only-do-not-override-2i2tap).ant-select:not(.ant-select-customize-input)
+  .ant-select-selector {
+  font-family: "preRg";
 }
 
 /* 에디터 서랍 바디 */
