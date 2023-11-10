@@ -11,14 +11,10 @@ export const metadata: Metadata = {
 export default function TestPage() {
   return (
     <>
-      <section className="flex items-center justify-center ">
-        <section className="px-2 pr-6 grid grid-cols-2 h-screen w-full max-w-full items-center">
-          <Test />
-
-          <div className="pl-2">
-            <ChatRoom roomId={10} height={80} />
-          </div>
-        </section>
+      {/* <button className="bg-primary flex mx-auto hover:bg-gray-300 text-secondary py-2 px-4 rounded">방 만들기</button> */}
+      <section className="h-screen pt-32 w-full">
+        <Test />
+        <Timer time={20} />
       </section>
     </>
   );

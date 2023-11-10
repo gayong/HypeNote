@@ -75,7 +75,7 @@ export default function QuizStart(props: QuizRoomProps) {
     <>
       {quizs && quizs.length > 0 && (
         <>
-          <div className="my-24 flex-cols items-center justify-center h-screen mx-16 w-full pt-10 ">
+          <div className="h-screen pt-32 w-full justify-center items-center flex-cols mx-16">
             <Steps
               status="process"
               type="navigation"
@@ -100,16 +100,19 @@ export default function QuizStart(props: QuizRoomProps) {
               />
             </div>
 
-            <div className="flex justify-between mt-10">
+            <div className="flex justify-center mt-10">
               {step != 0 ? (
-                <Button className=" dark:border-font_primary font-preRg bg-white" type="primary" onClick={() => prev()}>
+                <Button
+                  className=" dark:border-font_primary font-preRg bg-line_primary"
+                  type="primary"
+                  onClick={() => prev()}>
                   이전
                 </Button>
               ) : (
                 <br />
               )}
               {step < quizsWithExtraOption.length - 1 ? (
-                <Button className="font-preRg bg-primary" type="primary" onClick={() => next()}>
+                <Button className="font-preRg bg-primary ml-3 pl-3" type="primary" onClick={() => next()}>
                   다음
                 </Button>
               ) : (

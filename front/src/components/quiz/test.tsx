@@ -196,7 +196,7 @@ export default function Test() {
   }));
 
   return (
-    <div className="my-24 flex-cols items-center justify-center h-screen mx-16 w-full">
+    <div className="justify-center items-center flex-cols mx-16">
       <Steps
         status="process"
         type="navigation"
@@ -207,9 +207,8 @@ export default function Test() {
         items={items}
       />
 
-      <h1 className="text-3xl font-preBd mt-11">
-        <span className="text-4xl">{step + 1}. </span>
-
+      <h1 className="text-xl font-preBd mt-11">
+        <span className="text-xl">{step + 1}. </span>
         {quizsWithExtraOption[step].question}
       </h1>
 
@@ -222,20 +221,23 @@ export default function Test() {
         />
       </div>
 
-      <div className="flex justify-between">
+      <div className="flex justify-center mt-10">
         {step != 0 ? (
-          <Button className=" dark:border-font_primary font-preRg bg-white" type="primary" onClick={() => prev()}>
+          <Button
+            className=" dark:border-font_primary font-preRg bg-line_primary"
+            type="primary"
+            onClick={() => prev()}>
             이전
           </Button>
         ) : (
           <br />
         )}
         {step < quizsWithExtraOption.length - 1 ? (
-          <Button className="font-preRg bg-primary" type="primary" onClick={() => next()}>
+          <Button className="font-preRg bg-primary ml-3" type="primary" onClick={() => next()}>
             다음
           </Button>
         ) : (
-          <Button className=" font-preRg bg-primary" type="primary" onClick={() => submitAnswer()}>
+          <Button className=" font-preRg bg-primary ml-3" type="primary" onClick={() => submitAnswer()}>
             답안 제출
           </Button>
         )}

@@ -4,12 +4,18 @@ import { useAtom } from "jotai";
 import { themeAtom } from "../../store/theme";
 import { isSearchOpen } from "../../store/searchOpen";
 import { useEffect, useState } from "react";
-import { BlockNoteView, useBlockNote } from "@blocknote/react";
+import { BlockNoteView, blockNoteToMantineTheme, useBlockNote } from "@blocknote/react";
 import "@blocknote/core/style.css";
 import styles from "./Editor.module.css";
-import { uploadToTmpFilesDotOrg_DEV_ONLY } from "@blocknote/core";
+import { uploadToTmpFilesDotOrg_DEV_ONLY, Block, PartialBlock } from "@blocknote/core";
 import * as store from "./store";
 import Search from "@/components/editor/Search";
+import Note from "@/hooks/useGetNote";
+import UpdateNote from "@/hooks/useUpdateNote";
+import { useRouter } from "next/navigation";
+import { useEditorWebSocket } from "@/context/SocketEditorProvider";
+import ShardeBtn from "./SharedBtn";
+import ToShareBtn from "./ToShareBtn";
 
 type WindowWithProseMirror = Window & typeof globalThis & { ProseMirror: any };
 
@@ -18,11 +24,70 @@ type Props = {
 };
 
 function TestEditor({ id }: Props) {
+  const router = useRouter();
+  const stompClient = useEditorWebSocket();
+
   // const [theme, setTheme] = useState<"light" | "dark">("light");
   const [theme, setTheme] = useAtom<any>(themeAtom);
   const [open] = useAtom(isSearchOpen);
+  // const val = `<h1 class="_inlineContent_nstdf_297">가나다라 마바사</h1><p class="_inlineContent_nstdf_297">어ㄴ</p><p class="_inlineContent_nstdf_297">ㅁ나이ㅓ리ㅏㅁㄴ어리ㅏㅇㄴ</p><p class="_inlineContent_nstdf_297">ㄴㅁ아ㅣㅓ라ㅣㅇ널</p><p class="_inlineContent_nstdf_297"></p><p class="_inlineContent_nstdf_297">&#x3C;h1 class="_inlineContent_nstdf_297">가나다라 마바사&#x3C;/h1>&#x3C;p class="_inlineContent_nstdf_297">어ㄴ&#x3C;/p>&#x3C;p class="_inlineContent_nstdf_297">ㅁ나이ㅓ리ㅏㅁㄴ어리ㅏㅇㄴ&#x3C;/p>&#x3C;p class="_inlineContent_nstdf_297">ㄴㅁ아ㅣㅓ라ㅣㅇ널&#x3C;/p>&#x3C;p class="_inlineContent_nstdf_297">&#x3C;/p>&#x3C;p class="_inlineContent_nstdf_297">&#x3C;/p></p><p class="_inlineContent_nstdf_297"></p>`;
+
+  useEffect(() => {
+    if (stompClient) {
+      store.connectStompClient(id, stompClient);
+    }
+
+    // 컴포넌트가 언마운트될 때 실행되는 함수를 반환합니다.
+    return () => {
+      if (editor) {
+        editor.blocksToHTML(editor.topLevelBlocks).then((update) => {
+          const title = editor.topLevelBlocks[0].content;
+          if (title && title[0]) {
+            // @ts-ignore
+            UpdateNote(id, title[0].text, update);
+          }
+        });
+      }
+      if (stompClient) {
+        stompClient.unsubscribe(`/sub/note/${id}`);
+      }
+    };
+  }, [id, stompClient]); // editor가 변경될 때마다 이 훅을 실행합니다.
 
   const editor = useBlockNote({
+    initialContent: [
+      {
+        id: "d91d6999-f308-4d23-adea-4e69e22b50ea",
+        type: "paragraph",
+
+        props: {
+          //@ts-ignore
+          textColor: "default",
+          //@ts-ignore
+          backgroundColor: "default",
+          //@ts-ignore
+          textAlignment: "left",
+        },
+        //@ts-ignore
+        content: [],
+        children: [],
+      },
+    ],
+    onEditorReady(editor) {
+      const getBlocks = async (val: string) => {
+        const blocks = await editor.HTMLToBlocks(val);
+        editor.replaceBlocks(editor.topLevelBlocks, blocks);
+      };
+
+      Note(id)
+        .then((content) => {
+          console.log(content);
+          getBlocks(content);
+        })
+        .catch((error) => {
+          // router.push("/404");
+        });
+    },
     onEditorContentChange: (editor) => {
       console.log(editor.topLevelBlocks);
     },
@@ -53,7 +118,7 @@ function TestEditor({ id }: Props) {
       },
     },
   });
-
+  //Test
   // Give tests a way to get prosemirror instance
   (window as WindowWithProseMirror).ProseMirror = editor?._tiptapEditor;
 
@@ -63,6 +128,8 @@ function TestEditor({ id }: Props) {
         <BlockNoteView editor={editor} theme={theme} />
       </div>
       <Search />
+      <ShardeBtn />
+      <ToShareBtn />
     </>
   );
 }
