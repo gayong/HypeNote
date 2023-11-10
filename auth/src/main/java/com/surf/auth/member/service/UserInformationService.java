@@ -6,6 +6,8 @@ import com.surf.auth.member.dto.UserInfoResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 
@@ -15,11 +17,18 @@ public class UserInformationService {
 
     private final UserRepository userRepository;
 
-    public UserInfoResponseDto sendUserInformation (String email) {
+    public UserInfoResponseDto sendUserInformation (Map<String, String> request) {
 
-        Optional<User> optionalUser = userRepository.findByEmail(email);
+        Optional<User> optionalUser;
+
+        if (!request.get("email").isEmpty()){
+            optionalUser = userRepository.findByEmail(request.get("email"));
+        } else {
+            optionalUser = userRepository.findByNickName(request.get("nickName"));
+        }
 
         User userInfo = optionalUser.orElseThrow();
+
 
         return UserInfoResponseDto.builder()
                 .message("성공적으로 유저 정보를 반환했습니다.")
@@ -35,7 +44,7 @@ public class UserInformationService {
     public UserInfoResponseDto userNotFound () {
 
         return UserInfoResponseDto.builder()
-                .message("해당 PK 값을 가진 유저가 존재하지 않습니다.")
+                .message("해당 유저가 존재하지 않습니다.")
                 .build();
     }
 
