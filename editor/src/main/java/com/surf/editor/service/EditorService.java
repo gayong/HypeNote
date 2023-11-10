@@ -4,17 +4,12 @@ import com.surf.editor.common.error.ErrorCode;
 import com.surf.editor.common.error.exception.BaseException;
 import com.surf.editor.common.error.exception.NotFoundException;
 import com.surf.editor.domain.Editor;
-import com.surf.editor.dto.request.EditorHyperLinkRequestDto;
-import com.surf.editor.dto.request.EditorRelationRequestDto;
-import com.surf.editor.dto.request.EditorWriteRequestDto;
-import com.surf.editor.dto.request.EditorWriterPermissionRequestDto;
+import com.surf.editor.dto.request.*;
 import com.surf.editor.dto.response.EditorCheckResponseDto;
 import com.surf.editor.dto.response.EditorCreateResponseDto;
+import com.surf.editor.dto.response.EditorListResponseDto;
 import com.surf.editor.dto.response.EditorSearchResponseDto;
-import com.surf.editor.feign.client.DiagramOpenFeign;
 import com.surf.editor.feign.client.MemberOpenFeign;
-import com.surf.editor.feign.client.MemberShareOpenFeign;
-import com.surf.editor.feign.client.QuizOpenFeign;
 import com.surf.editor.feign.dto.MemberEditorSaveRequestDto;
 import com.surf.editor.repository.EditorRepository;
 import lombok.RequiredArgsConstructor;
@@ -176,6 +171,41 @@ public class EditorService {
             throw new BaseException(ErrorCode.WRITER_PERMISSION_FAIL);
         }
 
+    }
+
+    public List<EditorListResponseDto> editorList(EditorListRequestDto editorListRequestDto) {
+
+        List<String> rootList = editorListRequestDto.getRootList();
+
+        List<EditorListResponseDto> editorListResponseDtoList = new ArrayList<>();
+        for (String root : rootList) {
+            Editor editor = editorRepository.findById(root).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
+            EditorListResponseDto treeDto = convertEditorToTreeDto(editor);
+            editorListResponseDtoList.add(treeDto);
+        }
+
+        return editorListResponseDtoList;
+    }
+
+    private EditorListResponseDto convertEditorToTreeDto(Editor editor) {
+        EditorListResponseDto editorListResponseDto = new EditorListResponseDto();
+
+        editorListResponseDto.setId(editor.getId());
+        editorListResponseDto.setTitle(editor.getTitle());
+        editorListResponseDto.setParentId(editor.getParentId());
+
+        List<String> childIds = editor.getChildId();
+        if(childIds !=null && !childIds.isEmpty()){
+            List<EditorListResponseDto> children = new ArrayList<>();
+
+            for (String childId : childIds) {
+                Editor childEditor = editorRepository.findById(childId).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
+                EditorListResponseDto childDto = convertEditorToTreeDto(childEditor);
+                children.add(childDto);
+            }
+            editorListResponseDto.setChildren(children);
+        }
+        return editorListResponseDto;
     }
 
 
