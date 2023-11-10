@@ -32,7 +32,7 @@ public class MessageController {
     @MessageMapping("/note/connection/{noteId}")
     public EditorConnectionRequestDto editorConnection(@DestinationVariable("noteId") String noteId, EditorConnectionRequestDto editorConnectionRequestDto){
         List<Integer> userList = editorConnection.editorConnection(noteId,editorConnectionRequestDto);
-        simpMessagingTemplate.convertAndSend("/sub/note/"+noteId, userList);
+        simpMessagingTemplate.convertAndSend("/sub/note/connection/"+noteId, userList);
 
         return editorConnectionRequestDto;
     }
@@ -40,7 +40,7 @@ public class MessageController {
     @MessageMapping("/note/disconnection/{noteId}")
     public EditorDisconnectionRequestDto editorDisconnection(@DestinationVariable("noteId") String noteId, EditorDisconnectionRequestDto editorDisConnectionRequestDto){
         List<Integer> userList = editorConnection.editorDisconnection(noteId,editorDisConnectionRequestDto);
-        simpMessagingTemplate.convertAndSend("/sub/note/"+noteId, userList);
+        simpMessagingTemplate.convertAndSend("/sub/note/disconnection/"+noteId, userList);
 
         return editorDisConnectionRequestDto;
     }
