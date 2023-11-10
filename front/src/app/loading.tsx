@@ -5,7 +5,7 @@ export default function Loading() {
   return (
     <>
       <div className="flex mx-auto justify-center items-center h-screen">
-        <Image src={loading} alt="로딩" priority />
+        <Image className="ml-5" src={loading} alt="로딩" priority />
       </div>
     </>
   );
