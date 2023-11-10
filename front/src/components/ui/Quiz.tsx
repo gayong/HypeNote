@@ -32,7 +32,7 @@ export default function Quiz({
               />
               <label
                 htmlFor={`quiz-radio-${questionId}-${item.ex}`}
-                className="w-full py-3 ml-2 text-lg font-medium text-gray-900 dark:text-gray-300">
+                className="w-full py-3 ml-2 text-[16px] text-gray-900 dark:text-gray-300">
                 {item.content}
               </label>
             </div>
