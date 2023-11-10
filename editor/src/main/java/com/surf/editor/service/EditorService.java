@@ -78,13 +78,16 @@ public class EditorService {
     public void editorDelete(String editorId) {
         Editor byId = editorRepository.findById(editorId).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
 
-        //부모,자녀 관계 제거
+        //부모의 나 제거
         Editor parentEditor = editorRepository.findById(byId.getParentId()).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
         parentEditor.childDelete(byId.getId());
+        editorRepository.save(parentEditor);
 
+        //자녀 제거
         for (String childId : byId.getChildId()) {
             Editor childEditor = editorRepository.findById(childId).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
             childEditor.parentDelete();
+            editorRepository.save(childEditor);
         }
 
         try{
@@ -139,7 +142,6 @@ public class EditorService {
                 .orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
 
         findParentEditor.childRelation(editorRelationRequestDto.getChildId());
-        findChildEditor.parentRelation(editorRelationRequestDto.getParentId());
 
         // root가 아니라면 해당 기존의 parent에서 child값을 삭제해야 한다.
         if(!findChildEditor.getParentId().equals("root")){
@@ -149,6 +151,8 @@ public class EditorService {
             findPreParentEditor.childDelete(findChildEditor.getId());
             editorRepository.save(findPreParentEditor);
         }
+
+        findChildEditor.parentRelation(editorRelationRequestDto.getParentId());
 
         editorRepository.save(findParentEditor);
         editorRepository.save(findChildEditor);
