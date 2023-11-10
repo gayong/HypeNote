@@ -153,7 +153,6 @@ public class QuizResultService {
 
     // 각 유저의 답안이 저장 > 결과 전송
     private void saveAndSendResults(String roomId, Quiz quiz) {
-        System.out.println("111roomId = " + roomId);
         if (quizResultRepository.countByRoomId(Integer.parseInt(roomId)) == quiz.getUserCnt()) {
             quiz.setComplete(true);
             quizRepository.save(quiz);
@@ -161,43 +160,51 @@ public class QuizResultService {
 
             List<QuizResult> results = quizResultRepository.findByRoomId(Integer.parseInt(roomId));
             results.sort((o1, o2) -> o2.getCorrect() - o1.getCorrect());
-            Map<Long, QuizResult> resultsMap = results.stream()
-                    .collect(Collectors.toMap(result -> result.getUser().getUserPk(), Function.identity()));
-            Map<Long, QuizResultDto> resultsDtoMap = resultsMap.entrySet().stream()
-                    .collect(Collectors.toMap(Map.Entry::getKey, entry -> toQuizResultDto(entry.getValue())));
 
+            Map<Long, QuizResultDto> resultsDtoMap = results.stream()
+                    .collect(Collectors.toMap(result -> result.getUser().getUserPk(), this::toQuizResultDto));
 
-            // 각 QuizResult에서 필요한 정보를 추출하여 ranking 리스트 생성
-            List<Map<String, Object>> ranking = new ArrayList<>();
-            int rank = 1;
-            int prevCorrect = -1;
-            for (QuizResult result : results) {
-                Map<String, Object> userRanking = new HashMap<>();
-                userRanking.put("userPk", result.getUser().getUserPk());
-                userRanking.put("userName", result.getUser().getUserName()); // userName 필드 가정
-                userRanking.put("userImg", result.getUser().getUserImg()); // userImg 필드 가정
-                // 이전 점수와 현재 점수를 비교
-                if (result.getCorrect() != prevCorrect) {
-                    rank = ranking.size() + 1; // 이전 점수와 현재 점수가 다르면, 현재 등수를 ranking 리스트의 크기 + 1로 설정
-                }
-                userRanking.put("ranking", rank);
-                prevCorrect = result.getCorrect();
-                userRanking.put("correct", result.getCorrect());
-                userRanking.put("total", result.getTotals()); // total 필드 가정
-                ranking.add(userRanking);
-            }
+            List<Map<String, Object>> ranking = createRanking(results);
 
-            // results와 ranking을 하나의 객체에 담아 보냄
-            Map<String, Object> payload = new HashMap<>();
-            payload.put("type", "result");
-            payload.put("ranking", ranking);
-            payload.put("result", resultsDtoMap);
-            System.out.println("payload = " + payload);
+            Map<String, Object> payload = createPayload(ranking, resultsDtoMap);
+
 
             messageTemplate.convertAndSend("/sub/quiz/" + roomId, payload);
         }
     }
 
+    // 랭킹 생성
+    private List<Map<String, Object>> createRanking(List<QuizResult> results) {
+        List<Map<String, Object>> ranking = new ArrayList<>();
+        int rank = 1;
+        int prevCorrect = -1;
+        for (QuizResult result : results) {
+            Map<String, Object> userRanking = new HashMap<>();
+            userRanking.put("userPk", result.getUser().getUserPk());
+            userRanking.put("userName", result.getUser().getUserName());
+            userRanking.put("userImg", result.getUser().getUserImg());
+            if (result.getCorrect() != prevCorrect) {
+                rank = ranking.size() + 1;
+            }
+            userRanking.put("ranking", rank);
+            prevCorrect = result.getCorrect();
+            userRanking.put("correct", result.getCorrect());
+            userRanking.put("total", result.getTotals());
+            ranking.add(userRanking);
+        }
+        return ranking;
+    }
+
+    // 전달할 페이로드 생성
+    private Map<String, Object> createPayload(List<Map<String, Object>> ranking, Map<Long, QuizResultDto> resultsDtoMap) {
+        Map<String, Object> payload = new HashMap<>();
+        payload.put("type", "result");
+        payload.put("ranking", ranking);
+        payload.put("result", resultsDtoMap);
+        return payload;
+    }
+
+    // 퀴즈 결과 dto로 변환
     public QuizResultDto toQuizResultDto(QuizResult quizResult) {
         QuizResultDto quizResultDto = new QuizResultDto();
         quizResultDto.setQuizId(quizResult.getQuizId());
