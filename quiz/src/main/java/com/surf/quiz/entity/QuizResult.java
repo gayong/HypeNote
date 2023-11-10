@@ -3,9 +3,12 @@ package com.surf.quiz.entity;
 import com.surf.quiz.dto.MemberDto;
 import com.surf.quiz.dto.QuestionResultDto;
 import lombok.*;
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -20,6 +23,7 @@ public class QuizResult {
     private int Correct;
     private String examStart;
     private String examDone;
+    private LocalDateTime latestAnswerTime;
     List<QuestionResultDto> questionResult;
 //    private List<String> pageLst;
 

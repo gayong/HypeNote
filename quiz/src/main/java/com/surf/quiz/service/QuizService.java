@@ -4,11 +4,13 @@ package com.surf.quiz.service;
 import com.surf.quiz.dto.MemberDto;
 import com.surf.quiz.entity.Quiz;
 import com.surf.quiz.repository.QuizRepository;
+import org.apache.commons.lang3.tuple.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -29,7 +31,7 @@ public class QuizService {
     @Transactional
     public Quiz processAnswer(String roomId, String userId, Map<Long, String> userAnswerDto) {
         Quiz quiz = findQuizByRoomId(roomId);
-        Map<String, Map<Integer, String>> userAnswers = quiz.getUserAnswers();
+        Map<String, Map<Integer, Pair<String, LocalDateTime>>> userAnswers = quiz.getUserAnswers();
 
         // 유저 정답이 있으면
         if(userAnswerDto != null) {
@@ -52,12 +54,12 @@ public class QuizService {
                 .orElseThrow(() -> new NoSuchElementException("Quiz not found for roomId: " + roomId));
     }
 
-    private void processUserAnswers(String userId, Map<Long, String> userAnswerDto, Map<String, Map<Integer, String>> userAnswers) {
-        Map<Integer, String> convertedAnswers = convertUserAnswer(userAnswerDto);
+    private void processUserAnswers(String userId, Map<Long, String> userAnswerDto, Map<String, Map<Integer, Pair<String, LocalDateTime>>> userAnswers) {
+        Map<Integer, Pair<String, LocalDateTime>> convertedAnswers = convertUserAnswer(userAnswerDto);
 
         // 기존 유저의 답변이 있는 경우, 병합
         if(userAnswers.containsKey(userId)) {
-            Map<Integer, String> existingAnswers = userAnswers.get(userId);
+            Map<Integer, Pair<String, LocalDateTime>> existingAnswers = userAnswers.get(userId);
             userAnswers.remove(userId);
             existingAnswers.putAll(convertedAnswers); // 기존 답변에 새 답변 추가
             userAnswers.put(userId, existingAnswers); // 기존 답변을 다시 추가
@@ -67,11 +69,12 @@ public class QuizService {
     }
     
     // 문제와 정답 추출
-    private Map<Integer, String> convertUserAnswer(Map<Long, String> userAnswerDto) {
-        Map<Integer, String> convertedAnswers = new HashMap<>();
+    private Map<Integer, Pair<String, LocalDateTime>> convertUserAnswer(Map<Long, String> userAnswerDto) {
+        Map<Integer, Pair<String, LocalDateTime>> convertedAnswers = new HashMap<>();
         // 문제 / 정답 추출
         for (Map.Entry<Long, String> answerEntry : userAnswerDto.entrySet()) {
-            convertedAnswers.put(Math.toIntExact(answerEntry.getKey()), answerEntry.getValue());
+            Pair<String, LocalDateTime> answerWithTime = Pair.of(answerEntry.getValue(), LocalDateTime.now());
+            convertedAnswers.put(Math.toIntExact(answerEntry.getKey()), answerWithTime);
         }
         return convertedAnswers;
     }
@@ -80,7 +83,7 @@ public class QuizService {
 
     // 답변 보낸 유저들이 퀴즈에 참여한 유저들과 일치
     // 전원이 제출했는지 확인
-    public boolean isQuizFinished(String roomId, Map<String, Map<Integer, String>> userAnswers) {
+    public boolean isQuizFinished(String roomId, Map<String, Map<Integer, Pair<String, LocalDateTime>>> userAnswers) {
         List<MemberDto> members = quizRoomService.getUsersByRoomId(Long.parseLong(roomId));
         System.out.println("members = " + members);
         Set<String> userIds = members.stream()
