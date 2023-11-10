@@ -5,7 +5,7 @@ import { useMutation } from "react-query";
 
 export const useCreateRoom = () => {
   const [roomInfo, setRoomInfo] = useState<QuizRoomGroup>();
-  const [roomId, setRoomId] = useState()
+  const [roomId, setRoomId] = useState();
   const createRoomMutation = useMutation(
     async ({
       roomName,
@@ -16,8 +16,8 @@ export const useCreateRoom = () => {
       content,
     }: {
       roomName: string;
-      pages: Array<number>;
-      sharePages: Array<number>;
+      pages: Array<string>;
+      sharePages: Array<string>;
       quizCnt: number;
       single: boolean;
       content: string;
@@ -43,8 +43,8 @@ export const useCreateRoom = () => {
       content,
     }: {
       roomName: string;
-      pages: Array<number>;
-      sharePages: Array<number>;
+      pages: Array<string>;
+      sharePages: Array<string>;
       quizCnt: number;
       single: boolean;
       users: Array<QuizUser>;
@@ -65,6 +65,6 @@ export const useCreateRoom = () => {
     inviteUserInfo: roomInfo ? roomInfo.inviteUsers : undefined,
     roomInfo: roomInfo,
     inviteUserMutation: inviteUserMutation,
-    roomId:roomId
+    roomId: roomId,
   };
 };

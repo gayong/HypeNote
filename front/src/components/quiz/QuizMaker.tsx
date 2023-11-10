@@ -40,9 +40,9 @@ export default function QuizMaker() {
   const handleCreateRoom = () => {
     createRoomMutation.mutate({
       roomName: title,
-      pages: [1, 2, 3],
-      sharePages: [1, 2],
-      quizCnt: 2,
+      pages: ["6549f65b4cce962b0ff0a055", "6549f67d4cce962b0ff0a056"],
+      sharePages: ["6549f6984cce962b0ff0a058"],
+      quizCnt: 1,
       content: content,
       single: false,
     });
