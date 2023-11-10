@@ -46,6 +46,9 @@ public class User implements UserDetails {
     @ElementCollection
     private List<String> documentsRoots;
 
+    @ElementCollection
+    private List<String> sharedDocumentsRoots;
+
     private String role;
 
     @Override

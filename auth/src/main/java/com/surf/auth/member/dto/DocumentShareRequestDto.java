@@ -13,5 +13,4 @@ public class DocumentShareRequestDto {
 
     private int userPk;
     private String editorId;
-    private String sharedNickName;
 }
