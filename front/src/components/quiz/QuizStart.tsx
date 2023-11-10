@@ -75,7 +75,7 @@ export default function QuizStart(props: QuizRoomProps) {
     <>
       {quizs && quizs.length > 0 && (
         <>
-          <div className="my-24 flex-cols items-center justify-center h-screen mx-16 w-full pt-10 ">
+          <div className="h-screen pt-32 w-full justify-center items-center flex-cols mx-16">
             <Steps
               status="process"
               type="navigation"
