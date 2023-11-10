@@ -9,8 +9,12 @@ export const createUser = (email: string, password: string, nickName: string, pr
     nickName,
     profileImage,
   });
+
 // 로그인
 export const signinUser = (email: string, password: string) => api.post(`auth/login`, { email, password });
+
+// 유저 정보 조회
+export const getUserInfo = () => api.get(`auth/user-info`);
 
 // 게시글 공유
 // export const shareNote = (userId: number, document:number) =>
