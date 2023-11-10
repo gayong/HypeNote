@@ -1,4 +1,5 @@
-import Test from "@/components/quiz/test";
+import ChatRoom from "@/components/quiz/ChatRoom";
+import Test from "@/components/quiz/test2";
 import Timer from "@/components/ui/Timer";
 import { Metadata } from "next";
 
