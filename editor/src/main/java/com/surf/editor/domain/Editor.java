@@ -36,9 +36,9 @@ public class Editor {
         Editor editor = Editor.builder()
                 .id(null)
                 .userId(userId)
-                .content(null)
-                .title(null)
-                .parentId(null)
+                .content("<h1 class=\"_inlineContent_nstdf_297\">제목 없음</h1><p class=\"_inlineContent_nstdf_297\"></p>")
+                .title("제목 없음")
+                .parentId("root")
                 .childId(new ArrayList<>())
                 .hyperLink(new ArrayList<>())
                 .writePermission(new ArrayList<>())
@@ -57,6 +57,10 @@ public class Editor {
     public void childRelation(String child){
         childId.add(child);
     }
+    public void parentRelation(String parentId){
+        this.parentId = parentId;
+    }
+
     public void childHyperLink(String child){
         hyperLink.add(child);
     }
