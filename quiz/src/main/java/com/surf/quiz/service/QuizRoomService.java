@@ -374,7 +374,10 @@ public class QuizRoomService {
 
 
     public Quiz createQuiz(QuizRoom createdQuizroom) {
-        String res = feignService.getEditorInfoQuiz("6549f6984cce962b0ff0a058");
+//        String res = feignService.getEditorInfoQuiz("6549f6984cce962b0ff0a058");
+        List<String> res = createdQuizroom.getPages().stream()
+                .map(feignService::getEditorInfoQuiz)
+                .toList();
         Quiz quiz = new Quiz();
         quiz.setRoomId(createdQuizroom.getId().intValue());
         String formattedDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
@@ -385,8 +388,9 @@ public class QuizRoomService {
 
         // GPT 문제 생성 보내기
         try {
-            List<CompletableFuture<BaseResponse<List<QuestionDto>>>> futures = IntStream.range(0, createdQuizroom.getQuizCnt())
-                    .mapToObj(i -> getGptWithRetry(3, i, res))  // 재시도 횟수를 3으로 설정
+            List<CompletableFuture<BaseResponse<List<QuestionDto>>>> futures = res.stream()
+                    .flatMap(r -> IntStream.range(0, createdQuizroom.getQuizCnt())
+                            .mapToObj(i -> getGptWithRetry(1, i, r)))
                     .toList();
 
             CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();

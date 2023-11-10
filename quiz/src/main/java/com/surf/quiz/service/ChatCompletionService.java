@@ -111,7 +111,7 @@ public class ChatCompletionService {
                         "      \"commentary\": \"commentary content\"\n" +
                         "    }\n" +
                         " Please respond with a List\n"+
-                        "The number of quizzes is"+ cnt +"Please answer all in Korean.")
+                        "The number of quizzes is only one" +"Please answer all in Korean.")
                 .build();
 
 //
