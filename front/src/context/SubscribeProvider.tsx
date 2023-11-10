@@ -2,10 +2,10 @@
 
 import SockJS from "sockjs-client";
 import { useEffect, useState, createContext, useRef } from "react";
-import { Stomp, CompatClient } from "@stomp/stompjs";
+
 import React, { ReactNode } from "react";
 import { useWebSocket } from "./SocketProvider";
-import { QuizRoomInfo, QuizInfo, QuizResultInfo, chatUser } from "@/types/quiz";
+import { QuizRanking, QuizRoomInfo, QuizInfo, QuizResultInfo, chatUser } from "@/types/quiz";
 import { useAtom } from "jotai";
 import { userAtom } from "@/store/authAtom";
 import { message } from "antd";
@@ -19,7 +19,7 @@ export const SocketContext = createContext<{
   room: QuizRoomInfo | null;
   quizs: Array<QuizInfo>;
   quizResults: Array<QuizResultInfo>;
-  quizRanking: Array<number>;
+  quizRanking: Array<QuizRanking>;
   chatMessages: Array<chatUser>;
 }>({
   quizRooms: [],
@@ -37,7 +37,7 @@ export default function SubscribeProvider({ roomId, children }: { roomId: number
   const [room, setRoom] = useState<QuizRoomInfo | null>(null);
   const [quizs, setQuizs] = useState<Array<QuizInfo>>([]);
   const [quizResults, setQuizResults] = useState<Array<QuizResultInfo>>([]);
-  const [quizRanking, setQuizRanking] = useState<Array<number>>([]);
+  const [quizRanking, setQuizRanking] = useState<Array<QuizRanking>>([]);
   const [chatMessages, setChatMessages] = useState<Array<chatUser>>([]);
   const [user] = useAtom(userAtom);
 

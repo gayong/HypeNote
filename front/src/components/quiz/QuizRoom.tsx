@@ -82,7 +82,12 @@ export default function QuizRoom(props: QuizRoomProps) {
     <>
       {submit && quizResults.length > 0 ? (
         // 퀴즈 모두 다 푼 경우 => 랭킹 보여줌
-        <QuizResult />
+        <section className="px-2 pr-6 grid grid-cols-2 h-screen w-full max-w-full items-center">
+          <QuizResult />
+          <div className="pl-2">
+            <ChatRoom roomId={10} height={80} />
+          </div>
+        </section>
       ) : submit && quizResults.length === 0 ? (
         // 제출했지만 결과가 아직 없는 경우 => 로딩 화면
         <div>
@@ -99,7 +104,7 @@ export default function QuizRoom(props: QuizRoomProps) {
             <div className="col-span-7 flex flex-col">
               <div className="flex justify-center items-center relative">
                 <span
-                  className="hover:text-hover_primary text-lg font-PreBd font-normal text-dark_background dark:text-font_primary absolute left-0 p-1 rounded-md outline outline-2 outline-dark_font dark:outline-font_primary "
+                  className="hover:text-hover_primary text-lg font-PreBd font-normal text-dark_background dark:text-font_primary absolute left-0 p-1 rounded-md outline outline-2 outline-dark_background dark:outline-font_primary "
                   onClick={() => outRoom()}>
                   {"<< 나가기"}
                 </span>
