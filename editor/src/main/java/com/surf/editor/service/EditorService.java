@@ -132,14 +132,19 @@ public class EditorService {
 
     public void editorRelation(int userId, EditorRelationRequestDto editorRelationRequestDto) {
         // db의 child 리스트에 추가
-        Editor findEditor = editorRepository.findById(editorRelationRequestDto.getParentId())
+        Editor findParentEditor = editorRepository.findById(editorRelationRequestDto.getParentId())
                 .orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
 
-        findEditor.childRelation(editorRelationRequestDto.getChildId());
+        Editor findChildEditor = editorRepository.findById(editorRelationRequestDto.getChildId())
+                .orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
 
-        editorRepository.save(findEditor);
+        findParentEditor.childRelation(editorRelationRequestDto.getChildId());
+        findChildEditor.parentRelation(editorRelationRequestDto.getParentId());
+
+        editorRepository.save(findParentEditor);
     }
 
+    // 하이퍼 링크 부모는 바뀌지 않는다.
     public void editorHyperLink(int userId, EditorHyperLinkRequestDto editorHyperLinkRequestDto) {
         // db의 hyperLink 리스트에 추가
         Editor findEditor = editorRepository.findById(editorHyperLinkRequestDto.getParentId())
