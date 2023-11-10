@@ -1,4 +1,5 @@
 import { createUser } from "@/api/service/user";
+import { message } from "antd";
 
 const useSignup = () => {
   const signup = async (email: string, password: string, nickName: string, profileImage: string) => {
@@ -6,8 +7,10 @@ const useSignup = () => {
     try {
       const response = await createUser(email, password, nickName, profileImage);
       return "success";
-    } catch (error) {
-      console.log(error);
+    } catch (error: any) {
+      // message.error(error.response);
+      // console.log(error.response.data);
+      return error.response.data;
     }
   };
   return { signup };
