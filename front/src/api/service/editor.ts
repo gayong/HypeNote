@@ -7,7 +7,7 @@ export const fetchCreateDocument = (userId: number) => {
 };
 
 // 게시글 작성
-export const fetchCreateNote = (editorId: number, title: string, content: string) => {
+export const fetchCreateNote = (editorId: string, title: string, content: string) => {
   api.post(`editor/write/${editorId}`, {
     title,
     content,
@@ -15,13 +15,13 @@ export const fetchCreateNote = (editorId: number, title: string, content: string
 };
 
 // 게시글 삭제
-export const fetchDeleteNote = (edittorId: number) => {
+export const fetchDeleteNote = (edittorId: string) => {
   api.delete(`editor/write/${edittorId}`);
 };
 
 // 에디터 게시글 상세 조회
 export const fetchNoteDetail = (editorId: string) => {
-  api.get(`editor/${editorId}`);
+  return api.get(`editor/${editorId}`);
 };
 
 // 웹 서칭 검색결과 조회
