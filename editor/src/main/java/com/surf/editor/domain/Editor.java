@@ -69,9 +69,9 @@ public class Editor {
         parentId = "root";
     }
     public void childDelete(String child){
-        if (childId != null && childId.contains(child)) {
+//        if (childId != null && childId.contains(child)) {
             childId.remove(child);
-        }
+//        }
     }
 
     public void writerPermissionAdd(int userId){
