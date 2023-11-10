@@ -5,8 +5,8 @@ import api from "../instances/api";
 //group / single 동일 single ture,false만 관리
 export const createQuizRoom = (
   roomName: string,
-  pages: Array<number>,
-  sharePages: Array<number>,
+  pages: Array<string>,
+  sharePages: Array<string>,
   quizCnt: number,
   single: boolean,
   content: string
@@ -23,8 +23,8 @@ export const createQuizRoom = (
 // 유저 초대 (여러명)
 export const inviteUser = (
   roomName: string,
-  pages: Array<number>,
-  sharePages: Array<number>,
+  pages: Array<string>,
+  sharePages: Array<string>,
   quizCnt: number,
   single: boolean,
   users: Array<object>,

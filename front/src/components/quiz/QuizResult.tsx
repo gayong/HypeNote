@@ -3,12 +3,13 @@ import { SocketContext } from "@/context/SubscribeProvider";
 import { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import confetti from "canvas-confetti";
-
+import { useRouter } from "next/navigation";
 import { Button, Radio } from "antd";
 
 export default function QuizResult() {
   const { quizResults, quizRanking } = useContext(SocketContext);
   const [tab, setTab] = useState("rank");
+  const router = useRouter();
 
   const handleGetQuiz = () => {
     console.log("틀린문제를 공개해");
@@ -16,6 +17,11 @@ export default function QuizResult() {
 
   const handleGetRank = () => {
     console.log("랭킹을 공개해라");
+  };
+
+  const outRoom = () => {
+    router.replace("/quiz/room");
+    console.log("방나가기");
   };
 
   useEffect(() => {
@@ -58,6 +64,11 @@ export default function QuizResult() {
 
   return (
     <section className="bg-white dark:bg-gray-900 w-full max-h-full pr-4">
+      <span
+        className="hover:text-hover_primary text-lg font-PreBd font-normal text-dark_background dark:text-font_primary absolute left-0 p-1 rounded-md outline outline-2 outline-dark_background dark:outline-font_primary "
+        onClick={() => outRoom()}>
+        {"<< 나가기"}
+      </span>
       <div className="pt-6 flex justify-center">
         <Radio.Group defaultValue="rank" buttonStyle="solid">
           <Radio.Button
@@ -95,7 +106,7 @@ export default function QuizResult() {
                   </h1>
                   {/* <div className="mr-2 rounded-full w-10 h-10 bg-cover bg-[url('/assets/profile.jpg')]" /> */}
                   <Image src={user.userImg} alt="프로필 이미지" width={20} height={20} priority />
-                  <br />
+                  <div className="w-4"></div>
                   <h1>{user.userName}</h1>
                 </div>
                 <p className="font-PreBd text-sm text-[#ffd51c] flex justify-center">
@@ -110,6 +121,14 @@ export default function QuizResult() {
         <div className="mr-2 mt-4 h-[620px] max-h-[620px] flex items-center justify-center">
           {" "}
           <h1>시험지를 다시 띄워달라</h1>
+          <div>
+            {quizResults?.questionResult.map((quiz) => (
+              <>
+                <h1>{quiz.question}</h1>
+                <h2>{quiz.myAnswer}</h2>
+              </>
+            ))}
+          </div>
         </div>
       )}
     </section>

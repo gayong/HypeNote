@@ -18,14 +18,14 @@ export const SocketContext = createContext<{
   quizRooms: Array<QuizRoomInfo>;
   room: QuizRoomInfo | null;
   quizs: Array<QuizInfo>;
-  quizResults: Array<QuizResultInfo>;
+  quizResults: QuizResultInfo | null;
   quizRanking: Array<QuizRanking>;
   chatMessages: Array<chatUser>;
 }>({
   quizRooms: [],
   room: null,
   quizs: [],
-  quizResults: [],
+  quizResults: null,
   quizRanking: [],
   chatMessages: [],
 });
@@ -36,7 +36,7 @@ export default function SubscribeProvider({ roomId, children }: { roomId: number
   const [quizRooms, setQuizRooms] = useState([]);
   const [room, setRoom] = useState<QuizRoomInfo | null>(null);
   const [quizs, setQuizs] = useState<Array<QuizInfo>>([]);
-  const [quizResults, setQuizResults] = useState<Array<QuizResultInfo>>([]);
+  const [quizResults, setQuizResults] = useState<QuizResultInfo | null>(null);
   const [quizRanking, setQuizRanking] = useState<Array<QuizRanking>>([]);
   const [chatMessages, setChatMessages] = useState<Array<chatUser>>([]);
   const [user] = useAtom(userAtom);
@@ -62,7 +62,7 @@ export default function SubscribeProvider({ roomId, children }: { roomId: number
         }
         // 퀴즈 결과
         else if (responseBody.type == "result") {
-          setQuizResults(responseBody.result);
+          setQuizResults(responseBody.result[user.userPk]);
           setQuizRanking(responseBody.ranking);
         }
       });
