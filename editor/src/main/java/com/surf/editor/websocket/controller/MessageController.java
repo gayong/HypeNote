@@ -40,7 +40,7 @@ public class MessageController {
     @MessageMapping("/note/disconnection/{noteId}")
     public EditorDisconnectionRequestDto editorDisconnection(@DestinationVariable("noteId") String noteId, EditorDisconnectionRequestDto editorDisConnectionRequestDto){
         List<Integer> userList = editorConnection.editorDisconnection(noteId,editorDisConnectionRequestDto);
-        simpMessagingTemplate.convertAndSend("/sub/note/disconnection/"+noteId, userList);
+        simpMessagingTemplate.convertAndSend("/sub/note/connection/"+noteId, userList);
 
         return editorDisConnectionRequestDto;
     }
