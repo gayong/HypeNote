@@ -207,8 +207,8 @@ export default function Test() {
         items={items}
       />
 
-      <h1 className="text-xl font-preBd mt-11">
-        <span className="text-xl">{step + 1}. </span>
+      <h1 className="text-lg font-preBd mt-11">
+        <span className="text-lg">{step + 1}. </span>
         {quizsWithExtraOption[step].question}
       </h1>
 
