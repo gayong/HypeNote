@@ -84,11 +84,13 @@ export default function Category({ childProps, value }: categoryProps) {
       )}
       {childProps.children.length > 0 &&
         childProps.children.map((subject) => (
-          <div className="text-[14px] mx-6 text-white" id="submenu" onClick={(event) => onClickPage(event, subject.Id)}>
+          <div
+            key={subject.Id}
+            className="text-[14px] mx-6 text-white"
+            id="submenu"
+            onClick={(event) => onClickPage(event, subject.Id)}>
             {/* 책 카테고리 */}
-            <div
-              key={subject.Id}
-              className="group flex justify-between items-center cursor-pointer p-2 hover:bg-hover_primary hover:bg-opacity-50 dark:hover:bg-line_primary dark:hover:bg-opacity-50 rounded-md">
+            <div className="group flex justify-between items-center cursor-pointer p-2 hover:bg-hover_primary hover:bg-opacity-50 dark:hover:bg-line_primary dark:hover:bg-opacity-50 rounded-md">
               <h1 className="text-left flex items-center">{subject.title}</h1>
               {value === 1 && (
                 <h1
