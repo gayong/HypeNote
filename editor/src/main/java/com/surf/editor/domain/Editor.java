@@ -66,7 +66,7 @@ public class Editor {
     }
 
     public void parentDelete(){
-        parentId = null;
+        parentId = "root";
     }
     public void childDelete(String child){
         if (childId != null && childId.contains(child)) {
