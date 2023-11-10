@@ -1,9 +1,9 @@
-package com.surf.search.service;
+package com.surf.search.google.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.surf.search.common.error.ErrorCode;
 import com.surf.search.common.error.exception.BaseException;
-import com.surf.search.dto.SearchGetResponseDto;
+import com.surf.search.google.dto.SearchGetResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

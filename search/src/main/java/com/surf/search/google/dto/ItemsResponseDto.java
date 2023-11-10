@@ -1,4 +1,4 @@
-package com.surf.search.dto;
+package com.surf.search.google.dto;
 
 import lombok.Getter;
 
