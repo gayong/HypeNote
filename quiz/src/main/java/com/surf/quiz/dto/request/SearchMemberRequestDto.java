@@ -13,6 +13,6 @@ public class SearchMemberRequestDto {
     String content;
     int quizCnt;
     boolean single;
-    List<Integer> pages;
-    List<Integer> sharePages;
+    List<String> pages;
+    List<String> sharePages;
 }

@@ -161,7 +161,6 @@ public class QuizRoomService {
         MemberDto member = new MemberDto();
         member.setHost(true);
         member.setReady(true);
-        System.out.println("createRoomRequestDto.getUsers().get(0) = " + createRoomRequestDto.getUsers().get(0));
         member.setUserPk(createRoomRequestDto.getUsers().get(0).getUserPk());
         member.setUserName(createRoomRequestDto.getUsers().get(0).getUserName());
         member.setUserImg(createRoomRequestDto.getUsers().get(0).getUserImg());
@@ -207,10 +206,8 @@ public class QuizRoomService {
         Object userPk = payload.get("userPk");
         if (userPk instanceof Number) {
             id = ((Number) userPk).longValue();
-            System.out.println("id = " + id);
         } else {
             id = Long.parseLong((String) userPk);
-            System.out.println("id = " + id);
         }
 
         String action = (String) payload.get("action");

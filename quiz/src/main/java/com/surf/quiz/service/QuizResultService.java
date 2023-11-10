@@ -4,6 +4,7 @@ package com.surf.quiz.service;
 import com.surf.quiz.dto.MemberDto;
 import com.surf.quiz.dto.QuestionDto;
 import com.surf.quiz.dto.QuestionResultDto;
+import com.surf.quiz.dto.response.QuizResultDto;
 import com.surf.quiz.entity.Quiz;
 import com.surf.quiz.entity.QuizResult;
 import com.surf.quiz.entity.QuizRoom;
@@ -17,6 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -155,8 +158,14 @@ public class QuizResultService {
             quiz.setComplete(true);
             quizRepository.save(quiz);
 
+
             List<QuizResult> results = quizResultRepository.findByRoomId(Integer.parseInt(roomId));
             results.sort((o1, o2) -> o2.getCorrect() - o1.getCorrect());
+            Map<Long, QuizResult> resultsMap = results.stream()
+                    .collect(Collectors.toMap(result -> result.getUser().getUserPk(), Function.identity()));
+            Map<Long, QuizResultDto> resultsDtoMap = resultsMap.entrySet().stream()
+                    .collect(Collectors.toMap(Map.Entry::getKey, entry -> toQuizResultDto(entry.getValue())));
+
 
             // 각 QuizResult에서 필요한 정보를 추출하여 ranking 리스트 생성
             List<Map<String, Object>> ranking = new ArrayList<>();
@@ -182,10 +191,24 @@ public class QuizResultService {
             Map<String, Object> payload = new HashMap<>();
             payload.put("type", "result");
             payload.put("ranking", ranking);
-            payload.put("result", results);
+            payload.put("result", resultsDtoMap);
             System.out.println("payload = " + payload);
 
             messageTemplate.convertAndSend("/sub/quiz/" + roomId, payload);
         }
+    }
+
+    public QuizResultDto toQuizResultDto(QuizResult quizResult) {
+        QuizResultDto quizResultDto = new QuizResultDto();
+        quizResultDto.setQuizId(quizResult.getQuizId());
+        quizResultDto.setRoomId(quizResult.getRoomId());
+        quizResultDto.setRoomName(quizResult.getRoomName());
+        quizResultDto.setTotals(quizResult.getTotals());
+        quizResultDto.setCorrect(quizResult.getCorrect());
+        quizResultDto.setQuestionResult(quizResult.getQuestionResult());
+        quizResultDto.setExamStart(quizResult.getExamStart());
+        quizResultDto.setExamDone(quizResult.getExamDone());
+
+        return quizResultDto;
     }
 }

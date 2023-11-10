@@ -40,8 +40,8 @@ public class QuizRoom {
 
     private String createdDate;
 
-    private List<Integer> pages;
-    private List<Integer> sharePages;
+    private List<String> pages;
+    private List<String> sharePages;
 
     private boolean single;
 
