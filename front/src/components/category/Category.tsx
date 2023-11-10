@@ -2,7 +2,7 @@ import useLinkNote from "@/hooks/useLinkNote";
 import style from "./Category.module.css";
 import useCreateNote from "@/hooks/useCreateNote";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { HiChevronDown, HiChevronRight } from "react-icons/hi";
 
 type childProps = { Id: string; title: string; parentId: string; children: childProps[] };
@@ -17,9 +17,14 @@ export default function Category({ childProps, value }: categoryProps) {
   const { LinkNote } = useLinkNote();
   const router = useRouter();
   const [collapsed, setCollapsed] = useState(true);
-  const [rootCollapsed, setRootCollapsed] = useState(true);
+  const [rootCollapsed, setRootCollapsed] = useState(false);
   const icon = collapsed ? <HiChevronRight /> : <HiChevronDown />;
   const Rooticon = rootCollapsed ? <HiChevronRight /> : <HiChevronDown />;
+  useEffect(() => {
+    if (childProps.parentId === "") {
+      setRootCollapsed(true);
+    }
+  }, [childProps.parentId]);
 
   const userId = 1;
   function toggleCollapse(event: React.MouseEvent) {
