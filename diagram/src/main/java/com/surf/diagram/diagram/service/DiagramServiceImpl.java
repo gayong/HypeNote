@@ -81,7 +81,7 @@ public class DiagramServiceImpl implements DiagramService {
         }
 
 
-        return String.join(". ", texts); // '|'를 구분자로 사용
+        return String.join("|||", texts); // '|'를 구분자로 사용
     }
 
 
@@ -94,15 +94,18 @@ public class DiagramServiceImpl implements DiagramService {
             // 인증 키 파일을 사용하여 Credentials 객체 생성
             GoogleCredentials credentials = getCredentials();
 
-            for (Node node : nodes) {
-                analyzeAndSetNodeCategory(node, credentials);
-                nodeRepository.save(node);
-            }
+            nodes.parallelStream().forEach(node -> {
+                try {
+                    analyzeAndSetNodeCategory(node, credentials);
+                    nodeRepository.save(node);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
         } catch (IOException e) {
             // 파일 읽기 에러, API 호출 에러
             e.printStackTrace();
         } catch (Exception e) {
-            // 그 외 에러
             e.printStackTrace();
         }
     }
@@ -111,7 +114,7 @@ public class DiagramServiceImpl implements DiagramService {
     private List<Node> getEmptyCategoryNodesByUserId(int userId) {
         return nodeRepository.findByUserId(userId)
                 .stream()
-//                .filter(n -> n.getCategory() == null || n.getCategory().isEmpty())
+                .filter(n -> n.getCategory() == null || n.getCategory().isEmpty())
                 .toList();
     }
 
@@ -126,7 +129,6 @@ public class DiagramServiceImpl implements DiagramService {
             return GoogleCredentials.fromStream(new FileInputStream(keyPath));
         } catch (FileNotFoundException e) {
             // 파일을 찾지 못했을 때의 에러 처리
-            // 이 부분은 상황에 맞게 적절히 처리해 주세요.
             e.printStackTrace();
             return null;
         }
@@ -137,13 +139,14 @@ public class DiagramServiceImpl implements DiagramService {
     private void analyzeAndSetNodeCategory(Node node, GoogleCredentials credentials) throws IOException {
         // 텍스트 전처리
         String content = preprocessContent(node.getContent());
-
+        System.out.println("content = " + content);
         // 키워드 추출
         List<String> keywords = extractKeywords(content);
+        System.out.println("keywords = " + keywords);
 
         // 키워드가 포함된 문장 추출
         String analysisInput = extractKeywordSentences(content, keywords);
-
+        System.out.println("analysisInput = " + analysisInput);
         // 텍스트 분류
         ClassifyTextResponse response = classifyText(analysisInput, credentials);
         System.out.println("response = " + response);
@@ -153,6 +156,7 @@ public class DiagramServiceImpl implements DiagramService {
 
     private String preprocessContent(String content) {
         String text = extractTextFromHtml(content);
+        text = text.toLowerCase(); // 대소문자 통일
         return text.replaceAll("[^a-zA-Z0-9가-힣|]", "");
     }
 
@@ -463,16 +467,6 @@ public class DiagramServiceImpl implements DiagramService {
     public DiagramResponseDto linkNodesByShares(int userId, List<Integer> targetUserIds) {
         List<Node> nodes1 = nodeRepository.findByUserId(userId);
         List<Link> links1 = linkRepository.findByUserId(userId);
-
-//        List<NodeResponseDto> nodeDtoList = new ArrayList<>();
-//        List<LinkResponseDto> linkDtoList = new ArrayList<>();
-//
-//        // 링크들을 LinkResponseDto로 변환
-//        linkDtoList.addAll(convertLinksToDtos(links1));
-//
-//        // 노드들을 NodeResponseDto로 변환
-//        nodeDtoList.addAll(convertNodesToDtos(nodes1, userId));
-//
 
         List<LinkResponseDto> linkDtoList = new ArrayList<>(convertLinksToDtos(links1));
         List<NodeResponseDto> nodeDtoList = new ArrayList<>(convertNodesToDtos(nodes1, userId));
