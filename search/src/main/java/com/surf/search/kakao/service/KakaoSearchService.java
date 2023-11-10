@@ -1,5 +1,7 @@
 package com.surf.search.kakao.service;
 
+import com.surf.search.common.error.ErrorCode;
+import com.surf.search.common.error.exception.BaseException;
 import com.surf.search.kakao.dto.KakaoSearchRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,7 +20,7 @@ public class KakaoSearchService {
     private static String url = "https://dapi.kakao.com/v2/search/blog";
 
     public KakaoSearchRequestDto kakaoSearchGet(String query) {
-//        try{
+        try{
             WebClient webClient = WebClient.builder()
                     .baseUrl(url)
                     .defaultHeader("Authorization","KakaoAK "+key)
@@ -51,11 +53,12 @@ public class KakaoSearchService {
 
             return webClientResponse;
 
-//        }catch (Exception e){
-//            throw new BaseException(ErrorCode.ILLEGAL_ARGUMENT_EXCEPTION);
-//        }
+        }catch (Exception e){
+            throw new BaseException(ErrorCode.ILLEGAL_ARGUMENT_EXCEPTION);
+        }
     }
 
+    //HTML 엔티티 제거
     public static String removeHtmlEntities(String input) {
         // HTML 엔터티를 찾을 정규식
         String regex = "&#[0-9]+;|&[a-zA-Z]+;";
@@ -72,6 +75,4 @@ public class KakaoSearchService {
 
         return buffer.toString();
     }
-
-
 }
