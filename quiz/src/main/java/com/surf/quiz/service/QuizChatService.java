@@ -19,6 +19,9 @@ public class QuizChatService {
     }
 
     public ChatResponseDto convertAndSetChatTime(ChatRequestDto body) {
+        if (body.getContent()==null) {
+            return null;
+        }
         ChatResponseDto chatDto = new ChatResponseDto();
         chatDto.setContent(body.getContent());
         chatDto.setUserPk(Integer.parseInt(body.getUserPk()));
@@ -34,6 +37,9 @@ public class QuizChatService {
 
     public void sendStompMessage(int roomId, ChatResponseDto body) {
         String destination = String.format("/sub/chat/%d", roomId);
+        if (body==null){
+            return;
+        }
         messageTemplate.convertAndSend(destination, body);
     }
 
