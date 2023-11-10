@@ -77,8 +77,7 @@ public class ChatCompletionService {
 
         // 키워드가 포함된 문장 추출
         String analysisInput = extractKeywordSentences(content, keywords);
-        logger.info("analysisInput = " + analysisInput);
-        logger.info("apikey = " + apikey);
+        System.out.println("analysisInput = " + analysisInput);
 
         Message systemMessage = Message.builder()
                 .role("system")
@@ -111,7 +110,7 @@ public class ChatCompletionService {
                         "      \"commentary\": \"commentary content\"\n" +
                         "    }\n" +
                         " Please respond with a List\n"+
-                        "The number of quizzes is only one" +"Please answer all in Korean.")
+                        "There is only 1 quiz" +"Please answer all in Korean.")
                 .build();
 
 //
@@ -125,19 +124,21 @@ public class ChatCompletionService {
                 .model(MODEL)
                 .messages(Arrays.asList(systemMessage, message))
                 .build();
-        logger.info("Chat Request: {}", chatRequest);
+
         ChatResponse chatResponse = chatCompletionClient
                 .chatCompletions(apikey, chatRequest);
-        logger.info("chatResponse: {}", chatResponse);
-        Usage usage = chatResponse.getUsage();
-        System.out.println("Usage: " + usage);
 
         // 응답을 List에 넣기
-        return chatResponse
-                .getChoices()
-                .stream()
-                .map(choice -> choice.getMessage().getContent())
-                .collect(Collectors.toList());
+            List<String> responses = chatResponse.getChoices().stream()
+                    .map(choice -> choice.getMessage().getContent())
+                    .collect(Collectors.toList());
+
+//        // 첫 번째 응답만 사용
+//            if (!responses.isEmpty()) {
+//                responses = Collections.singletonList(responses.get(0));
+//            }
+
+            return responses;
 
     }
 
@@ -162,7 +163,7 @@ public class ChatCompletionService {
 
     // 키워드 추출
     private List<String> extractKeywords(String content) {
-        return extractKeywordsWithKomoran(content, 5); // 상위 5개 키워드 추출
+        return extractKeywordsWithKomoran(content, 4); // 상위 4개 키워드 추출
     }
 
     // 코모란

@@ -58,8 +58,9 @@ public class QuizService {
         // 기존 유저의 답변이 있는 경우, 병합
         if(userAnswers.containsKey(userId)) {
             Map<Integer, String> existingAnswers = userAnswers.get(userId);
+            userAnswers.remove(userId);
             existingAnswers.putAll(convertedAnswers); // 기존 답변에 새 답변 추가
-            userAnswers.put(userId, existingAnswers);
+            userAnswers.put(userId, existingAnswers); // 기존 답변을 다시 추가
         } else { // 새로운 유저의 답변인 경우, 추가
             userAnswers.put(userId, convertedAnswers);
         }
