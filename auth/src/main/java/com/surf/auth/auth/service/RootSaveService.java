@@ -19,7 +19,6 @@ public class RootSaveService {
 
     public HttpStatus rootSaveService(RootDto root) {
 
-        log.info("루트 받아오기:" + root);
         Optional<User> userOptional = userRepository.findByUserPk(root.getUserPk());
 
         if (userOptional.isPresent()) {
@@ -28,8 +27,6 @@ public class RootSaveService {
             user.getDocumentsRoots().add(root.getRoot());
 
             userRepository.save(user);
-
-            log.info("여기까지 성공");
 
             return HttpStatus.OK;
         } else {
