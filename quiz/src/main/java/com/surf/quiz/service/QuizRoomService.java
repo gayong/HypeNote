@@ -181,6 +181,7 @@ public class QuizRoomService {
         // 퀴즈 생성 작업을 비동기로 수행
         CompletableFuture.runAsync(() -> {
             Quiz quiz = this.createQuiz(createdQuizroom);
+            SendQuizReady(createdQuizroom);
             quizRepository.save(quiz);
         }).exceptionally(ex -> {
             // 오류 처리 코드
@@ -190,7 +191,7 @@ public class QuizRoomService {
 
         // 스레드 스케줄러
         this.findAllAndSend(createdQuizroom);
-        this.SendQuizRoom(createdQuizroom);
+        this.SendCreateQuizRoom(createdQuizroom);
 
         return createdQuizroom;
     }
@@ -307,31 +308,41 @@ public class QuizRoomService {
     private void saveAndSendQuizRoom(Long roomId, QuizRoom quizRoom) {
         this.save(quizRoom);
         Map<String, Object> payload = new HashMap<>();
-        DetailResponseDto response = DetailResponseDto.builder()
-                .id(quizRoom.getId())
-                .roomName(quizRoom.getRoomName())
-                .roomCnt(quizRoom.getRoomCnt())
-                .roomMax(quizRoom.getRoomMax())
-                .roomStatus(quizRoom.isRoomStatus())
-                .quizCnt(quizRoom.getQuizCnt())
-                .users(quizRoom.getUsers())
-                .readyCnt(quizRoom.getReadyCnt())
-                .content(quizRoom.getContent())
-                .createdDate(quizRoom.getCreatedDate())
-                .inviteUsers(quizRoom.getInviteUsers())
-                .single(quizRoom.isSingle())
-                .pages(quizRoom.getPages())
-                .sharePages(quizRoom.getSharePages())
-                .host(quizRoom.getInviteUsers().get(0).getUserPk())
-                .build();
+        DetailResponseDto response = detailConvert(quizRoom);
+
+        boolean isQuizExist = quizRepository.findByRoomId(quizRoom.getId().intValue()).isPresent();
+
         payload.put("type", "detail");
+        payload.put("quizReady", isQuizExist);
         payload.put("result", response);
         messageTemplate.convertAndSend("/sub/quiz/" + roomId, payload);
     }
 
-    private void SendQuizRoom(QuizRoom quizRoom) {
+    private void SendCreateQuizRoom(QuizRoom quizRoom) {
         Map<String, Object> payload = new HashMap<>();
-        DetailResponseDto response = DetailResponseDto.builder()
+        DetailResponseDto response = detailConvert(quizRoom);
+
+        boolean isQuizExist = quizRepository.findByRoomId(quizRoom.getId().intValue()).isPresent();
+
+        payload.put("type", "detail");
+        payload.put("quizReady", isQuizExist);
+        payload.put("result", response);
+        scheduler.schedule(() -> messageTemplate.convertAndSend("/sub/quiz/" + quizRoom.getId(), payload), 2, TimeUnit.SECONDS);
+    }
+
+    private void SendQuizReady(QuizRoom quizRoom) {
+        Map<String, Object> payload = new HashMap<>();
+        DetailResponseDto response = detailConvert(quizRoom);
+
+        payload.put("type", "detail");
+        payload.put("quizReady", true);
+        payload.put("result", response);
+        messageTemplate.convertAndSend("/sub/quiz/" + quizRoom.getId(), payload);
+    }
+
+
+    public DetailResponseDto detailConvert(QuizRoom quizRoom) {
+        return DetailResponseDto.builder()
                 .id(quizRoom.getId())
                 .roomName(quizRoom.getRoomName())
                 .roomCnt(quizRoom.getRoomCnt())
@@ -348,9 +359,6 @@ public class QuizRoomService {
                 .sharePages(quizRoom.getSharePages())
                 .host(quizRoom.getInviteUsers().get(0).getUserPk())
                 .build();
-        payload.put("type", "detail");
-        payload.put("result", response);
-        scheduler.schedule(() -> messageTemplate.convertAndSend("/sub/quiz/" + quizRoom.getId(), payload), 2, TimeUnit.SECONDS);
     }
 
 
@@ -382,7 +390,7 @@ public class QuizRoomService {
         quiz.setRoomId(createdQuizroom.getId().intValue());
         String formattedDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
         quiz.setCreatedDate(formattedDateTime);
-        quiz.setQuizCnt(createdQuizroom.getQuizCnt());
+        quiz.setQuizCnt(createdQuizroom.getQuizCnt() * createdQuizroom.getPages().size());
         quiz.setRoomName(createdQuizroom.getRoomName());
         quiz.setUsers(createdQuizroom.getUsers());
 
@@ -390,7 +398,7 @@ public class QuizRoomService {
         try {
             List<CompletableFuture<BaseResponse<List<QuestionDto>>>> futures = res.stream()
                     .flatMap(r -> IntStream.range(0, createdQuizroom.getQuizCnt())
-                            .mapToObj(i -> getGptWithRetry(1, i, r)))
+                            .mapToObj(i -> getGptWithRetry(2, i, r)))
                     .toList();
 
             CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
@@ -407,7 +415,9 @@ public class QuizRoomService {
 
             quiz.setQuestion(question);
             quiz.setComplete(false);
+
             return quiz;
+
         } catch (Exception e) {
             // 예외 처리 코드를 작성합니다.
         }
@@ -434,7 +444,7 @@ public class QuizRoomService {
 
         quiz.setQuestion(questions);
         quiz.setComplete(false);
-
+        System.out.println("quiz = " + quiz);
         return quiz;
     }
 }

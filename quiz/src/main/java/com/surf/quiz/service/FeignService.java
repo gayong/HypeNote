@@ -51,8 +51,10 @@ public class FeignService {
             List<QuestionDto> questionList = new ArrayList<>();
             for (String json : abc) {
                 if (json.startsWith("[")) { // JSON 문자열이 배열인 경우
-                    List<QuestionDto> tempList = objectMapper.readValue(json, new TypeReference<List<QuestionDto>>() {});
-                    questionList.addAll(tempList);
+                    List<QuestionDto> tempList = objectMapper.readValue(json, new TypeReference<>() {});
+                    if (!tempList.isEmpty()) {
+                        questionList.add(tempList.get(0));
+                    }
                 } else { // JSON 문자열이 객체인 경우
                     QuestionDto questionDto = objectMapper.readValue(json, QuestionDto.class);
                     questionList.add(questionDto);
