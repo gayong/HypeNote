@@ -52,12 +52,11 @@ public class LoginService {
         return authenticationResultDto;
     }
 
-    public TokenDto sendToken (UserDto userInfo, HttpServletResponse response) {
+    public TokenDto sendToken (String email, HttpServletResponse response) {
         TokenDto tokenIssueResult = new TokenDto();
 
-        tokenIssueResult.setAccessToken(accessTokenIssueService.accessTokenIssue(userInfo));
-        tokenIssueResult.setUserInfo(userInfo);
-        refreshTokenIssueService.refreshTokenIssue(userInfo, response);
+        tokenIssueResult.setAccessToken(accessTokenIssueService.accessTokenIssue(email));
+        refreshTokenIssueService.refreshTokenIssue(email, response);
         tokenIssueResult.setMessage("정상적으로 로그인이 되었습니다.");
 
         return tokenIssueResult;

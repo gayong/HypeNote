@@ -13,10 +13,8 @@ import java.util.concurrent.TimeUnit;
 public class RedisRefreshTokenSaveService {
     private final StringRedisTemplate redisTemplate;
 
-    public void saveRefreshToken(long EXPIRATION_TIME, String refreshToken, UserDto userInfo) {
+    public void saveRefreshToken(long EXPIRATION_TIME, String refreshToken, String email) {
 
-        int refreshTokenKey = userInfo.getUserPk();
-
-        redisTemplate.opsForValue().set(String.valueOf(refreshTokenKey), refreshToken, EXPIRATION_TIME, TimeUnit.MILLISECONDS);
+        redisTemplate.opsForValue().set(String.valueOf(email), refreshToken, EXPIRATION_TIME, TimeUnit.MILLISECONDS);
     }
 }

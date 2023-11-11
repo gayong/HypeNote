@@ -19,19 +19,24 @@ public class ReissueController {
     private final TokenDecoder tokenDecoder;
 
     @GetMapping("/reissue")
-    public ResponseEntity<TokenDto> reissue(@CookieValue(name = "refreshToken", required = true) String refreshToken) {
+    public ResponseEntity<TokenDto> reissue(@CookieValue(name = "refreshToken", required = false) String refreshToken) {
 
-        UserDto userInfo = tokenDecoder.parsingRefreshToken(refreshToken);
+        String email = tokenDecoder.parsingRefreshToken(refreshToken);
 
-        String storedRefreshToken = reissueService.findRefreshTokenByUserPk(String.valueOf(userInfo.getUserPk()));
+        String storedRefreshToken = reissueService.findRefreshTokenByUserEmail(email);
 
         TokenDto fail = new TokenDto();
+
+        if (refreshToken == null) {
+            fail.setMessage("RefreshToken 쿠키가 없습니다.");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(fail);
+        }
 
         if ( storedRefreshToken != null) {
             boolean authenticationResult = reissueService.refreshTokenAuthentication(refreshToken, storedRefreshToken);
             if (authenticationResult) {
 
-                return ResponseEntity.ok(reissueService.reissueAccessToken(userInfo));
+                return ResponseEntity.ok(reissueService.reissueAccessToken(email));
             } else {
 
                 fail.setMessage("유효하지 않은 토큰입니다.");

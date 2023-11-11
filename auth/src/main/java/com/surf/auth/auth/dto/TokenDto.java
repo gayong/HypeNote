@@ -12,5 +12,4 @@ public class TokenDto {
 
     private String message;
     private String accessToken = null;
-    private UserDto userInfo;
 }

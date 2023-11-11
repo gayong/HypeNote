@@ -23,21 +23,7 @@ public class TokenProvider {
 
     private final Date DATE = new Date(System.currentTimeMillis());
 
-    public String createToken(Map<String, Object> claims, UserDto userInfo, long expirationTime) {
-
-        int userPk = userInfo.getUserPk();
-        String email = userInfo.getEmail();
-        String nickName = userInfo.getNickName();
-        String profileImage = userInfo.getProfileImage();
-        List<String> documentsRoots = userInfo.getDocumentsRoots();
-        String role = userInfo.getRole();
-
-        claims.put("userPk", userPk);
-        claims.put("email", email);
-        claims.put("nickName", nickName);
-        claims.put("profileImage", profileImage);
-        claims.put("documentsRoots", documentsRoots);
-        claims.put("role", role);
+    public String createToken(Map<String, Object> claims, String email, long expirationTime) {
 
         return Jwts.builder()
                 .claims(claims)
