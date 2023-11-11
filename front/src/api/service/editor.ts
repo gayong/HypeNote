@@ -43,3 +43,9 @@ export const fetchSearchMyNote = (query: string | undefined) => {
   const response = api.get("editor", { params: { query } });
   return response;
 };
+
+// 게시글 목록 조회
+export const fetchNoteList = (rootList: string[]) => {
+  const data = { rootList: rootList };
+  return api.post(`editor/list`, data);
+};

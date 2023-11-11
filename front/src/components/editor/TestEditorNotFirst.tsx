@@ -14,6 +14,7 @@ import { useEditorWebSocket } from "@/context/SocketEditorProvider";
 import { Button } from "antd";
 import ShardeBtn from "./SharedBtn";
 import ToShareBtn from "./ToShareBtn";
+import UpdateNote from "@/hooks/useUpdateNote";
 
 type WindowWithProseMirror = Window & typeof globalThis & { ProseMirror: any };
 
@@ -26,6 +27,17 @@ function TestEditorNotFirst({ id }: Props) {
   const [theme, setTheme] = useAtom<any>(themeAtom);
   const [open] = useAtom(isSearchOpen);
   const stompClient = useEditorWebSocket();
+  const onSave = () => {
+    const title = editor.topLevelBlocks[0].content;
+    const content = editor.domElement.innerHTML;
+    if (title) {
+      try {
+        UpdateNote(id, title, content);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
 
   useEffect(() => {
     if (stompClient) {
@@ -40,8 +52,15 @@ function TestEditorNotFirst({ id }: Props) {
 
   const editor = useBlockNote({
     onEditorContentChange: (editor) => {
-      console.log(editor.topLevelBlocks, "blcok value");
-      console.log(editor.domElement.innerHTML);
+      const title = editor.topLevelBlocks[0].content;
+      const content = editor.domElement.innerHTML;
+      if (title) {
+        try {
+          UpdateNote(id, title, content);
+        } catch (error) {
+          console.log(error);
+        }
+      }
     },
     domAttributes: {
       editor: {
@@ -77,7 +96,7 @@ function TestEditorNotFirst({ id }: Props) {
   return (
     <>
       <div style={{ width: open ? "calc(100% - 300px)" : "100%" }}>
-        <BlockNoteView editor={editor} theme={theme} />
+        <BlockNoteView editor={editor} theme={theme} onKeyDown={onSave} />
       </div>
       <Search />
       {/* <Button className="absolute top-5 right-10">공유버튼</Button> */}
