@@ -103,27 +103,36 @@ public class EditorService {
     }
 
     public void editorDelete(String editorId) {
-        Editor byId = editorRepository.findById(editorId).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
-
-        //부모의 나 제거
-        Editor parentEditor = editorRepository.findById(byId.getParentId()).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
-        parentEditor.childDelete(byId.getId());
-        editorRepository.save(parentEditor);
-
-        //자녀 제거
-        for (String childId : byId.getChildId()) {
-            Editor childEditor = editorRepository.findById(childId).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
-            childEditor.parentDelete();
-            editorRepository.save(childEditor);
-        }
 
         try{
-            editorRepository.delete(byId);
-        }catch (Exception e){
+            Editor byId = editorRepository.findById(editorId).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
+
+            //부모 연관 관계 나 제거
+            Editor parentEditor = editorRepository.findById(byId.getParentId()).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
+            parentEditor.childDelete(byId.getId());
+            editorRepository.save(parentEditor);
+
+            //연관 자녀 모두 제거
+            deleteChildEditor(byId);
+        }
+        catch (Exception e){
             throw new BaseException(ErrorCode.FAIL_DELETE_EDITOR);
         }
     }
 
+    private void deleteChildEditor(Editor editor) {
+
+        List<String> childIds = editor.getChildId();
+        if(childIds !=null && !childIds.isEmpty()){
+            for (String childId : childIds) {
+                Editor childEditor = editorRepository.findById(childId).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
+                convertEditorToTreeDto(childEditor);
+                editorRepository.delete(childEditor);
+            }
+        }
+    }
+
+    
     public EditorCheckResponseDto editorCheck(String editorId) {
         Editor byId = editorRepository.findById(editorId).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
 
