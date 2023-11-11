@@ -2,8 +2,13 @@ import ThreeScene from "@/components/brain/test";
 import loading from "../../public/assets/loading.gif";
 import { Suspense } from "react";
 import Image from "next/image";
+// import { cookies } from "next/headers";
 
 export default function Home() {
+  // const cookiesList = cookies();
+  // const refreshToken = cookiesList.get("refreshToken");
+  // console.log("GDGDG");
+  // console.log("@@@", refreshToken);
   return (
     <div className="flex h-screen max-h-screen scrollbar-hide">
       <Suspense

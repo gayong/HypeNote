@@ -24,7 +24,6 @@ export default function Timer({ time }: TimerProps) {
         value={deadline}
         onFinish={onFinish}
         className="font-preBd absolute top-5 right-10"
-        valueStyle={{ color: "#cf1322", fontFamily: "PreBd" }}
       />
     </div>
   );
