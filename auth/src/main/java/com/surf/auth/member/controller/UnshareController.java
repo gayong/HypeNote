@@ -6,6 +6,7 @@ import com.surf.auth.member.entity.User;
 import com.surf.auth.member.repository.UserRepository;
 import com.surf.auth.member.service.UnshareService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Optional;
 
+@Slf4j
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/auth")
@@ -29,7 +31,7 @@ public class UnshareController {
         List<Integer> userList = unshareRequestDto.getUserPkList();
         String documentId = unshareRequestDto.getDocumentId();
 
-        for (Integer userPk : userList) {
+        for (int userPk : userList) {
             if (userPkAuthenticator.userPkAuthentication(userPk)) {
                 Optional<User> optionalUser = userRepository.findByUserPk(userPk);
 

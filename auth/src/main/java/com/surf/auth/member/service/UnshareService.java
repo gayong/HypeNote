@@ -15,7 +15,7 @@ public class UnshareService {
     private final UserRepository userRepository;
 
     public void sharedDocumentDelete(String documentId, User user) {
-        List<String> sharedDocumentsRoots = user.getDocumentsRoots();
+        List<String> sharedDocumentsRoots = user.getSharedDocumentsRoots();
 
         if (sharedDocumentsRoots != null && sharedDocumentsRoots.contains(documentId)) {
             sharedDocumentsRoots.remove(documentId);
