@@ -43,6 +43,7 @@ public class Editor {
                 .childId(new ArrayList<>())
                 .hyperLink(new ArrayList<>())
                 .writePermission(new ArrayList<>())
+                .sharedUser(new ArrayList<>())
                 .build();
 
         editor.getWritePermission().add(userId);
@@ -81,5 +82,9 @@ public class Editor {
 
     public void writerPermissionSub(int userId){
         this.writePermission.remove(userId);
+    }
+
+    public void sharedUserAdd(int userId){
+        this.getSharedUser().add(userId);
     }
 }

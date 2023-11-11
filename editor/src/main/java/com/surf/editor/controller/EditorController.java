@@ -137,7 +137,7 @@ public class EditorController {
         return ResponseEntity.ok(apiResponse);
     }
 
-    @PostMapping("/share")
+    @PostMapping("/member")
     public ResponseEntity<ApiResponse> editorShareMember(@RequestBody EditorShareMemberRequestDto editorShareMemberRequestDto){
         EditorShareMemberResponseDto editorShareMember = editorService.editorShareMember(editorShareMemberRequestDto);
 
@@ -148,6 +148,18 @@ public class EditorController {
                 .build();
 
         return ResponseEntity.ok(apiResponse);
+    }
 
+    @PostMapping("/share")
+    public ResponseEntity<ApiResponse> editorShare(@RequestBody EditorShareRequestDto editorShareRequestDto){
+        editorService.editorShare(editorShareRequestDto);
+
+        ApiResponse apiResponse = ApiResponse.builder()
+                .message("문서 공유 완료")
+                .status(OK.value())
+                .data(null)
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
     }
 }

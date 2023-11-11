@@ -7,7 +7,9 @@ import com.surf.editor.domain.Editor;
 import com.surf.editor.dto.request.*;
 import com.surf.editor.dto.response.*;
 import com.surf.editor.feign.client.MemberOpenFeign;
+import com.surf.editor.feign.client.MemberShareOpenFeign;
 import com.surf.editor.feign.dto.MemberEditorSaveRequestDto;
+import com.surf.editor.feign.dto.MemberShareRequestDto;
 import com.surf.editor.repository.EditorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,6 +23,7 @@ import java.util.*;
 public class EditorService {
     private final EditorRepository editorRepository;
     private final MemberOpenFeign memberOpenFeign;
+    private final MemberShareOpenFeign memberShareOpenFeign;
 
 
     @Transactional
@@ -36,17 +39,16 @@ public class EditorService {
         }
 
         //feign member, quiz, diagram DB에도 저장
-        feign(userId, savedEditor);
+        memberCreateFeign(userId, savedEditor);
 
         EditorCreateResponseDto editorCreateResponseDto = EditorCreateResponseDto.builder()
                 .id(savedEditor.getId())
                 .build();
 
         return editorCreateResponseDto;
-
     }
 
-    private void feign(int userId, Editor savedEditor) {
+    private void memberCreateFeign(int userId, Editor savedEditor) {
         try{
             MemberEditorSaveRequestDto memberEditorSaveRequestDto = MemberEditorSaveRequestDto.builder()
                     .userId(userId)
@@ -260,5 +262,41 @@ public class EditorService {
                 .build();
 
         return editorShareMemberResponseDto;
+    }
+
+    /**
+     * 1. 해당 문서에 공유하는 인원 추가
+     * 2. member에게 feign 보냄
+     */
+    public void editorShare(EditorShareRequestDto editorShareRequestDto) {
+        // 1. 해당 문서에 공유하는 인원 추가
+        String editorId = editorShareRequestDto.getEditorId();
+        Editor editor = editorRepository.findById(editorId).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
+
+        for (int userId : editorShareRequestDto.getUserList()) {
+            if(!editor.getSharedUser().contains(userId)){
+                editor.sharedUserAdd(userId);
+            }
+        }
+
+        editorRepository.save(editor);
+
+        // 2. member에게 feign 보냄
+        editorShareFeign(editorShareRequestDto);
+
+    }
+
+
+    private void editorShareFeign(EditorShareRequestDto editorShareRequestDto) {
+        try{
+            MemberShareRequestDto memberShareRequestDto = MemberShareRequestDto.builder()
+                    .editorId(editorShareRequestDto.getEditorId())
+                    .userPk(editorShareRequestDto.getUserId())
+                    .build();
+
+            memberShareOpenFeign.MemberShare(memberShareRequestDto);
+        }catch (Exception e){
+            throw new BaseException(ErrorCode.MEMBER_SAVE_FAIL);
+        }
     }
 }

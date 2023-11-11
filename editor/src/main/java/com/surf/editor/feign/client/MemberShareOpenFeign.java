@@ -6,6 +6,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 @FeignClient(name = "MemberShareClient",url = "https://www.hype-note.com/api/auth")
 public interface MemberShareOpenFeign {
-    @PutMapping(value = "/root-share") // 수정 필요
+    @PutMapping(value = "/share") // 수정 필요
     void MemberShare(MemberShareRequestDto memberShareRequestDto);
 }
