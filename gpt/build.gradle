@@ -22,6 +22,10 @@ repositories {
 }
 
 dependencies {
+
+	//Open Feign for GPT API Request
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
 	implementation 'org.springframework.boot:spring-boot-starter'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
