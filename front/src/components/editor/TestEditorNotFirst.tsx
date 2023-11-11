@@ -26,6 +26,7 @@ function TestEditorNotFirst({ id }: Props) {
   // const [theme, setTheme] = useState<"light" | "dark">("light");
   const [theme, setTheme] = useAtom<any>(themeAtom);
   const [open] = useAtom(isSearchOpen);
+
   const stompClient = useEditorWebSocket();
   const onSave = () => {
     const title = editor.topLevelBlocks[0].content;
@@ -101,7 +102,7 @@ function TestEditorNotFirst({ id }: Props) {
       <Search />
       {/* <Button className="absolute top-5 right-10">공유버튼</Button> */}
       <ShardeBtn />
-      <ToShareBtn />
+      <ToShareBtn id={id} />
     </>
   );
 }

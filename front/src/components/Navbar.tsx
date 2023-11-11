@@ -13,47 +13,72 @@ import MySearch from "@/components/MySearch";
 import useNoteList from "@/hooks/useNoteList";
 import { useRouter } from "next/navigation";
 import useCreateNote from "@/hooks/useCreateNote";
+import useGetUserNoteList from "@/hooks/useGetUserNoteList";
+import useLinkNote from "@/hooks/useLinkNote";
 
 type childProps = { id: string; title: string; parentId: string; children: childProps[] };
 
 export default function Navbar() {
-  const userId = 1;
   const { createDocument } = useCreateNote();
   const [user] = useAtom(userAtom);
   const pathname = usePathname();
   const { noteList } = useNoteList();
   const router = useRouter();
-
-  const [treeNote, setTreeNote] = useState<childProps[]>([]);
-  console.log(treeNote);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const treeList = await noteList(["654f61ed89670a432b9c6b78"]);
-        setTreeNote(treeList);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchData();
-  }, []);
-
-  if (pathname === "/signin" || pathname == "/signup" || pathname == "/intro") {
-    return null;
-  }
-
+  const { userNoteList } = useGetUserNoteList();
+  const [myTreeNote, setMyTreeNote] = useState<childProps[]>([]);
+  const [sharedTreeNote, setsharedMyTreeNote] = useState<childProps[]>([]);
+  const { LinkNote } = useLinkNote();
+  console.log(user);
   const onClickHandler = async (event: React.MouseEvent) => {
     event.stopPropagation();
 
+    const userId = user.userPk;
+
     try {
       const documentId = await createDocument(userId);
-
+      console.log(documentId);
       router.push(`/editor/${documentId}`);
     } catch (error) {
       console.log(error);
     }
   };
+  useEffect(() => {
+    const fetchMyData = async (Mydata: string[]) => {
+      try {
+        const treeList = await noteList(Mydata);
+        setMyTreeNote(treeList);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    const fetchSharedData = async (sharedData: string[]) => {
+      try {
+        const treeList = await noteList(sharedData);
+        setsharedMyTreeNote(treeList);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    const getUserRootLists = async () => {
+      try {
+        const data = await userNoteList();
+        if (data) {
+          fetchMyData(data.documentsRoots);
+          fetchSharedData(data.sharedDocumentsRoots);
+        }
+
+        return data;
+        // if(data)
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getUserRootLists();
+  }, [user]);
+
+  if (pathname === "/signin" || pathname == "/signup" || pathname == "/intro") {
+    return null;
+  }
 
   return (
     <>
@@ -99,8 +124,8 @@ export default function Navbar() {
           </span>
         </div>
         {/* 제일큰 노트 map으로 호출 */}
-        {treeNote &&
-          treeNote.map((element) => {
+        {myTreeNote &&
+          myTreeNote.map((element) => {
             return element.parentId === "root" ? <Category childProps={element} value={1} key={element.id} /> : null;
           })}
 
@@ -122,8 +147,8 @@ export default function Navbar() {
           </span>
         </div>
         {/* 공유받은 페이지 map으로 호출 */}
-        {treeNote &&
-          treeNote.map((element) => {
+        {sharedTreeNote &&
+          sharedTreeNote.map((element) => {
             return element.parentId === "root" ? <Category childProps={element} value={2} key={element.id} /> : null;
           })}
         <Link href="/signin">

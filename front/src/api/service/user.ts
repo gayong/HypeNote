@@ -23,5 +23,11 @@ export const getUserInfo = () => api.get(`auth/user-info`);
 export const reissueToken = () => api.post(`auth/reissue`, {}, { withCredentials: true });
 
 // 게시글 공유
-// export const shareNote = (userId: number, document:number) =>
-// api.put(`auth/share`, {userId, document})
+export const shareNote = (userId: number, userList: number[], editorId: string) => {
+  const data = { userId, userList, editorId };
+  return api.post(`editor/share`, data);
+};
+// 인물 검색
+export const getOtherUserPkByNickName = (nickName: string) => {
+  return api.get(`auth/user-info/${nickName}`);
+};

@@ -6,6 +6,13 @@ export const fetchCreateDocument = (userId: number) => {
   return api.post(`editor/${userId}`);
 };
 
+// 하위 document 만들기
+export const fetchCreateCihldDocument = (userId: number, editorId: string) => {
+  return api.post(`editor/child/${userId}`, {
+    editorId,
+  });
+};
+
 // 게시글 작성
 export const fetchCreateNote = (editorId: string, title: string, content: string) => {
   api.post(`editor/write/${editorId}`, {
@@ -48,4 +55,8 @@ export const fetchSearchMyNote = (query: string | undefined) => {
 export const fetchNoteList = (rootList: string[]) => {
   const data = { rootList: rootList };
   return api.post(`editor/list`, data);
+};
+
+export const fetchUserRootList = () => {
+  return api.get("auth/user-info");
 };
