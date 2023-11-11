@@ -6,6 +6,7 @@ import { useSendQuizAnswer } from "@/hooks/useSendQuizAnswer";
 import { userAtom } from "@/store/authAtom";
 import { useAtom } from "jotai";
 
+import Timer from "../ui/Timer";
 import Quiz from "../ui/Quiz";
 import { useRouter } from "next/navigation";
 
@@ -76,6 +77,8 @@ export default function QuizStart(props: QuizRoomProps) {
       {quizs && quizs.length > 0 && (
         <>
           <div className="h-screen pt-32 w-full justify-center items-center flex-cols mx-16">
+            <Timer time={quizs.length} />
+
             <Steps
               status="process"
               type="navigation"

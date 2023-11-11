@@ -12,7 +12,7 @@ import Card2 from "../ui/Card2";
 import { useAtom } from "jotai";
 import { userAtom } from "@/store/authAtom";
 import QuizResult from "./QuizResult";
-import Loading from "@/app/loading";
+import Loading from "@/components/Loading";
 
 interface QuizRoomProps {
   roomId: number;

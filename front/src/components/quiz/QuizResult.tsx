@@ -6,6 +6,10 @@ import confetti from "canvas-confetti";
 import { useRouter } from "next/navigation";
 import { Button, Radio } from "antd";
 
+import first from "../../../public/assets/first.png";
+import second from "../../../public/assets/second.png";
+import third from "../../../public/assets/third.png";
+
 export default function QuizResult() {
   const { quizResults, quizRanking } = useContext(SocketContext);
   const [tab, setTab] = useState("rank");
@@ -97,7 +101,170 @@ export default function QuizResult() {
             퀴즈 결과입니다!
           </h1>
 
-          {quizRanking.map((user, index) => (
+          <div className="mt-3 flex justify-center items-center p-3">
+            {quizRanking.length >= 3
+              ? [quizRanking[1], quizRanking[0], quizRanking[2]].map((item, index) => {
+                  // 멤버가 세 명일때
+                  if (index === 0) {
+                    // 2등
+                    return (
+                      <div
+                        key={index}
+                        className="hover:-translate-y-2 duration-300 p-5 flex items-center justify-center mr-5 bg-font_primary shadow-lg dark:shadow-font_secondary rounded-xl w-[150px] h-[170px]">
+                        <div>
+                          <Image src={second} className="w-[80px] h-auto absolute ml-[-40px] mt-[-17px]" alt="2" />
+                          <div className="h-[100px] w-[100px] flex items-center justify-center">
+                            <Image
+                              src={item.userImg}
+                              alt="프로필 이미지"
+                              width={100}
+                              height={100}
+                              priority
+                              className="rounded-full object-cover h-[80px] w-[80px]"></Image>
+                          </div>
+                          {/* <div className="mb-2 ml-2 mr-2 rounded-full w-16 h-16 bg-cover bg-[url('/assets/profile.jpg')]" /> */}
+                          <div className="dark:text-dark_primary flex justify-center">{item.userName}</div>
+                          <p className="font-PreBd text-sm text-[#ffd51c] flex justify-center">
+                            {item.correct} / {item.total}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  } else if (index === 1) {
+                    // 1등
+                    return (
+                      <div
+                        key={index}
+                        className="hover:-translate-y-2 duration-300 p-5 flex items-center justify-center mr-5 bg-font_primary shadow-lg dark:shadow-font_secondary rounded-xl w-[180px] h-[190px]">
+                        <div>
+                          <Image src={first} className="w-[100px] h-auto absolute ml-[-60px] mt-[-29px]" alt="1" />
+                          <div className="h-[100px] w-[100px] flex items-center justify-center">
+                            <Image
+                              src={item.userImg}
+                              alt="프로필 이미지"
+                              width={100}
+                              height={100}
+                              priority
+                              className="rounded-full object-cover h-[100px] w-[100px]"></Image>
+                          </div>
+                          {/* <div className="mb-2 ml-2 mr-2 rounded-full w-16 h-16 bg-cover bg-[url('/assets/profile.jpg')]" /> */}
+                          <div className="dark:text-dark_primary flex justify-center">{item.userName}</div>
+                          <p className="font-PreBd text-sm text-[#ffd51c] flex justify-center">
+                            {item.correct} / {item.total}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  } else {
+                    // 3등
+                    return (
+                      <div
+                        key={index}
+                        className="hover:-translate-y-2 duration-300 p-5 flex items-center justify-center bg-font_primary shadow-lg dark:shadow-font_secondary rounded-xl w-[150px] h-[170px]">
+                        <div>
+                          <Image src={third} className="w-[80px] h-auto absolute ml-[-40px] mt-[-31px]" alt="3" />
+                          <div className="h-[100px] w-[100px] flex items-center justify-center">
+                            <Image
+                              src={item.userImg}
+                              alt="프로필 이미지"
+                              width={100}
+                              height={100}
+                              priority
+                              className="rounded-full object-cover h-[80px] w-[80px]"></Image>
+                          </div>
+                          {/* <div className="mb-2 ml-2 mr-2 rounded-full w-16 h-16 bg-cover bg-[url('/assets/profile.jpg')]" /> */}
+                          <div className="dark:text-dark_primary flex justify-center">{item.userName}</div>
+                          <p className="font-PreBd text-sm text-[#ffd51c] flex justify-center">
+                            {item.correct} / {item.total}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  }
+                })
+              : quizRanking.length === 2 // 멤버가 두 명일때
+              ? [quizRanking[0], quizRanking[1]].map((item, index) => {
+                  if (index === 0) {
+                    // 1등
+                    return (
+                      <div
+                        key={index}
+                        className="hover:-translate-y-2 duration-300 p-5 flex items-center justify-center mr-5 bg-font_primary shadow-lg dark:shadow-font_secondary rounded-xl w-[180px] h-[190px]">
+                        <div>
+                          <Image src={first} className="w-[100px] h-auto absolute ml-[-60px] mt-[-29px]" alt="1" />
+                          <div className="h-[100px] w-[100px] flex items-center justify-center">
+                            <Image
+                              src={item.userImg}
+                              alt="프로필 이미지"
+                              width={100}
+                              height={100}
+                              priority
+                              className="rounded-full object-cover h-[100px] w-[100px]"></Image>
+                          </div>
+                          {/* <div className="mb-2 ml-2 mr-2 rounded-full w-16 h-16 bg-cover bg-[url('/assets/profile.jpg')]" /> */}
+                          <div className="flex justify-center">{item.userName}</div>
+                          <p className="font-PreBd text-sm text-[#ffd51c] flex justify-center">
+                            {item.correct} / {item.total}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  } else if (index === 1) {
+                    // 2등
+                    return (
+                      <div
+                        key={index}
+                        className="hover:-translate-y-2 duration-300 p-5 flex items-center justify-center mr-5 bg-font_primary shadow-lg dark:shadow-font_secondary rounded-xl w-[150px] h-[170px]">
+                        <div>
+                          <Image src={second} className="w-[80px] h-auto absolute ml-[-40px] mt-[-31px]" alt="2" />
+                          <div className="h-[100px] w-[100px] flex items-center justify-center">
+                            <Image
+                              src={item.userImg}
+                              alt="프로필 이미지"
+                              width={100}
+                              height={100}
+                              priority
+                              className="rounded-full object-cover h-[80px] w-[80px]"></Image>
+                          </div>
+                          {/* <div className="mb-2 ml-2 mr-2 rounded-full w-16 h-16 bg-cover bg-[url('/assets/profile.jpg')]" /> */}
+                          <div className="flex justify-center">{item.userName}</div>
+                          <p className="font-PreBd text-sm text-[#ffd51c] flex justify-center">
+                            {item.correct} / {item.total}
+                          </p>
+                        </div>
+                      </div>
+                    );
+                  }
+                })
+              : quizRanking.map((item, index) => {
+                  // 혼자일 때 => 혹시 혼자풀기 결과도 같은 페이지 쓴다면 필요, 아님 그냥 null 해도 됨
+                  return (
+                    <div
+                      key={index}
+                      className="hover:-translate-y-2 duration-300 p-5 flex items-center justify-center mr-5 bg-font_primary shadow-lg dark:shadow-font_secondary rounded-xl w-[180px] h-[190px]">
+                      <div>
+                        <Image src={first} className="w-[100px] h-auto absolute ml-[-60px] mt-[-29px]" alt="1" />
+                        <div className="h-[100px] w-[100px] flex items-center justify-center">
+                          <Image
+                            src={item.userImg}
+                            alt="프로필 이미지"
+                            width={100}
+                            height={100}
+                            priority
+                            className="rounded-full object-cover h-[100px] w-[100px]"></Image>
+                        </div>
+                        {/* <div className="mb-2 ml-2 mr-2 rounded-full w-16 h-16 bg-cover bg-[url('/assets/profile.jpg')]" /> */}
+                        <div className="flex justify-center">{item.userName}</div>
+                        <p className="font-PreBd text-sm text-[#ffd51c] flex justify-center">
+                          {item.correct} / {item.total}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
+          </div>
+
+          {quizRanking.slice(3).map((user, index) => (
             <>
               <div key={user.userPk} className="h-[70px] flex justify-between items-center px-6 ">
                 <div className="flex items-center">
@@ -105,7 +272,15 @@ export default function QuizResult() {
                     {user.ranking}
                   </h1>
                   {/* <div className="mr-2 rounded-full w-10 h-10 bg-cover bg-[url('/assets/profile.jpg')]" /> */}
-                  <Image src={user.userImg} alt="프로필 이미지" width={20} height={20} priority />
+                  <div className="h-[100px] w-[10px] flex items-center justify-center">
+                    <Image
+                      src={user.userImg}
+                      alt="프로필 이미지"
+                      width={100}
+                      height={100}
+                      priority
+                      className="rounded-full object-cover h-[40px] w-[40px]"></Image>
+                  </div>
                   <div className="w-4"></div>
                   <h1>{user.userName}</h1>
                 </div>
@@ -123,7 +298,11 @@ export default function QuizResult() {
             {quizResults?.questionResult.map((quiz, index) => (
               <div key={index} className="pt-16">
                 <div className="flex items-center relative px-10">
-                  <Image src="/assets/correct.png" alt="맞음" width={100} height={100} className="absolute -left-3" />
+                  {quiz.myAnswer === quiz.answer ? (
+                    <Image src="/assets/cor.png" alt="맞음" width={110} height={110} className="absolute left-0.5" />
+                  ) : (
+                    <Image src="/assets/wr.png" alt="틀림" width={70} height={70} className="absolute left-6 -top-10" />
+                  )}
 
                   <h1 className="text-4xl font-preBd text-dark_font">{quiz.id}.</h1>
                   <span className="ml-2 mt-1 text-xl font-preBd dark:text-font_primary">{quiz.question}</span>
