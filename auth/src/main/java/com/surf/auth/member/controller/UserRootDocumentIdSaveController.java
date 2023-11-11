@@ -1,7 +1,7 @@
 package com.surf.auth.member.controller;
 
 
-import com.surf.auth.auth.dto.rquest.RootDto;
+import com.surf.auth.member.dto.request.RootDto;
 import com.surf.auth.member.service.UserRootDocumentIdSaveService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

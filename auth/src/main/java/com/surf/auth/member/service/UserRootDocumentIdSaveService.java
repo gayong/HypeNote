@@ -1,6 +1,6 @@
 package com.surf.auth.member.service;
 
-import com.surf.auth.auth.dto.rquest.RootDto;
+import com.surf.auth.member.dto.request.RootDto;
 import com.surf.auth.member.entity.User;
 import com.surf.auth.member.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
