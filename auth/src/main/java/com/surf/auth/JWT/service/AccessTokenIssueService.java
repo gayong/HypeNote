@@ -19,8 +19,8 @@ public class AccessTokenIssueService {
     @Value("${jwt.access-token-expiration-time}")
     private long EXPIRATION_TIME;
 
-    public String accessTokenIssue(UserDto userInfo) {
+    public String accessTokenIssue(String email) {
         Map<String, Object> claims = new HashMap<>();
-        return tokenProvider.createToken(claims, userInfo, EXPIRATION_TIME);
+        return tokenProvider.createToken(claims, email, EXPIRATION_TIME);
     }
 }

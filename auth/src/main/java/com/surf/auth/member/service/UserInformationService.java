@@ -17,14 +17,11 @@ public class UserInformationService {
 
     private final UserRepository userRepository;
 
-    public UserInfoResponseDto sendUserInformation (Map<String, String> request) {
+    public UserInfoResponseDto sendUserInformation (String email) {
 
         Optional<User> optionalUser;
-        if (request.get("email") != null){
-            optionalUser = userRepository.findByEmail(request.get("email"));
-        } else {
-            optionalUser = userRepository.findByNickName(request.get("nickName"));
-        }
+
+        optionalUser = userRepository.findByEmail(email);
 
         User userInfo = optionalUser.orElseThrow();
 

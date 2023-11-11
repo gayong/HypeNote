@@ -30,9 +30,9 @@ public class RefreshTokenIssueService {
     @Value("${jwt.refresh-token-cookie-max-age}")
     private int REFRESH_TOKEN_COOKIE_MAX_AGE;
 
-    public void refreshTokenIssue(UserDto userInfo, HttpServletResponse response) {
+    public void refreshTokenIssue(String email, HttpServletResponse response) {
         Map<String, Object> claims = new HashMap<>();
-        String refreshToken = tokenProvider.createToken(claims, userInfo, EXPIRATION_TIME);
+        String refreshToken = tokenProvider.createToken(claims, email, EXPIRATION_TIME);
 
         ResponseCookie responseTokenCookie = ResponseCookie.from(REFRESH_TOKEN_COOKIE_NAME, refreshToken)
                 .maxAge(REFRESH_TOKEN_COOKIE_MAX_AGE)
@@ -44,6 +44,6 @@ public class RefreshTokenIssueService {
 
         response.addHeader("Set-Cookie", responseTokenCookie.toString());
 
-        redisRefreshTokenSaveService.saveRefreshToken(EXPIRATION_TIME, refreshToken, userInfo);
+        redisRefreshTokenSaveService.saveRefreshToken(EXPIRATION_TIME, refreshToken, email);
     }
 }

@@ -39,11 +39,11 @@ public class UserInformationController {
 
         if (accessTokenAuthenticator.authenticateToken(accessToken)) {
 
-            request.put("email", tokenDecoder.parsingAccessToken(accessToken));
+            String email = tokenDecoder.parsingAccessToken(accessToken);
 
-            if (userEmailAuthenticator.userEmailAuthenticator(request.get("email"))) {
+            if (userEmailAuthenticator.userEmailAuthenticator(email)) {
 
-                return ResponseEntity.ok(userInformationService.sendUserInformation(request));
+                return ResponseEntity.ok(userInformationService.sendUserInformation(email));
 
             } else {
 
