@@ -1,7 +1,8 @@
 import { fetchCreateNote } from "../api/service/editor";
 
-// 내 단일 노트 가져오기
-export default async function UpdateNote(editorId: string, title: string, content: string) {
-  const data = await fetchCreateNote(editorId, title, content);
+export default async function UpdateNote(editorId: string, title: any, content: string) {
+  if (title[0].text) {
+    const data = await fetchCreateNote(editorId, title[0].text, content);
+  }
   return content;
 }
