@@ -50,6 +50,33 @@ public class EditorService {
         return editorCreateResponseDto;
     }
 
+    public EditorCreateResponseDto editorChildCreate(int userId, EditorChildCreateRequestDto editorChildCreateRequestDto) {
+        Editor savedEditor = new Editor();
+        try{
+            //부모 추가
+            Editor editor = Editor.editorCreate(userId);
+            editor.parentRelation(editorChildCreateRequestDto.getEditorId());
+
+            //자식 추가
+            Editor findParentEditor = editorRepository.findById(editorChildCreateRequestDto.getEditorId())
+                    .orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
+            findParentEditor.childRelation(editor.getId());
+
+            editorRepository.save(findParentEditor);
+            savedEditor = editorRepository.save(editor);
+
+        }catch (Exception e){
+            throw new BaseException(ErrorCode.FAIL_CREATE_EDITOR);
+        }
+
+        EditorCreateResponseDto editorCreateResponseDto = EditorCreateResponseDto.builder()
+                .id(savedEditor.getId())
+                .build();
+
+        return editorCreateResponseDto;
+
+    }
+
     private void memberCreateFeign(int userId, Editor savedEditor) {
         try{
             MemberEditorSaveRequestDto memberEditorSaveRequestDto = MemberEditorSaveRequestDto.builder()

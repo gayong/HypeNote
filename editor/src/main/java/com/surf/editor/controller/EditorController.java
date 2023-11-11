@@ -33,6 +33,19 @@ public class EditorController {
         return ResponseEntity.ok(apiResponse);
     }
 
+    @PostMapping("/child/{userId}")
+    public ResponseEntity<ApiResponse> editorChildCreate(@PathVariable int userId,@RequestBody EditorChildCreateRequestDto editorChildCreateRequestDto){
+        EditorCreateResponseDto editorCreateResponseDto = editorService.editorChildCreate(userId,editorChildCreateRequestDto);
+
+        ApiResponse apiResponse = ApiResponse.builder()
+                .message("자식 문서 작성 성공")
+                .status(OK.value())
+                .data(editorCreateResponseDto)
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
     @PostMapping("/relation/{userId}")
     public ResponseEntity<ApiResponse> editorRelation(@PathVariable int userId, @RequestBody EditorRelationRequestDto editorRelationRequestDto){
         editorService.editorRelation(userId,editorRelationRequestDto);
