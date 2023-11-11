@@ -6,6 +6,6 @@ import lombok.Getter;
 @Getter
 @Builder(toBuilder = true)
 public class MemberShareRequestDto {
-    private int userId;
-    private String root;
+    private int userPk;
+    private String editorId;
 }
