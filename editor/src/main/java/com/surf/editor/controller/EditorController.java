@@ -188,4 +188,17 @@ public class EditorController {
 
         return ResponseEntity.ok(apiResponse);
     }
+
+    @PostMapping("/shareList")
+    public ResponseEntity<ApiResponse> editorShareList(@RequestBody EditorShareListRequestDto editorShareListRequestDto){
+        EditorShareListResponseDto editorShareList= editorService.editorShareList(editorShareListRequestDto);
+
+        ApiResponse apiResponse = ApiResponse.builder()
+                .message("공유 유저 전체 리스트")
+                .status(OK.value())
+                .data(editorShareList)
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
 }
