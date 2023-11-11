@@ -210,6 +210,7 @@ public class EditorService {
         editorListResponseDto.setId(editor.getId());
         editorListResponseDto.setTitle(editor.getTitle());
         editorListResponseDto.setParentId(editor.getParentId());
+        editorListResponseDto.setOwner(editor.getUserId());
 
         List<String> childIds = editor.getChildId();
         if(childIds !=null && !childIds.isEmpty()){
