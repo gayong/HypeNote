@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,8 +21,11 @@ public class KakaoSearchService {
     private String key;
     private static String url = "https://dapi.kakao.com/v2/search/blog";
 
-    public KakaoSearchRequestDto kakaoSearchGet(String query) {
+    public List<KakaoSearchRequestDto.Items> kakaoSearchGet(String query) {
         try{
+
+            String prompt = "cs학습" + query;
+
             WebClient webClient = WebClient.builder()
                     .baseUrl(url)
                     .defaultHeader("Authorization","KakaoAK "+key)
@@ -28,12 +33,16 @@ public class KakaoSearchService {
 
             KakaoSearchRequestDto webClientResponse = webClient.get()
                     .uri(uriBuilder -> uriBuilder.path("")
-                            .queryParam("query",query)
+                            .queryParam("query",prompt)
+                            .queryParam("sort","accuracy")
+                            .queryParam("size",50)
                             .build()
                     )
                     .retrieve()
                     .bodyToMono(KakaoSearchRequestDto.class)
                     .block();
+
+            List<KakaoSearchRequestDto.Items> Results = new ArrayList<>();
 
         // title에 대해 HTML 태그 제거
         if (webClientResponse != null && webClientResponse.getDocuments() != null) {
@@ -48,14 +57,23 @@ public class KakaoSearchService {
                     item.setContents(item.getContents().replaceAll("(&lt;(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?&gt;)|(<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>)", ""));
                     item.setContents(removeHtmlEntities(item.getContents()));
                 }
+
+                // 사이트에서 나온 결과만을 필터링
+                if (isSite(item.getUrl())) {
+                    Results.add(item);
+                }
             }
         }
 
-            return webClientResponse;
+            return Results;
 
         }catch (Exception e){
             throw new BaseException(ErrorCode.ILLEGAL_ARGUMENT_EXCEPTION);
         }
+    }
+
+    private boolean isSite(String url) {
+        return url != null && (url.contains("tistory.com") || (url.contains("velog.io")));
     }
 
     //HTML 엔티티 제거
