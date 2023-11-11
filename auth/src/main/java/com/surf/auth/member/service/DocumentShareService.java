@@ -17,9 +17,9 @@ public class DocumentShareService {
     private final UserRepository userRepository;
     private final UserPkAuthenticator userPkAuthenticator;
 
-    public void saveDocumentShare(DocumentShareRequestDto documentShareRequestDto) {
+    public void saveDocumentShare(DocumentShareRequestDto documentShareRequestDto, Integer userPk) {
 
-        Optional<User> userOptional = userRepository.findByUserPk(documentShareRequestDto.getUserPk());
+        Optional<User> userOptional = userRepository.findByUserPk(userPk);
 
         User user = userOptional.orElseThrow();
 

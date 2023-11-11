@@ -25,7 +25,7 @@ public class DocumentShareController {
 
         for (Integer userPk : userPkList) {
             if (userPkAuthenticator.userPkAuthentication(userPk)){
-                documentShareService.saveDocumentShare(documentShareRequestDto);
+                documentShareService.saveDocumentShare(documentShareRequestDto, userPk);
             } else {
 
                 return ResponseEntity.status(HttpStatus.CONFLICT).body("해당 유저가 존재하지 않습니다.");
