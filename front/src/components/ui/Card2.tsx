@@ -37,7 +37,7 @@ export default function Card2({ user }: Card2Props) {
             <h2 className="text-xl font-bold tracking-tight text-center dark:text-white">{user.userName}</h2>
             {/* <span className="mt-3 mb-4 font-light text-gray-500 dark:text-gray-400">{user.host ? " (방장)" : ""}</span> */}
             <div className="text-primary font-preRg text-md text-center">
-              {user.host ? "방장" : user.ready ? "준비 완료" : "준비 중"}
+              {user.host ? "방장" : user.ready ? "준비 완료" : "준비 전"}
             </div>
           </div>
         </>
