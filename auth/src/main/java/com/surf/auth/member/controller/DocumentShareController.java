@@ -8,6 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/auth")
@@ -19,14 +21,17 @@ public class DocumentShareController {
     @PutMapping("/share")
     private ResponseEntity<String> documentShareController (@RequestBody DocumentShareRequestDto documentShareRequestDto) {
 
-        int userPk = documentShareRequestDto.getUserPk();
-        if (userPkAuthenticator.userPkAuthentication(userPk)){
-            documentShareService.saveDocumentShare(documentShareRequestDto);
+        List<Integer> userPkList = documentShareRequestDto.getUserPkList();
 
-            return ResponseEntity.ok("성공적으로 공유되었습니다.");
-        } else {
+        for (Integer userPk : userPkList) {
+            if (userPkAuthenticator.userPkAuthentication(userPk)){
+                documentShareService.saveDocumentShare(documentShareRequestDto);
+            } else {
 
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("해당 유저가 존재하지 않습니다.");
+                return ResponseEntity.status(HttpStatus.CONFLICT).body("해당 유저가 존재하지 않습니다.");
+            }
+
         }
+        return ResponseEntity.ok("성공적으로 공유되었습니다.");
     }
 }
