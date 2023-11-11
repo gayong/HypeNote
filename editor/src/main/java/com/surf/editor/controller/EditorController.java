@@ -162,4 +162,17 @@ public class EditorController {
 
         return ResponseEntity.ok(apiResponse);
     }
+
+    @PostMapping("/unshare")
+    public ResponseEntity<ApiResponse> editorUnShare(@RequestBody EditorUnShareRequestDto editorUnShareRequestDto){
+        editorService.editorUnshare(editorUnShareRequestDto);
+
+        ApiResponse apiResponse = ApiResponse.builder()
+                .message("문서 공유 해제")
+                .status(OK.value())
+                .data(null)
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
 }
