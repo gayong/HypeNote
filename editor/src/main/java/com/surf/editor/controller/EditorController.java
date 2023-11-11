@@ -2,10 +2,7 @@ package com.surf.editor.controller;
 
 import com.surf.editor.common.response.ApiResponse;
 import com.surf.editor.dto.request.*;
-import com.surf.editor.dto.response.EditorCheckResponseDto;
-import com.surf.editor.dto.response.EditorCreateResponseDto;
-import com.surf.editor.dto.response.EditorListResponseDto;
-import com.surf.editor.dto.response.EditorSearchResponseDto;
+import com.surf.editor.dto.response.*;
 import com.surf.editor.service.EditorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -135,6 +132,32 @@ public class EditorController {
                 .message("문서 리스트 출력")
                 .status(OK.value())
                 .data(editorListResponseDtoList)
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @PostMapping("/member")
+    public ResponseEntity<ApiResponse> editorShareMember(@RequestBody EditorShareMemberRequestDto editorShareMemberRequestDto){
+        EditorShareMemberResponseDto editorShareMember = editorService.editorShareMember(editorShareMemberRequestDto);
+
+        ApiResponse apiResponse = ApiResponse.builder()
+                .message("공유한 사람 리스트 출력")
+                .status(OK.value())
+                .data(editorShareMember)
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
+
+    @PostMapping("/share")
+    public ResponseEntity<ApiResponse> editorShare(@RequestBody EditorShareRequestDto editorShareRequestDto){
+        editorService.editorShare(editorShareRequestDto);
+
+        ApiResponse apiResponse = ApiResponse.builder()
+                .message("문서 공유 완료")
+                .status(OK.value())
+                .data(null)
                 .build();
 
         return ResponseEntity.ok(apiResponse);
