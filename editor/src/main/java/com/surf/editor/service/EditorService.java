@@ -13,6 +13,7 @@ import com.surf.editor.feign.dto.MemberEditorSaveRequestDto;
 import com.surf.editor.feign.dto.MemberShareRequestDto;
 import com.surf.editor.repository.EditorRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.mongodb.core.aggregation.ArrayOperators;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -361,5 +362,24 @@ public class EditorService {
                 editorShareChild(childEditor,userList,type);
             }
         }
+    }
+
+    public EditorShareListResponseDto editorShareList(EditorShareListRequestDto editorShareListRequestDto) {
+
+        Set<Integer> set = new HashSet<>();
+
+        for (String editorId : editorShareListRequestDto.getEditorIds()) {
+            Editor editor = editorRepository.findById(editorId).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
+
+            for (Integer userId : editor.getSharedUser()) {
+                set.add(userId);
+            }
+
+        }
+        EditorShareListResponseDto editorShareListResponseDto = EditorShareListResponseDto.builder()
+                .userList(List.copyOf(set))
+                .build();
+
+        return editorShareListResponseDto;
     }
 }
