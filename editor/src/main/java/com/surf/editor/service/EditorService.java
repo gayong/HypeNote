@@ -210,6 +210,7 @@ public class EditorService {
         editorListResponseDto.setId(editor.getId());
         editorListResponseDto.setTitle(editor.getTitle());
         editorListResponseDto.setParentId(editor.getParentId());
+        editorListResponseDto.setOwner(editor.getUserId());
 
         List<String> childIds = editor.getChildId();
         if(childIds !=null && !childIds.isEmpty()){
@@ -273,17 +274,30 @@ public class EditorService {
         String editorId = editorShareRequestDto.getEditorId();
         Editor editor = editorRepository.findById(editorId).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
 
-        for (int userId : editorShareRequestDto.getUserList()) {
-            if(!editor.getSharedUser().contains(userId)){
-                editor.sharedUserAdd(userId);
-            }
-        }
-
-        editorRepository.save(editor);
+        editorShareChild(editor,editorShareRequestDto.getUserList());
 
         // 2. member에게 feign 보냄
         editorShareFeign(editorShareRequestDto);
 
+    }
+
+    private void editorShareChild(Editor editor, List<Integer> userList) {
+
+        for (int userId : userList) {
+            if(!editor.getSharedUser().contains(userId)){
+                editor.sharedUserAdd(userId);
+            }
+        }
+        editorRepository.save(editor);
+
+        List<String> childIds = editor.getChildId();
+        if(childIds != null && !childIds.isEmpty()){
+
+            for (String childId : childIds) {
+                Editor childEditor = editorRepository.findById(childId).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
+                editorShareChild(childEditor,userList);
+            }
+        }
     }
 
 
@@ -291,7 +305,7 @@ public class EditorService {
         try{
             MemberShareRequestDto memberShareRequestDto = MemberShareRequestDto.builder()
                     .editorId(editorShareRequestDto.getEditorId())
-                    .userPk(editorShareRequestDto.getUserId())
+                    .userPkList(editorShareRequestDto.getUserList())
                     .build();
 
             memberShareOpenFeign.MemberShare(memberShareRequestDto);
