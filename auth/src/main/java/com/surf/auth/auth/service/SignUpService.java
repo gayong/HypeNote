@@ -1,5 +1,6 @@
 package com.surf.auth.auth.service;
 
+import com.surf.auth.auth.S3.ProfileImageService;
 import com.surf.auth.auth.dto.SignUpDto;
 import com.surf.auth.auth.entity.User;
 import com.surf.auth.auth.repository.UserRepository;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,9 +23,9 @@ public class SignUpService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder bCryptPasswordEncoder;
-    private final ProfileUploadService profileUploadService;
+    private final ProfileImageService profileImageService;
 
-    public ResponseEntity<String> saveUser(@Valid SignUpDto signupInfo) {
+    public ResponseEntity<String> saveUser(@Valid SignUpDto signupInfo) throws IOException {
 
         boolean isEmailDuplicate = userRepository.findByEmail(signupInfo.getEmail()).isPresent();
         boolean isNickNameDuplicate = userRepository.findByNickName(signupInfo.getNickName()).isPresent();
@@ -43,7 +45,7 @@ public class SignUpService {
                 .password(bCryptPasswordEncoder.encode(signupInfo.getPassword()))
                 .nickName(signupInfo.getNickName())
                 .role("ROLE_USER")
-                .profileImage(profileUploadService.profileUpLoad(signupInfo.getProfileImage()))
+                .profileImage(profileImageService.saveFile(signupInfo.getProfileImage()))
                 .documentsRoots(documentsRoots)
                 .build());
         return ResponseEntity.status(HttpStatus.OK).body("정상적인 가입이 되었습니다.");
