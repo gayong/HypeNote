@@ -17,5 +17,11 @@ export const signinUser = (email: string, password: string) => api.post(`auth/lo
 export const getUserInfo = () => api.get(`auth/user-info`);
 
 // 게시글 공유
-// export const shareNote = (userId: number, document:number) =>
-// api.put(`auth/share`, {userId, document})
+export const shareNote = (userId: number, userList: number[], editorId: string) => {
+  const data = { userId, userList, editorId };
+  return api.post(`editor/share`, data);
+};
+// 인물 검색
+export const getOtherUserPkByNickName = (nickName: string) => {
+  return api.get(`auth/user-info/${nickName}`);
+};
