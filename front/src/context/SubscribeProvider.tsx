@@ -9,6 +9,7 @@ import { QuizRanking, QuizRoomInfo, QuizInfo, QuizResultInfo, chatUser } from "@
 import { useAtom } from "jotai";
 import { userAtom } from "@/store/authAtom";
 import { message } from "antd";
+
 interface Props {
   roomId: number;
   children: ReactNode;
@@ -45,39 +46,47 @@ export default function SubscribeProvider({ roomId, children }: { roomId: number
   const [user] = useAtom(userAtom);
 
   useEffect(() => {
-    console.log("나 돌아가");
+    const accessToken = localStorage.getItem("accessToken");
+
     if (stompClient) {
-      console.log("구독할거야.");
       // 방 구독
-      stompClient.subscribe(`/sub/quiz/${roomId}`, (response) => {
-        const responseBody = JSON.parse(response.body);
-        // 방 정보
-        if (responseBody.type === "detail") {
-          setRoom(responseBody.result);
-          // 퀴즈가 다 준비됐다면
-          if (responseBody.quizReady && !quizReady) {
-            message.info("퀴즈가 다 준비됐어요. READY버튼을 누르고 퀴즈를 시작해주세요.");
-            setQuizReady(true);
+      stompClient.subscribe(
+        `/sub/quiz/${roomId}`,
+        (response) => {
+          const responseBody = JSON.parse(response.body);
+          // 방 정보
+          if (responseBody.type === "detail") {
+            setRoom(responseBody.result);
+            // 퀴즈가 다 준비됐다면
+            if (responseBody.quizReady && !quizReady) {
+              message.info("퀴즈가 다 준비됐어요. READY버튼을 누르고 퀴즈를 시작해주세요.");
+              setQuizReady(true);
+            }
           }
-        }
-        // 퀴즈
-        else if (responseBody.type == "quiz") {
-          message.warning(`퀴즈가 시작됩니다! ${responseBody.result.question.length * 30}초 이내에 푸십시오`);
-          console.log("퀴즈", responseBody.result.question);
-          setQuizs(responseBody.result.question);
-        }
-        // 퀴즈 결과
-        else if (responseBody.type == "result") {
-          setQuizResults(responseBody.result[user.userPk]);
-          setQuizRanking(responseBody.ranking);
-        }
-      });
+          // 퀴즈
+          else if (responseBody.type == "quiz") {
+            message.warning(`퀴즈가 시작됩니다! ${responseBody.result.question.length * 30}초 이내에 푸십시오`);
+            console.log("퀴즈", responseBody.result.question);
+            setQuizs(responseBody.result.question);
+          }
+          // 퀴즈 결과
+          else if (responseBody.type == "result") {
+            setQuizResults(responseBody.result[user.userPk]);
+            setQuizRanking(responseBody.ranking);
+          }
+        },
+        { Authorization: `Bearer ${accessToken}` }
+      );
 
       // 채팅방 구독
-      stompClient.subscribe(`/sub/chat/${roomId}`, (mes) => {
-        const message = JSON.parse(mes.body);
-        setChatMessages((prevChatMessages) => [...prevChatMessages, message]);
-      });
+      stompClient.subscribe(
+        `/sub/chat/${roomId}`,
+        (mes) => {
+          const message = JSON.parse(mes.body);
+          setChatMessages((prevChatMessages) => [...prevChatMessages, message]);
+        },
+        { Authorization: `Bearer ${accessToken}` }
+      );
     }
 
     return () => {
@@ -86,7 +95,11 @@ export default function SubscribeProvider({ roomId, children }: { roomId: number
         userPk: user.userPk,
       };
       if (stompClient) {
-        stompClient.send(`/pub/quizroom/out/${roomId}`, {}, JSON.stringify(data));
+        stompClient.send(
+          `/pub/quizroom/out/${roomId}`,
+          { Authorization: `Bearer ${accessToken}` },
+          JSON.stringify(data)
+        );
         stompClient.unsubscribe(`/sub/quiz/${roomId}`);
       }
     };

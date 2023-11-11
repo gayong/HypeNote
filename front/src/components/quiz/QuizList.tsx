@@ -7,6 +7,7 @@ import { QuizRoomInfo } from "@/types/quiz";
 import Loading from "@/components/Loading";
 import { useAtom } from "jotai";
 import { userAtom } from "@/store/authAtom";
+
 export default function QuizList() {
   // const { quizRooms } = useContext(SocketContext);
   const [quizRooms, setQuizRooms] = useState<Array<QuizRoomInfo>>([]);
@@ -14,11 +15,17 @@ export default function QuizList() {
   const [user] = useAtom(userAtom);
 
   useEffect(() => {
+    const accessToken = localStorage.getItem("accessToken");
+
     if (stompClient) {
-      const roomListSubscription = stompClient.subscribe(`/sub/quizroom/roomList/${user.userPk}`, (roomList) => {
-        setQuizRooms(JSON.parse(roomList.body));
-      });
-      stompClient.send(`/pub/quizroom/roomList/${user.userPk}`, {});
+      const roomListSubscription = stompClient.subscribe(
+        `/sub/quizroom/roomList/${user.userPk}`,
+        (roomList) => {
+          setQuizRooms(JSON.parse(roomList.body));
+        },
+        { Authorization: `Bearer ${accessToken}` }
+      );
+      stompClient.send(`/pub/quizroom/roomList/${user.userPk}`, { Authorization: `Bearer ${accessToken}` });
     }
     return stompClient?.unsubscribe(`/sub/quizroom/roomList/${user.userPk}`);
   }, [stompClient]);
