@@ -4,6 +4,9 @@ import useCreateNote from "@/hooks/useCreateNote";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { HiChevronDown, HiChevronRight } from "react-icons/hi";
+import useCreateChildNote from "@/hooks/useCreateChildNote";
+import { useAtom } from "jotai";
+import { userAtom } from "@/store/authAtom";
 
 type childProps = { id: string; title: string; parentId: string; children: childProps[] };
 
@@ -13,7 +16,9 @@ interface categoryProps {
 }
 
 export default function Category({ childProps, value }: categoryProps) {
-  const { createDocument } = useCreateNote();
+  const { createChildDocument } = useCreateChildNote();
+  const [user] = useAtom(userAtom);
+
   const { LinkNote } = useLinkNote();
   const router = useRouter();
   const [collapsed, setCollapsed] = useState(true);
@@ -26,7 +31,7 @@ export default function Category({ childProps, value }: categoryProps) {
     }
   }, [childProps.parentId]);
 
-  const userId = 1;
+  const userId = user.userPk;
   function toggleCollapse(event: React.MouseEvent) {
     event.stopPropagation();
 
@@ -42,10 +47,8 @@ export default function Category({ childProps, value }: categoryProps) {
     console.log(id.id, "여기는 + 핸들러");
 
     try {
-      const documentId = await createDocument(userId);
-      if (id.id) {
-        LinkNote(userId, id.id, documentId);
-      }
+      const documentId = await createChildDocument(userId, id.id);
+      console.log(documentId);
       router.push(`/editor/${documentId}`);
     } catch (error) {
       console.log(error);

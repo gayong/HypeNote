@@ -49,20 +49,20 @@ function TestEditor({ id }: Props) {
     }
 
     // 컴포넌트가 언마운트될 때 실행되는 함수를 반환합니다.
-    return () => {
-      if (editor) {
-        editor.blocksToHTML(editor.topLevelBlocks).then((update) => {
-          const title = editor.topLevelBlocks[0].content;
-          if (title && title[0]) {
-            // @ts-ignore
-            UpdateNote(id, title[0].text, update);
-          }
-        });
-      }
-      if (stompClient) {
-        stompClient.unsubscribe(`/sub/note/${id}`);
-      }
-    };
+    // return () => {
+    //   if (editor) {
+    //     editor.blocksToHTML(editor.topLevelBlocks).then((update) => {
+    //       const title = editor.topLevelBlocks[0].content;
+    //       if (title && title[0]) {
+    //         // @ts-ignore
+    //         UpdateNote(id, title[0].text, update);
+    //       }
+    //     });
+    //   }
+    //   if (stompClient) {
+    //     stompClient.unsubscribe(`/sub/note/${id}`);
+    //   }
+    // };
   }, [id, stompClient]); // editor가 변경될 때마다 이 훅을 실행합니다.
 
   const editor = useBlockNote({
@@ -138,7 +138,7 @@ function TestEditor({ id }: Props) {
       </div>
       <Search />
       <ShardeBtn />
-      <ToShareBtn />
+      <ToShareBtn id={id}/>
     </>
   );
 }
