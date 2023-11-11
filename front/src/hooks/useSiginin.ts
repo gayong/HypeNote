@@ -9,6 +9,8 @@ const useSignin = () => {
       const response = await signinUser(email, password);
       console.log(response);
       localStorage.setItem("accessToken", response.data.accessToken);
+      // const refreshToken = response.headers["refreshToken"];
+      // console.log(refreshToken);
       userInfo();
 
       return "success";
