@@ -291,7 +291,7 @@ public class EditorService {
         try{
             MemberShareRequestDto memberShareRequestDto = MemberShareRequestDto.builder()
                     .editorId(editorShareRequestDto.getEditorId())
-                    .userPk(editorShareRequestDto.getUserId())
+                    .userPkList(editorShareRequestDto.getUserList())
                     .build();
 
             memberShareOpenFeign.MemberShare(memberShareRequestDto);
