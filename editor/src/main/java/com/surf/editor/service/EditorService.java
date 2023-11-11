@@ -5,10 +5,7 @@ import com.surf.editor.common.error.exception.BaseException;
 import com.surf.editor.common.error.exception.NotFoundException;
 import com.surf.editor.domain.Editor;
 import com.surf.editor.dto.request.*;
-import com.surf.editor.dto.response.EditorCheckResponseDto;
-import com.surf.editor.dto.response.EditorCreateResponseDto;
-import com.surf.editor.dto.response.EditorListResponseDto;
-import com.surf.editor.dto.response.EditorSearchResponseDto;
+import com.surf.editor.dto.response.*;
 import com.surf.editor.feign.client.MemberOpenFeign;
 import com.surf.editor.feign.dto.MemberEditorSaveRequestDto;
 import com.surf.editor.repository.EditorRepository;
@@ -16,8 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Service
 @Transactional
@@ -228,4 +224,41 @@ public class EditorService {
     }
 
 
+    /**
+     * 문서 ID List에 공유 되어 잇는 인원 교집합 리턴
+     * 1. 문서 리스트 순회
+     * 2. 해당 문서에서 첫번째 값에 유저를 딕셔너리에 넣는다.
+     * 3. 이후 차례대로 해당 딕셔너리 값이 있으면 값을 +1 더하고 없으면 해당 딕셔너리를 삭제한다.
+     * 4. 마지막으로 남은 딕셔너리 값이 문서 갯수와 같으면 교집합이므로 리턴해준다.
+     */
+    public EditorShareMemberResponseDto editorShareMember(EditorShareMemberRequestDto editorShareMemberRequestDto) {
+        List<Integer> userList = new ArrayList<>();
+        Map<Integer,Integer> editorDict = new HashMap<>();
+
+        List<String> editorList = editorShareMemberRequestDto.getEditorList();
+        for (String editorId : editorList) {
+            Editor editor = editorRepository.findById(editorId).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
+
+            for (Integer sharedUser : editor.getSharedUser()) {
+                if(editorDict.containsKey(sharedUser)){ //값이 있으면 +1
+                    editorDict.put(sharedUser,editorDict.get(sharedUser)+1);
+                }
+                else{
+                    editorDict.put(sharedUser,1);
+                }
+            }
+        }
+
+        for (Integer key : editorDict.keySet()) {
+            if(editorDict.get(key)== editorList.size()){
+                userList.add(key);
+            }
+        }
+
+        EditorShareMemberResponseDto editorShareMemberResponseDto = EditorShareMemberResponseDto.builder()
+                .userList(userList)
+                .build();
+
+        return editorShareMemberResponseDto;
+    }
 }

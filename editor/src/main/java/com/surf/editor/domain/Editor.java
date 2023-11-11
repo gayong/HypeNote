@@ -31,6 +31,7 @@ public class Editor {
     private List<String> hyperLink;
 
     private List<Integer> writePermission;
+    private List<Integer> sharedUser;
 
     public static Editor editorCreate(int userId){
         Editor editor = Editor.builder()
