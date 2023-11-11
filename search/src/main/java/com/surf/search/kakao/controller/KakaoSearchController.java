@@ -22,7 +22,7 @@ public class KakaoSearchController {
 
     @GetMapping("/kakao")
     public ResponseEntity<ApiResponse> kakaoSearchGet(@RequestParam String query){
-        List<KakaoSearchRequestDto.Items> itemsList = kakaoSearchService.kakaoSearchGet(query);
+        KakaoSearchRequestDto itemsList = kakaoSearchService.kakaoSearchGet(query);
 
         ApiResponse apiResponse = ApiResponse.builder()
                 .message("검색 결과")

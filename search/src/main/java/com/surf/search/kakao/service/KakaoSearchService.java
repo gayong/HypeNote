@@ -21,7 +21,7 @@ public class KakaoSearchService {
     private String key;
     private static String url = "https://dapi.kakao.com/v2/search/blog";
 
-    public List<KakaoSearchRequestDto.Items> kakaoSearchGet(String query) {
+    public KakaoSearchRequestDto kakaoSearchGet(String query) {
         try{
 
             String prompt = "cs학습" + query;
@@ -65,7 +65,10 @@ public class KakaoSearchService {
             }
         }
 
-            return Results;
+            KakaoSearchRequestDto kakaoSearchRequestDto = KakaoSearchRequestDto.builder()
+                    .documents(Results)
+                    .build();
+            return kakaoSearchRequestDto;
 
         }catch (Exception e){
             throw new BaseException(ErrorCode.ILLEGAL_ARGUMENT_EXCEPTION);
