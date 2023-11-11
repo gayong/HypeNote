@@ -1,4 +1,6 @@
 import axios from "axios";
+import Loading from "@/app/loading";
+import useReissue from "@/hooks/useReissue";
 // import { access } from "fs";
 // import { validateHeaderValue } from "http";
 // import { cookies } from "next/headers";
@@ -42,9 +44,20 @@ api.interceptors.response.use(
 
     // 에러가 토큰관련일 경우 함수 작성
     // 401 에러 토큰 만료
+    // if (error.response.status === 401) {
+    //   // redirect(`https://${window.location.origin}/api/auth/reissue`);
+    //   window.location.href = process.env.NEXT_PUBLIC_SERVER_URL + "auth/reissue";
+    // }
+
     if (error.response.status === 401) {
-      window.location.href = `${window.location.origin}/api/auth/reissue`;
+      const { reissue } = useReissue();
+      reissue();
+      // window.location.href = `${window.location.origin}/api/auth/reissue`;
+      // return Loading;
     }
+    // else if (error.response.status === 400) {
+    //   redirect(`https://${window.location.origin}/api/auth/reissue`);
+    // }
 
     return Promise.reject(error);
   }
