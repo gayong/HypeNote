@@ -15,9 +15,9 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 public class NaverSearchService {
 
-    @Value("${naver.search.naver_clientId}")
+//    @Value("${naver.search.naver_clientId}")
     private String naverClientId;
-    @Value("${naver.search.naver_client_secret}")
+//    @Value("${naver.search.naver_client_secret}")
     private String naverClientSecret;
 
     private static String url = "https://openapi.naver.com/v1/search/blog.json";
