@@ -87,4 +87,8 @@ public class Editor {
     public void sharedUserAdd(int userId){
         this.getSharedUser().add(userId);
     }
+
+    public void sharedUserSub(int userId){
+        this.getSharedUser().remove(userId);
+    }
 }
