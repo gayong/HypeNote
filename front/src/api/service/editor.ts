@@ -14,6 +14,14 @@ export const fetchCreateNote = (editorId: string, title: string, content: string
   });
 };
 
+// 게시글 연관관계 설정
+export const fetchLinkNote = (userId: number, parentId: string, childId: string) => {
+  api.post(`editor/relation/${userId}`, {
+    parentId,
+    childId,
+  });
+};
+
 // 게시글 삭제
 export const fetchDeleteNote = (edittorId: string) => {
   api.delete(`editor/write/${edittorId}`);
@@ -26,7 +34,7 @@ export const fetchNoteDetail = (editorId: string) => {
 
 // 웹 서칭 검색결과 조회
 export const fetchSearchResult = (query: string) => {
-  const response = api.get("search", { params: { query } });
+  const response = api.get("search/kakao", { params: { query } });
   return response;
 };
 

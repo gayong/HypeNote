@@ -1,30 +1,23 @@
 import { signinUser } from "@/api/service/user";
-import { useAtom } from "jotai";
-
-import { userAtom } from "@/store/authAtom";
+import useGetUserInfo from "./useGetUserInfo";
+import { message } from "antd";
 
 const useSignin = () => {
-  const [, setUser] = useAtom(userAtom);
-
+  const { userInfo } = useGetUserInfo();
   const signin = async (email: string, password: string) => {
     try {
       const response = await signinUser(email, password);
-      // console.log(response);
+      console.log(response);
       localStorage.setItem("accessToken", response.data.accessToken);
-      // console.log(response.data.userInfo);
-
-      setUser({
-        userPk: response.data.userInfo.userPk,
-        nickName: response.data.userInfo.nickName,
-        email: response.data.userInfo.email,
-        profileImage: response.data.userInfo.profileImage,
-        documents: response.data.userInfo.documents,
-      });
+      // const refreshToken = response.headers["refreshToken"];
+      // console.log(refreshToken);
+      userInfo();
 
       return "success";
-    } catch (error) {
-      console.log(error);
-      return "error";
+    } catch (error: any) {
+      console.log(error.response);
+      // message.error(error);
+      return error.response.data.message;
     }
   };
   return { signin };

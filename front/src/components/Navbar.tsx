@@ -14,6 +14,124 @@ import MySearch from "@/components/MySearch";
 export default function Navbar() {
   const [user] = useAtom(userAtom);
   const pathname = usePathname();
+  const treeNote = [
+    {
+      Id: "root",
+      title: "1st root",
+      parentId: "",
+      children: [
+        {
+          Id: "User",
+          title: "role1",
+          parentId: "root",
+          children: [
+            {
+              Id: "subUser1",
+              title: "role11",
+              parentId: "role1",
+              children: [],
+            },
+            {
+              Id: "subUser2",
+              title: "role12",
+              parentId: "role1",
+              children: [
+                {
+                  Id: "subUser2-1",
+                  title: "role121",
+                  parentId: "role12",
+                  children: [
+                    {
+                      Id: "subUser2-1-1",
+                      title: "role1211",
+                      parentId: "role121",
+                      children: [],
+                    },
+                    {
+                      Id: "subUser2-1-2",
+                      title: "role1212",
+                      parentId: "role121",
+                      children: [],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          Id: "Admin",
+          title: "role2",
+          parentId: "root",
+          children: [],
+        },
+        {
+          Id: "Guest",
+          title: "role3",
+          parentId: "root",
+          children: [],
+        },
+      ],
+    },
+    {
+      Id: "root",
+      title: "2nd root",
+      parentId: "",
+      children: [
+        {
+          Id: "User",
+          title: "role1",
+          parentId: "root",
+          children: [
+            {
+              Id: "subUser1",
+              title: "role11",
+              parentId: "role1",
+              children: [],
+            },
+            {
+              Id: "subUser2",
+              title: "role12",
+              parentId: "role1",
+              children: [
+                {
+                  Id: "subUser2-1",
+                  title: "role121",
+                  parentId: "role12",
+                  children: [
+                    {
+                      Id: "subUser2-1-1",
+                      title: "role1211",
+                      parentId: "role121",
+                      children: [],
+                    },
+                    {
+                      Id: "subUser2-1-2",
+                      title: "role1212",
+                      parentId: "role121",
+                      children: [],
+                    },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+        {
+          Id: "Admin",
+          title: "role2",
+          parentId: "root",
+          children: [],
+        },
+        {
+          Id: "Guest",
+          title: "role3",
+          parentId: "root",
+          children: [],
+        },
+      ],
+    },
+  ];
 
   if (pathname === "/signin" || pathname == "/signup" || pathname == "/intro") {
     return null;
@@ -63,7 +181,10 @@ export default function Navbar() {
           </span>
         </div>
         {/* 제일큰 노트 map으로 호출 */}
-        <Category title="MY CS BOOK" value={1} key={1} />
+        {treeNote.map((element) => {
+          return element.parentId === "" ? <Category childProps={element} value={1} key={element.Id} /> : null;
+        })}
+
         <div
           className="p-1.5 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-line_primary hover:bg-opacity-50 dark:hover:bg-line_primary dark:hover:bg-opacity-50"
           // onclick="dropdown()"
@@ -80,7 +201,9 @@ export default function Navbar() {
           </span>
         </div>
         {/* 공유받은 페이지 map으로 호출 */}
-        <Category title="1주차 스터디" value={2} key={2} />
+        {treeNote.map((element) => {
+          return element.parentId === "" ? <Category childProps={element} value={2} key={element.Id} /> : null;
+        })}
         <Link href="/signin">
           <h1 className="inline underline text-font_primary">signIn / </h1>
         </Link>

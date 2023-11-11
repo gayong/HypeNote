@@ -25,7 +25,7 @@ const notYet = {
 };
 
 export default function QuizRoom(props: QuizRoomProps) {
-  const { room, quizs, quizResults } = useContext(SocketContext);
+  const { room, quizs, quizResults, quizReady } = useContext(SocketContext);
   const [ready, setReady] = useState<"unready" | "ready">("unready");
   const [start, setStart] = useState<boolean>(false);
   const [submit, setSubmit] = useState<boolean>(false);
@@ -64,7 +64,7 @@ export default function QuizRoom(props: QuizRoomProps) {
       stompClient.send(`/pub/quiz/${props.roomId}`, {});
 
       // 1초 후 퀴즈 배열 확인
-      if (quizs.length === 0) {
+      if (!quizReady) {
         message.loading("퀴즈를 만들고 있는 중이에요. 잠시 후 다시 시도해주세요.", 2);
         setStart(false);
       }

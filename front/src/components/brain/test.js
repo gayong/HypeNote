@@ -24,11 +24,11 @@ const ThreeScene = () => {
 
   useEffect(() => {
     if (response) {
-      console.log("날 뇌에 담아줘!", response.data.result);
-      console.log("노드", response.data.result.nodes);
+      // console.log("날 뇌에 담아줘!", response.data.result);
+      // console.log("노드", response.data.result.nodes);
       setNodes(response.data.result.nodes);
       setMyNodes(response.data.result.nodes);
-      console.log("링크", response.data.result.links);
+      // console.log("링크", response.data.result.links);
       setMyLinks(response.data.result.links);
       setLinks(response.data.result.links);
     }
@@ -47,7 +47,7 @@ const ThreeScene = () => {
   };
 
   useEffect(() => {
-    console.log("zz", nodes, links);
+    // console.log("zz", nodes, links);
 
     function ForceGraph(
       { nodes, links },

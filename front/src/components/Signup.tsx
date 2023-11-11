@@ -1,7 +1,6 @@
 "use client";
 import Image from "next/image";
-
-import Button from "./ui/Button";
+import axios from "axios";
 import Input from "./ui/Input";
 import Label from "./ui/Label";
 
@@ -30,7 +29,7 @@ export default function Signup() {
   const handleEmailChange = (e: any) => setEmail(e.target.value);
   const handlePasswordChange = (e: any) => setPassword(e.target.value);
   const handlePassword2Change = (e: any) => setPassword2(e.target.value);
-  const [file, setFile] = useState(null);
+  const [file, setFile] = useState<any | null>(null);
 
   const { signup } = useSignup();
   const imgRef = useRef<HTMLInputElement>(null);
@@ -44,16 +43,41 @@ export default function Signup() {
       return;
     }
 
-    const success = await signup(email, password, nickName, profileImage);
+    // axios.post()
+    console.log(file);
+    // const success = await signup(email, password, nickName, file);
+    const formData = new FormData();
+    formData.append("email", email);
+    formData.append("password", password);
+    formData.append("nickName", nickName);
+    formData.append("profileImage", file);
 
-    if (success === "success") {
-      // 회원가입 성공 처리
-      message.success("회원가입에 성공했습니다. 로그인 후 사이트 이용해 주세요☺");
-      router.push("/signin");
-    } else {
-      // 회원가입 실패 처리
-      message.error("회원가입에 실패했습니다. 잠시 후 다시 시도해주세요.");
+    try {
+      const response = await axios.post("https://k9e101.p.ssafy.io/api/auth/signup", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      if (response.status === 200) {
+        message.success("회원가입에 성공했습니다. 로그인 후 사이트 이용해 주세요.");
+        router.push("/signin");
+      } else {
+        console.log("에러");
+        message.error("회원가입에 실패했습니다.");
+      }
+    } catch (err) {
+      console.error(err);
+      message.error("회원가입에 실패했습니다.");
     }
+
+    // if (success === "success") {
+    //   // 회원가입 성공 처리
+    //   message.success("회원가입에 성공했습니다. 로그인 후 사이트 이용해 주세요.");
+    //   router.push("/signin");
+    // } else {
+    //   console.log("에러");
+    //   message.error(success);
+    // }
   };
   const handleImageChange = (e: any) => {
     setFile(e.target.files[0]);
@@ -95,17 +119,17 @@ export default function Signup() {
           </h2>
         </div>
 
-        <div className="mt-4 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form className="space-y-3" onSubmit={handleSignup}>
+        <div className="mt-2 sm:mx-auto sm:w-full sm:max-w-sm">
+          <form className="space-y-1" onSubmit={handleSignup}>
             <div>
               <Label text="닉네임" />
-              <div className="mt-2">
+              <div className="mt-1">
                 <Input text="NickName" type="text" onChange={handleNickNameChange} />
               </div>
             </div>
             <div>
               <Label text="이메일" />
-              <div className="mt-2">
+              <div className="mt-1">
                 <Input text="Email" type="email" onChange={handleEmailChange} autoComplete="email" />
               </div>
             </div>
@@ -114,7 +138,7 @@ export default function Signup() {
               <div className="flex items-center justify-between">
                 <Label text="비밀번호" />
               </div>
-              <div className="mt-2">
+              <div className="mt-1">
                 <Input text="Password" type="password" onChange={handlePasswordChange} autoComplete="new-password" />
               </div>
             </div>
@@ -123,7 +147,7 @@ export default function Signup() {
               <div className="flex items-center justify-between">
                 <Label text="비밀번호 확인" />
               </div>
-              <div className="mt-2 ">
+              <div className="mt-1">
                 <Input text="Password2" type="password" onChange={handlePassword2Change} autoComplete="new-password" />
               </div>
             </div>
@@ -136,32 +160,32 @@ export default function Signup() {
                   alt="프로필 이미지"
                   width={70}
                   height={70}
-                  className="rounded-full object-cover"
+                  className="rounded-full object-cover mr-2"
                 />
 
-                <span className="text-sm font-medium ml-3">미 입력시 해당 유령사진으로 대체됩니다.</span>
-              </div>
+                <div className="flex-col justify-between">
+                  <span className="text-sm font-medium">미 입력시 기본 프로필이 적용됩니다.</span>
 
-              <div className="mt-2">
-                <label className="block">
-                  <input
-                    type="file"
-                    className="block w-full text-sm text-slate-500
-            file:mr-4 file:py-1 file:px-3
-            file:rounded-md file:border-0
-            file:text-xs
-            file:bg-primary file:text-font_primary
-            hover:file:bg-hover_primary
-            "
-                    accept="image/*"
-                    ref={imgRef}
-                    onChange={handleImageChange}
-                  />
-                </label>
+                  <label className="block">
+                    <input
+                      type="file"
+                      accept="image/*"
+                      ref={imgRef}
+                      onChange={handleImageChange}
+                      style={{ display: "none" }}
+                    />
+                    <div
+                      className="block w-16 text-center text-[13px] text-slate-500
+                    border-[1px] rounded-md bg-primary hover:bg-hover_primary
+                    border-transparent text-font_primary pt-[1px] mt-1">
+                      파일 선택
+                    </div>
+                  </label>
+                </div>
               </div>
             </div>
 
-            <div className="pt-5">
+            <div className="pt-3">
               <button className="w-full flex text-font_primary justify-center rounded-md bg-primary px-3 py-1.5 text-sm font-semibold leading-6 shadow-sm hover:bg-hover_primary focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
                 회원가입
               </button>
