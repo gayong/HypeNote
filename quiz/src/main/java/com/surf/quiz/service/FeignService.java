@@ -7,6 +7,8 @@ import com.surf.quiz.common.BaseResponse;
 import com.surf.quiz.dto.QuestionDto;
 import com.surf.quiz.dto.editor.ApiResponse;
 import com.surf.quiz.dto.editor.EditorCheckResponse;
+import com.surf.quiz.dto.editor.EditorShareMemberRequestDto;
+import com.surf.quiz.dto.editor.EditorShareMemberResponseDto;
 import com.surf.quiz.fegin.ChatCompletionClient;
 import com.surf.quiz.fegin.EditorServiceFeignClient;
 import lombok.RequiredArgsConstructor;
@@ -70,4 +72,11 @@ public class FeignService {
 
         return res;
     }
+
+
+    public List<Integer> getEditorShare(EditorShareMemberRequestDto editorShareMemberRequestDto) {
+        ApiResponse<EditorShareMemberResponseDto> response = editorServiceFeignClient.getShares(editorShareMemberRequestDto);
+        return response.getData().getUserList();
+    }
+
 }

@@ -6,6 +6,7 @@ import com.surf.quiz.dto.ExampleDto;
 import com.surf.quiz.dto.MemberDto;
 import com.surf.quiz.dto.QuestionDto;
 import com.surf.quiz.dto.UserDto;
+import com.surf.quiz.dto.editor.EditorShareMemberRequestDto;
 import com.surf.quiz.dto.request.CreateRoomRequestDto;
 import com.surf.quiz.dto.request.SearchMemberRequestDto;
 import com.surf.quiz.dto.response.DetailResponseDto;
@@ -115,14 +116,16 @@ public class QuizRoomService {
 
         // invite users = 초대 받은 유저 + 방 만든 유저
         // 방을 만든 사람이면 리스트의 0번으로 넣기 > 방장으로 만들기 위해서
-        List<UserDto> inviteUsers = createInviteUsers();
+        List<UserDto> inviteUsers = createInviteUsers(SearchMemberRequestDto.getPages());
 
         roomDto.setInviteUsers(inviteUsers);
 
         return roomDto;
     }
 
-    private List<UserDto> createInviteUsers() {
+    private List<UserDto> createInviteUsers(List<String> pages) {
+        List<Integer> res =  feignService.getEditorShare(new EditorShareMemberRequestDto(pages));
+        System.out.println("res = " + res);
         List<UserDto> inviteUsers = new ArrayList<>();
         inviteUsers.add(createUser(2020L, "csi", "/assets/유령.png"));
         inviteUsers.add(createUser(3030L, "isc", "/assets/유령2.png"));
