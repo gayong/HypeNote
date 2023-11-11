@@ -20,5 +20,6 @@ public class UserInfoResponseDto {
     private String nickName;
     private String profileImage;
     private List<String> documentsRoots;
+    private List<String> sharedDocumentsRoots;
     private String role;
 }

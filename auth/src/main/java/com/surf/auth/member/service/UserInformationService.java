@@ -31,6 +31,7 @@ public class UserInformationService {
                 .nickName(userInfo.getNickName())
                 .profileImage(userInfo.getProfileImage())
                 .documentsRoots(userInfo.getDocumentsRoots())
+                .sharedDocumentsRoots(userInfo.getSharedDocumentsRoots())
                 .role(userInfo.getRole())
                 .build();
     }
