@@ -6,8 +6,10 @@ import com.surf.auth.JWT.decoder.TokenDecoder;
 import com.surf.auth.member.authenticator.UserEmailAuthenticator;
 import com.surf.auth.member.authenticator.UserNickNameAuthenticator;
 import com.surf.auth.member.dto.response.UserInfoResponseDto;
+import com.surf.auth.member.dto.response.UserPkResponseDto;
 import com.surf.auth.member.handler.FindMemberAccessTokenNotValidationHandler;
 import com.surf.auth.member.handler.UserNotFoundExceptionHandler;
+import com.surf.auth.member.service.UserInformationNickNameService;
 import com.surf.auth.member.service.UserInformationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -29,6 +31,7 @@ public class UserInformationController {
     private final AccessTokenAuthenticator accessTokenAuthenticator;
     private final UserNotFoundExceptionHandler userNotFoundExceptionHandler;
     private final FindMemberAccessTokenNotValidationHandler findMemberAccessTokenNotValidationHandler;
+    private final UserInformationNickNameService userInformationNickNameService;
 
     @GetMapping ("/user-info")
     private ResponseEntity<UserInfoResponseDto> userInformationController (@RequestHeader("Authorization") String accessTokenHeader) {
@@ -55,14 +58,8 @@ public class UserInformationController {
     }
 
     @GetMapping("/user-info/{nickName}")
-    private ResponseEntity<Boolean> userInformationNickNameController (@PathVariable String nickName) {
+    private ResponseEntity<UserPkResponseDto> userInformationNickNameController (@PathVariable String nickName) {
 
-        if (userNickNameAuthenticator.userNickNameAuthentication(nickName)) {
-
-            return ResponseEntity.ok(true);
-        }
-        else {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(false);
-        }
+        return ResponseEntity.ok(userInformationNickNameService.findUserPkByNickName(nickName));
     }
 }
