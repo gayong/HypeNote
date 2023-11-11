@@ -15,6 +15,9 @@ import { useRouter } from "next/navigation";
 
 import { useRef, useState } from "react";
 import useSignup from "@/hooks/useSignup";
+import object_bottom from "../../public/assets/object_bottom.png";
+import object_top from "../../public/assets/object_top.png";
+import dd from "../../public/assets/dd.png";
 
 export default function Signup() {
   // 각 입력 필드에 대한 State들을 생성합니다.
@@ -40,6 +43,11 @@ export default function Signup() {
 
     if (password !== password2) {
       message.error("비밀번호가 일치하지 않습니다.");
+      return;
+    }
+
+    if (file === null) {
+      message.error("프로필 사진을 등록해주세요.");
       return;
     }
 
@@ -164,7 +172,7 @@ export default function Signup() {
                 />
 
                 <div className="flex-col justify-between">
-                  <span className="text-sm font-medium">미 입력시 기본 프로필이 적용됩니다.</span>
+                  <span className="text-sm font-medium">프로필 사진 등록은 필수입니다.</span>
 
                   <label className="block">
                     <input
@@ -193,6 +201,9 @@ export default function Signup() {
           </form>
         </div>
       </div>
+      <Image src={object_bottom} className="absolute bottom-0 -left-20 w-[600px]" alt="bottom" />
+      <Image src={dd} className="absolute bottom-0 left-0 w-[600px] z-50 overflow-hidden" alt="bottom" />
+      <Image src={object_top} className="absolute top-0 right-0 w-[550px]" alt="top" />
     </>
   );
 }
