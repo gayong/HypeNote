@@ -21,6 +21,7 @@ export const SocketContext = createContext<{
   quizResults: QuizResultInfo | null;
   quizRanking: Array<QuizRanking>;
   chatMessages: Array<chatUser>;
+  quizReady: boolean;
 }>({
   quizRooms: [],
   room: null,
@@ -28,6 +29,7 @@ export const SocketContext = createContext<{
   quizResults: null,
   quizRanking: [],
   chatMessages: [],
+  quizReady: false,
 });
 
 export default function SubscribeProvider({ roomId, children }: { roomId: number; children: React.ReactNode }) {
@@ -39,6 +41,7 @@ export default function SubscribeProvider({ roomId, children }: { roomId: number
   const [quizResults, setQuizResults] = useState<QuizResultInfo | null>(null);
   const [quizRanking, setQuizRanking] = useState<Array<QuizRanking>>([]);
   const [chatMessages, setChatMessages] = useState<Array<chatUser>>([]);
+  const [quizReady, setQuizReady] = useState<boolean>(false);
   const [user] = useAtom(userAtom);
 
   useEffect(() => {
@@ -48,11 +51,14 @@ export default function SubscribeProvider({ roomId, children }: { roomId: number
       // 방 구독
       stompClient.subscribe(`/sub/quiz/${roomId}`, (response) => {
         const responseBody = JSON.parse(response.body);
-        console.log("나와다!!!!");
-        console.log(responseBody);
         // 방 정보
         if (responseBody.type === "detail") {
           setRoom(responseBody.result);
+          // 퀴즈가 다 준비됐다면
+          if (responseBody.quizReady && !quizReady) {
+            message.info("퀴즈가 다 준비됐어요. READY버튼을 누르고 퀴즈를 시작해주세요.");
+            setQuizReady(true);
+          }
         }
         // 퀴즈
         else if (responseBody.type == "quiz") {
@@ -95,6 +101,7 @@ export default function SubscribeProvider({ roomId, children }: { roomId: number
         quizRanking,
         quizResults,
         chatMessages,
+        quizReady,
       }}>
       {children}
     </SocketContext.Provider>

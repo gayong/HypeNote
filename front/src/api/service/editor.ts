@@ -34,7 +34,7 @@ export const fetchNoteDetail = (editorId: string) => {
 
 // 웹 서칭 검색결과 조회
 export const fetchSearchResult = (query: string) => {
-  const response = api.get("search", { params: { query } });
+  const response = api.get("search/kakao", { params: { query } });
   return response;
 };
 

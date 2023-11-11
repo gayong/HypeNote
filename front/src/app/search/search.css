@@ -10,3 +10,14 @@
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
 }
+
+.oneline {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  line-height: 1.3;
+  word-wrap: break-word;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+}

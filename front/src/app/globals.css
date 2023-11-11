@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 ::-webkit-scrollbar {
-  width: 10px;
+  width: 6px;
 }
 
 /* Track */
@@ -121,7 +121,21 @@ body {
   > .ant-collapse-content
   > .ant-collapse-content-box {
   padding-top: 0;
+  padding-bottom: 0;
 }
+
+/* 웹서치 모달 띄워졌을때 배경 작동 */
+.ant-modal-mask {
+  background: transparent;
+  pointer-events: none;
+}
+.ant-modal-wrap {
+  pointer-events: none;
+}
+.ant-modal {
+  pointer-events: all;
+}
+
 /* :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
