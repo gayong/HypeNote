@@ -108,9 +108,11 @@ public class EditorService {
             Editor byId = editorRepository.findById(editorId).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
 
             //부모 연관 관계 나 제거
-            Editor parentEditor = editorRepository.findById(byId.getParentId()).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
-            parentEditor.childDelete(byId.getId());
-            editorRepository.save(parentEditor);
+            if(!byId.getParentId().equals("root")){
+                Editor parentEditor = editorRepository.findById(byId.getParentId()).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
+                parentEditor.childDelete(byId.getId());
+                editorRepository.save(parentEditor);
+            }
 
             //연관 자녀 모두 제거
             deleteChildEditor(byId);
@@ -130,6 +132,7 @@ public class EditorService {
                 editorRepository.delete(childEditor);
             }
         }
+        editorRepository.delete(editor);
     }
 
     
