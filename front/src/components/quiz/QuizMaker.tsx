@@ -247,7 +247,7 @@ export default function QuizMaker() {
     justifyContent: "center",
     color: token.colorTextTertiary,
     backgroundColor: token.colorFillAlter,
-    borderRadius: token.borderRadiusLG,
+    // borderRadius: token.borderRadiusLG,
     border: `1px dashed ${token.colorBorder}`,
     marginTop: 16,
     fontFamily: "preRg",
@@ -258,7 +258,9 @@ export default function QuizMaker() {
       <h1 className="text-2xl font-bold text-center">퀴즈를 만들어봅시다</h1>
       <br />
       <Steps current={current} items={items} />
-      <div style={contentStyle}>{steps[current].content}</div>
+      <div className="rounded-lg" style={contentStyle}>
+        {steps[current].content}
+      </div>
       <div style={{ display: "flex", justifyContent: "flex-end", fontFamily: "preRg", marginTop: 24 }}>
         {/* 첫번째 관문 로딩 페이지 */}
         {createRoomMutation.isLoading ? (

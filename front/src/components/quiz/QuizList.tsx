@@ -7,7 +7,6 @@ import { QuizRoomInfo } from "@/types/quiz";
 import Loading from "@/components/Loading";
 import { useAtom } from "jotai";
 import { userAtom } from "@/store/authAtom";
-
 export default function QuizList() {
   // const { quizRooms } = useContext(SocketContext);
   const [quizRooms, setQuizRooms] = useState<Array<QuizRoomInfo>>([]);
@@ -28,7 +27,6 @@ export default function QuizList() {
     <>
       <div className="pr-[50px] p-10">
         <h1 className="mt-4 text-3xl font-bold mb-2 text-center dark:text-dark_font text-primary">퀴즈 리스트</h1>
-
         {quizRooms.length > 0 ? (
           <>
             <h2 className="text-base font-PreBd text-center">초대된 퀴즈 방이에요. 얼른 들어가 보아요.</h2>

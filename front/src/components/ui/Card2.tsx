@@ -14,7 +14,7 @@ export default function Card2({ user }: Card2Props) {
           {user.userImg ? (
             <>
               <Image
-                className="w-28 sm:rounded-none sm:rounded-l-lg mb-2"
+                className="mb-2 rounded-full object-cover h-[100px] w-[100px]"
                 src={user.userImg}
                 alt="인물사진"
                 width={150}

@@ -4,12 +4,19 @@ import Image from "next/image";
 export function YourChat(props: chatUser) {
   return (
     <div className="flex w-full mt-2 space-x-3 max-w-xs">
-      <div className="flex flex-col items-center justify-center flex-shrink-0 h-10 w-10 rounded-full">
-        <Image src={props.userImg} alt="이미지" width={30} height={30}></Image>
-        <p className="text-xs text-center">{props.userName}</p>
+      <div className="flex flex-col items-center justify-center flex-shrink-0 h-15 w-15 rounded-full">
+        <div className="h-[50px] w-[50px] flex items-center justify-center"></div>
+        <Image
+          src={props.userImg}
+          alt="이미지"
+          width={30}
+          height={30}
+          className="rounded-full object-cover h-[40px] w-[40px]"></Image>
       </div>
       <div>
-        <div className="bg-primary text-font_primary p-3 rounded-r-lg rounded-bl-lg">
+        <p className="text-xs text-left">{props.userName}</p>
+
+        <div className="bg-primary text-font_primary p-2 rounded-r-lg rounded-bl-lg">
           <p className="text-sm">{props.content}</p>
         </div>
         <span className="w-full text-xs text-left block mt-1 leading-none">{props.chatTime}</span>
@@ -20,16 +27,24 @@ export function YourChat(props: chatUser) {
 
 export function MyChat(props: chatUser) {
   return (
-    <div className="flex w-full mt-2 space-x-3 max-w-xs ml-auto justify-end">
+    <div className="flex w-full mt-2 space-x-3 max-w-xs ml-auto justify-end items-start">
       <div>
-        <div className="bg-line_primary text-font_primary text-white p-3 rounded-l-lg rounded-br-lg">
+        <p className="text-xs text-right">{props.userName}</p>
+
+        <div className="bg-line_primary text-font_primary text-white p-2 rounded-l-lg rounded-br-lg">
           <p className="text-sm">{props.content}</p>
         </div>
         <span className="w-full text-xs leading-none text-right block mt-1">{props.chatTime}</span>
       </div>
-      <div className="flex flex-col items-center justify-center flex-shrink-0 h-10 w-10 rounded-full">
-        <Image src={props.userImg} alt="이미지" width={30} height={30}></Image>
-        <p className="text-xs text-center">{props.userName}</p>
+      <div className="flex flex-col items-center justify-center flex-shrink-0 h-15 w-15">
+        <div className="h-[50px] w-[50px] flex items-center justify-center">
+          <Image
+            src={props.userImg}
+            alt="이미지"
+            width={30}
+            height={30}
+            className="rounded-full object-cover h-[40px] w-[40px]"></Image>
+        </div>
       </div>
     </div>
   );

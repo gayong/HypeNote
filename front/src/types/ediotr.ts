@@ -1,6 +1,7 @@
 export interface NoteType {
+  id: string;
   title: string;
-  contents: string;
+  content: string;
   url: string;
   thumbnail: string;
 }
