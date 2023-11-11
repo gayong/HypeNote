@@ -23,12 +23,27 @@ export default function Search() {
   const { data: response, isLoading, refetch } = useGetSearchResult(keyword, enabled);
   const [results, setResults] = useState<Array<SearchType>>([]);
   const [iframeSrc, setIframeSrc] = useState("");
-  const [showIframe, setShowIframe] = useState(false);
-
   const [modalOpen, setModalOpen] = useState(false);
   const [disabled, setDisabled] = useState(true);
   const [bounds, setBounds] = useState({ left: 0, top: 0, bottom: 0, right: 0 });
   const draggleRef = useRef<HTMLDivElement>(null);
+
+  // 모달 시 스크롤 방지
+  useEffect(() => {
+    const preventScroll = (e: WheelEvent) => {
+      e.preventDefault();
+    };
+
+    if (modalOpen) {
+      window.addEventListener("wheel", preventScroll, { passive: false });
+    } else {
+      window.removeEventListener("wheel", preventScroll);
+    }
+
+    return () => {
+      window.removeEventListener("wheel", preventScroll);
+    };
+  }, [modalOpen]);
 
   // 검색결과에 날짜 형식 바꾸기
   const formatDate = (datetime: string) => datetime.slice(0, 10).replace(/-/g, ".");
@@ -137,14 +152,6 @@ export default function Search() {
                 <hr className="p-1 opacity-20" />
               </div>
             ))}
-          {/* {showIframe && (
-            <div>
-              <button className="absolute top-0 z-50 text-2xl bg-hover_primary" onClick={() => setShowIframe(false)}>
-                사라져!!!
-              </button>
-              <iframe className="absolute top-20 right-0 w-[300px] h-[600px]" src={iframeSrc}></iframe>
-            </div>
-          )} */}
           <Modal
             title={
               <div
@@ -207,10 +214,10 @@ export default function Search() {
   return (
     <div>
       <Button
-        className="bg-primary absolute top-8 -right-9 rounded-b-none rotate-[270deg]"
+        className="bg-primary absolute top-8 -right-8 rounded-b-none rotate-[270deg]"
         type="primary"
         onClick={showDrawer}>
-        검색 & GPT
+        한입 도우미
       </Button>
       <Drawer
         title="한입 도우미"

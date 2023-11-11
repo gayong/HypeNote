@@ -55,7 +55,7 @@ export default function SubscribeProvider({ roomId, children }: { roomId: number
         if (responseBody.type === "detail") {
           setRoom(responseBody.result);
           // 퀴즈가 다 준비됐다면
-          if (responseBody.quizReady) {
+          if (responseBody.quizReady && !quizReady) {
             message.info("퀴즈가 다 준비됐어요. READY버튼을 누르고 퀴즈를 시작해주세요.");
             setQuizReady(true);
           }
