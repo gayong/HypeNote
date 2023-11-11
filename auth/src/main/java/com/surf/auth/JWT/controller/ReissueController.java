@@ -18,7 +18,7 @@ public class ReissueController {
     private final ReissueService reissueService;
     private final TokenDecoder tokenDecoder;
 
-    @PostMapping("/reissue")
+    @GetMapping("/reissue")
     public ResponseEntity<TokenDto> reissue(@CookieValue(name = "refreshToken", required = true) String refreshToken) {
 
         UserDto userInfo = tokenDecoder.parsingRefreshToken(refreshToken);
