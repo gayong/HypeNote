@@ -15,6 +15,9 @@ import darkKrLogoImg from "../../public/assets/krlogo.png";
 import { useState } from "react";
 import useSignin from "@/hooks/useSiginin";
 import { useRouter } from "next/navigation";
+import object_bottom from "../../public/assets/object_bottom.png";
+import object_top from "../../public/assets/object_top.png";
+import dd from "../../public/assets/dd.png";
 
 export default function Signin() {
   const [email, setEmail] = useState<string>("");
@@ -110,6 +113,9 @@ export default function Signin() {
           </p>
         </div>
       </div>
+      <Image src={object_bottom} className="absolute bottom-0 -left-20 w-[600px] overflow-hidden" alt="bottom" />
+      <Image src={dd} className="absolute bottom-0 left-0 w-[600px] z-50 overflow-hidden" alt="bottom" />
+      <Image src={object_top} className="absolute top-0 right-0 w-[550px]" alt="top" />
     </>
   );
 }

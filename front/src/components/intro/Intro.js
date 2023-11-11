@@ -23,7 +23,6 @@ import line2 from "./line2.png";
 import line3 from "./line3.png";
 import bite from "./bite.png";
 import "./Intro.css";
-import { Button } from "antd";
 import confetti from "canvas-confetti";
 
 export default function Intro() {
@@ -90,14 +89,31 @@ export default function Intro() {
           page.style.opacity = 0;
         });
       }
+      if (currentSection === 0) {
+        document.querySelectorAll(".signin").forEach((page) => {
+          page.style.opacity = 0;
+        });
+      }
     }
   };
 
   const toTop = () => {
     sectionRef[0].current.scrollIntoView({ block: "center", behavior: "smooth" });
+    document.querySelectorAll(".signin").forEach((page) => {
+      page.style.opacity = 0;
+    });
   };
 
   useEffect(() => {
+    // 스크롤 막기
+    window.addEventListener(
+      "wheel",
+      function (e) {
+        e.preventDefault();
+      },
+      { passive: false }
+    );
+
     let lastScrollY = 0;
     let currentScrollY = window.scrollY;
 
@@ -140,13 +156,8 @@ export default function Intro() {
   return (
     <div className="overflow-hidden p-0 m-0 w-full text-center items-center justify-center">
       <div className="mx-auto relative w-[100vw]">
-        <div className="mt-[-100px] origin-[24%_50%] animate-spin-slow">
+        <div className="mt-[-100px] origin-[25%_50%] animate-spin-slow">
           <Image className="ml-[-150px] w-[68vw]" src={plate} alt="plate" />
-          <Image
-            className="rotate-[27deg] absolute top-[4.5%] left-[35%] mx-auto pt-10 w-[100px]"
-            src={logo_blue}
-            alt="logo"
-          />
         </div>
         <Image className="animate-spin-slow w-[430px] absolute top-[5.2%] left-[11%]" src={bottom} alt="bottom" />
         <Image className="animate-spin-slow w-[430px] absolute top-[5.2%] left-[11%] " src={lettuce} alt="lettuce" />
@@ -195,11 +206,6 @@ export default function Intro() {
         <div className="mt-[135px]">
           <div className="origin-[24%_50%] animate-spin-slow">
             <Image className="ml-[-150px] w-[68vw]" src={plate} alt="plate" />
-            <Image
-              className="rotate-[27deg] absolute top-[4.5%] left-[35%] mx-auto pt-10 w-[100px]"
-              src={logo_blue}
-              alt="logo"
-            />
           </div>
           <Image className="animate-spin-slow w-[430px] absolute top-[26%] left-[11%]" src={bottom} alt="bottom" />
           <Image className="animate-spin-slow w-[430px] absolute top-[26%] left-[11%] " src={lettuce} alt="lettuce" />
@@ -240,11 +246,6 @@ export default function Intro() {
         <div className="mt-[110px] ">
           <div className="origin-[24%_50%] animate-spin-slow">
             <Image className="ml-[-150px] w-[68vw]" src={plate} alt="plate" />
-            <Image
-              className="rotate-[27deg] absolute top-[4.5%] left-[35%] mx-auto pt-10 w-[100px]"
-              src={logo_blue}
-              alt="logo"
-            />
           </div>
           <Image className="animate-spin-slow w-[430px] absolute top-[46%] left-[11%]" src={bottom} alt="bottom" />
           <Image className="animate-spin-slow w-[430px] absolute top-[46%] left-[11%] " src={lettuce} alt="lettuce" />
@@ -281,11 +282,6 @@ export default function Intro() {
         <div className="mt-[120px] ">
           <div className="origin-[24%_50%] animate-spin-slow">
             <Image className="ml-[-150px] w-[68vw]" src={plate} alt="plate" />
-            <Image
-              className="rotate-[27deg] absolute top-[4.5%] left-[35%] mx-auto pt-10 w-[100px]"
-              src={logo_blue}
-              alt="logo"
-            />
           </div>
           <Image className="animate-spin-slow w-[430px] absolute top-[67%] left-[11%]" src={bottom} alt="bottom" />
           <Image className="animate-spin-slow w-[430px] absolute top-[67%] left-[11%] " src={lettuce} alt="lettuce" />
@@ -323,11 +319,6 @@ export default function Intro() {
         <div className="mt-[120px] -mb-64 p-0 ">
           <div className="origin-[24%_50%] animate-spin-slow">
             <Image className="ml-[-150px] w-[68vw]" src={plate} alt="plate" />
-            <Image
-              className="rotate-[27deg] absolute top-[4.5%] left-[35%] mx-auto pt-10 w-[100px]"
-              src={logo_blue}
-              alt="logo"
-            />
           </div>
           <Image className="animate-spin-slow w-[470px] absolute top-[87%] left-[8%]" src={bite} alt="bottom" />
           <h1 className="text-yellow italic font-preBd text-[120px] absolute top-[86.1%] left-[61.6%] z-20">4</h1>
