@@ -26,9 +26,22 @@ export default function Navbar() {
 
   const [treeNote, setTreeNote] = useState<childProps[]>([]);
   console.log(treeNote);
-  // if (pathname === "/signin" || pathname == "/signup" || pathname == "/intro") {
-  //   return null;
-  // }
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const treeList = await noteList(["654f61ed89670a432b9c6b78"]);
+        setTreeNote(treeList);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  if (pathname === "/signin" || pathname == "/signup" || pathname == "/intro") {
+    return null;
+  }
 
   const onClickHandler = async (event: React.MouseEvent) => {
     event.stopPropagation();
@@ -41,17 +54,6 @@ export default function Navbar() {
       console.log(error);
     }
   };
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const treeList = await noteList(["654f61ed89670a432b9c6b78"]);
-        setTreeNote(treeList);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchData();
-  }, []);
 
   return (
     <>

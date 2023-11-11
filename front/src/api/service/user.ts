@@ -20,7 +20,7 @@ export const signinUser = (email: string, password: string) =>
 export const getUserInfo = () => api.get(`auth/user-info`);
 
 // 토큰 재발급
-export const reissueToken = () => api.post(`aut/reissue`, {}, { withCredentials: true });
+export const reissueToken = () => api.post(`auth/reissue`, {}, { withCredentials: true });
 
 // 게시글 공유
 // export const shareNote = (userId: number, document:number) =>
