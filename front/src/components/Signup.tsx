@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-
+import axios from "axios";
 import Input from "./ui/Input";
 import Label from "./ui/Label";
 
@@ -29,7 +29,7 @@ export default function Signup() {
   const handleEmailChange = (e: any) => setEmail(e.target.value);
   const handlePasswordChange = (e: any) => setPassword(e.target.value);
   const handlePassword2Change = (e: any) => setPassword2(e.target.value);
-  const [file, setFile] = useState(null);
+  const [file, setFile] = useState<any | null>(null);
 
   const { signup } = useSignup();
   const imgRef = useRef<HTMLInputElement>(null);
@@ -43,16 +43,41 @@ export default function Signup() {
       return;
     }
 
-    const success = await signup(email, password, nickName, profileImage);
+    // axios.post()
+    console.log(file);
+    // const success = await signup(email, password, nickName, file);
+    const formData = new FormData();
+    formData.append("email", email);
+    formData.append("password", password);
+    formData.append("nickName", nickName);
+    formData.append("profileImage", file);
 
-    if (success === "success") {
-      // 회원가입 성공 처리
-      message.success("회원가입에 성공했습니다. 로그인 후 사이트 이용해 주세요.");
-      router.push("/signin");
-    } else {
-      console.log("에러");
-      message.error(success);
+    try {
+      const response = await axios.post("https://k9e101.p.ssafy.io/api/auth/signup", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      if (response.status === 200) {
+        message.success("회원가입에 성공했습니다. 로그인 후 사이트 이용해 주세요.");
+        router.push("/signin");
+      } else {
+        console.log("에러");
+        message.error("회원가입에 실패했습니다.");
+      }
+    } catch (err) {
+      console.error(err);
+      message.error("회원가입에 실패했습니다.");
     }
+
+    // if (success === "success") {
+    //   // 회원가입 성공 처리
+    //   message.success("회원가입에 성공했습니다. 로그인 후 사이트 이용해 주세요.");
+    //   router.push("/signin");
+    // } else {
+    //   console.log("에러");
+    //   message.error(success);
+    // }
   };
   const handleImageChange = (e: any) => {
     setFile(e.target.files[0]);
