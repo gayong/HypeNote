@@ -1,7 +1,6 @@
 package com.surf.auth.JWT.decoder;
 
 import com.surf.auth.JWT.provider.SignKeyProvider;
-import com.surf.auth.auth.dto.UserDto;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;

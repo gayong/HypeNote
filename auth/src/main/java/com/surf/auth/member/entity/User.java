@@ -1,4 +1,4 @@
-package com.surf.auth.auth.entity;
+package com.surf.auth.member.entity;
 
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;

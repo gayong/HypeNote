@@ -1,10 +1,10 @@
 package com.surf.auth.member.handler;
 
-import com.surf.auth.member.dto.UserInfoResponseDto;
+import com.surf.auth.member.dto.response.UserInfoResponseDto;
 import org.springframework.stereotype.Component;
 
 @Component
-public class AccessTokenNotValidationHandler {
+public class FindMemberAccessTokenNotValidationHandler {
 
     public UserInfoResponseDto accessTokenNotValidation () {
 

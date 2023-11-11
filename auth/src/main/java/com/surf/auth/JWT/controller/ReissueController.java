@@ -2,9 +2,7 @@ package com.surf.auth.JWT.controller;
 
 import com.surf.auth.JWT.decoder.TokenDecoder;
 import com.surf.auth.JWT.service.ReissueService;
-import com.surf.auth.auth.dto.TokenDto;
-import com.surf.auth.auth.dto.UserDto;
-import com.surf.auth.auth.entity.User;
+import com.surf.auth.auth.dto.response.TokenDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

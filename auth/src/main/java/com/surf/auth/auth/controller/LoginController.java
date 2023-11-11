@@ -1,19 +1,14 @@
 package com.surf.auth.auth.controller;
 
-import com.surf.auth.JWT.service.AccessTokenIssueService;
-import com.surf.auth.JWT.service.RefreshTokenIssueService;
-import com.surf.auth.auth.dto.AuthenticationResultDto;
-import com.surf.auth.auth.dto.LogInDto;
-import com.surf.auth.auth.dto.TokenDto;
-import com.surf.auth.auth.dto.UserDto;
-import com.surf.auth.auth.entity.User;
+import com.surf.auth.auth.dto.response.AuthenticationResultDto;
+import com.surf.auth.auth.dto.rquest.LogInDto;
+import com.surf.auth.auth.dto.response.TokenDto;
+import com.surf.auth.auth.dto.response.UserDto;
 import com.surf.auth.auth.service.LoginService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;

@@ -1,16 +1,13 @@
-package com.surf.auth.member.dto;
+package com.surf.auth.member.dto.request;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DocumentShareRequestDto {
+public class UserInfoRequestDto {
 
     private int userPk;
-    private String documentId;
 }

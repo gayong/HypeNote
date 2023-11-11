@@ -1,7 +1,7 @@
 package com.surf.auth.member.authenticator;
 
 
-import com.surf.auth.auth.repository.UserRepository;
+import com.surf.auth.member.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

@@ -1,7 +1,7 @@
-package com.surf.auth.JWT.service;
+package com.surf.auth.JWT.issuer;
 
 import com.surf.auth.JWT.provider.TokenProvider;
-import com.surf.auth.auth.dto.UserDto;
+import com.surf.auth.JWT.service.RedisRefreshTokenSaveService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,7 +13,7 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
-public class RefreshTokenIssueService {
+public class RefreshTokenIssuer {
 
     private final TokenProvider tokenProvider;
     private final RedisRefreshTokenSaveService redisRefreshTokenSaveService;

@@ -1,6 +1,5 @@
-package com.surf.auth.auth.dto;
+package com.surf.auth.auth.dto.response;
 
-import com.surf.auth.auth.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

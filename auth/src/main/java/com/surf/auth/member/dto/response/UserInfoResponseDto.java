@@ -1,4 +1,4 @@
-package com.surf.auth.member.dto;
+package com.surf.auth.member.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,9 +1,9 @@
 package com.surf.auth.auth.service;
 
-import com.surf.auth.auth.S3.ProfileImageService;
-import com.surf.auth.auth.dto.SignUpDto;
-import com.surf.auth.auth.entity.User;
-import com.surf.auth.auth.repository.UserRepository;
+import com.surf.auth.auth.S3.ProfileImageHandler;
+import com.surf.auth.auth.dto.rquest.SignUpDto;
+import com.surf.auth.member.entity.User;
+import com.surf.auth.member.repository.UserRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +23,7 @@ public class SignUpService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder bCryptPasswordEncoder;
-    private final ProfileImageService profileImageService;
+    private final ProfileImageHandler profileImageHandler;
 
     public ResponseEntity<String> saveUser(@Valid SignUpDto signupInfo) throws IOException {
 
@@ -45,7 +45,7 @@ public class SignUpService {
                 .password(bCryptPasswordEncoder.encode(signupInfo.getPassword()))
                 .nickName(signupInfo.getNickName())
                 .role("ROLE_USER")
-                .profileImage(profileImageService.saveFile(signupInfo.getProfileImage()))
+                .profileImage(profileImageHandler.saveFile(signupInfo.getProfileImage()))
                 .documentsRoots(documentsRoots)
                 .build());
         return ResponseEntity.status(HttpStatus.OK).body("정상적인 가입이 되었습니다.");

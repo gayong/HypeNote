@@ -1,8 +1,8 @@
-package com.surf.auth.auth.controller;
+package com.surf.auth.member.controller;
 
 
-import com.surf.auth.auth.dto.RootDto;
-import com.surf.auth.auth.service.RootSaveService;
+import com.surf.auth.auth.dto.rquest.RootDto;
+import com.surf.auth.member.service.UserRootDocumentIdSaveService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -14,15 +14,15 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/api/auth")
-public class RootSaveController {
+public class UserRootDocumentIdSaveController {
 
-    private final RootSaveService rootSaveService;
+    private final UserRootDocumentIdSaveService userRootDocumentIdSaveService;
 
     @PutMapping("/root-save")
     public HttpStatus LogIn(@RequestBody RootDto rootDto) {
         
         log.info("컨트롤러");
 
-        return rootSaveService.rootSaveService(rootDto);
+        return userRootDocumentIdSaveService.rootSaveService(rootDto);
     }
 }

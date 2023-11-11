@@ -1,13 +1,11 @@
 package com.surf.auth.member.service;
 
-import com.surf.auth.auth.entity.User;
-import com.surf.auth.auth.repository.UserRepository;
-import com.surf.auth.member.dto.UserInfoResponseDto;
+import com.surf.auth.member.entity.User;
+import com.surf.auth.member.repository.UserRepository;
+import com.surf.auth.member.dto.response.UserInfoResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 
 

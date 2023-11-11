@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @RequiredArgsConstructor
 @Service
-public class ProfileImageService {
+public class ProfileImageHandler {
 
     private final AmazonS3 amazonS3;
 

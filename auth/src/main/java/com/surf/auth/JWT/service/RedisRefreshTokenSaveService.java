@@ -1,7 +1,5 @@
 package com.surf.auth.JWT.service;
 
-import com.surf.auth.auth.dto.UserDto;
-import com.surf.auth.auth.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;

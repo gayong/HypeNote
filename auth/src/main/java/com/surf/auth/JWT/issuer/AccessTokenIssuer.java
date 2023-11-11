@@ -1,8 +1,6 @@
-package com.surf.auth.JWT.service;
+package com.surf.auth.JWT.issuer;
 
 import com.surf.auth.JWT.provider.TokenProvider;
-import com.surf.auth.auth.dto.UserDto;
-import com.surf.auth.auth.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -12,7 +10,7 @@ import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
-public class AccessTokenIssueService {
+public class AccessTokenIssuer {
 
     private final TokenProvider tokenProvider;
 

@@ -1,6 +1,6 @@
 package com.surf.auth.auth.controller;
 
-import com.surf.auth.auth.dto.SignUpDto;
+import com.surf.auth.auth.dto.rquest.SignUpDto;
 import com.surf.auth.auth.service.SignUpService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;

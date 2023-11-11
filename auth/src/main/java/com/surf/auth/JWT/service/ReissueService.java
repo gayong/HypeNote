@@ -1,7 +1,7 @@
 package com.surf.auth.JWT.service;
 
-import com.surf.auth.auth.dto.TokenDto;
-import com.surf.auth.auth.dto.UserDto;
+import com.surf.auth.JWT.issuer.AccessTokenIssuer;
+import com.surf.auth.auth.dto.response.TokenDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -12,7 +12,7 @@ import java.util.Objects;
 public class ReissueService {
 
     private final StringRedisTemplate redisTemplate;
-    private final AccessTokenIssueService accessTokenIssueService;
+    private final AccessTokenIssuer accessTokenIssuer;
 
     public String findRefreshTokenByUserEmail(String email) {
 
@@ -27,7 +27,7 @@ public class ReissueService {
 
         TokenDto tokenIssueResult = new TokenDto();
 
-        tokenIssueResult.setAccessToken(accessTokenIssueService.accessTokenIssue(email));
+        tokenIssueResult.setAccessToken(accessTokenIssuer.accessTokenIssue(email));
         tokenIssueResult.setMessage("Access Token이 정상 발급 되었습니다.");
 
         return tokenIssueResult;

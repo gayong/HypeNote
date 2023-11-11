@@ -5,8 +5,8 @@ import com.surf.auth.JWT.authenticator.AccessTokenAuthenticator;
 import com.surf.auth.JWT.decoder.TokenDecoder;
 import com.surf.auth.member.authenticator.UserEmailAuthenticator;
 import com.surf.auth.member.authenticator.UserNickNameAuthenticator;
-import com.surf.auth.member.dto.UserInfoResponseDto;
-import com.surf.auth.member.handler.AccessTokenNotValidationHandler;
+import com.surf.auth.member.dto.response.UserInfoResponseDto;
+import com.surf.auth.member.handler.FindMemberAccessTokenNotValidationHandler;
 import com.surf.auth.member.handler.UserNotFoundExceptionHandler;
 import com.surf.auth.member.service.UserInformationService;
 import lombok.RequiredArgsConstructor;
@@ -28,14 +28,12 @@ public class UserInformationController {
     private final TokenDecoder tokenDecoder;
     private final AccessTokenAuthenticator accessTokenAuthenticator;
     private final UserNotFoundExceptionHandler userNotFoundExceptionHandler;
-    private final AccessTokenNotValidationHandler accessTokenNotValidationHandler;
+    private final FindMemberAccessTokenNotValidationHandler findMemberAccessTokenNotValidationHandler;
 
     @GetMapping ("/user-info")
     private ResponseEntity<UserInfoResponseDto> userInformationController (@RequestHeader("Authorization") String accessTokenHeader) {
 
         String accessToken = accessTokenHeader.substring(7);
-
-        Map<String, String> request = new HashMap<>();
 
         if (accessTokenAuthenticator.authenticateToken(accessToken)) {
 
@@ -50,7 +48,7 @@ public class UserInformationController {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(userNotFoundExceptionHandler.userNotFound());
             }
         } else {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(accessTokenNotValidationHandler.accessTokenNotValidation());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(findMemberAccessTokenNotValidationHandler.accessTokenNotValidation());
         }
 
 

@@ -1,7 +1,7 @@
 package com.surf.auth.member.controller;
 
 import com.surf.auth.member.authenticator.UserPkAuthenticator;
-import com.surf.auth.member.dto.DocumentShareRequestDto;
+import com.surf.auth.member.dto.request.DocumentShareRequestDto;
 import com.surf.auth.member.service.DocumentShareService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

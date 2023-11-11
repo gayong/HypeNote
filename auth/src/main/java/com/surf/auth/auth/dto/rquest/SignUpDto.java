@@ -1,4 +1,4 @@
-package com.surf.auth.auth.dto;
+package com.surf.auth.auth.dto.rquest;
 
 import lombok.Getter;
 import lombok.Setter;
