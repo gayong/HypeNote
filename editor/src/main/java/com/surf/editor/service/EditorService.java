@@ -56,14 +56,13 @@ public class EditorService {
             //부모 추가
             Editor editor = Editor.editorCreate(userId);
             editor.parentRelation(editorChildCreateRequestDto.getEditorId());
+            savedEditor = editorRepository.save(editor);
 
             //자식 추가
             Editor findParentEditor = editorRepository.findById(editorChildCreateRequestDto.getEditorId())
                     .orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
             findParentEditor.childRelation(editor.getId());
-
             editorRepository.save(findParentEditor);
-            savedEditor = editorRepository.save(editor);
 
         }catch (Exception e){
             throw new BaseException(ErrorCode.FAIL_CREATE_EDITOR);
