@@ -1,7 +1,8 @@
 export interface NoteType {
   title: string;
-  content: string;
-  id: string;
+  contents: string;
+  url: string;
+  thumbnail: string;
 }
 
 export interface NotesType {
@@ -9,10 +10,12 @@ export interface NotesType {
 }
 
 export interface SearchType {
-  link: string;
-  pagemap: PageMapType;
-  snippet: string;
+  url: string;
+  // pagemap: PageMapType;
   title: string;
+  datetime: string;
+  contents: string;
+  thumbnail: string;
 }
 
 export interface PageMapType {
