@@ -126,7 +126,7 @@ public class EditorService {
         if(childIds !=null && !childIds.isEmpty()){
             for (String childId : childIds) {
                 Editor childEditor = editorRepository.findById(childId).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
-                convertEditorToTreeDto(childEditor);
+                deleteChildEditor(childEditor);
                 editorRepository.delete(childEditor);
             }
         }
