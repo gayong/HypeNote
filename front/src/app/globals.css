@@ -99,6 +99,10 @@ body {
   background-color: #a5b3e2;
 }
 
+:where(.css-2i2tap).ant-input-search > .ant-input-group > .ant-input-group-addon:last-child .ant-input-search-button {
+  background-color: #a5b3e2;
+}
+
 /* 검색에 사용되는 인풋, placeholder */
 /* :where(.css-dev-only-do-not-override-2i2tap).ant-input {
   font-family: "preRg";
