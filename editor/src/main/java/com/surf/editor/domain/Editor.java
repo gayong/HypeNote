@@ -71,9 +71,9 @@ public class Editor {
         parentId = "root";
     }
     public void childDelete(String child){
-//        if (childId != null && childId.contains(child)) {
+        if (childId != null && childId.contains(child)) {
             childId.remove(child);
-//        }
+        }
     }
 
     public void writerPermissionAdd(int userId){
@@ -86,5 +86,9 @@ public class Editor {
 
     public void sharedUserAdd(int userId){
         this.getSharedUser().add(userId);
+    }
+
+    public void sharedUserSub(int userId){
+        this.getSharedUser().remove(userId);
     }
 }

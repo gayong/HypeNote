@@ -11,6 +11,7 @@ public class EditorListResponseDto {
     private String id;
     private String title;
     private String parentId;
+    private int owner;
     private List<EditorListResponseDto> children;
 
     public EditorListResponseDto(){

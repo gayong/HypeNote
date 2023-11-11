@@ -8,6 +8,7 @@ import com.surf.editor.dto.request.*;
 import com.surf.editor.dto.response.*;
 import com.surf.editor.feign.client.MemberOpenFeign;
 import com.surf.editor.feign.client.MemberShareOpenFeign;
+import com.surf.editor.feign.client.MemberUnShareOpenFeign;
 import com.surf.editor.feign.dto.MemberEditorSaveRequestDto;
 import com.surf.editor.feign.dto.MemberShareRequestDto;
 import com.surf.editor.repository.EditorRepository;
@@ -24,6 +25,7 @@ public class EditorService {
     private final EditorRepository editorRepository;
     private final MemberOpenFeign memberOpenFeign;
     private final MemberShareOpenFeign memberShareOpenFeign;
+    private final MemberUnShareOpenFeign memberUnShareOpenFeign;
 
 
     @Transactional
@@ -46,6 +48,33 @@ public class EditorService {
                 .build();
 
         return editorCreateResponseDto;
+    }
+
+    public EditorCreateResponseDto editorChildCreate(int userId, EditorChildCreateRequestDto editorChildCreateRequestDto) {
+        Editor savedEditor = new Editor();
+        try{
+            //부모 추가
+            Editor editor = Editor.editorCreate(userId);
+            editor.parentRelation(editorChildCreateRequestDto.getEditorId());
+
+            //자식 추가
+            Editor findParentEditor = editorRepository.findById(editorChildCreateRequestDto.getEditorId())
+                    .orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
+            findParentEditor.childRelation(editor.getId());
+
+            editorRepository.save(findParentEditor);
+            savedEditor = editorRepository.save(editor);
+
+        }catch (Exception e){
+            throw new BaseException(ErrorCode.FAIL_CREATE_EDITOR);
+        }
+
+        EditorCreateResponseDto editorCreateResponseDto = EditorCreateResponseDto.builder()
+                .id(savedEditor.getId())
+                .build();
+
+        return editorCreateResponseDto;
+
     }
 
     private void memberCreateFeign(int userId, Editor savedEditor) {
@@ -210,6 +239,7 @@ public class EditorService {
         editorListResponseDto.setId(editor.getId());
         editorListResponseDto.setTitle(editor.getTitle());
         editorListResponseDto.setParentId(editor.getParentId());
+        editorListResponseDto.setOwner(editor.getUserId());
 
         List<String> childIds = editor.getChildId();
         if(childIds !=null && !childIds.isEmpty()){
@@ -273,30 +303,64 @@ public class EditorService {
         String editorId = editorShareRequestDto.getEditorId();
         Editor editor = editorRepository.findById(editorId).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
 
-        for (int userId : editorShareRequestDto.getUserList()) {
-            if(!editor.getSharedUser().contains(userId)){
-                editor.sharedUserAdd(userId);
-            }
-        }
-
-        editorRepository.save(editor);
+        editorShareChild(editor,editorShareRequestDto.getUserList(),0);
 
         // 2. member에게 feign 보냄
-        editorShareFeign(editorShareRequestDto);
+        editorShareFeign(editorShareRequestDto.getEditorId(),editorShareRequestDto.getUserList(),0);
 
     }
 
+    public void editorUnshare(EditorUnShareRequestDto editorUnShareRequestDto) {
+        // 1. 공유 인원 해제
+        Editor editor = editorRepository.findById(editorUnShareRequestDto.getEditorId()).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
 
-    private void editorShareFeign(EditorShareRequestDto editorShareRequestDto) {
+        editorShareChild(editor,editorUnShareRequestDto.getUserList(),1);
+
+        // 2. member에게 feign 보냄
+        editorShareFeign(editorUnShareRequestDto.getEditorId(), editorUnShareRequestDto.getUserList(),1);
+    }
+
+    private void editorShareFeign(String editorId, List<Integer> userList, int type) {
         try{
             MemberShareRequestDto memberShareRequestDto = MemberShareRequestDto.builder()
-                    .editorId(editorShareRequestDto.getEditorId())
-                    .userPk(editorShareRequestDto.getUserId())
+                    .editorId(editorId)
+                    .userPkList(userList)
                     .build();
 
-            memberShareOpenFeign.MemberShare(memberShareRequestDto);
+            if(type==0){
+                memberShareOpenFeign.MemberShare(memberShareRequestDto);
+            }
+            else{
+                memberUnShareOpenFeign.MemberUnShare(memberShareRequestDto);
+            }
+
         }catch (Exception e){
             throw new BaseException(ErrorCode.MEMBER_SAVE_FAIL);
+        }
+    }
+
+
+    private void editorShareChild(Editor editor, List<Integer> userList,int type) {
+        for (int userId : userList) {
+            if(!editor.getSharedUser().contains(userId)){
+                if(type==0){ //0이면 추가
+                    editor.sharedUserAdd(userId);
+                }
+                else{ //1이면 삭제
+                    editor.sharedUserSub(userId);
+                }
+
+            }
+        }
+        editorRepository.save(editor);
+
+        List<String> childIds = editor.getChildId();
+        if(childIds != null && !childIds.isEmpty()){
+
+            for (String childId : childIds) {
+                Editor childEditor = editorRepository.findById(childId).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
+                editorShareChild(childEditor,userList,type);
+            }
         }
     }
 }
