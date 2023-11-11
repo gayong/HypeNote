@@ -21,20 +21,20 @@ public class GlobalExceptionHandler{
         return handleException(e, e.getErrorCode());
     }
 
-//    @ExceptionHandler(IllegalArgumentException.class)
-//    public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException e){
-//        return handleException(e,ErrorCode.ILLEGAL_ARGUMENT_EXCEPTION);
-//    }
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorResponse> handleIllegalArgumentException(IllegalArgumentException e){
+        return handleException(e,ErrorCode.ILLEGAL_ARGUMENT_EXCEPTION);
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e){
         return handleException(e,ErrorCode.METHOD_ARGUMENT_NOT_VALID_EXCEPTION);
     }
 
-//    @ExceptionHandler(Exception.class)
-//    public ResponseEntity<ErrorResponse> handleServerException(Exception e){
-//        return handleException(e,ErrorCode.INTERNAL_SERVER_ERROR);
-//    }
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorResponse> handleServerException(Exception e){
+        return handleException(e,ErrorCode.INTERNAL_SERVER_ERROR);
+    }
 
     private ResponseEntity<ErrorResponse> handleException(Exception e, ErrorCode errorCode){
         ErrorResponse errorResponse = ErrorResponse.of(errorCode);
