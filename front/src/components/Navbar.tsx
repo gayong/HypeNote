@@ -4,138 +4,54 @@ import LogoImg from "../../public/assets/logo.png";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DarkModeBtn from "./darkmode/DarkmodeBtn";
 import Category from "./category/Category";
 import { useAtom } from "jotai";
 import { userAtom } from "@/store/authAtom";
 import MySearch from "@/components/MySearch";
+import useNoteList from "@/hooks/useNoteList";
+import { useRouter } from "next/navigation";
+import useCreateNote from "@/hooks/useCreateNote";
+
+type childProps = { id: string; title: string; parentId: string; children: childProps[] };
 
 export default function Navbar() {
+  const userId = 1;
+  const { createDocument } = useCreateNote();
   const [user] = useAtom(userAtom);
   const pathname = usePathname();
-  const treeNote = [
-    {
-      Id: "root",
-      title: "1st root",
-      parentId: "",
-      children: [
-        {
-          Id: "User",
-          title: "role1",
-          parentId: "root",
-          children: [
-            {
-              Id: "subUser1",
-              title: "role11",
-              parentId: "role1",
-              children: [],
-            },
-            {
-              Id: "subUser2",
-              title: "role12",
-              parentId: "role1",
-              children: [
-                {
-                  Id: "subUser2-1",
-                  title: "role121",
-                  parentId: "role12",
-                  children: [
-                    {
-                      Id: "subUser2-1-1",
-                      title: "role1211",
-                      parentId: "role121",
-                      children: [],
-                    },
-                    {
-                      Id: "subUser2-1-2",
-                      title: "role1212",
-                      parentId: "role121",
-                      children: [],
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
-        {
-          Id: "Admin",
-          title: "role2",
-          parentId: "root",
-          children: [],
-        },
-        {
-          Id: "Guest",
-          title: "role3",
-          parentId: "root",
-          children: [],
-        },
-      ],
-    },
-    {
-      Id: "root",
-      title: "2nd root",
-      parentId: "",
-      children: [
-        {
-          Id: "User",
-          title: "role1",
-          parentId: "root",
-          children: [
-            {
-              Id: "subUser1",
-              title: "role11",
-              parentId: "role1",
-              children: [],
-            },
-            {
-              Id: "subUser2",
-              title: "role12",
-              parentId: "role1",
-              children: [
-                {
-                  Id: "subUser2-1",
-                  title: "role121",
-                  parentId: "role12",
-                  children: [
-                    {
-                      Id: "subUser2-1-1",
-                      title: "role1211",
-                      parentId: "role121",
-                      children: [],
-                    },
-                    {
-                      Id: "subUser2-1-2",
-                      title: "role1212",
-                      parentId: "role121",
-                      children: [],
-                    },
-                  ],
-                },
-              ],
-            },
-          ],
-        },
-        {
-          Id: "Admin",
-          title: "role2",
-          parentId: "root",
-          children: [],
-        },
-        {
-          Id: "Guest",
-          title: "role3",
-          parentId: "root",
-          children: [],
-        },
-      ],
-    },
-  ];
+  const { noteList } = useNoteList();
+  const router = useRouter();
 
-  if (pathname === "/signin" || pathname == "/signup" || pathname == "/intro") {
-    return null;
-  }
+  const [treeNote, setTreeNote] = useState<childProps[]>([]);
+  console.log(treeNote);
+  // if (pathname === "/signin" || pathname == "/signup" || pathname == "/intro") {
+  //   return null;
+  // }
+
+  const onClickHandler = async (event: React.MouseEvent) => {
+    event.stopPropagation();
+
+    try {
+      const documentId = await createDocument(userId);
+
+      router.push(`/editor/${documentId}`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const treeList = await noteList(["654f61ed89670a432b9c6b78"]);
+        setTreeNote(treeList);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
 
   return (
     <>
@@ -181,16 +97,19 @@ export default function Navbar() {
           </span>
         </div>
         {/* 제일큰 노트 map으로 호출 */}
-        {treeNote.map((element) => {
-          return element.parentId === "" ? <Category childProps={element} value={1} key={element.Id} /> : null;
-        })}
+        {treeNote &&
+          treeNote.map((element) => {
+            return element.parentId === "root" ? <Category childProps={element} value={1} key={element.id} /> : null;
+          })}
 
         <div
           className="p-1.5 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-line_primary hover:bg-opacity-50 dark:hover:bg-line_primary dark:hover:bg-opacity-50"
           // onclick="dropdown()"
         >
           <div className="flex justify-between w-full items-center">
-            <span className="text-[15px] text-white">+ 페이지 추가</span>
+            <span className="text-[15px] text-white" onClick={(event) => onClickHandler(event)}>
+              + 페이지 추가
+            </span>
           </div>
         </div>
         <br />
@@ -201,9 +120,10 @@ export default function Navbar() {
           </span>
         </div>
         {/* 공유받은 페이지 map으로 호출 */}
-        {treeNote.map((element) => {
-          return element.parentId === "" ? <Category childProps={element} value={2} key={element.Id} /> : null;
-        })}
+        {treeNote &&
+          treeNote.map((element) => {
+            return element.parentId === "root" ? <Category childProps={element} value={2} key={element.id} /> : null;
+          })}
         <Link href="/signin">
           <h1 className="inline underline text-font_primary">signIn / </h1>
         </Link>
