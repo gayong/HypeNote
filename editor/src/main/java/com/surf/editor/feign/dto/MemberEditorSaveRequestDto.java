@@ -8,6 +8,6 @@ import java.util.List;
 @Getter
 @Builder(toBuilder = true)
 public class MemberEditorSaveRequestDto {
-    private int userId;
+    private int userPk;
     private String root;
 }

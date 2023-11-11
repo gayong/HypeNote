@@ -9,5 +9,5 @@ import java.util.List;
 @Builder(toBuilder = true)
 public class MemberShareRequestDto {
     private List<Integer> userPkList;
-    private String editorId;
+    private String documentId;
 }

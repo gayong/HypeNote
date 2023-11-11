@@ -79,7 +79,7 @@ public class EditorService {
     private void memberCreateFeign(int userId, Editor savedEditor) {
         try{
             MemberEditorSaveRequestDto memberEditorSaveRequestDto = MemberEditorSaveRequestDto.builder()
-                    .userId(userId)
+                    .userPk(userId)
                     .root(savedEditor.getId()) //추가 필요
                     .build();
 
@@ -322,7 +322,7 @@ public class EditorService {
     private void editorShareFeign(String editorId, List<Integer> userList, int type) {
         try{
             MemberShareRequestDto memberShareRequestDto = MemberShareRequestDto.builder()
-                    .editorId(editorId)
+                    .documentId(editorId)
                     .userPkList(userList)
                     .build();
 
@@ -341,14 +341,14 @@ public class EditorService {
 
     private void editorShareChild(Editor editor, List<Integer> userList,int type) {
         for (int userId : userList) {
-            if(!editor.getSharedUser().contains(userId)){
-                if(type==0){ //0이면 추가
+            if(type==0){ //0이면 추가
+                if(!editor.getSharedUser().contains(userId)){
                     editor.sharedUserAdd(userId);
                 }
-                else{ //1이면 삭제
+            }else{ //1이면 삭제
+                if(editor.getSharedUser().contains(userId)) {
                     editor.sharedUserSub(userId);
                 }
-
             }
         }
         editorRepository.save(editor);
