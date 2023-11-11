@@ -77,18 +77,18 @@ public class Editor {
     }
 
     public void writerPermissionAdd(int userId){
-        this.writePermission.add(userId);
+        this.writePermission.add(Integer.valueOf(userId));
     }
 
     public void writerPermissionSub(int userId){
-        this.writePermission.remove(userId);
+        this.writePermission.remove(Integer.valueOf(userId));
     }
 
     public void sharedUserAdd(int userId){
-        this.getSharedUser().add(userId);
+        this.getSharedUser().add(Integer.valueOf(userId));
     }
 
     public void sharedUserSub(int userId){
-        this.getSharedUser().remove(userId);
+        this.getSharedUser().remove(Integer.valueOf(userId));
     }
 }
