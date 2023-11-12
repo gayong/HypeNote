@@ -38,7 +38,7 @@ api.interceptors.response.use(
     // 응답 데이터가 있는 작업 수행
     return response;
   },
-  async function (error) {
+  function (error) {
     // 2xx 외의 범위에 있는 상태 코드는 이 함수를 트리거 합니다.
     // 응답 오류가 있는 작업 수행
 
@@ -54,14 +54,10 @@ api.interceptors.response.use(
       // reissue();
       try {
         console.log(`Bearer ${accessToken}`);
-        const res = await axios.post(
-          `${window.location.origin}/api/auth/reissue`,
-          {},
-          {
-            // headers: { Authorization: `Bearer ${accessToken}` },
-            withCredentials: true,
-          }
-        );
+        const res = axios.get(`${window.location.origin}/api/auth/reissue`, {
+          // headers: { Authorization: `Bearer ${accessToken}` },
+          withCredentials: true,
+        });
         console.log(res);
       } catch (error) {
         console.log(error);
