@@ -250,6 +250,7 @@ public class EditorService {
 
         editorListResponseDto.setId(editor.getId());
         editorListResponseDto.setTitle(editor.getTitle());
+        editorListResponseDto.setContent(editor.getContent());
         editorListResponseDto.setParentId(editor.getParentId());
         editorListResponseDto.setOwner(editor.getUserId());
 
