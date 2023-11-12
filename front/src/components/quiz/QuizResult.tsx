@@ -69,9 +69,9 @@ export default function QuizResult() {
   return (
     <section className="bg-white dark:bg-gray-900 w-full max-h-full">
       <span
-        className="hover:text-hover_primary text-lg font-PreBd font-normal text-dark_background dark:text-font_primary absolute left-0 p-1 rounded-md outline outline-2 outline-dark_background dark:outline-font_primary "
+        className="hover:text-hover_primary text-lg font-PreBd font-normal text-dark_background dark:text-font_primary absolute left-56 p-1 rounded-md outline outline-2 outline-dark_background dark:outline-font_primary "
         onClick={() => outRoom()}>
-        {"<< 나가기"}
+        {"< 나가기"}
       </span>
       <div className="-mt-7 flex justify-center">
         <Radio.Group defaultValue="rank" buttonStyle="solid">
@@ -202,7 +202,7 @@ export default function QuizResult() {
                               className="rounded-full object-cover h-[100px] w-[100px]"></Image>
                           </div>
                           {/* <div className="mb-2 ml-2 mr-2 rounded-full w-16 h-16 bg-cover bg-[url('/assets/profile.jpg')]" /> */}
-                          <div className="flex justify-center">{item.userName}</div>
+                          <div className="flex justify-center dark:text-dark_primary">{item.userName}</div>
                           <p className="font-PreBd text-sm text-[#ffd51c] flex justify-center">
                             {item.correct} / {item.total}
                           </p>
@@ -227,7 +227,7 @@ export default function QuizResult() {
                               className="rounded-full object-cover h-[80px] w-[80px]"></Image>
                           </div>
                           {/* <div className="mb-2 ml-2 mr-2 rounded-full w-16 h-16 bg-cover bg-[url('/assets/profile.jpg')]" /> */}
-                          <div className="flex justify-center">{item.userName}</div>
+                          <div className="flex justify-center dark:text-dark_primary">{item.userName}</div>
                           <p className="font-PreBd text-sm text-[#ffd51c] flex justify-center">
                             {item.correct} / {item.total}
                           </p>
@@ -272,7 +272,7 @@ export default function QuizResult() {
                     {user.ranking}
                   </h1>
                   {/* <div className="mr-2 rounded-full w-10 h-10 bg-cover bg-[url('/assets/profile.jpg')]" /> */}
-                  <div className="h-[100px] w-[10px] flex items-center justify-center">
+                  <div className="h-[100px] w-[10px] flex items-center justify-center dark:text-dark_primary">
                     <Image
                       src={user.userImg}
                       alt="프로필 이미지"

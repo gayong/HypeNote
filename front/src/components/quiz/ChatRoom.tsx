@@ -53,7 +53,7 @@ export default function ChatRoom(props: QuizRoomProps) {
     <>
       <div
         style={{ height: `${props.height}vh` }}
-        className="flex flex-col flex-grow w-full rounded-lg overflow-hidden">
+        className="flex flex-col flex-grow w-full rounded-lg overflow-hidden bg-font_primary">
         <div className="flex flex-col flex-grow h-0 p-4 overflow-auto min-h-min">
           {chatMessages.map((chat, index) =>
             chat.userPk === user.userPk ? <MyChat key={index} {...chat} /> : <YourChat key={index} {...chat} />
@@ -63,7 +63,7 @@ export default function ChatRoom(props: QuizRoomProps) {
 
         <div className="flex justify-between items-center p-2">
           <Input
-            className="flex-grow mr-2 dark:bg-dark_primary dark:text-font_primary"
+            className="flex-grow mr-2 dark:bg-dark_primary dark:text-font_primary placeholder-font_primary"
             type="text"
             placeholder="메세지를 입력하시오."
             value={message}

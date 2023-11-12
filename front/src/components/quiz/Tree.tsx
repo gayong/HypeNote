@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState, useEffect } from "react";
 import { TreeSelect, Select, Button, message, Steps, theme } from "antd";
 import { MyDocumentsAtom } from "@/store/documentsAtom";
