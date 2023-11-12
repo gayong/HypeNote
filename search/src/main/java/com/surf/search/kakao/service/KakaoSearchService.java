@@ -35,7 +35,7 @@ public class KakaoSearchService {
                     .uri(uriBuilder -> uriBuilder.path("")
                             .queryParam("query",prompt)
                             .queryParam("sort","accuracy")
-                            .queryParam("size",50)
+                            .queryParam("size",30)
                             .build()
                     )
                     .retrieve()
