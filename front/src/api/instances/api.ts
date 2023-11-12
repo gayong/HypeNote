@@ -55,7 +55,7 @@ api.interceptors.response.use(
       try {
         console.log(`Bearer ${accessToken}`);
         const res = await axios.post(
-          `${window.location.origin}/api/auth/refresh`,
+          `${window.location.origin}/api/auth/reissue`,
           {},
           {
             headers: { Authorization: `Bearer ${accessToken}` },
