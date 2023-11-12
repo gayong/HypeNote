@@ -3,43 +3,100 @@
 import React, { useMemo, useEffect, useState } from "react";
 import { TreeSelect, Select, Button, message, Steps, theme } from "antd";
 import Input from "../ui/Input";
-import type { SelectProps, RadioChangeEvent } from "antd";
 import { useAtom } from "jotai";
 import { isSoloAtom } from "../../store/isSolo";
 import { useCreateRoom } from "@/hooks/useCreateRoom";
-// import { useMutation } from "react-query";
 import Loading from "@/app/loading";
 import { useRouter } from "next/navigation";
 import { userAtom } from "@/store/authAtom";
+import { useNoteList } from "@/hooks/useNoteList";
+import { DocumentsType } from "@/types/ediotr";
+import { MyDocumentsAtom } from "@/store/documentsAtom";
 
 const handleChange = (value: string | string[]) => {
   console.log(`Selected: ${value}`);
 };
 
+interface TreeType {
+  title: string;
+  value: string;
+  key: string;
+  children?: TreeType[];
+}
+
+interface ClickType {
+  disabled: undefined;
+  halfChecked: undefined;
+  label: string;
+  value: string;
+}
+
 export default function QuizMaker() {
   const { token } = theme.useToken();
   const [current, setCurrent] = useState(0);
-  const [value, setValue] = useState(["0-0-0"]);
-  const { SHOW_PARENT } = TreeSelect;
+  const { SHOW_PARENT, SHOW_ALL } = TreeSelect;
   const [isSolo] = useAtom(isSoloAtom);
   const { createRoomMutation, inviteUserInfo, inviteUserMutation, roomInfo, roomId } = useCreateRoom();
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
+  const [treeData, setTreeData] = useState<TreeType[]>([]);
   const handleTitleChange = (e: any) => setTitle(e.target.value);
   const handleContentChange = (e: any) => setContent(e.target.value);
+
   const [user] = useAtom(userAtom);
+  const [myDocuments] = useAtom(MyDocumentsAtom);
+
+  const [documentsValue, setDocumentsValue] = useState<Array<ClickType>>([]);
+  const [treeProps, setTreeProps] = useState<object>();
 
   const router = useRouter();
 
   useEffect(() => {}, [isSolo]);
 
+  useEffect(() => {
+    console.log(treeData);
+
+    const tProps = {
+      treeData,
+      // value: value,
+      onChange: documentsOnChange,
+      treeCheckable: true,
+      treeCheckStrictly: true,
+      showCheckedStrategy: SHOW_ALL,
+      placeholder: "페이지를 선택해주세요",
+      style: {
+        width: "300px",
+        marginTop: "10px",
+      },
+    };
+    setTreeProps(tProps);
+  }, [treeData]);
+
+  useEffect(() => {
+    // 재귀 함수를 이용한 DocumentsType에서 TreeType으로의 변환
+    const convertToTreeType = (documents: DocumentsType[]): TreeType[] => {
+      return documents.map((item) => ({
+        title: item.title,
+        value: item.id,
+        key: item.id,
+        children: item.children ? convertToTreeType(item.children) : [], // children이 있으면 재귀 호출
+      }));
+    };
+
+    // 변환 과정
+    if (myDocuments && myDocuments.length > 0) {
+      const newTreeData: TreeType[] = convertToTreeType(myDocuments);
+      setTreeData(newTreeData.filter((item) => myDocuments.find((i) => i.id === item.key)?.parentId === "root"));
+    }
+  }, [myDocuments]);
+
   // 퀴즈 방 만들기 STEP 1
   const handleCreateRoom = () => {
     createRoomMutation.mutate({
       roomName: title,
-      pages: ["654f593c89670a432b9c6b72", "654f594e89670a432b9c6b73"],
+      pages: documentsValue.map((doc) => doc.value),
       sharePages: ["654f593c89670a432b9c6b72"],
       quizCnt: 1,
       content: content,
@@ -79,53 +136,27 @@ export default function QuizMaker() {
     }
   }, [roomId]);
 
-  const treeData = [
-    {
-      title: "MY CS BOOK",
-      value: "0-0",
-      key: "0-0",
-      children: [
-        {
-          title: "네트워크",
-          value: "0-0-0",
-          key: "0-0-0",
-        },
-      ],
-    },
-    {
-      title: "1주차",
-      value: "0-1",
-      key: "0-1",
-      children: [
-        {
-          title: "네트워크",
-          value: "0-1-0",
-          key: "0-1-0",
-        },
-        {
-          title: "운영체제",
-          value: "0-1-1",
-          key: "0-1-1",
-        },
-        {
-          title: "자료구조",
-          value: "0-1-2",
-          key: "0-1-2",
-        },
-      ],
-    },
-  ];
-
-  const tProps = {
-    treeData,
-    treeCheckable: true,
-    showCheckedStrategy: SHOW_PARENT,
-    placeholder: "페이지를 선택해주세요",
-    style: {
-      width: "300px",
-      marginTop: "10px",
-    },
+  const documentsOnChange = (newDocument: ClickType[]) => {
+    setDocumentsValue(newDocument);
   };
+
+  // useEffect(() => {
+  //   console.log(documentsValue);
+  // }, [documentsValue]);
+
+  // const tProps = {
+  //   treeData,
+  //   // value: value,
+  //   onChange: documentsOnChange,
+  //   treeCheckable: true,
+  //   treeCheckStrictly: true,
+  //   showCheckedStrategy: SHOW_ALL,
+  //   placeholder: "페이지를 선택해주세요",
+  //   style: {
+  //     width: "300px",
+  //     marginTop: "10px",
+  //   },
+  // };
 
   const steps = useMemo(
     () => [
@@ -141,7 +172,9 @@ export default function QuizMaker() {
             <h1 className="dark:text-font_primary" style={{ marginBottom: "60px", padding: 0 }}>
               내 노트, 공유받은 페이지에서 퀴즈로 풀 페이지를 골라주세요.
             </h1>
-            <TreeSelect {...tProps} />
+            {/* {treeData.length > 0 ? <TreeSelect {...tProps} /> : ""} */}
+            {/* {treeProps && <TreeSelect {...treeProps} />} */}
+            {<TreeSelect {...treeProps} />}
           </div>
         ),
       },
