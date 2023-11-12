@@ -16,6 +16,7 @@ import { useRouter } from "next/navigation";
 import { useEditorWebSocket } from "@/context/SocketEditorProvider";
 import ShardeBtn from "./SharedBtn";
 import ToShareBtn from "./ToShareBtn";
+import { Placeholder } from "@tiptap/extension-placeholder";
 
 type WindowWithProseMirror = Window & typeof globalThis & { ProseMirror: any };
 
@@ -31,7 +32,17 @@ function TestEditor({ id }: Props) {
   const [theme, setTheme] = useAtom<any>(themeAtom);
   const [open] = useAtom(isSearchOpen);
   // const val = `<h1 class="_inlineContent_nstdf_297">가나다라 마바사</h1><p class="_inlineContent_nstdf_297">어ㄴ</p><p class="_inlineContent_nstdf_297">ㅁ나이ㅓ리ㅏㅁㄴ어리ㅏㅇㄴ</p><p class="_inlineContent_nstdf_297">ㄴㅁ아ㅣㅓ라ㅣㅇ널</p><p class="_inlineContent_nstdf_297"></p><p class="_inlineContent_nstdf_297">&#x3C;h1 class="_inlineContent_nstdf_297">가나다라 마바사&#x3C;/h1>&#x3C;p class="_inlineContent_nstdf_297">어ㄴ&#x3C;/p>&#x3C;p class="_inlineContent_nstdf_297">ㅁ나이ㅓ리ㅏㅁㄴ어리ㅏㅇㄴ&#x3C;/p>&#x3C;p class="_inlineContent_nstdf_297">ㄴㅁ아ㅣㅓ라ㅣㅇ널&#x3C;/p>&#x3C;p class="_inlineContent_nstdf_297">&#x3C;/p>&#x3C;p class="_inlineContent_nstdf_297">&#x3C;/p></p><p class="_inlineContent_nstdf_297"></p>`;
-
+  const onSave = () => {
+    const title = editor.topLevelBlocks[0].content;
+    const content = editor.domElement.innerHTML;
+    if (title) {
+      try {
+        UpdateNote(id, title, content);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
   useEffect(() => {
     if (stompClient) {
       store.connectStompClient(id, stompClient);
@@ -39,18 +50,10 @@ function TestEditor({ id }: Props) {
 
     // 컴포넌트가 언마운트될 때 실행되는 함수를 반환합니다.
     return () => {
-      if (editor) {
-        editor.blocksToHTML(editor.topLevelBlocks).then((update) => {
-          const title = editor.topLevelBlocks[0].content;
-          if (title && title[0]) {
-            // @ts-ignore
-            UpdateNote(id, title[0].text, update);
-          }
-        });
-      }
       if (stompClient) {
         stompClient.unsubscribe(`/sub/note/${id}`);
       }
+      store.yDoc.destroy();
     };
   }, [id, stompClient]); // editor가 변경될 때마다 이 훅을 실행합니다.
 
@@ -88,9 +91,7 @@ function TestEditor({ id }: Props) {
           // router.push("/404");
         });
     },
-    onEditorContentChange: (editor) => {
-      console.log(editor.topLevelBlocks);
-    },
+    onEditorContentChange: (editor) => {},
     domAttributes: {
       editor: {
         class: styles.editor,
@@ -125,11 +126,11 @@ function TestEditor({ id }: Props) {
   return (
     <>
       <div style={{ width: open ? "calc(100% - 380px)" : "100%" }}>
-        <BlockNoteView editor={editor} theme={theme} />
+        <BlockNoteView editor={editor} theme={theme} onKeyDown={onSave} />
       </div>
       <Search />
       <ShardeBtn />
-      <ToShareBtn />
+      <ToShareBtn id={id} />
     </>
   );
 }
