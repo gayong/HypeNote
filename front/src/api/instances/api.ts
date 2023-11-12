@@ -61,6 +61,12 @@ api.interceptors.response.use(
               withCredentials: true,
             });
             localStorage.setItem("accessToken", res.data.accessToken);
+
+            // 이전 요청 다시 수행
+
+            const originalRequest = error.config;
+            originalRequest.headers["Authorization"] = `Bearer ${res.data.accessToken}`;
+            return api(originalRequest);
           } catch (error) {
             console.log(error);
             return (window.location.href = `https://${window.location.origin}/signin`);
