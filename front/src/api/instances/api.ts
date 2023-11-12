@@ -53,6 +53,7 @@ api.interceptors.response.use(
       // const { reissue } = useReissue();
       // reissue();
       try {
+        console.log(`Bearer ${accessToken}`);
         const res = await axios.post(
           `${window.location.origin}/api/auth/refresh`,
           {},
