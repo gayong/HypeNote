@@ -48,6 +48,7 @@ public class QuizRoomController {
     @PostMapping("/quizroom")
     @Operation(summary = "멤버 탐색")
     public BaseResponse<SearchMemberResponseDto> searchMember(@RequestBody SearchMemberRequestDto SearchMemberRequestDto) {
+//        System.out.println("token = " + token);
         SearchMemberResponseDto result = quizRoomService.createSearchMemberResponseDto(SearchMemberRequestDto);
         return new BaseResponse<>(result);
     }
