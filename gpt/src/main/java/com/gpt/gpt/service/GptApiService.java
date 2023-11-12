@@ -1,5 +1,6 @@
 package com.gpt.gpt.service;
 
+import com.gpt.gpt.dto.GptClientRequestDto;
 import com.gpt.gpt.dto.GptRequestDto;
 import com.gpt.gpt.feign.GptFeignClient;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ public class GptApiService {
     @Value("${apikey}")
     private String API_Key;
 
-    public String getChatGptResponse(String prompt) {
+    public String getChatGptResponse(GptClientRequestDto question) {
 
         GptRequestDto requestBody = new GptRequestDto();
         requestBody.setModel("gpt-3.5-turbo");
@@ -32,7 +33,7 @@ public class GptApiService {
 
         Map<String, String> userMessage = new HashMap<>();
         userMessage.put("role", "user");
-        userMessage.put("content", prompt);
+        userMessage.put("content", question.getQuestion());
 
         requestBody.setMessages(Arrays.asList(message, userMessage));
 
