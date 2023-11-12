@@ -201,4 +201,17 @@ public class EditorController {
 
         return ResponseEntity.ok(apiResponse);
     }
+
+    @DeleteMapping("/user")
+    public ResponseEntity<ApiResponse> editorUserDelete(@RequestBody EditorUserDeleteRequestDto editorUserDeleteRequestDto){
+        editorService.editorUserDelete(editorUserDeleteRequestDto);
+
+        ApiResponse apiResponse = ApiResponse.builder()
+                .message("유저 관련 문서 삭제 완료")
+                .status(OK.value())
+                .data(null)
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
 }
