@@ -9,6 +9,7 @@ import DarkModeBtn from "./darkmode/DarkmodeBtn";
 import Category from "./category/Category";
 import { useAtom } from "jotai";
 import { userAtom } from "@/store/authAtom";
+import { MyDocumentsAtom, SharedDocumentsAtom } from "@/store/documentsAtom";
 import MySearch from "@/components/MySearch";
 import { useNoteList } from "@/hooks/useNoteList";
 import { useRouter } from "next/navigation";
@@ -18,8 +19,10 @@ import useLinkNote from "@/hooks/useLinkNote";
 export default function Navbar() {
   const { createDocument } = useCreateNote();
   const [user] = useAtom(userAtom);
+  const [myDocuments] = useAtom(MyDocumentsAtom);
+  const [sharedDocuments] = useAtom(SharedDocumentsAtom);
   const pathname = usePathname();
-  const { noteList, myTreeNote, sharedTreeNote } = useNoteList();
+  const { noteList } = useNoteList();
   const router = useRouter();
   // const [myTreeNote, setMyTreeNote] = useState<childProps[]>([]);
   // const [sharedTreeNote, setsharedMyTreeNote] = useState<childProps[]>([]);
@@ -97,8 +100,8 @@ export default function Navbar() {
           </span>
         </div>
         {/* 제일큰 노트 map으로 호출 */}
-        {myTreeNote &&
-          myTreeNote.map((element) => {
+        {myDocuments &&
+          myDocuments.map((element) => {
             return element.parentId === "root" ? <Category childProps={element} value={1} key={element.id} /> : null;
           })}
 
@@ -120,8 +123,8 @@ export default function Navbar() {
           </span>
         </div>
         {/* 공유받은 페이지 map으로 호출 */}
-        {sharedTreeNote &&
-          sharedTreeNote.map((element) => {
+        {sharedDocuments &&
+          sharedDocuments.map((element) => {
             return element.parentId === "root" ? <Category childProps={element} value={2} key={element.id} /> : null;
           })}
         <Link href="/signin">
