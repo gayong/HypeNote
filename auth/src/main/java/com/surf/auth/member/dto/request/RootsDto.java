@@ -1,17 +1,18 @@
 package com.surf.auth.member.dto.request;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class RootDto {
+@NoArgsConstructor
+public class RootsDto {
 
     private int userPk;
-    private String root;
+    private List<String> documentsIdRoots;
 }
