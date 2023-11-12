@@ -27,11 +27,11 @@ ext {
 
 dependencies {
 	//For MSA
-//	implementation 'org.springframework.cloud:spring-cloud-starter'
-//	// Discovery 서버에 등록
-//	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
-//	// Config 서버에서 Properties 가져오기
-//	implementation 'org.springframework.cloud:spring-cloud-starter-config'
+	implementation 'org.springframework.cloud:spring-cloud-starter'
+	// Discovery 서버에 등록
+	implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+	// Config 서버에서 Properties 가져오기
+	implementation 'org.springframework.cloud:spring-cloud-starter-config'
 
 	//Open Feign for GPT API Request
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
