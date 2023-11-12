@@ -46,6 +46,7 @@ public class Editor {
                 .sharedUser(new ArrayList<>())
                 .build();
 
+        editor.getSharedUser().add(userId);
         editor.getWritePermission().add(userId);
 
         return editor;
