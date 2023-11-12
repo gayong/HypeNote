@@ -38,7 +38,7 @@ api.interceptors.response.use(
     // 응답 데이터가 있는 작업 수행
     return response;
   },
-  function (error) {
+  async function (error) {
     // 2xx 외의 범위에 있는 상태 코드는 이 함수를 트리거 합니다.
     // 응답 오류가 있는 작업 수행
 
@@ -48,10 +48,23 @@ api.interceptors.response.use(
     //   // redirect(`https://${window.location.origin}/api/auth/reissue`);
     //   window.location.href = process.env.NEXT_PUBLIC_SERVER_URL + "auth/reissue";
     // }
-
     if (error.response.status === 401) {
-      const { reissue } = useReissue();
-      reissue();
+      const accessToken = localStorage.getItem("accessToken");
+      // const { reissue } = useReissue();
+      // reissue();
+      try {
+        const res = await axios.post(
+          `${window.location.origin}/api/auth/refresh`,
+          {},
+          {
+            headers: { Authorization: accessToken },
+            withCredentials: true,
+          }
+        );
+        console.log(res);
+      } catch (error) {
+        console.log(error);
+      }
       // window.location.href = `${window.location.origin}/api/auth/reissue`;
       // return Loading;
     }
