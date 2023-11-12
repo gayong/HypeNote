@@ -64,7 +64,7 @@ public class UserInformationController {
     }
 
     @GetMapping("/user-info/pk-list")
-    public ResponseEntity<List<UserInfoResponseDto>> userInfoByUserPkListController(@RequestBody FindUserPkListDto userPkListDto) {
+    public ResponseEntity<List<UserInfoResponseDto>> userInfoByUserPkListController(@RequestParam FindUserPkListDto userPkListDto) {
 
         List<UserInfoResponseDto> userList = new ArrayList<>();
 
