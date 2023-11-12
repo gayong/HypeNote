@@ -7,23 +7,40 @@ import { SearchType } from "@/types/ediotr";
 import "../../app/search/search.css";
 import { BsFillSendFill } from "react-icons/bs";
 
-function useEventSource(url: string) {
+function useEventSource(url: string, keyword: string) {
   const [data, setData] = useState("");
 
   useEffect(() => {
-    const source = new EventSource(url);
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ question: keyword }),
+    }).then((response) => {
+      if (response.body) {
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
 
-    source.onmessage = (event) => {
-      const result = JSON.parse(event.data);
-      if (result && result.choices && result.choices[0] && result.choices[0].delta) {
-        setData((prevData) => prevData + result.choices[0].delta.content);
+        function readChunk(): any {
+          return reader.read().then(({ value, done }) => {
+            if (done) return;
+
+            const chunk = decoder.decode(value || new Uint8Array(), { stream: !done });
+            const result = JSON.parse(chunk);
+
+            if (result && result.choices && result.choices[0] && result.choices[0].delta) {
+              setData((prevData) => prevData + result.choices[0].delta.content);
+            }
+
+            return readChunk();
+          });
+        }
+
+        return readChunk();
       }
-    };
-
-    return () => {
-      source.close();
-    };
-  }, [url]);
+    });
+  }, [url, keyword]);
 
   return data;
 }
@@ -33,12 +50,8 @@ export default function GPT() {
   const [enabled, setEnabled] = useState(false);
   const { getGPT } = useGPT();
   const [results, setResults] = useState<Array<SearchType>>([]);
-  const data = useEventSource("/api/gpt/chat");
-
-  // const handleEnter = () => {
-  //   console.log("지피티 질문", keyword);
-  //   // setEnabled(true);
-  // };
+  // const data = useEventSource("/api/gpt/chat");
+  const data = useEventSource("/api/gpt/chat", keyword);
 
   const handleEnter = async () => {
     console.log("지피티 질문", keyword);
@@ -61,21 +74,7 @@ export default function GPT() {
   const onChange = (e: any) => {
     setKeyword(e.target.value);
     console.log(e.target.value);
-    // setEnabled(false);
   };
-
-  // useEffect(() => {
-  //   if (response) {
-  //     console.log("검색결과다", response.data);
-  //   }
-  // }, [response]);
-
-  // useEffect(() => {
-  //   if (response) {
-  //     console.log("검색결과다", response.data);
-  //     setResults(response.data);
-  //   }
-  // }, [response]);
 
   return (
     <div className="flex">
