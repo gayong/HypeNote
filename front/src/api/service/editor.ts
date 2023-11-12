@@ -56,3 +56,8 @@ export const fetchNoteList = (rootList: string[]) => {
   const data = { rootList: rootList };
   return api.post(`editor/list`, data);
 };
+
+// GPT 검색 결과
+export const fetchGPT = (question: string) => {
+  return api.post("gpt/chat", { question });
+};
