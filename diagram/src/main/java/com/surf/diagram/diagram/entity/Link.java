@@ -14,8 +14,8 @@ public class Link {
 
     @Id
     private String id;
-    private int source;
-    private int target;
+    private String source;
+    private String target;
     private double similarity;
     private int userId;
 }

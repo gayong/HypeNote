@@ -12,20 +12,16 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "node")
 public class Node {
 
-    @Transient
-    public static final String SEQUENCE_NAME = "node_sequence";
 
     @Id
-    private Long id;
+    private String id;
     private int userId;      // group
     private String title;
-    private int editorId;
+    private String editorId;
     private String content;
     private String category;
     private Float confidence;
     private String access = "Private";
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+
 }

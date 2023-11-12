@@ -9,8 +9,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class NodeResponseDto {
-    private Long id;
+    private String id;
     private String title;
     private int group;      // group
-    private int editorId;
+    private String editorId;
 }

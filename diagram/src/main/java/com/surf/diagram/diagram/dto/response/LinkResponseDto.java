@@ -9,8 +9,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 public class LinkResponseDto {
-    private int source;
-    private int target;
+    private String source;
+    private String target;
     private double similarity;
     private int userId;
 }
