@@ -3,8 +3,9 @@ export interface User {
   userPk: number;
   nickName: string;
   email: string;
-  profileImage: any;
-  documents: Array<any>;
+  profileImage: string;
+  documentsRoots: Array<string>;
+  sharedDocumentsRoots: Array<string>;
 }
 
 export interface LoginUser {

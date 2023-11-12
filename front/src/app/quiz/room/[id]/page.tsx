@@ -17,6 +17,7 @@ type Props = {
 export default function QuizRoomPage({ params: { id } }: Props) {
   const stompClient = useWebSocket();
   const [user] = useAtom(userAtom);
+  const accessToken = localStorage.getItem("accessToken");
 
   useEffect(() => {
     if (stompClient) {
@@ -28,7 +29,7 @@ export default function QuizRoomPage({ params: { id } }: Props) {
         userImg: user.profileImage,
       };
 
-      stompClient.send(`/pub/quizroom/in/${id}`, {}, JSON.stringify(data));
+      stompClient.send(`/pub/quizroom/in/${id}`, { Authorization: `Bearer ${accessToken}` }, JSON.stringify(data));
     }
   }, []);
 

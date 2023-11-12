@@ -1,4 +1,6 @@
 import axios from "axios";
+import Loading from "@/app/loading";
+import useReissue from "@/hooks/useReissue";
 // import { access } from "fs";
 // import { validateHeaderValue } from "http";
 // import { cookies } from "next/headers";
@@ -42,9 +44,41 @@ api.interceptors.response.use(
 
     // 에러가 토큰관련일 경우 함수 작성
     // 401 에러 토큰 만료
-    if (error.response.status === 401) {
-      window.location.href = `${window.location.origin}/api/auth/reissue`;
-    }
+    // if (error.response.status === 401) {
+    //   // redirect(`https://${window.location.origin}/api/auth/reissue`);
+    //   window.location.href = process.env.NEXT_PUBLIC_SERVER_URL + "auth/reissue";
+    // }
+    api.interceptors.response.use(
+      function (response) {
+        return response;
+      },
+      async function (error) {
+        if (error.response.status === 401 || error.responese.status == 403) {
+          const accessToken = localStorage.getItem("accessToken");
+          try {
+            console.log(`Bearer ${accessToken}`);
+            const res = await axios.get(`${window.location.origin}/api/auth/reissue`, {
+              withCredentials: true,
+            });
+            localStorage.setItem("accessToken", res.data.accessToken);
+
+            // 이전 요청 다시 수행
+
+            const originalRequest = error.config;
+            originalRequest.headers["Authorization"] = `Bearer ${res.data.accessToken}`;
+            return api(originalRequest);
+          } catch (error) {
+            console.log(error);
+            return (window.location.href = `https://${window.location.origin}/signin`);
+          }
+        }
+        return Promise.reject(error);
+      }
+    );
+
+    // else if (error.response.status === 400) {
+    //   redirect(`https://${window.location.origin}/api/auth/reissue`);
+    // }
 
     return Promise.reject(error);
   }

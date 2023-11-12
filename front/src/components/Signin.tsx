@@ -63,7 +63,7 @@ export default function Signin() {
           </h2>
         </div>
 
-        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+        <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm z-10">
           <form className="space-y-6" onSubmit={handleSignin}>
             <div>
               <Label text="이메일" />

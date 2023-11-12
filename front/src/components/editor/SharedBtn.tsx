@@ -3,6 +3,7 @@ import { DownOutlined, UserOutlined } from "@ant-design/icons";
 import { useState, useEffect } from "react";
 import useGetSharedMember from "@/hooks/useGetSharedMember";
 import useUsersFindByPkList from "@/hooks/useUsersFindByPkList";
+import { userInfo } from "os";
 type Props = {
   id: string;
 };
@@ -13,52 +14,26 @@ export default function ShardeBtn({ id }: Props) {
     message.info("Click on menu item.");
     console.log("click", e);
   };
-  const [userList, setUserList] = useState([]);
   const [items, setItem] = useState<MenuProps[]>([]);
-  // const items: MenuProps["items"] = [
-  //   {
-  //     label: "권인식",
-  //     key: "1",
-  //     icon: <UserOutlined />,
-  //   },
-  //   {
-  //     label: "심규렬",
-  //     key: "2",
-  //     icon: <UserOutlined />,
-  //   },
-  //   {
-  //     label: "윤자현",
-  //     key: "3",
-  //     icon: <UserOutlined />,
-  //   },
-  //   {
-  //     label: "이가영",
-  //     key: "4",
-  //     icon: <UserOutlined />,
-  //   },
-  //   {
-  //     label: "최상익",
-  //     key: "5",
-  //     icon: <UserOutlined />,
-  //   },
-  // ];
+
   useEffect(() => {
     const getSharedMember = async () => {
       try {
         const response = await SharedMember([id]);
         if (response) {
-          // const member = response.data.data.userList;
-          const member = [9];
+          const member = response.data.data.userList;
+          // const member = [9];
           const res = await getUsersFindByPkList(member);
           if (res) {
-            console.log(res.data);
             const userList: MenuProps[] = [];
-            res.forEach((element) => {
+            res.data.forEach((element) => {
+              console.log(element);
               const userinfo = {
                 label: element.nickName,
                 key: element.userPk,
                 icon: <UserOutlined />,
               };
+              console.log(userinfo);
               userList.push(userinfo);
             });
             setItem(userList);

@@ -10,7 +10,7 @@ const useSignup = () => {
     } catch (error: any) {
       // message.error(error.response);
       console.log(error);
-      // return error.response.data;
+      return error.response.data;
     }
   };
   return { signup };

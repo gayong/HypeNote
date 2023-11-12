@@ -10,23 +10,19 @@ import Category from "./category/Category";
 import { useAtom } from "jotai";
 import { userAtom } from "@/store/authAtom";
 import MySearch from "@/components/MySearch";
-import useNoteList from "@/hooks/useNoteList";
+import { useNoteList } from "@/hooks/useNoteList";
 import { useRouter } from "next/navigation";
 import useCreateNote from "@/hooks/useCreateNote";
-import useGetUserNoteList from "@/hooks/useGetUserNoteList";
 import useLinkNote from "@/hooks/useLinkNote";
-
-type childProps = { id: string; title: string; parentId: string; children: childProps[] };
 
 export default function Navbar() {
   const { createDocument } = useCreateNote();
   const [user] = useAtom(userAtom);
   const pathname = usePathname();
-  const { noteList } = useNoteList();
+  const { noteList, myTreeNote, sharedTreeNote } = useNoteList();
   const router = useRouter();
-  const { userNoteList } = useGetUserNoteList();
-  const [myTreeNote, setMyTreeNote] = useState<childProps[]>([]);
-  const [sharedTreeNote, setsharedMyTreeNote] = useState<childProps[]>([]);
+  // const [myTreeNote, setMyTreeNote] = useState<childProps[]>([]);
+  // const [sharedTreeNote, setsharedMyTreeNote] = useState<childProps[]>([]);
   const { LinkNote } = useLinkNote();
   const onClickHandler = async (event: React.MouseEvent) => {
     event.stopPropagation();
@@ -43,38 +39,13 @@ export default function Navbar() {
     }
   };
   useEffect(() => {
-    const fetchMyData = async (Mydata: string[]) => {
-      try {
-        const treeList = await noteList(Mydata);
-        setMyTreeNote(treeList);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    const fetchSharedData = async (sharedData: string[]) => {
-      try {
-        const treeList = await noteList(sharedData);
-        setsharedMyTreeNote(treeList);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    const getUserRootLists = async () => {
-      try {
-        const data = await userNoteList();
-        if (data) {
-          console.log(data);
-          fetchMyData(data.documentsRoots);
-          fetchSharedData(data.sharedDocumentsRoots);
-        }
-
-        return data;
-        // if(data)
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getUserRootLists();
+    console.log("요기요기");
+    noteList.mutate({
+      rootList: user.documentsRoots,
+    });
+    noteList.mutate({
+      rootList: user.sharedDocumentsRoots,
+    });
   }, [user]);
 
   if (pathname === "/signin" || pathname == "/signup" || pathname == "/intro") {

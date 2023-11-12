@@ -27,3 +27,11 @@ export interface ThumbnailType {
   width: number;
   height: number;
 }
+
+export interface DocumentsType {
+  children: null | DocumentsType[];
+  id: string;
+  owner: number;
+  parentId: string;
+  title: string;
+}

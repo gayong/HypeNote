@@ -16,7 +16,9 @@ import { useRouter } from "next/navigation";
 import { useEditorWebSocket } from "@/context/SocketEditorProvider";
 import ShardeBtn from "./SharedBtn";
 import ToShareBtn from "./ToShareBtn";
-import { Placeholder } from "@tiptap/extension-placeholder";
+import { userAtom } from "@/store/authAtom";
+import { useNoteList } from "@/hooks/useNoteList";
+import HorizontalRule from "@tiptap/extension-horizontal-rule";
 
 type WindowWithProseMirror = Window & typeof globalThis & { ProseMirror: any };
 
@@ -27,6 +29,8 @@ type Props = {
 function TestEditor({ id }: Props) {
   const router = useRouter();
   const stompClient = useEditorWebSocket();
+  const [user] = useAtom(userAtom);
+  const { noteList } = useNoteList();
 
   // const [theme, setTheme] = useState<"light" | "dark">("light");
   const [theme, setTheme] = useAtom<any>(themeAtom);
@@ -35,12 +39,23 @@ function TestEditor({ id }: Props) {
   const onSave = () => {
     const title = editor.topLevelBlocks[0].content;
     const content = editor.domElement.innerHTML;
-    if (title) {
-      try {
-        UpdateNote(id, title, content);
-      } catch (error) {
-        console.log(error);
+    const update = async (title: string) => {
+      if (title) {
+        try {
+          await UpdateNote(id, title, content);
+          noteList.mutate({
+            rootList: user.documentsRoots,
+          });
+          noteList.mutate({
+            rootList: user.sharedDocumentsRoots,
+          });
+        } catch (error) {
+          console.log(error);
+        }
       }
+    };
+    if (title) {
+      update(title);
     }
   };
   useEffect(() => {
@@ -58,6 +73,9 @@ function TestEditor({ id }: Props) {
   }, [id, stompClient]); // editor가 변경될 때마다 이 훅을 실행합니다.
 
   const editor = useBlockNote({
+    _tiptapOptions: {
+      extensions: [HorizontalRule],
+    },
     initialContent: [
       {
         id: "d91d6999-f308-4d23-adea-4e69e22b50ea",
@@ -91,12 +109,20 @@ function TestEditor({ id }: Props) {
           // router.push("/404");
         });
     },
-    onEditorContentChange: (editor) => {},
+    onEditorContentChange: (editor) => {
+      const blockToUpdate = editor.topLevelBlocks[0];
+      if (blockToUpdate.type !== "heading") {
+        editor.updateBlock(blockToUpdate, {
+          type: "heading",
+        });
+      }
+    },
     domAttributes: {
       editor: {
         class: styles.editor,
         "data-test": "editor",
       },
+      blockContent: {},
     },
     uploadFile: uploadToTmpFilesDotOrg_DEV_ONLY,
     collaboration: {
@@ -119,6 +145,7 @@ function TestEditor({ id }: Props) {
       },
     },
   });
+
   //Test
   // Give tests a way to get prosemirror instance
   (window as WindowWithProseMirror).ProseMirror = editor?._tiptapEditor;

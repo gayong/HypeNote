@@ -20,13 +20,24 @@ export default function SocketProvider({ children }: WebSocketProviderProps) {
   const [stompClient, setStompClient] = useState<CompatClient | undefined>(undefined);
 
   useEffect(() => {
+    const accessToken = localStorage.getItem("accessToken");
+    const token = `Bearer ${accessToken}`;
     const socketFactory = () => new SockJS(process.env.NEXT_PUBLIC_SERVER_URL + "quiz/stomp/ws");
     const client = Stomp.over(socketFactory);
 
+    console.log(token);
     function connect() {
-      client.connect({}, function connection() {
-        setStompClient(client);
-      });
+      // const headers = { Authorization: `Bearer ${accessToken}` };
+      // console.log(`Headers: ${JSON.stringify(headers)}`); // 헤더가 올바르게 설정되었는지 확인
+
+      client.connect(
+        {
+          Authorization: token,
+        },
+        function connection() {
+          setStompClient(client);
+        }
+      );
     }
 
     connect();
