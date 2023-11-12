@@ -23,8 +23,10 @@ export const useNoteList = () => {
         // mutation 성공 시 수행할 로직
         // console.log("트리데이터 받아라 얍", data, variables);
         if (variables.rootList === user.documentsRoots) {
+          console.log(data, "myDocument");
           setMyDocuments(data);
         } else if (variables.rootList === user.sharedDocumentsRoots) {
+          console.log(data, "SharedDoc");
           setSharedDocuments(data);
         }
       },

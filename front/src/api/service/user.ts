@@ -33,3 +33,8 @@ export const shareNote = (userId: number, userList: number[], editorId: string) 
 export const getOtherUserPkByNickName = (nickName: string) => {
   return api.get(`auth/user-info/${nickName}`);
 };
+
+// userPk 로 user info 반환
+export const getUsersInfo = (userPkList: number[]) => {
+  return api.post(`auth/user-info/pk-list`, { userPkList: userPkList });
+};

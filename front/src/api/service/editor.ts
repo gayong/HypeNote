@@ -56,3 +56,13 @@ export const fetchNoteList = (rootList: string[]) => {
   const data = { rootList: rootList };
   return api.post(`editor/list`, data);
 };
+
+// UserRootList 조회
+export const fetchUserRootList = () => {
+  return api.get("auth/user-info");
+};
+
+// 공유 맴버 조회
+export const fetchSharedMember = (editorList: string[]) => {
+  return api.post(`editor/member`, { editorList });
+};
