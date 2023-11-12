@@ -86,7 +86,7 @@ public class FeignService {
     }
 
 
-    public List<UserInfoResponseDto> userInfoByUserPkList(FindUserPkListDto findUserPkListDto, String token) {
+    public List<UserInfoResponseDto> userInfoByUserPkList(FindUserPkListDto findUserPkListDto) {
         ResponseEntity<List<UserInfoResponseDto>> response = userServiceFeignClient.userInfoByUserPkList(findUserPkListDto);
         return response.getBody();
     }

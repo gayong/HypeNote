@@ -107,7 +107,7 @@ public class QuizRoomService {
     /// roomlist를 찾을 때 구독한 userPk로 보내게 하기
 
 
-    public SearchMemberResponseDto createSearchMemberResponseDto(SearchMemberRequestDto SearchMemberRequestDto, String token) {
+    public SearchMemberResponseDto createSearchMemberResponseDto(SearchMemberRequestDto SearchMemberRequestDto) {
         SearchMemberResponseDto roomDto = new SearchMemberResponseDto();
         roomDto.setRoomName(SearchMemberRequestDto.getRoomName());
         roomDto.setContent(SearchMemberRequestDto.getContent());
@@ -118,17 +118,29 @@ public class QuizRoomService {
 
         // invite users = 초대 받은 유저 + 방 만든 유저
         // 방을 만든 사람이면 리스트의 0번으로 넣기 > 방장으로 만들기 위해서
-        List<UserDto> inviteUsers = createInviteUsers(SearchMemberRequestDto.getPages(), token);
+        List<UserDto> inviteUsers = createInviteUsers(SearchMemberRequestDto.getPages());
 
         roomDto.setInviteUsers(inviteUsers);
 
         return roomDto;
     }
 
-    private List<UserDto> createInviteUsers(List<String> pages, String token) {
-        List<Integer> res =  feignService.getEditorShare(new EditorShareMemberRequestDto(pages));
+    private List<UserDto> createInviteUsers(List<String> pages) {
+        List<Integer> res = feignService.getEditorShare(new EditorShareMemberRequestDto(pages));
         System.out.println("res = " + res);
-        List<UserInfoResponseDto> lst =  feignService.userInfoByUserPkList(new FindUserPkListDto(res), token);
+
+        if(res == null || res.isEmpty()) {
+            throw new RuntimeException("res is null or empty");
+        }
+
+        FindUserPkListDto dto = new FindUserPkListDto();
+        dto.setUserPkList(res);  // res를 userPkList로 설정
+        List<UserInfoResponseDto> lst = feignService.userInfoByUserPkList(dto);
+
+        if(lst == null || lst.isEmpty()) {
+            throw new RuntimeException("lst is null or empty");
+        }
+
         System.out.println("lst = " + lst);
 
         List<UserDto> inviteUsers = new ArrayList<>();
