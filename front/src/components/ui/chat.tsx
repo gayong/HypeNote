@@ -1,17 +1,11 @@
 import { chatUser } from "@/types/quiz";
-import Image from "next/image";
 
 export function YourChat(props: chatUser) {
   return (
     <div className="flex w-full mt-2 space-x-3 max-w-xs">
       <div className="flex flex-col items-center justify-center flex-shrink-0 h-15 w-15 rounded-full">
         <div className="h-[50px] w-[50px] flex items-center justify-center">
-          <Image
-            src={props.userImg}
-            alt="이미지"
-            width={30}
-            height={30}
-            className="rounded-full object-cover h-[40px] w-[40px]"></Image>
+          <img src={props.userImg} alt="이미지" className="rounded-full object-cover h-[40px] w-[40px]"></img>
         </div>
       </div>
       <div>
@@ -39,12 +33,7 @@ export function MyChat(props: chatUser) {
       </div>
       <div className="flex flex-col items-center justify-center flex-shrink-0 h-15 w-15">
         <div className="h-[50px] w-[50px] flex items-center justify-center">
-          <Image
-            src={props.userImg}
-            alt="이미지"
-            width={30}
-            height={30}
-            className="rounded-full object-cover h-[40px] w-[40px]"></Image>
+          <img src={props.userImg} alt="이미지" className="rounded-full object-cover h-[40px] w-[40px]"></img>
         </div>
       </div>
     </div>
