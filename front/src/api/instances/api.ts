@@ -48,23 +48,28 @@ api.interceptors.response.use(
     //   // redirect(`https://${window.location.origin}/api/auth/reissue`);
     //   window.location.href = process.env.NEXT_PUBLIC_SERVER_URL + "auth/reissue";
     // }
-    if (error.response.status === 401) {
-      const accessToken = localStorage.getItem("accessToken");
-      // const { reissue } = useReissue();
-      // reissue();
-      try {
-        console.log(`Bearer ${accessToken}`);
-        const res = axios.get(`${window.location.origin}/api/auth/reissue`, {
-          // headers: { Authorization: `Bearer ${accessToken}` },
-          withCredentials: true,
-        });
-        console.log(res);
-      } catch (error) {
-        console.log(error);
+    api.interceptors.response.use(
+      function (response) {
+        return response;
+      },
+      async function (error) {
+        if (error.response.status === 401) {
+          const accessToken = localStorage.getItem("accessToken");
+          try {
+            console.log(`Bearer ${accessToken}`);
+            const res = await axios.get(`${window.location.origin}/api/auth/reissue`, {
+              withCredentials: true,
+            });
+            localStorage.setItem("accessToken", res.data.accessToken);
+          } catch (error) {
+            console.log(error);
+            return (window.location.href = `https://${window.location.origin}/signin`);
+          }
+        }
+        return Promise.reject(error);
       }
-      // window.location.href = `${window.location.origin}/api/auth/reissue`;
-      // return Loading;
-    }
+    );
+
     // else if (error.response.status === 400) {
     //   redirect(`https://${window.location.origin}/api/auth/reissue`);
     // }
