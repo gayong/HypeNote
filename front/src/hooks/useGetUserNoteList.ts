@@ -5,7 +5,10 @@ const useGetUserNoteList = () => {
     try {
       const response = await fetchUserRootList();
       // data 저장하기
-      const data = { documentsRoots: response.data.documentsRoots, sharedDocumentsRoots: response.data.documentsRoots };
+      const data = {
+        documentsRoots: response.data.documentsRoots,
+        sharedDocumentsRoots: response.data.sharedDocumentsRoots,
+      };
       //   return "success";
       console.log(data);
       return data;

@@ -129,7 +129,7 @@ function TestEditor({ id }: Props) {
         <BlockNoteView editor={editor} theme={theme} onKeyDown={onSave} />
       </div>
       <Search />
-      <ShardeBtn />
+      <ShardeBtn id={id} />
       <ToShareBtn id={id} />
     </>
   );

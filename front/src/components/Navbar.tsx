@@ -28,7 +28,6 @@ export default function Navbar() {
   const [myTreeNote, setMyTreeNote] = useState<childProps[]>([]);
   const [sharedTreeNote, setsharedMyTreeNote] = useState<childProps[]>([]);
   const { LinkNote } = useLinkNote();
-  console.log(user);
   const onClickHandler = async (event: React.MouseEvent) => {
     event.stopPropagation();
 
@@ -64,6 +63,7 @@ export default function Navbar() {
       try {
         const data = await userNoteList();
         if (data) {
+          console.log(data);
           fetchMyData(data.documentsRoots);
           fetchSharedData(data.sharedDocumentsRoots);
         }
