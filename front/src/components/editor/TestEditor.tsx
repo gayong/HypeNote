@@ -19,6 +19,7 @@ import ToShareBtn from "./ToShareBtn";
 import { userAtom } from "@/store/authAtom";
 import { useNoteList } from "@/hooks/useNoteList";
 import HorizontalRule from "@tiptap/extension-horizontal-rule";
+import CodeBlock from "@tiptap/extension-code-block";
 
 type WindowWithProseMirror = Window & typeof globalThis & { ProseMirror: any };
 
@@ -31,24 +32,19 @@ function TestEditor({ id }: Props) {
   const stompClient = useEditorWebSocket();
   const [user] = useAtom(userAtom);
   const { noteList } = useNoteList();
+  const [prevTitle, setPrevTitle] = useState("");
 
   // const [theme, setTheme] = useState<"light" | "dark">("light");
   const [theme, setTheme] = useAtom<any>(themeAtom);
   const [open] = useAtom(isSearchOpen);
-  // const val = `<h1 class="_inlineContent_nstdf_297">가나다라 마바사</h1><p class="_inlineContent_nstdf_297">어ㄴ</p><p class="_inlineContent_nstdf_297">ㅁ나이ㅓ리ㅏㅁㄴ어리ㅏㅇㄴ</p><p class="_inlineContent_nstdf_297">ㄴㅁ아ㅣㅓ라ㅣㅇ널</p><p class="_inlineContent_nstdf_297"></p><p class="_inlineContent_nstdf_297">&#x3C;h1 class="_inlineContent_nstdf_297">가나다라 마바사&#x3C;/h1>&#x3C;p class="_inlineContent_nstdf_297">어ㄴ&#x3C;/p>&#x3C;p class="_inlineContent_nstdf_297">ㅁ나이ㅓ리ㅏㅁㄴ어리ㅏㅇㄴ&#x3C;/p>&#x3C;p class="_inlineContent_nstdf_297">ㄴㅁ아ㅣㅓ라ㅣㅇ널&#x3C;/p>&#x3C;p class="_inlineContent_nstdf_297">&#x3C;/p>&#x3C;p class="_inlineContent_nstdf_297">&#x3C;/p></p><p class="_inlineContent_nstdf_297"></p>`;
   const onSave = () => {
     const title = editor.topLevelBlocks[0].content;
     const content = editor.domElement.innerHTML;
     const update = async (title: string) => {
-      if (title) {
+      if (title !== prevTitle) {
         try {
           await UpdateNote(id, title, content);
-          noteList.mutate({
-            rootList: user.documentsRoots,
-          });
-          noteList.mutate({
-            rootList: user.sharedDocumentsRoots,
-          });
+          setPrevTitle(title);
         } catch (error) {
           console.log(error);
         }
@@ -74,7 +70,7 @@ function TestEditor({ id }: Props) {
 
   const editor = useBlockNote({
     _tiptapOptions: {
-      extensions: [HorizontalRule],
+      extensions: [HorizontalRule, CodeBlock],
     },
     initialContent: [
       {
@@ -98,6 +94,10 @@ function TestEditor({ id }: Props) {
       const getBlocks = async (val: string) => {
         const blocks = await editor.HTMLToBlocks(val);
         editor.replaceBlocks(editor.topLevelBlocks, blocks);
+        if (blocks && blocks[0]) {
+          const content = blocks[0].content;
+          setPrevTitle(content[0].text);
+        }
       };
 
       Note(id)
@@ -114,6 +114,14 @@ function TestEditor({ id }: Props) {
       if (blockToUpdate.type !== "heading") {
         editor.updateBlock(blockToUpdate, {
           type: "heading",
+        });
+      }
+      if (blockToUpdate.content !== prevTitle) {
+        noteList.mutate({
+          rootList: user.documentsRoots,
+        });
+        noteList.mutate({
+          rootList: user.sharedDocumentsRoots,
         });
       }
     },
@@ -145,6 +153,28 @@ function TestEditor({ id }: Props) {
       },
     },
   });
+  const Drag = () => {
+    const title = editor.topLevelBlocks[0].content;
+    const content = editor.domElement.innerHTML;
+    const update = async (title: string) => {
+      if (title) {
+        try {
+          // await UpdateNote(id, title, content);
+          noteList.mutate({
+            rootList: user.documentsRoots,
+          });
+          noteList.mutate({
+            rootList: user.sharedDocumentsRoots,
+          });
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    };
+    if (title) {
+      update(title);
+    }
+  };
 
   //Test
   // Give tests a way to get prosemirror instance
@@ -153,7 +183,7 @@ function TestEditor({ id }: Props) {
   return (
     <>
       <div style={{ width: open ? "calc(100% - 380px)" : "100%" }}>
-        <BlockNoteView editor={editor} theme={theme} onKeyDown={onSave} />
+        <BlockNoteView editor={editor} theme={theme} onKeyDown={onSave} onDragEnd={Drag} />
       </div>
       <Search />
       <ShardeBtn id={id} />
