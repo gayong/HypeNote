@@ -7,11 +7,12 @@ import { HiChevronDown, HiChevronRight } from "react-icons/hi";
 import useCreateChildNote from "@/hooks/useCreateChildNote";
 import { useAtom } from "jotai";
 import { userAtom } from "@/store/authAtom";
+import { DocumentsType } from "@/types/ediotr";
 
-type childProps = { id: string; title: string; parentId: string; children: childProps[] };
+// type childProps = { id: string; title: string; parentId: string; children: childProps[] };
 
 interface categoryProps {
-  childProps: childProps;
+  childProps: DocumentsType;
   value: number;
 }
 
@@ -42,7 +43,7 @@ export default function Category({ childProps, value }: categoryProps) {
 
     setRootCollapsed((prevValue) => !prevValue);
   }
-  const onClickHandler = async (event: React.MouseEvent, id: childProps) => {
+  const onClickHandler = async (event: React.MouseEvent, id: DocumentsType) => {
     event.stopPropagation();
     console.log(id.id, "여기는 + 핸들러");
 

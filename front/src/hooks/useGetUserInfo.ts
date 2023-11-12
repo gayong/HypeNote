@@ -17,6 +17,7 @@ const useGetUserInfo = () => {
         email: response.data.email,
         profileImage: response.data.profileImage,
         documentsRoots: response.data.documentsRoots,
+        sharedDocumentsRoots: response.data.sharedDocumentsRoots,
         role: response.data.documentsRoots,
       });
 

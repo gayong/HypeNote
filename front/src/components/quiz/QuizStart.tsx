@@ -8,7 +8,6 @@ import { useAtom } from "jotai";
 
 import Timer from "../ui/Timer";
 import Quiz from "../ui/Quiz";
-import { useRouter } from "next/navigation";
 
 interface QuizRoomProps {
   roomId: number;
@@ -23,7 +22,6 @@ export default function QuizStart(props: QuizRoomProps) {
   const { quizs } = useContext(SocketContext);
 
   const [user] = useAtom(userAtom);
-  const router = useRouter();
 
   const handleAnswerChange = (questionId: string, answer: string) => {
     setAnswers({

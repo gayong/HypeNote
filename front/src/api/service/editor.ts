@@ -56,7 +56,3 @@ export const fetchNoteList = (rootList: string[]) => {
   const data = { rootList: rootList };
   return api.post(`editor/list`, data);
 };
-
-export const fetchUserRootList = () => {
-  return api.get("auth/user-info");
-};

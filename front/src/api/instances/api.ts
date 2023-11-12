@@ -53,7 +53,7 @@ api.interceptors.response.use(
         return response;
       },
       async function (error) {
-        if (error.response.status === 401) {
+        if (error.response.status === 401 || error.responese.status == 403) {
           const accessToken = localStorage.getItem("accessToken");
           try {
             console.log(`Bearer ${accessToken}`);

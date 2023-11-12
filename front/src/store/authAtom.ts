@@ -6,5 +6,6 @@ export const userAtom = atomWithStorage("user", {
   email: "",
   profileImage: "",
   documentsRoots: [],
+  sharedDocumentsRoots: [],
   role: "",
 });
