@@ -1,4 +1,4 @@
-package com.surf.auth.member.dto.request;
+package com.surf.auth.member.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,11 +7,11 @@ import lombok.Setter;
 
 import java.util.List;
 
-@Setter
 @Getter
-@AllArgsConstructor
+@Setter
 @NoArgsConstructor
-public class SharedDocumentsListDto {
+@AllArgsConstructor
+public class FeignClientUserListDto {
 
-    private List<String> sharedDocumentsList;
+    private List<Integer> userList;
 }

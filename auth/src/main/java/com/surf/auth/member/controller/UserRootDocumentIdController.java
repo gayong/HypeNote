@@ -4,20 +4,18 @@ package com.surf.auth.member.controller;
 import com.surf.auth.member.authenticator.UserPkAuthenticator;
 import com.surf.auth.member.dto.request.RootDto;
 import com.surf.auth.member.dto.request.RootsDto;
-import com.surf.auth.member.dto.request.SharedDocumentsListDto;
+import com.surf.auth.member.dto.request.SharedDocumentsRootListDto;
 import com.surf.auth.member.dto.response.UserInfoResponseDto;
 import com.surf.auth.member.feign.FeignClientInterface;
 import com.surf.auth.member.service.UserInformationService;
 import com.surf.auth.member.service.UserRootDocumentIdService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,10 +52,10 @@ public class UserRootDocumentIdController {
     public ResponseEntity<List<UserInfoResponseDto>> rootUserInfoController(@PathVariable int userPk) {
 
         List<String> sharedDocumentsList = userInformationService.sendUserInformationPk(userPk).getSharedDocumentsRoots();
-        SharedDocumentsListDto sharedDocumentsListDto = new SharedDocumentsListDto();
-        sharedDocumentsListDto.setSharedDocumentsList(sharedDocumentsList);
+        SharedDocumentsRootListDto sharedDocumentsRootListDto = new SharedDocumentsRootListDto();
+        sharedDocumentsRootListDto.setSharedDocumentsRootList(sharedDocumentsList);
 
-        List<Integer> userList = feignClientInterface.rootInspect(sharedDocumentsListDto);
+        List<Integer> userList = feignClientInterface.rootInspect(sharedDocumentsRootListDto).getUserList();
 
         List<UserInfoResponseDto> userInfoList = new ArrayList<>();
 
