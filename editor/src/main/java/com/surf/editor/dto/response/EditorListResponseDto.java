@@ -10,6 +10,7 @@ import java.util.List;
 public class EditorListResponseDto {
     private String id;
     private String title;
+    private String content;
     private String parentId;
     private int owner;
     private List<EditorListResponseDto> children;
