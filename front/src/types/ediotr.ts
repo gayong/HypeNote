@@ -29,9 +29,9 @@ export interface ThumbnailType {
 }
 
 export interface DocumentsType {
-  children: null | DocumentsType[];
+  title: string;
+  children?: DocumentsType[];
   id: string;
   owner: number;
   parentId: string;
-  title: string;
 }
