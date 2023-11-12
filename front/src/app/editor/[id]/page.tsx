@@ -18,23 +18,28 @@ export default function EditorPage({ params: { id } }: Props) {
   const array = Array.from({ length: 100 }, (_, index) => index + 1);
   const randomValue = array[Math.floor(Math.random() * array.length)];
   const [first, setFirst] = useState(0);
-  useEffect(() => {
-    if (stompClient) {
-      stompClient.subscribe(`/sub/note/connection/${id}`, (message) => {
-        const payload = JSON.parse(message.body);
-        if (first === 0) {
-          setFirst(payload.length);
-        }
-      });
-      stompClient.send(`/pub/note/connection/${id}`, {}, JSON.stringify({ userId: randomValue }));
-    }
-    return () => {
-      if (stompClient) {
-        stompClient.send(`/pub/note/disconnection/${id}`, {}, JSON.stringify({ userId: randomValue }));
-        stompClient.unsubscribe(`/sub/note/connection/${id}`);
-      }
-    };
-  }, [stompClient]);
+  // useEffect(() => {
+  //   if (stompClient) {
+  //     stompClient.subscribe(`/sub/note/connection/${id}`, (message) => {
+  //       const payload = JSON.parse(message.body);
+  //       if (first === 0) {
+  //         setFirst(payload.length);
+  //       }
+  //     });
+  //     stompClient.send(`/pub/note/connection/${id}`, {}, JSON.stringify({ userId: randomValue }));
+  //   }
+  //   return () => {
+  //     if (stompClient) {
+  //       stompClient.send(`/pub/note/disconnection/${id}`, {}, JSON.stringify({ userId: randomValue }));
+  //       stompClient.unsubscribe(`/sub/note/connection/${id}`);
+  //     }
+  //   };
+  // }, [stompClient]);
 
-  return <> {first === 0 ? null : first === 1 ? <TestEditor id={id} /> : <TestEditorNotFirst id={id} />}</>;
+  // return <> {first === 0 ? null : first === 1 ? <TestEditor id={id} /> : <TestEditorNotFirst id={id} />}</>;
+  return (
+    <>
+      <TestEditor id={id} />
+    </>
+  );
 }
