@@ -201,4 +201,17 @@ public class EditorController {
 
         return ResponseEntity.ok(apiResponse);
     }
+
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<ApiResponse> editorUserDelete(@PathVariable int userId){
+        editorService.editorUserDelete(userId);
+
+        ApiResponse apiResponse = ApiResponse.builder()
+                .message("유저 관련 문서 삭제 완료")
+                .status(OK.value())
+                .data(null)
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
 }

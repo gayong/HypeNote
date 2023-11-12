@@ -394,4 +394,8 @@ public class EditorService {
 
         return editorShareListResponseDto;
     }
+
+    public void editorUserDelete(int userId) {
+
+    }
 }
