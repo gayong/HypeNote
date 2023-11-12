@@ -57,7 +57,7 @@ api.interceptors.response.use(
           `${window.location.origin}/api/auth/refresh`,
           {},
           {
-            headers: { Authorization: accessToken },
+            headers: { Authorization: `Bearer ${accessToken}` },
             withCredentials: true,
           }
         );
