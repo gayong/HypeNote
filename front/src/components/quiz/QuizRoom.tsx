@@ -80,12 +80,20 @@ export default function QuizRoom(props: QuizRoomProps) {
     <>
       {submit && quizResults ? (
         // 퀴즈 모두 다 푼 경우 => 랭킹 보여줌
-        <section className="px-2 pr-6 grid grid-cols-2 h-screen w-full max-w-full items-center">
-          <QuizResult />
-          <div className="pl-2">
-            <ChatRoom roomId={props.roomId} height={80} />
-          </div>
-        </section>
+        <>
+          {/* <span
+            className="font-bold absolute left-60 hover:text-hover_primary dark:hover:text-dark_font text-lg font-PreBd text-dark_background dark:text-font_primary absolute left-0 p-1 rounded-md"
+            onClick={() => outRoom()}>
+            {"< 나가기"}
+          </span> */}
+
+          <section className="px-2 pr-6 grid grid-cols-2 h-screen w-full max-w-full items-center">
+            <QuizResult />
+            <div className="pl-2">
+              <ChatRoom roomId={props.roomId} height={80} />
+            </div>
+          </section>
+        </>
       ) : submit && !quizResults ? (
         // 제출했지만 결과가 아직 없는 경우 => 로딩 화면
         <div>
