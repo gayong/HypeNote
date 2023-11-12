@@ -33,6 +33,7 @@ export default function Navbar() {
     event.stopPropagation();
 
     const userId = user.userPk;
+    // const userId = 9;
 
     try {
       const documentId = await createDocument(userId);
