@@ -1,9 +1,6 @@
 package com.surf.quiz.fegin;
 
-import com.surf.quiz.dto.editor.ApiResponse;
-import com.surf.quiz.dto.editor.EditorCheckResponse;
-import com.surf.quiz.dto.editor.EditorShareMemberResponseDto;
-import com.surf.quiz.dto.editor.EditorShareMemberRequestDto;
+import com.surf.quiz.dto.editor.*;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,5 +15,8 @@ public interface EditorServiceFeignClient {
 
     @PostMapping("/api/editor/member")
     ApiResponse<EditorShareMemberResponseDto> getShares(@RequestBody EditorShareMemberRequestDto editorShareMemberRequestDto);
+
+    @PostMapping("/api/editor/shareList")
+    ApiResponse<EditorShareListResponseDto> editorShareList(@RequestBody EditorShareListRequestDto editorShareListRequestDto);
 
 }
