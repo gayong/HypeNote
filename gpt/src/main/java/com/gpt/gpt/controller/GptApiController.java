@@ -14,6 +14,6 @@ public class GptApiController {
 
     @PostMapping("/chat")
     public String getChatGptResponse(@RequestBody GptClientRequestDto gptClientRequestDto) {
-        return gptApiService.getChatGptResponse(gptClientRequestDto);
+        return gptApiService.getChatGptResponse(gptClientRequestDto).substring(7);
     }
 }
