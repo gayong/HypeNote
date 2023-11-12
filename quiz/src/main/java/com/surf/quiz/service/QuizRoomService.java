@@ -6,6 +6,7 @@ import com.surf.quiz.dto.ExampleDto;
 import com.surf.quiz.dto.MemberDto;
 import com.surf.quiz.dto.QuestionDto;
 import com.surf.quiz.dto.UserDto;
+import com.surf.quiz.dto.editor.EditorShareListRequestDto;
 import com.surf.quiz.dto.editor.EditorShareMemberRequestDto;
 import com.surf.quiz.dto.member.FindUserPkListDto;
 import com.surf.quiz.dto.member.UserInfoResponseDto;
@@ -124,23 +125,26 @@ public class QuizRoomService {
 
     private List<UserDto> createInviteUsers(List<String> pages) {
         List<Integer> res = feignService.getEditorShare(new EditorShareMemberRequestDto(pages));
+        List<Integer> res1 = feignService.editorShareList(new EditorShareListRequestDto(pages));
         System.out.println("res = " + res);
+        System.out.println("res1 = " + res1);
 
-        if(res == null || res.isEmpty()) {
-            throw new RuntimeException("res is null or empty");
+        List<UserDto> inviteUsers = new ArrayList<>();
+        if(res1 == null || res1.isEmpty()) {
+            return inviteUsers;
         }
 
         FindUserPkListDto dto = new FindUserPkListDto();
-        dto.setUserPkList(res);  // res를 userPkList로 설정
+        dto.setUserPkList(res1);  // res를 userPkList로 설정
         List<UserInfoResponseDto> lst = feignService.userInfoByUserPkList(dto);
 
         if(lst == null || lst.isEmpty()) {
-            throw new RuntimeException("lst is null or empty");
+            return inviteUsers;
         }
 
         System.out.println("lst = " + lst);
 
-        List<UserDto> inviteUsers = new ArrayList<>();
+
 
         for(UserInfoResponseDto userInfo : lst) {
             UserDto user = createUser((long)userInfo.getUserPk(), userInfo.getNickName(), userInfo.getProfileImage());

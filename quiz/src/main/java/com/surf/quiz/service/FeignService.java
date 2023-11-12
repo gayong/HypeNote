@@ -5,10 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.surf.quiz.common.BaseResponse;
 import com.surf.quiz.dto.QuestionDto;
-import com.surf.quiz.dto.editor.ApiResponse;
-import com.surf.quiz.dto.editor.EditorCheckResponse;
-import com.surf.quiz.dto.editor.EditorShareMemberRequestDto;
-import com.surf.quiz.dto.editor.EditorShareMemberResponseDto;
+import com.surf.quiz.dto.editor.*;
 import com.surf.quiz.dto.member.FindUserPkListDto;
 import com.surf.quiz.dto.member.UserInfoResponseDto;
 import com.surf.quiz.fegin.ChatCompletionClient;
@@ -89,6 +86,11 @@ public class FeignService {
     public List<UserInfoResponseDto> userInfoByUserPkList(FindUserPkListDto findUserPkListDto) {
         ResponseEntity<List<UserInfoResponseDto>> response = userServiceFeignClient.userInfoByUserPkList(findUserPkListDto);
         return response.getBody();
+    }
+
+    public List<Integer> editorShareList(EditorShareListRequestDto editorShareListRequestDto) {
+        ApiResponse<EditorShareListResponseDto> response = editorServiceFeignClient.editorShareList(editorShareListRequestDto);
+        return response.getData().getUserList();
     }
 
 
