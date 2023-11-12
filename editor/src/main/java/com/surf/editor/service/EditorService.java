@@ -395,7 +395,9 @@ public class EditorService {
         return editorShareListResponseDto;
     }
 
-    public void editorUserDelete(int userId) {
-
+    public void editorUserDelete(EditorUserDeleteRequestDto editorUserDeleteRequestDto) {
+        for (String editorId : editorUserDeleteRequestDto.getEditorIds()) {
+            editorDelete(editorId);
+        }
     }
 }
