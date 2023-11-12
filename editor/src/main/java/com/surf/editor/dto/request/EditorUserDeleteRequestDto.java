@@ -6,5 +6,5 @@ import java.util.List;
 
 @Getter
 public class EditorUserDeleteRequestDto {
-    private List<String> editorIds;
+    private List<String> documentsIdRoots;
 }
