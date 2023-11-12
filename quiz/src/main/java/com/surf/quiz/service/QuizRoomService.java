@@ -7,6 +7,8 @@ import com.surf.quiz.dto.MemberDto;
 import com.surf.quiz.dto.QuestionDto;
 import com.surf.quiz.dto.UserDto;
 import com.surf.quiz.dto.editor.EditorShareMemberRequestDto;
+import com.surf.quiz.dto.member.FindUserPkListDto;
+import com.surf.quiz.dto.member.UserInfoResponseDto;
 import com.surf.quiz.dto.request.CreateRoomRequestDto;
 import com.surf.quiz.dto.request.SearchMemberRequestDto;
 import com.surf.quiz.dto.response.DetailResponseDto;
@@ -105,7 +107,7 @@ public class QuizRoomService {
     /// roomlist를 찾을 때 구독한 userPk로 보내게 하기
 
 
-    public SearchMemberResponseDto createSearchMemberResponseDto(SearchMemberRequestDto SearchMemberRequestDto) {
+    public SearchMemberResponseDto createSearchMemberResponseDto(SearchMemberRequestDto SearchMemberRequestDto, String token) {
         SearchMemberResponseDto roomDto = new SearchMemberResponseDto();
         roomDto.setRoomName(SearchMemberRequestDto.getRoomName());
         roomDto.setContent(SearchMemberRequestDto.getContent());
@@ -116,19 +118,25 @@ public class QuizRoomService {
 
         // invite users = 초대 받은 유저 + 방 만든 유저
         // 방을 만든 사람이면 리스트의 0번으로 넣기 > 방장으로 만들기 위해서
-        List<UserDto> inviteUsers = createInviteUsers(SearchMemberRequestDto.getPages());
+        List<UserDto> inviteUsers = createInviteUsers(SearchMemberRequestDto.getPages(), token);
 
         roomDto.setInviteUsers(inviteUsers);
 
         return roomDto;
     }
 
-    private List<UserDto> createInviteUsers(List<String> pages) {
+    private List<UserDto> createInviteUsers(List<String> pages, String token) {
         List<Integer> res =  feignService.getEditorShare(new EditorShareMemberRequestDto(pages));
         System.out.println("res = " + res);
+        List<UserInfoResponseDto> lst =  feignService.userInfoByUserPkList(new FindUserPkListDto(res), token);
+        System.out.println("lst = " + lst);
+
         List<UserDto> inviteUsers = new ArrayList<>();
-        inviteUsers.add(createUser(2020L, "csi", "/assets/유령.png"));
-        inviteUsers.add(createUser(3030L, "isc", "/assets/유령2.png"));
+
+        for(UserInfoResponseDto userInfo : lst) {
+            UserDto user = createUser((long)userInfo.getUserPk(), userInfo.getNickName(), userInfo.getProfileImage());
+            inviteUsers.add(user);
+        }
 
         return inviteUsers;
     }
