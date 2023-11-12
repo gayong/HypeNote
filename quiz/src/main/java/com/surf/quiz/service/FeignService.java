@@ -9,10 +9,14 @@ import com.surf.quiz.dto.editor.ApiResponse;
 import com.surf.quiz.dto.editor.EditorCheckResponse;
 import com.surf.quiz.dto.editor.EditorShareMemberRequestDto;
 import com.surf.quiz.dto.editor.EditorShareMemberResponseDto;
+import com.surf.quiz.dto.member.FindUserPkListDto;
+import com.surf.quiz.dto.member.UserInfoResponseDto;
 import com.surf.quiz.fegin.ChatCompletionClient;
 import com.surf.quiz.fegin.EditorServiceFeignClient;
+import com.surf.quiz.fegin.UserServiceFeignClient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -23,6 +27,8 @@ import java.util.List;
 public class FeignService {
     @Autowired
     private EditorServiceFeignClient editorServiceFeignClient;
+    @Autowired
+    private UserServiceFeignClient userServiceFeignClient;
     @Autowired
     private ChatCompletionClient chatCompletionClient;
 
@@ -78,5 +84,12 @@ public class FeignService {
         ApiResponse<EditorShareMemberResponseDto> response = editorServiceFeignClient.getShares(editorShareMemberRequestDto);
         return response.getData().getUserList();
     }
+
+
+    public List<UserInfoResponseDto> userInfoByUserPkList(FindUserPkListDto findUserPkListDto, String token) {
+        ResponseEntity<List<UserInfoResponseDto>> response = userServiceFeignClient.userInfoByUserPkList(findUserPkListDto);
+        return response.getBody();
+    }
+
 
 }
