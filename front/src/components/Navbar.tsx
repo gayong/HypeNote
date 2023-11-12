@@ -27,7 +27,6 @@ export default function Navbar() {
   // const [myTreeNote, setMyTreeNote] = useState<childProps[]>([]);
   // const [sharedTreeNote, setsharedMyTreeNote] = useState<childProps[]>([]);
   const { LinkNote } = useLinkNote();
-
   const onClickHandler = async (event: React.MouseEvent) => {
     event.stopPropagation();
 
