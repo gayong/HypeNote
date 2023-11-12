@@ -4,8 +4,15 @@ import { useState, useEffect } from "react";
 import useGetSharedMember from "@/hooks/useGetSharedMember";
 import useUsersFindByPkList from "@/hooks/useUsersFindByPkList";
 import { userInfo } from "os";
+import { ReactNode } from "react";
 type Props = {
   id: string;
+};
+
+type userInfo = {
+  label: string;
+  key: number;
+  icon: ReactNode;
 };
 export default function ShardeBtn({ id }: Props) {
   const { SharedMember } = useGetSharedMember();
@@ -14,7 +21,7 @@ export default function ShardeBtn({ id }: Props) {
     message.info("Click on menu item.");
     console.log("click", e);
   };
-  const [items, setItem] = useState<MenuProps[]>([]);
+  const [items, setItem] = useState<userInfo[]>([]);
 
   useEffect(() => {
     const getSharedMember = async () => {
@@ -25,8 +32,8 @@ export default function ShardeBtn({ id }: Props) {
           // const member = [9];
           const res = await getUsersFindByPkList(member);
           if (res) {
-            const userList: MenuProps[] = [];
-            res.data.forEach((element) => {
+            const userList: userInfo[] = [];
+            res.data.forEach((element: any) => {
               console.log(element);
               const userinfo = {
                 label: element.nickName,
