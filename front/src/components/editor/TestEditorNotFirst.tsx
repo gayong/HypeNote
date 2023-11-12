@@ -101,7 +101,7 @@ function TestEditorNotFirst({ id }: Props) {
       </div>
       <Search />
       {/* <Button className="absolute top-5 right-10">공유버튼</Button> */}
-      <ShardeBtn />
+      {/* <ShardeBtn /> */}
       <ToShareBtn id={id} />
     </>
   );

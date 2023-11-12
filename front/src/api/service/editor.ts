@@ -61,3 +61,13 @@ export const fetchNoteList = (rootList: string[]) => {
 export const fetchGPT = (question: string) => {
   return api.post("gpt/chat", { question });
 };
+
+// UserRootList 조회
+export const fetchUserRootList = () => {
+  return api.get("auth/user-info");
+};
+
+// 공유 맴버 조회
+export const fetchSharedMember = (editorList: string[]) => {
+  return api.post(`editor/member`, { editorList });
+};

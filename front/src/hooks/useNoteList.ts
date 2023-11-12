@@ -3,27 +3,31 @@ import { useMutation } from "react-query";
 import { useState } from "react";
 import { useAtom } from "jotai";
 import { userAtom } from "@/store/authAtom";
+import { SharedDocumentsAtom, MyDocumentsAtom } from "@/store/documentsAtom";
 import { DocumentsType } from "@/types/ediotr";
 
 export const useNoteList = () => {
   const [myTreeNote, setMyTreeNote] = useState<DocumentsType[]>([]);
   const [sharedTreeNote, setsharedMyTreeNote] = useState<DocumentsType[]>([]);
   const [user] = useAtom(userAtom);
+  const [, setMyDocuments] = useAtom(MyDocumentsAtom);
+  const [, setSharedDocuments] = useAtom(SharedDocumentsAtom);
 
   const noteList = useMutation(
     async ({ rootList }: { rootList: Array<string> }) => {
       const response = await fetchNoteList(rootList);
-      console.log(response);
       return response.data.data;
     },
     {
       onSuccess: (data, variables) => {
         // mutation 성공 시 수행할 로직
-        console.log("트리데이터 받아라 얍", data, variables);
+        // console.log("트리데이터 받아라 얍", data, variables);
         if (variables.rootList === user.documentsRoots) {
-          setMyTreeNote(data);
+          console.log(data, "myDocument");
+          setMyDocuments(data);
         } else if (variables.rootList === user.sharedDocumentsRoots) {
-          setsharedMyTreeNote(data);
+          console.log(data, "SharedDoc");
+          setSharedDocuments(data);
         }
       },
       onError: (error) => {
@@ -33,8 +37,6 @@ export const useNoteList = () => {
   );
   return {
     noteList,
-    myTreeNote,
-    sharedTreeNote,
   };
 };
 
