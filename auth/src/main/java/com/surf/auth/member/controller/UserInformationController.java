@@ -63,8 +63,8 @@ public class UserInformationController {
         return ResponseEntity.ok(userInformationService.sendUserInformationPk(userPk));
     }
 
-    @GetMapping("/user-info/pk-list")
-    public ResponseEntity<List<UserInfoResponseDto>> userInfoByUserPkListController(@RequestParam FindUserPkListDto userPkListDto) {
+    @PostMapping("/user-info/pk-list")
+    public ResponseEntity<List<UserInfoResponseDto>> userInfoByUserPkListController(@RequestBody FindUserPkListDto userPkListDto) {
 
         List<UserInfoResponseDto> userList = new ArrayList<>();
 
