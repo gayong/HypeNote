@@ -10,8 +10,8 @@ import java.util.List;
 
 public interface DiagramService {
 
-    //    DiagramResponseDto linkNodesByShare(int userId, int targetUserId);
+//    DiagramResponseDto linkNodesByShare(int userId, int targetUserId);
 //
-//    DiagramResponseDto linkNodesByShares(int userId, List<Integer> targetUserIds);
+    DiagramResponseDto linkNodesByShares(int userId, List<Integer> targetUserIds);
     DiagramResponseDto getDiagram(int userId);
 }

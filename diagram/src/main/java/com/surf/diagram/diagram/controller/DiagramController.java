@@ -76,10 +76,10 @@ public class DiagramController {
 //        return new BaseResponse<>(responseDto);
 //    }
 
-//    @PostMapping("/share/{userId}")
-//    @Operation(summary = "다인 쉐어")
-//    public BaseResponse<DiagramResponseDto> linkNodesByShares(@PathVariable int userId, @RequestBody List<Integer> targetIds ) throws Exception {
-//        DiagramResponseDto responseDto = diagramService.linkNodesByShares(userId, targetIds);
-//        return new BaseResponse<>(responseDto);
-//    }
+    @PostMapping("/share/{userId}")
+    @Operation(summary = "다인 쉐어")
+    public BaseResponse<DiagramResponseDto> linkNodesByShares(@PathVariable int userId, @RequestBody List<Integer> targetIds ) throws Exception {
+        DiagramResponseDto responseDto = diagramService.linkNodesByShares(userId, targetIds);
+        return new BaseResponse<>(responseDto);
+    }
 }

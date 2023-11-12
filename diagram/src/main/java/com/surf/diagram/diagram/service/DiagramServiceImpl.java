@@ -12,8 +12,6 @@ import com.surf.diagram.diagram.dto.response.LinkResponseDto;
 import com.surf.diagram.diagram.dto.response.NodeResponseDto;
 import com.surf.diagram.diagram.entity.Link;
 import com.surf.diagram.diagram.entity.Node;
-import com.surf.diagram.diagram.repository.LinkRepository;
-import com.surf.diagram.diagram.repository.NodeRepository;
 import kr.co.shineware.nlp.komoran.constant.DEFAULT_MODEL;
 import kr.co.shineware.nlp.komoran.core.Komoran;
 import kr.co.shineware.nlp.komoran.model.Token;
@@ -34,16 +32,14 @@ import java.util.stream.Collectors;
 public class DiagramServiceImpl implements DiagramService {
 
 
-    private final NodeRepository nodeRepository;
-    private final LinkRepository linkRepository;
     private final FeginEditorService feginEditorService;
     private final FeginUserService feginUserService;
     private static final Set<String> STOPWORDS = new HashSet<>();
     private final DecimalFormat df = new DecimalFormat("#.###");
 
-    public DiagramServiceImpl(NodeRepository nodeRepository, LinkRepository linkRepository, FeginEditorService feginEditorService, FeginUserService feginUserService) {
-        this.nodeRepository = nodeRepository;
-        this.linkRepository = linkRepository;
+    private final Map<Integer, DiagramResponseDto> diagramCache = new HashMap<>();
+
+    public DiagramServiceImpl( FeginEditorService feginEditorService, FeginUserService feginUserService) {
         this.feginEditorService = feginEditorService;
         this.feginUserService = feginUserService;
     }
@@ -87,8 +83,9 @@ public class DiagramServiceImpl implements DiagramService {
         List<Link> links = linkNodesByCategoryAndConfidence(nodes);
         List<LinkResponseDto> linkResponseDtos1 = convertLinkResponseDtos(links);
         linkResponseDtos.addAll(linkResponseDtos1);
-
-        return createDiagramResponseDto(nodeResponseDtos, linkResponseDtos);
+        DiagramResponseDto response = createDiagramResponseDto(nodeResponseDtos, linkResponseDtos);
+        diagramCache.put(userId, response);
+        return response;
     }
 
 
@@ -310,11 +307,6 @@ public class DiagramServiceImpl implements DiagramService {
         return createLinksFromNodes(categoryNodeMap);
     }
 
-//    // 노드 가져오기
-//    private List<Node> fetchNodesByUserId(int userId) {
-//        return nodeRepository.findByUserId(userId);
-//    }
-
     // 노드 카테고리 분류
     private Map<String, List<Node>> categorizeNodes(List<Node> nodes) {
         Map<String, List<Node>> categoryNodeMap = new HashMap<>();
@@ -415,6 +407,25 @@ public class DiagramServiceImpl implements DiagramService {
         return wordCount;
     }
 
+    public DiagramResponseDto linkNodesByShares(int userId,  List<Integer> targetUserIds) {
+        UserInfoResponseDto res = feginUserService.userInfoByUserPk(userId);
+
+        List<EditorListResponseDto> editorList = feginEditorService.editorList(new EditorListRequestDto(res.getDocumentsRoots()));
+        List<EditorListResponseDto> shareeditorList = feginEditorService.editorList(new EditorListRequestDto(res.getSharedDocumentsRoots()));
+        shareeditorList = shareeditorList.stream()
+                .filter(editor -> targetUserIds.contains(editor.getOwner()))
+                .collect(Collectors.toList());
+        editorList.addAll(shareeditorList);
+        List<NodeResponseDto> nodeResponseDtos = createNodeResponseDtos(editorList);
+        List<LinkResponseDto> linkResponseDtos = createLinkResponseDtos(editorList);
+        List<Node> nodes = classifyAndSaveEmptyCategoryNodes(editorList);
+        List<Link> links = linkNodesByCategoryAndConfidence(nodes);
+        List<LinkResponseDto> linkResponseDtos1 = convertLinkResponseDtos(links);
+        linkResponseDtos.addAll(linkResponseDtos1);
+        DiagramResponseDto response = createDiagramResponseDto(nodeResponseDtos, linkResponseDtos);
+        diagramCache.put(userId, response);
+        return response;
+    }
 
 
     // 공유 링크
