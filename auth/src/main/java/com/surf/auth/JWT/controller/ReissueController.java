@@ -27,7 +27,7 @@ public class ReissueController {
 
         if (refreshToken == null) {
             fail.setMessage("RefreshToken 쿠키가 없습니다.");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(fail);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(fail);
         }
 
         if ( storedRefreshToken != null) {
@@ -43,7 +43,7 @@ public class ReissueController {
             }
         } else {
 
-            fail.setMessage("해당 유저가 가진 RefreshToken이 없습니다.");
+            fail.setMessage("존재하지않는 RefreshToken입니다. 다시 로그인 해주세요.");
 
             return ResponseEntity.status(HttpStatus.CONFLICT).body(fail);
         }

@@ -52,7 +52,7 @@ public class UserInformationController {
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(userNotFoundExceptionHandler.userNotFound());
             }
         } else {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(findMemberAccessTokenNotValidationHandler.accessTokenNotValidation());
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(findMemberAccessTokenNotValidationHandler.accessTokenNotValidation());
         }
 
 
