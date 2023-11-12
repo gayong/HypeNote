@@ -162,7 +162,7 @@ export default function QuizResult() {
                         key={index}
                         className="hover:-translate-y-2 duration-300 p-5 flex items-center justify-center bg-font_primary shadow-lg dark:shadow-font_secondary rounded-xl w-[150px] h-[170px]">
                         <div>
-                          <Image src={third} className="w-[80px] h-auto absolute ml-[-40px] mt-[-31px]" alt="3" />
+                          <Image src={third} className="w-[80px] h-auto absolute ml-[-40px]  mt-[-17px]" alt="3" />
                           <div className="h-[100px] w-[100px] flex items-center justify-center">
                             <Image
                               src={item.userImg}
@@ -216,7 +216,7 @@ export default function QuizResult() {
                         key={index}
                         className="hover:-translate-y-2 duration-300 p-5 flex items-center justify-center mr-5 bg-font_primary shadow-lg dark:shadow-font_secondary rounded-xl w-[150px] h-[170px]">
                         <div>
-                          <Image src={second} className="w-[80px] h-auto absolute ml-[-40px] mt-[-31px]" alt="2" />
+                          <Image src={second} className="w-[80px] h-auto absolute ml-[-40px]  mt-[-17px]" alt="2" />
                           <div className="h-[100px] w-[100px] flex items-center justify-center">
                             <Image
                               src={item.userImg}

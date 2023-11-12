@@ -9,14 +9,16 @@ import { useCreateRoom } from "@/hooks/useCreateRoom";
 import Loading from "@/app/loading";
 import { useRouter } from "next/navigation";
 import { userAtom } from "@/store/authAtom";
-import { useNoteList } from "@/hooks/useNoteList";
-import { DocumentsType } from "@/types/ediotr";
-import { MyDocumentsAtom } from "@/store/documentsAtom";
+import Tree from "./Tree";
+import { QuizUser } from "@/types/quiz";
 
-const handleChange = (value: string | string[]) => {
-  console.log(`Selected: ${value}`);
-};
-
+interface Click2Type {
+  disabled: undefined;
+  key: string;
+  label: string;
+  title: QuizUser;
+  value: string;
+}
 interface TreeType {
   title: string;
   value: string;
@@ -34,63 +36,24 @@ interface ClickType {
 export default function QuizMaker() {
   const { token } = theme.useToken();
   const [current, setCurrent] = useState(0);
-  const { SHOW_PARENT, SHOW_ALL } = TreeSelect;
+  // const { SHOW_PARENT, SHOW_ALL } = TreeSelect;
   const [isSolo] = useAtom(isSoloAtom);
   const { createRoomMutation, inviteUserInfo, inviteUserMutation, roomInfo, roomId } = useCreateRoom();
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 
-  const [treeData, setTreeData] = useState<TreeType[]>([]);
+  const [quizCnt, setQuizCnt] = useState<number>(1);
+  const [selectedUser, setSelectedUser] = useState<Array<QuizUser>>([]);
+
   const handleTitleChange = (e: any) => setTitle(e.target.value);
   const handleContentChange = (e: any) => setContent(e.target.value);
-
-  const [user] = useAtom(userAtom);
-  const [myDocuments] = useAtom(MyDocumentsAtom);
-
   const [documentsValue, setDocumentsValue] = useState<Array<ClickType>>([]);
-  const [treeProps, setTreeProps] = useState<object>();
+  const [user] = useAtom(userAtom);
 
   const router = useRouter();
 
   useEffect(() => {}, [isSolo]);
-
-  useEffect(() => {
-    console.log(treeData);
-
-    const tProps = {
-      treeData,
-      // value: value,
-      onChange: documentsOnChange,
-      treeCheckable: true,
-      treeCheckStrictly: true,
-      showCheckedStrategy: SHOW_ALL,
-      placeholder: "페이지를 선택해주세요",
-      style: {
-        width: "300px",
-        marginTop: "10px",
-      },
-    };
-    setTreeProps(tProps);
-  }, [treeData]);
-
-  useEffect(() => {
-    // 재귀 함수를 이용한 DocumentsType에서 TreeType으로의 변환
-    const convertToTreeType = (documents: DocumentsType[]): TreeType[] => {
-      return documents.map((item) => ({
-        title: item.title,
-        value: item.id,
-        key: item.id,
-        children: item.children ? convertToTreeType(item.children) : [], // children이 있으면 재귀 호출
-      }));
-    };
-
-    // 변환 과정
-    if (myDocuments && myDocuments.length > 0) {
-      const newTreeData: TreeType[] = convertToTreeType(myDocuments);
-      setTreeData(newTreeData.filter((item) => myDocuments.find((i) => i.id === item.key)?.parentId === "root"));
-    }
-  }, [myDocuments]);
 
   // 퀴즈 방 만들기 STEP 1
   const handleCreateRoom = () => {
@@ -98,7 +61,7 @@ export default function QuizMaker() {
       roomName: title,
       pages: documentsValue.map((doc) => doc.value),
       sharePages: ["654f593c89670a432b9c6b72"],
-      quizCnt: 1,
+      quizCnt: quizCnt,
       content: content,
       single: false,
     });
@@ -106,20 +69,21 @@ export default function QuizMaker() {
 
   const userOptions = useMemo(() => {
     if (inviteUserInfo) {
-      return inviteUserInfo.map((user) => ({ value: user.userName, label: user.userName }));
+      console.log(inviteUserInfo);
+      return inviteUserInfo.slice(1).map((user) => ({
+        value: user.userName,
+        label: user.userName,
+        title: { userPk: user.userPk, userName: user.userName, userImg: user.userImg },
+      }));
     } else {
       return [];
     }
   }, [inviteUserInfo]);
 
   // 퀴즈 방 만들기 STEP 2
-  const users = [
-    { userPk: user.userPk, userName: user.nickName, userImg: user.profileImage },
-    { userPk: 1, userName: "csi", userImg: "성공" },
-    { userPk: 5, userName: "isc", userImg: "성공" },
-  ];
-
   const handleSumbitCreateRoom = () => {
+    const users = [{ userPk: user.userPk, userName: user.nickName, userImg: user.profileImage }, ...selectedUser];
+
     if (roomInfo) {
       // const { inviteUsers, ...rest } = roomInfo;
       inviteUserMutation.mutate({ ...roomInfo, users: users });
@@ -136,27 +100,18 @@ export default function QuizMaker() {
     }
   }, [roomId]);
 
-  const documentsOnChange = (newDocument: ClickType[]) => {
+  const handleDocumentsChange = (newDocument: Array<ClickType>) => {
     setDocumentsValue(newDocument);
   };
+  const handleChangeQuizCnt = (value: number) => {
+    console.log(value);
+    setQuizCnt(value);
+  };
 
-  // useEffect(() => {
-  //   console.log(documentsValue);
-  // }, [documentsValue]);
-
-  // const tProps = {
-  //   treeData,
-  //   // value: value,
-  //   onChange: documentsOnChange,
-  //   treeCheckable: true,
-  //   treeCheckStrictly: true,
-  //   showCheckedStrategy: SHOW_ALL,
-  //   placeholder: "페이지를 선택해주세요",
-  //   style: {
-  //     width: "300px",
-  //     marginTop: "10px",
-  //   },
-  // };
+  const handleChangeNickName = (value: Array<Click2Type>) => {
+    const selectedUsers = value.map((v) => v.title);
+    setSelectedUser(selectedUsers);
+  };
 
   const steps = useMemo(
     () => [
@@ -172,9 +127,7 @@ export default function QuizMaker() {
             <h1 className="dark:text-font_primary" style={{ marginBottom: "60px", padding: 0 }}>
               내 노트, 공유받은 페이지에서 퀴즈로 풀 페이지를 골라주세요.
             </h1>
-            {/* {treeData.length > 0 ? <TreeSelect {...tProps} /> : ""} */}
-            {/* {treeProps && <TreeSelect {...treeProps} />} */}
-            {<TreeSelect {...treeProps} />}
+            <Tree onDocumentsChange={handleDocumentsChange} />
           </div>
         ),
       },
@@ -191,7 +144,8 @@ export default function QuizMaker() {
               페이지 당 생성 가능한 문제 수는 최소 1개, 최대 3개입니다.
             </h1>
             <Select
-              defaultValue={{ value: "1", label: "1개" }}
+              onChange={handleChangeQuizCnt}
+              defaultValue={1}
               style={{ width: 120, marginTop: "10px" }}
               options={[
                 { value: 1, label: "1개" },
@@ -241,11 +195,11 @@ export default function QuizMaker() {
                     닉네임 검색을 통해 친구를 초대해보세요.
                   </h1>
                   <Select
-                    // defaultValue={["가영"]}
+                    labelInValue={true}
                     mode="tags"
                     size="middle"
                     placeholder="닉네임을 검색하세요"
-                    onChange={handleChange}
+                    onChange={handleChangeNickName}
                     style={{ width: "400px" }}
                     options={userOptions}
                   />
