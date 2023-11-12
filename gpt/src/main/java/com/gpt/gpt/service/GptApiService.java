@@ -28,7 +28,7 @@ public class GptApiService {
 
         Map<String, String> message = new HashMap<>();
         message.put("role", "system");
-        message.put("content", "유저가 처음에 '표'라는 말과 함께 질문을 시작한다면 답변의 핵심 내용을 표로도 잘 정리해서 보여줘.");
+        message.put("content", "상냥한 말투로 친절하게 대답해줘");
 
         Map<String, String> userMessage = new HashMap<>();
         userMessage.put("role", "user");
