@@ -69,13 +69,10 @@ export default function Signup() {
       if (response.status === 200) {
         message.success("회원가입에 성공했습니다. 로그인 후 사이트 이용해 주세요.");
         router.push("/signin");
-      } else {
-        console.log("에러");
-        message.error("회원가입에 실패했습니다.");
       }
-    } catch (err) {
-      console.error(err);
-      message.error("회원가입에 실패했습니다.");
+    } catch (error: any) {
+      console.log(error);
+      message.error(error.response.data);
     }
 
     // if (success === "success") {

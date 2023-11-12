@@ -58,7 +58,7 @@ api.interceptors.response.use(
           `${window.location.origin}/api/auth/reissue`,
           {},
           {
-            headers: { Authorization: `Bearer ${accessToken}` },
+            // headers: { Authorization: `Bearer ${accessToken}` },
             withCredentials: true,
           }
         );
