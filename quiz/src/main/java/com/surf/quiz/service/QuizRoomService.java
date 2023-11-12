@@ -208,7 +208,7 @@ public class QuizRoomService {
         // 퀴즈 생성 작업을 비동기로 수행
         CompletableFuture.runAsync(() -> {
             Quiz quiz = this.createQuiz(createdQuizroom);
-            SendQuizReady(createdQuizroom);
+            SendQuizReady(createdQuizroom.getId());
             quizRepository.save(quiz);
         }).exceptionally(ex -> {
             // 오류 처리 코드
@@ -357,7 +357,8 @@ public class QuizRoomService {
         scheduler.schedule(() -> messageTemplate.convertAndSend("/sub/quiz/" + quizRoom.getId(), payload), 2, TimeUnit.SECONDS);
     }
 
-    private void SendQuizReady(QuizRoom quizRoom) {
+    private void SendQuizReady(Long roomId) {
+        QuizRoom quizRoom = quizRepo.findById(roomId).orElseThrow();
         Map<String, Object> payload = new HashMap<>();
         DetailResponseDto response = detailConvert(quizRoom);
 
