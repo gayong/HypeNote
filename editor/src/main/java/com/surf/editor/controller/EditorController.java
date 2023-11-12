@@ -202,7 +202,7 @@ public class EditorController {
         return ResponseEntity.ok(apiResponse);
     }
 
-    @DeleteMapping("/user")
+    @DeleteMapping("/root-delete")
     public ResponseEntity<ApiResponse> editorUserDelete(@RequestBody EditorUserDeleteRequestDto editorUserDeleteRequestDto){
         editorService.editorUserDelete(editorUserDeleteRequestDto);
 
