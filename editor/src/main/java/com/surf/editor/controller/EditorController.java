@@ -214,4 +214,17 @@ public class EditorController {
 
         return ResponseEntity.ok(apiResponse);
     }
+
+    @GetMapping("/shareList/{userId}")
+    public ResponseEntity<ApiResponse> editorUserList(@PathVariable int userId){
+        EditorUserListResponseDto editorUserListResponseDto = editorService.editorUserList(userId);
+
+        ApiResponse apiResponse = ApiResponse.builder()
+                .message("공유 해준 유저 리스트")
+                .status(OK.value())
+                .data(editorUserListResponseDto)
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
 }
