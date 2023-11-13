@@ -30,8 +30,8 @@ export const fetchLinkNote = (userId: number, parentId: string, childId: string)
 };
 
 // 게시글 삭제
-export const fetchDeleteNote = (edittorId: string) => {
-  api.delete(`editor/write/${edittorId}`);
+export const fetchDeleteNote = (editorId: string) => {
+  api.delete(`editor/${editorId}`);
 };
 
 // 에디터 게시글 상세 조회
