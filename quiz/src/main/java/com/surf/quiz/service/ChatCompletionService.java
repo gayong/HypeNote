@@ -16,9 +16,7 @@ import kr.co.shineware.nlp.komoran.constant.DEFAULT_MODEL;
 import kr.co.shineware.nlp.komoran.core.Komoran;
 import kr.co.shineware.nlp.komoran.model.Token;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
@@ -31,11 +29,15 @@ public class ChatCompletionService {
     private static final Logger logger = LoggerFactory.getLogger(ChatCompletionService.class);
     private final static String ROLE_USER = "user";
     private final static String MODEL = "gpt-3.5-turbo";
+    // 불용어 사전
     private static final Set<String> STOPWORDS = new HashSet<>();
-
     static {
         try {
-            BufferedReader br = new BufferedReader(new FileReader("src/main/resources/static/stopwords.txt"));
+            InputStream in = ChatCompletionService.class.getResourceAsStream("/static/stopwords.txt");
+            if (in == null) {
+                throw new FileNotFoundException("파일 경로 오류 'static/stopwords.txt'");
+            }
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
             String line;
             while ((line = br.readLine()) != null) {
                 STOPWORDS.add(line.trim());
@@ -45,11 +47,16 @@ public class ChatCompletionService {
             e.printStackTrace();
         }
     }
-    private static final Set<String> PUNCTUATIONS = new HashSet<>();
 
+    // 특수문자 사전
+    private static final Set<String> PUNCTUATIONS = new HashSet<>();
     static {
         try {
-            BufferedReader br = new BufferedReader(new FileReader("src/main/resources/static/punctuations.txt"));
+            InputStream in = ChatCompletionService.class.getResourceAsStream("/static/punctuations.txt");
+            if (in == null) {
+                throw new FileNotFoundException("파일 경로 오류 'static/punctuations.txt'");
+            }
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
             String line;
             while ((line = br.readLine()) != null) {
                 PUNCTUATIONS.add(line.trim());

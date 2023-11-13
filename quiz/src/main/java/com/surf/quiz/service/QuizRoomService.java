@@ -137,14 +137,13 @@ public class QuizRoomService {
         FindUserPkListDto dto = new FindUserPkListDto();
         dto.setUserPkList(res1);  // res를 userPkList로 설정
         List<UserInfoResponseDto> lst = feignService.userInfoByUserPkList(dto);
+        System.out.println("lst = " + lst);
 
         if(lst == null || lst.isEmpty()) {
             return inviteUsers;
         }
 
         System.out.println("lst = " + lst);
-
-
 
         for(UserInfoResponseDto userInfo : lst) {
             UserDto user = createUser((long)userInfo.getUserPk(), userInfo.getNickName(), userInfo.getProfileImage());
