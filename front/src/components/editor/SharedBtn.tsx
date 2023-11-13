@@ -7,6 +7,7 @@ import useGetSharedMember from "@/hooks/useGetSharedMember";
 import useUsersFindByPkList from "@/hooks/useUsersFindByPkList";
 import { userInfo } from "os";
 import { ReactNode } from "react";
+import { FaUserFriends } from "react-icons/fa";
 type Props = {
   id: string;
 };
@@ -60,10 +61,8 @@ export default function ShardeBtn({ id }: Props) {
     onClick: handleMenuClick,
   };
   return (
-    <Dropdown menu={menuProps} className="absolute top-5 right-10">
-      <Button>
-        <Space>공유목록</Space>
-      </Button>
+    <Dropdown menu={menuProps} className="absolute top-5 right-12">
+      <FaUserFriends className="dark:text-font_primary text-2xl hover:text-dark_font" title="공유한 친구목록" />
     </Dropdown>
   );
 }

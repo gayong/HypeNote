@@ -29,7 +29,7 @@ export default function SelectShare({ onReceive }: { onReceive: (sharedData: any
   };
 
   return (
-    <div className="relative mt-4 ml-4">
+    <div className="relative mt-4 ml-8">
       <Select
         mode="tags"
         size="middle"

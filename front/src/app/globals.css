@@ -129,15 +129,28 @@ body {
 }
 
 /* 검색에 사용되는 인풋, placeholder */
-/* :where(.css-dev-only-do-not-override-2i2tap).ant-input {
+:where(.css-dev-only-do-not-override-2i2tap).ant-input {
   font-family: "preRg";
-} */
+}
+:where(.css-2i2tap).ant-input-group > .ant-input:first-child,
+:where(.css-2i2tap).ant-input-group .ant-input-group-addon:first-child {
+  font-family: "preRg";
+}
 
 /* 뇌에 친구 select */
-/* .ant-select-show-search:where(.css-dev-only-do-not-override-2i2tap).ant-select:not(.ant-select-customize-input)
+.ant-select-show-search:where(.css-dev-only-do-not-override-2i2tap).ant-select:not(.ant-select-customize-input)
   .ant-select-selector {
   font-family: "preRg";
-} */
+}
+:where(.css-2i2tap).ant-select-multiple .ant-select-selection-overflow {
+  font-family: "preRg";
+}
+.ant-select-show-search:where(.css-2i2tap).ant-select:not(.ant-select-customize-input) .ant-select-selector {
+  font-family: "preRg";
+}
+:where(.css-2i2tap).ant-select-multiple .ant-select-selection-item-content {
+  font-family: "preRg";
+}
 
 /* 에디터 서랍 바디 */
 :where(.css-dev-only-do-not-override-2i2tap).ant-drawer .ant-drawer-body {
