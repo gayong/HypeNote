@@ -9,6 +9,4 @@ import java.util.List;
 @Builder(toBuilder = true)
 public class EditorUserListResponseDto {
     private List<Integer> userList;
-    private String nickName;
-    private String profileImage;
 }
