@@ -215,9 +215,9 @@ public class EditorController {
         return ResponseEntity.ok(apiResponse);
     }
 
-    @GetMapping("/shareList/{userId}")
-    public ResponseEntity<ApiResponse> editorUserList(@PathVariable int userId){
-        EditorUserListResponseDto editorUserListResponseDto = editorService.editorUserList(userId);
+    @PostMapping("/root-owner")
+    public ResponseEntity<ApiResponse> editorUserList(@RequestBody EditorUserListRequestDto editorUserListRequestDto){
+        EditorUserListResponseDto editorUserListResponseDto = editorService.editorUserList(editorUserListRequestDto);
 
         ApiResponse apiResponse = ApiResponse.builder()
                 .message("공유 해준 유저 리스트")
