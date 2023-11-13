@@ -27,7 +27,11 @@ function useEventSource(url: string, keyword: string) {
             if (done) return;
 
             const chunk = decoder.decode(value || new Uint8Array(), { stream: !done });
-            const result = JSON.parse(chunk);
+            const jsonData = chunk.slice(6);
+            const result = JSON.parse(jsonData);
+
+            console.log("이건 자른 데이터", jsonData);
+            console.log("이건 자른 데이터 json화", result);
 
             if (result && result.choices && result.choices[0] && result.choices[0].delta) {
               setData((prevData) => prevData + result.choices[0].delta.content);
