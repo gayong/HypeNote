@@ -8,6 +8,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.io.IOException;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler{
 
@@ -34,6 +36,11 @@ public class GlobalExceptionHandler{
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleServerException(Exception e){
         return handleException(e,ErrorCode.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(IOException.class)
+    public ResponseEntity<ErrorResponse> handleIOException(Exception e){
+        return handleException(e, ErrorCode.FAIL_UPLOAD);
     }
 
     private ResponseEntity<ErrorResponse> handleException(Exception e, ErrorCode errorCode){

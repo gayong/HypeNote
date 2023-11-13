@@ -16,6 +16,7 @@ public enum ErrorCode {
     INTERNAL_SERVER_ERROR(500, "서버에 문제가 생겼습니다."),
     ILLEGAL_ARGUMENT_EXCEPTION(400,"올바르지 않은 형식의 입력입니다."),
     METHOD_ARGUMENT_NOT_VALID_EXCEPTION(400,"올바르지 않은 형식입니다."),
+    FAIL_UPLOAD(400,"파일 업로드에 실패 했습니다."),
 
     USER_NOT_FOUND(404,"해당 유저를 찾을 수 없습니다."),
     EDITOR_NOT_FOUND(404, "해당 게시글을 찾을 수 없습니다."),
