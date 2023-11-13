@@ -13,8 +13,8 @@ export const createUser = (email: string, password: string, nickName: string, pr
 
 // 로그인
 export const signinUser = (email: string, password: string) =>
-  // axios.post(`${window.location.origin}/api/auth/login`, { email, password });
-  api.post(`auth/login`, { email, password });
+  axios.post(`${window.location.origin}/api/auth/login`, { email, password });
+// api.post(`auth/login`, { email, password });
 
 // 유저 정보 조회
 export const getUserInfo = () => {
