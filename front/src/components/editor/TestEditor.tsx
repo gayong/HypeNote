@@ -116,14 +116,14 @@ function TestEditor({ id }: Props) {
           type: "heading",
         });
       }
-      if (blockToUpdate.content !== prevTitle) {
-        noteList.mutate({
-          rootList: user.documentsRoots,
-        });
-        noteList.mutate({
-          rootList: user.sharedDocumentsRoots,
-        });
-      }
+      // if (blockToUpdate.content !== prevTitle) {
+      //   noteList.mutate({
+      //     rootList: user.documentsRoots,
+      //   });
+      //   noteList.mutate({
+      //     rootList: user.sharedDocumentsRoots,
+      //   });
+      // }
     },
     domAttributes: {
       editor: {

@@ -71,7 +71,7 @@ export default function Category({ childProps, value }: categoryProps) {
           onClick={(event) => onClickPage(event, childProps.id)}>
           <i className="bi bi-chat-left-text-fill"></i>
           <div className="group flex justify-between w-full items-center">
-            <div className="text-[15px] ml-2 text-white font-bold flex items-center">
+            <div className="text-[15px] ml-2 text-white font-bold flex items-center truncate ...">
               {childProps.title}
               <div className="ml-3" style={{ fontSize: "20px" }} onClick={(event) => toggleRootCollapse(event)}>
                 {childProps.children && Rooticon}
@@ -98,7 +98,7 @@ export default function Category({ childProps, value }: categoryProps) {
               onClick={(event) => onClickPage(event, subject.id)}>
               {/* 책 카테고리 */}
               <div className="group flex justify-between items-center cursor-pointer p-2 hover:bg-hover_primary hover:bg-opacity-50 dark:hover:bg-line_primary dark:hover:bg-opacity-50 rounded-md">
-                <h1 className="text-left flex items-center">
+                <h1 className="text-left flex items-center truncate ...">
                   {subject.title}
                   <div className="ml-3" style={{ fontSize: "20px" }} onClick={(event) => toggleCollapse(event)}>
                     {subject.children && icon}
