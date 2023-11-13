@@ -49,7 +49,8 @@ public class DiagramServiceImpl implements DiagramService {
     private static final Set<String> STOPWORDS = new HashSet<>();
     static {
         try {
-            BufferedReader br = new BufferedReader(new FileReader("src/main/resources/static/stopwords.txt"));
+            InputStream in = ClassLoader.getSystemResourceAsStream("static/stopwords.txt");
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
             String line;
             while ((line = br.readLine()) != null) {
                 STOPWORDS.add(line.trim());
@@ -64,7 +65,8 @@ public class DiagramServiceImpl implements DiagramService {
     private static final Set<String> PUNCTUATIONS = new HashSet<>();
     static {
         try {
-            BufferedReader br = new BufferedReader(new FileReader("src/main/resources/static/punctuations.txt"));
+            InputStream in = ClassLoader.getSystemResourceAsStream("static/punctuations.txt");
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
             String line;
             while ((line = br.readLine()) != null) {
                 PUNCTUATIONS.add(line.trim());
@@ -74,7 +76,6 @@ public class DiagramServiceImpl implements DiagramService {
             e.printStackTrace();
         }
     }
-
 
     // 나의 뇌 그리기
     @Override
