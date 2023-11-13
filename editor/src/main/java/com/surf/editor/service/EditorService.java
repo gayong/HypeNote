@@ -405,38 +405,19 @@ public class EditorService {
         }
     }
 
-    public EditorUserListResponseDto editorUserList(int userId) {
-        List<Editor> editorList = editorRepository.findAllByUserId(userId).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
-
-        List<MemberListOpenFeignResponseDto> memberListOpenFeignResponseDto = memberListFeign(userId);
-
+    public EditorUserListResponseDto editorUserList(EditorUserListRequestDto editorUserListRequestDto) {
         Set<Integer> set = new HashSet<>();
-        for (Editor editor : editorList) {
-            for (Integer id : editor.getSharedUser()) {
-                set.add(id);
-            }
+
+        for (String shareId : editorUserListRequestDto.getSharedDocumentsRootList()) {
+            Editor shareEditor = editorRepository.findById(shareId).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
+            set.add(shareEditor.getUserId());
         }
 
         EditorUserListResponseDto editorUserListResponseDto = EditorUserListResponseDto.builder()
-                .nickName(memberListOpenFeignResponseDto.get(0).getNickName())
-                .profileImage(memberListOpenFeignResponseDto.get(0).getProfileImage())
                 .userList(List.copyOf(set))
                 .build();
 
         return editorUserListResponseDto;
     }
 
-    private List<MemberListOpenFeignResponseDto> memberListFeign(int userId ) {
-        try{
-            List<Integer> userPkList = new ArrayList<>();
-            userPkList.add(userId);
-            MemberListOpenFeignRequestDto memberListOpenFeignRequestDto = MemberListOpenFeignRequestDto.builder()
-                    .userPkList(userPkList)
-                    .build();
-
-            return memberListOpenFeign.MemberList(memberListOpenFeignRequestDto);
-        }catch (Exception e){
-            throw new BaseException(ErrorCode.MEMBER_SAVE_FAIL);
-        }
-    }
 }
