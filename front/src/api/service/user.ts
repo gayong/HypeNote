@@ -40,3 +40,8 @@ export const getOtherUserPkByNickName = (nickName: string) => {
 export const getUsersInfo = (userPkList: number[]) => {
   return api.post(`auth/user-info/pk-list`, { userPkList: userPkList });
 };
+
+// userPk 로 user root info 반환
+export const getShareUserList = (userPk: number) => {
+  return api.get(`auth/root-user-info/${userPk}`);
+};
