@@ -123,7 +123,7 @@ export default function QuizResult() {
                               className="rounded-full object-cover h-[80px] w-[80px]"></Image>
                           </div>
                           {/* <div className="mb-2 ml-2 mr-2 rounded-full w-16 h-16 bg-cover bg-[url('/assets/profile.jpg')]" /> */}
-                          <div className="dark:text-font_primary flex justify-center">{item.userName}</div>
+                          <div className="flex justify-center">{item.userName}</div>
                           <p className="font-PreBd text-sm text-[#ffd51c] flex justify-center">
                             {item.correct} / {item.total}
                           </p>
@@ -148,7 +148,7 @@ export default function QuizResult() {
                               className="rounded-full object-cover h-[100px] w-[100px]"></Image>
                           </div>
                           {/* <div className="mb-2 ml-2 mr-2 rounded-full w-16 h-16 bg-cover bg-[url('/assets/profile.jpg')]" /> */}
-                          <div className="dark:text-font_primary flex justify-center">{item.userName}</div>
+                          <div className=" flex justify-center">{item.userName}</div>
                           <p className="font-PreBd text-sm text-[#ffd51c] flex justify-center">
                             {item.correct} / {item.total}
                           </p>
@@ -173,7 +173,7 @@ export default function QuizResult() {
                               className="rounded-full object-cover h-[80px] w-[80px]"></Image>
                           </div>
                           {/* <div className="mb-2 ml-2 mr-2 rounded-full w-16 h-16 bg-cover bg-[url('/assets/profile.jpg')]" /> */}
-                          <div className="dark:text-font_primary flex justify-center">{item.userName}</div>
+                          <div className="flex justify-center">{item.userName}</div>
                           <p className="font-PreBd text-sm text-[#ffd51c] flex justify-center">
                             {item.correct} / {item.total}
                           </p>
@@ -202,7 +202,7 @@ export default function QuizResult() {
                               className="rounded-full object-cover h-[100px] w-[100px]"></Image>
                           </div>
                           {/* <div className="mb-2 ml-2 mr-2 rounded-full w-16 h-16 bg-cover bg-[url('/assets/profile.jpg')]" /> */}
-                          <div className="flex justify-center dark:text-font_primary">{item.userName}</div>
+                          <div className="flex justify-center">{item.userName}</div>
                           <p className="font-PreBd text-sm text-[#ffd51c] flex justify-center">
                             {item.correct} / {item.total}
                           </p>

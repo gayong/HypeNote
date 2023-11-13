@@ -20,7 +20,7 @@ const useGetUserInfo = () => {
         sharedDocumentsRoots: response.data.sharedDocumentsRoots,
         role: response.data.documentsRoots,
       });
-
+      return true;
       //   return "success";
     } catch (error) {
       console.log(error);

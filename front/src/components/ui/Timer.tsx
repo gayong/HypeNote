@@ -2,7 +2,7 @@
 
 import React from "react";
 import type { CountdownProps } from "antd";
-import { Statistic } from "antd";
+import { Statistic, message } from "antd";
 
 interface TimerProps {
   time: number;
@@ -15,6 +15,7 @@ export default function Timer({ time }: TimerProps) {
 
   const onFinish: CountdownProps["onFinish"] = () => {
     console.log("finished!");
+    message.info("퀴즈가 끝났습니다!");
   };
 
   return (

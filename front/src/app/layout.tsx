@@ -27,6 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   const { userInfo } = useGetUserInfo();
 
   useEffect(() => {
+    console.log("내정보받으러간다");
     userInfo();
   }, []);
 
