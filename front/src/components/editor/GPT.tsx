@@ -14,9 +14,9 @@ async function fetchEventSource(url: string, keyword: string) {
   if (keyword) {
     const response = await fetch(url, {
       method: "POST",
-      // headers: {
-      //   "Content-Type": "application/json",
-      // },
+      headers: {
+        "Content-Type": "application/json",
+      },
       body: JSON.stringify({ question: keyword }),
     });
 
