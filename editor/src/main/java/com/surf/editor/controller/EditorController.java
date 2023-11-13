@@ -228,7 +228,7 @@ public class EditorController {
         return ResponseEntity.ok(apiResponse);
     }
 
-    @PostMapping("/upload")
+    @PostMapping(value = "/upload",consumes = "multipart/form-data")
     public ResponseEntity<ApiResponse> editorUpload(@RequestBody EditorUploadRequestDto editorUploadRequestDto){
 
         EditorUploadResponseDto editorUploadResponseDto = editorService.editorUpload(editorUploadRequestDto);
