@@ -20,21 +20,21 @@ public class DiagramController {
         this.diagramService = diagramService;
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/{userPk}")
     @Operation(summary = "내 노드와 링크 조회")
-    public BaseResponse<DiagramResponseDto> getNodes(@PathVariable int userId) {
-        System.out.println("userId = " + userId);
+    public BaseResponse<DiagramResponseDto> getNodes(@PathVariable int userPk) {
+        System.out.println("userId = " + userPk);
 
-        DiagramResponseDto response = diagramService.getDiagram(userId);
+        DiagramResponseDto response = diagramService.getDiagram(userPk);
 
         return new BaseResponse<>(response);
     }
 
 
-    @PostMapping("/share/{userId}")
+    @PostMapping("/share/{userPk}")
     @Operation(summary = "다인 쉐어")
-    public BaseResponse<DiagramResponseDto> linkNodesByShares(@PathVariable int userId, @RequestBody List<Integer> targetIds ) throws Exception {
-        DiagramResponseDto responseDto = diagramService.linkNodesByShares(userId, targetIds);
+    public BaseResponse<DiagramResponseDto> linkNodesByShares(@PathVariable int userPk, @RequestBody List<Integer> targetIds ) throws Exception {
+        DiagramResponseDto responseDto = diagramService.linkNodesByShares(userPk, targetIds);
         return new BaseResponse<>(responseDto);
     }
 }
