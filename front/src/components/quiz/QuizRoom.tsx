@@ -89,7 +89,7 @@ export default function QuizRoom(props: QuizRoomProps) {
 
           <section className="px-2 pr-6 grid grid-cols-3 h-screen w-full max-w-full items-center">
             <QuizResult />
-            <div className="pl-2 col-span-2">
+            <div className="pl-2 col-span-1">
               <ChatRoom roomId={props.roomId} height={80} />
             </div>
           </section>
