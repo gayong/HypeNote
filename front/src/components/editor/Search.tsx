@@ -13,6 +13,7 @@ import type { CollapseProps } from "antd";
 import type { DraggableData, DraggableEvent } from "react-draggable";
 import Draggable from "react-draggable";
 import "../../app/search/search.css";
+import GPT from "./GPT";
 
 // 이건 서랍 속 검색!!!!!!
 export default function Search() {
@@ -33,7 +34,6 @@ export default function Search() {
     const preventScroll = (e: WheelEvent) => {
       e.preventDefault();
     };
-
     if (modalOpen) {
       window.addEventListener("wheel", preventScroll, { passive: false });
     } else {
@@ -50,11 +50,6 @@ export default function Search() {
 
   const showModal = () => {
     setModalOpen(true);
-  };
-
-  const handleOk = (e: React.MouseEvent<HTMLElement>) => {
-    console.log(e);
-    setModalOpen(false);
   };
 
   const handleCancel = (e: React.MouseEvent<HTMLElement>) => {
@@ -99,6 +94,7 @@ export default function Search() {
   const onChange = (e: any) => {
     setKeyword(e.target.value);
     console.log(e.target.value);
+    setEnabled(false);
   };
 
   useEffect(() => {
@@ -128,7 +124,7 @@ export default function Search() {
             onSearch={handleEnter}
             style={{ width: "100%", display: "flex", margin: "auto", marginBottom: "7px" }}
           />
-          {results &&
+          {results ? (
             results.map((item, index) => (
               <div key={index} className="max-w-full scrollbar-hide">
                 <div
@@ -137,10 +133,16 @@ export default function Search() {
                     setIframeSrc(item.url);
                     showModal();
                   }}>
-                  <img src={item.thumbnail} alt="썸네일" className="w-16 min-w-16 h-16 mr-2 mb-2 rounded-md" />
+                  {item.thumbnail ? (
+                    <img src={item.thumbnail} alt="썸네일" className="w-16 min-w-16 h-16 mr-2 mb-2 rounded-md" />
+                  ) : null}
                   <div className="pb-2 hover:text-dark_font">
                     <div className="flex justify-start items-end max-w-full ">
-                      <p className="font-preBd mb-0 p-0 oneline mr-2 oneline max-w-[205px]">{item.title}</p>
+                      {item.thumbnail ? (
+                        <p className="font-preBd mb-0 p-0 oneline mr-2 oneline max-w-[205px]">{item.title}</p>
+                      ) : (
+                        <p className="font-preBd mb-0 p-0 oneline mr-2 oneline max-w-[270px]">{item.title}</p>
+                      )}
                       <p className="font-preLt mb-0 p-0 text-[10px] text-line_primary">
                         {" "}
                         | {formatDate(item.datetime)}
@@ -151,7 +153,12 @@ export default function Search() {
                 </div>
                 <hr className="p-1 opacity-20" />
               </div>
-            ))}
+            ))
+          ) : (
+            <div>
+              <h1 className="text-center">검색결과가 없습니다.</h1>
+            </div>
+          )}
           <Modal
             title={
               <div
@@ -207,7 +214,7 @@ export default function Search() {
           <p className="text-[13px] text-line_primary opacity-50">프롬프트를 이용한 대답을 들려줘요.</p>
         </div>
       ),
-      children: <h1 className="text-center">Chat-GPT를 기다려요..</h1>,
+      children: <GPT />,
     },
   ];
 

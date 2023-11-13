@@ -69,7 +69,7 @@ export default function MySearch() {
       <Search
         placeholder="게시글을 검색하세요"
         value={keyword}
-        enterButton
+        // enterButton
         onPressEnter={handleEnter}
         onChange={onChange}
         onSearch={handleEnter}

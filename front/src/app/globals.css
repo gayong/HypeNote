@@ -95,12 +95,37 @@ body {
   .ant-input-search-button {
   background-color: #a5b3e2;
 }
-.ant-btn css-2i2tap ant-btn-primary ant-input-search-button {
-  background-color: #a5b3e2;
-}
 
 :where(.css-2i2tap).ant-input-search > .ant-input-group > .ant-input-group-addon:last-child .ant-input-search-button {
   background-color: #a5b3e2;
+}
+
+/* 네브바 서치 돋보기 */
+:where(.css-dev-only-do-not-override-2i2tap).ant-input-search
+  > .ant-input-group
+  > .ant-input-group-addon:last-child
+  .ant-input-search-button:not(.ant-btn-primary) {
+  background-color: white;
+  height: 31px;
+}
+
+/* 네브바 서치 인풋 */
+:where(.css-dev-only-do-not-override-2i2tap).ant-input-group > .ant-input:first-child,
+:where(.css-dev-only-do-not-override-2i2tap).ant-input-group .ant-input-group-addon:first-child::placeholder {
+  padding-bottom: 4px;
+}
+/* 서치 돋보기 border */
+:where(.css-dev-only-do-not-override-2i2tap).ant-input-search
+  > .ant-input-group
+  > .ant-input-group-addon:last-child
+  .ant-input-search-button:not(.ant-btn-primary) {
+  border: none;
+}
+:where(.css-2i2tap).ant-input-search
+  > .ant-input-group
+  > .ant-input-group-addon:last-child
+  .ant-input-search-button:not(.ant-btn-primary) {
+  border: none;
 }
 
 /* 검색에 사용되는 인풋, placeholder */
@@ -116,6 +141,10 @@ body {
 
 /* 에디터 서랍 바디 */
 :where(.css-dev-only-do-not-override-2i2tap).ant-drawer .ant-drawer-body {
+  padding: 0;
+}
+
+:where(.css-2i2tap).ant-drawer .ant-drawer-body {
   padding: 0;
 }
 
