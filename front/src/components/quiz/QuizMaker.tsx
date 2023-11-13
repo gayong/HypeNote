@@ -55,11 +55,6 @@ export default function QuizMaker() {
 
   const router = useRouter();
 
-  // useEffect(() => {}, [isSolo]);
-  // if (isSolo === null) {
-  //   return null; // isSolo 값이 null인 경우 아무것도 렌더링하지 않음
-  // }
-
   // 퀴즈 방 만들기 STEP 1
   const handleCreateRoom = () => {
     createRoomMutation.mutate({
@@ -124,6 +119,11 @@ export default function QuizMaker() {
   };
 
   const handleChangeNickName = (value: Array<Click2Type>) => {
+    if (value.length > 8) {
+      message.warning("최대 7명까지 초대 가능 합니다.");
+      return;
+    }
+
     const selectedUsers = value.map((v) => v.title);
     setSelectedUser(selectedUsers);
   };
