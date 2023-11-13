@@ -1,9 +1,4 @@
 import axios from "axios";
-import Loading from "@/app/loading";
-import useReissue from "@/hooks/useReissue";
-// import { access } from "fs";
-// import { validateHeaderValue } from "http";
-// import { cookies } from "next/headers";
 
 // axios 인스턴스 생성
 const api = axios.create({
@@ -18,7 +13,6 @@ api.interceptors.request.use(
 
     // 토큰이 있는 경우
     const accessToken = localStorage.getItem("accessToken");
-    console.log("11111111111111111111111111인터셉터옴!!!");
     if (accessToken) {
       config.headers["Authorization"] = `Bearer ${accessToken}`;
     }
@@ -49,14 +43,13 @@ api.interceptors.response.use(
     //   // redirect(`https://${window.location.origin}/api/auth/reissue`);
     //   window.location.href = process.env.NEXT_PUBLIC_SERVER_URL + "auth/reissue";
     // }
-    console.log("22222222222222인터셉터옴!!!!!!!!!!!!");
 
     api.interceptors.response.use(
       function (response) {
         return response;
       },
       async function (error) {
-        // const accessToken = localStorage.getItem("accessToken");
+        const accessToken = localStorage.getItem("accessToken");
         // // console.log(accessToken);
         // if (!accessToken) {
         //   return (window.location.href = `/signin`);
