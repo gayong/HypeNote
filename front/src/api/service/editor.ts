@@ -72,9 +72,14 @@ export const fetchSharedMember = (editorList: string[]) => {
   return api.post(`editor/member`, { editorList });
 };
 
-// 게시글 document 만들기
+// 게시글 이미지 업로드
 export const fetchEditorUploadImage = (file: File) => {
   const body = new FormData();
   body.append("multipartFile", file);
-  return api.post(`editor/upload`, { body });
+
+  return api.post("editor/upload", body, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 };
