@@ -13,8 +13,8 @@ export const createUser = (email: string, password: string, nickName: string, pr
 
 // 로그인
 export const signinUser = (email: string, password: string) =>
-  axios.post(`${window.location.origin}/api/auth/login`, { email, password });
-// api.post(`auth/login`, { email, password });
+  // axios.post(`${window.location.origin}/api/auth/login`, { email, password });
+  api.post(`auth/login`, { email, password });
 
 // 유저 정보 조회
 export const getUserInfo = () => {
@@ -23,8 +23,8 @@ export const getUserInfo = () => {
 
 // 토큰 재발급
 export const reissueToken = () =>
-  axios.post(`${window.location.origin}/api/auth/reissue`, {}, { withCredentials: true });
-// api.post(`auth/reissue`, {}, { withCredentials: true });
+  // axios.post(`${window.location.origin}/api/auth/reissue`, {}, { withCredentials: true });
+  api.post(`auth/reissue`, {}, { withCredentials: true });
 
 // 게시글 공유
 export const shareNote = (userId: number, userList: number[], editorId: string) => {

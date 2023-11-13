@@ -56,19 +56,27 @@ api.interceptors.response.use(
         return response;
       },
       async function (error) {
-        if (error.response.status === 401 || error.responese.status == 403) {
+        // const accessToken = localStorage.getItem("accessToken");
+        // // console.log(accessToken);
+        // if (!accessToken) {
+        //   return (window.location.href = `/signin`);
+        // }
+
+        if (error.response.status === 401 || error.response.status == 403) {
           try {
             const res = await axios.get(`${window.location.origin}/api/auth/reissue`, {
               withCredentials: true,
             });
             localStorage.setItem("accessToken", res.data.accessToken);
-
+            console.log("요기");
             // 이전 요청 다시 수행
             const originalRequest = error.config;
             originalRequest.headers["Authorization"] = `Bearer ${res.data.accessToken}`;
             return api(originalRequest);
           } catch (error) {
-            return (window.location.href = `https://${window.location.origin}/signin`);
+            console.log("실패");
+
+            return (window.location.href = `signin`);
           }
         }
         return Promise.reject(error);
