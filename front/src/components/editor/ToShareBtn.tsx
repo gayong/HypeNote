@@ -1,3 +1,5 @@
+"use client";
+
 import { Alert, Button, Flex, FloatButton, List, Modal } from "antd";
 import Search, { SearchProps } from "antd/es/input/Search";
 import { useState } from "react";

@@ -1,3 +1,5 @@
+"use client";
+
 import { Button, Dropdown, MenuProps, Space, message } from "antd";
 import { DownOutlined, UserOutlined } from "@ant-design/icons";
 import { useState, useEffect } from "react";
