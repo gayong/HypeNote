@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -228,8 +229,8 @@ public class EditorController {
         return ResponseEntity.ok(apiResponse);
     }
 
-    @PostMapping(value = "/upload",consumes = "multipart/form-data")
-    public ResponseEntity<ApiResponse> editorUpload(@RequestBody EditorUploadRequestDto editorUploadRequestDto){
+    @PostMapping("/upload")
+    public ResponseEntity<ApiResponse> editorUpload(@RequestParam("multipartFile")MultipartFile editorUploadRequestDto){
 
         EditorUploadResponseDto editorUploadResponseDto = editorService.editorUpload(editorUploadRequestDto);
 

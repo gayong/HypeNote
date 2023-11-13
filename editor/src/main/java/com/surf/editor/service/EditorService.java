@@ -16,6 +16,7 @@ import com.surf.editor.repository.EditorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.*;
@@ -419,9 +420,9 @@ public class EditorService {
         return editorUserListResponseDto;
     }
 
-    public EditorUploadResponseDto editorUpload(EditorUploadRequestDto editorUploadRequestDto) {
+    public EditorUploadResponseDto editorUpload(MultipartFile editorUploadRequestDto) {
         try{
-            String saveFile = profileImageHandler.saveFile(editorUploadRequestDto.getMultipartFile());
+            String saveFile = profileImageHandler.saveFile(editorUploadRequestDto);
 
             EditorUploadResponseDto editorUploadResponseDto = EditorUploadResponseDto.builder()
                     .url(saveFile)
