@@ -24,12 +24,8 @@ const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const noNavbar = pathname === "/signin" || pathname === "/signup" || pathname === "/intro";
-  const { userInfo } = useGetUserInfo();
 
-  useEffect(() => {
-    console.log("내정보받으러간다");
-    userInfo();
-  }, []);
+  useGetUserInfo();
 
   return (
     <html lang="en">

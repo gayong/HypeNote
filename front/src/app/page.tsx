@@ -9,6 +9,7 @@ export default function Home() {
   // const refreshToken = cookiesList.get("refreshToken");
   // console.log("GDGDG");
   // console.log("@@@", refreshToken);
+
   return (
     <div className="flex h-screen max-h-screen scrollbar-hide">
       <Suspense

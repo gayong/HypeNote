@@ -17,7 +17,9 @@ export const signinUser = (email: string, password: string) =>
   api.post(`auth/login`, { email, password });
 
 // 유저 정보 조회
-export const getUserInfo = () => api.get(`auth/user-info`);
+export const getUserInfo = () => {
+  return api.get(`auth/user-info`);
+};
 
 // 토큰 재발급
 export const reissueToken = () =>
