@@ -36,6 +36,10 @@ dependencies {
 	//Open Feign for GPT API Request
 	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
+	//WebFlux for Stream
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
+	implementation 'io.netty:netty-resolver-dns-native-macos:4.1.73.Final:osx-aarch_64'
+
 
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter'
