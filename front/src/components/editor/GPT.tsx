@@ -72,10 +72,12 @@ export default function GPT() {
         };
 
         const appendChunks = (result: any) => {
-          const chunk = decoder.decode(result.value || new Uint8Array(), {
-            stream: !result.done,
-          });
-          // .replace(/^data: /, "");
+          const chunk = decoder
+            .decode(result.value || new Uint8Array(), {
+              stream: !result.done,
+            })
+            .replace("data: ", "");
+
           console.log(chunk);
 
           try {
