@@ -81,12 +81,13 @@ export default function GPT() {
           console.log("청크청크", chunk);
 
           try {
-            const parseData = JSON.parse(chunk);
+            const parseData = JSON.parse(chunk.slice(5));
             // const content = parseData.choices && parseData.choices[0].delta.content;
             const content = parseData.choices[0].delta.content;
 
             if (content) {
-              setResults((prevResults) => prevResults + content);
+              // setResults((prevResults) => prevResults + content);
+              setResults(content);
             }
           } catch (error) {
             console.log("파싱 에러:", error);
