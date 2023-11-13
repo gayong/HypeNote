@@ -17,6 +17,7 @@ import java.util.List;
 
 @FeignClient(name="server-editor", url="https://k9e101.p.ssafy.io")
 public interface EditorServiceFeignClient {
+    // root 보내면 에디터 리스트 받기
     @PostMapping("/api/editor/list")
     ApiResponse<List<EditorListResponseDto>> editorList(@RequestBody EditorListRequestDto editorListRequestDto);
 }
