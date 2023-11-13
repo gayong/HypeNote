@@ -67,7 +67,7 @@ export default function QuizResult() {
   }, []);
 
   return (
-    <section className="bg-white dark:bg-gray-900 w-full max-h-full col-span-2">
+    <section className="bg-white dark:bg-gray-900 w-full max-h-full col-span-7">
       <span
         className="font-bold dark:hover:text-dark_font text-lg font-PreBd  text-dark_background dark:text-font_primary absolute left-80 p-1 rounded-md "
         onClick={() => outRoom()}>
@@ -123,7 +123,7 @@ export default function QuizResult() {
                               className="rounded-full object-cover h-[80px] w-[80px]"></Image>
                           </div>
                           {/* <div className="mb-2 ml-2 mr-2 rounded-full w-16 h-16 bg-cover bg-[url('/assets/profile.jpg')]" /> */}
-                          <div className="dark:text-dark_primary flex justify-center">{item.userName}</div>
+                          <div className="dark:text-font_primary flex justify-center">{item.userName}</div>
                           <p className="font-PreBd text-sm text-[#ffd51c] flex justify-center">
                             {item.correct} / {item.total}
                           </p>
@@ -148,7 +148,7 @@ export default function QuizResult() {
                               className="rounded-full object-cover h-[100px] w-[100px]"></Image>
                           </div>
                           {/* <div className="mb-2 ml-2 mr-2 rounded-full w-16 h-16 bg-cover bg-[url('/assets/profile.jpg')]" /> */}
-                          <div className="dark:text-dark_primary flex justify-center">{item.userName}</div>
+                          <div className="dark:text-font_primary flex justify-center">{item.userName}</div>
                           <p className="font-PreBd text-sm text-[#ffd51c] flex justify-center">
                             {item.correct} / {item.total}
                           </p>
@@ -173,7 +173,7 @@ export default function QuizResult() {
                               className="rounded-full object-cover h-[80px] w-[80px]"></Image>
                           </div>
                           {/* <div className="mb-2 ml-2 mr-2 rounded-full w-16 h-16 bg-cover bg-[url('/assets/profile.jpg')]" /> */}
-                          <div className="dark:text-dark_primary flex justify-center">{item.userName}</div>
+                          <div className="dark:text-font_primary flex justify-center">{item.userName}</div>
                           <p className="font-PreBd text-sm text-[#ffd51c] flex justify-center">
                             {item.correct} / {item.total}
                           </p>
@@ -202,7 +202,7 @@ export default function QuizResult() {
                               className="rounded-full object-cover h-[100px] w-[100px]"></Image>
                           </div>
                           {/* <div className="mb-2 ml-2 mr-2 rounded-full w-16 h-16 bg-cover bg-[url('/assets/profile.jpg')]" /> */}
-                          <div className="flex justify-center dark:text-dark_primary">{item.userName}</div>
+                          <div className="flex justify-center dark:text-font_primary">{item.userName}</div>
                           <p className="font-PreBd text-sm text-[#ffd51c] flex justify-center">
                             {item.correct} / {item.total}
                           </p>
@@ -227,7 +227,7 @@ export default function QuizResult() {
                               className="rounded-full object-cover h-[80px] w-[80px]"></Image>
                           </div>
                           {/* <div className="mb-2 ml-2 mr-2 rounded-full w-16 h-16 bg-cover bg-[url('/assets/profile.jpg')]" /> */}
-                          <div className="flex justify-center dark:text-dark_primary">{item.userName}</div>
+                          <div className="flex justify-center dark:text-font_primary">{item.userName}</div>
                           <p className="font-PreBd text-sm text-[#ffd51c] flex justify-center">
                             {item.correct} / {item.total}
                           </p>
@@ -254,7 +254,7 @@ export default function QuizResult() {
                             className="rounded-full object-cover h-[100px] w-[100px]"></Image>
                         </div>
                         {/* <div className="mb-2 ml-2 mr-2 rounded-full w-16 h-16 bg-cover bg-[url('/assets/profile.jpg')]" /> */}
-                        <div className="flex justify-center">{item.userName}</div>
+                        <div className="flex justify-center dark:text-font_primary">{item.userName}</div>
                         <p className="font-PreBd text-sm text-[#ffd51c] flex justify-center">
                           {item.correct} / {item.total}
                         </p>
@@ -326,7 +326,7 @@ export default function QuizResult() {
                     </p>
                   ))}
                 </div>
-                <p className="text-xl font-bold font-preBd text-[#ff4a4a]">{quiz.commentary}</p>
+                <p className="text-lg font-bold font-preBd ml-7 mr-5 text-[#ff4a4a]">{quiz.commentary}</p>
                 <br />
               </div>
             ))}
