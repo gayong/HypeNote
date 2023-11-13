@@ -9,4 +9,5 @@ public class EditorCheckResponseDto {
     private String id;
     private String title;
     private String content;
+    private int owner;
 }

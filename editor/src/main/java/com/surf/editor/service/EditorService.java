@@ -148,6 +148,7 @@ public class EditorService {
                 .id(byId.getId())
                 .title(byId.getTitle())
                 .content(byId.getContent())
+                .owner(byId.getUserId())
                 .build();
 
         return editorCheckResponse;
