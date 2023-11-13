@@ -10,8 +10,8 @@ import com.surf.diagram.diagram.dto.member.UserInfoResponseDto;
 import com.surf.diagram.diagram.dto.response.DiagramResponseDto;
 import com.surf.diagram.diagram.dto.response.LinkResponseDto;
 import com.surf.diagram.diagram.dto.response.NodeResponseDto;
-import com.surf.diagram.diagram.entity.Link;
-import com.surf.diagram.diagram.entity.Node;
+import com.surf.diagram.diagram.dto.LinkDto;
+import com.surf.diagram.diagram.dto.NodeDto;
 import kr.co.shineware.nlp.komoran.constant.DEFAULT_MODEL;
 import kr.co.shineware.nlp.komoran.core.Komoran;
 import kr.co.shineware.nlp.komoran.model.Token;
@@ -34,7 +34,7 @@ public class DiagramServiceImpl implements DiagramService {
 
     private final FeginEditorService feginEditorService;
     private final FeginUserService feginUserService;
-    private static final Set<String> STOPWORDS = new HashSet<>();
+
     private final DecimalFormat df = new DecimalFormat("#.###");
 
     private final Map<Integer, DiagramResponseDto> diagramCache = new HashMap<>();
@@ -43,6 +43,10 @@ public class DiagramServiceImpl implements DiagramService {
         this.feginEditorService = feginEditorService;
         this.feginUserService = feginUserService;
     }
+
+
+    // 불용어 사전
+    private static final Set<String> STOPWORDS = new HashSet<>();
     static {
         try {
             BufferedReader br = new BufferedReader(new FileReader("src/main/resources/static/stopwords.txt"));
@@ -55,8 +59,9 @@ public class DiagramServiceImpl implements DiagramService {
             e.printStackTrace();
         }
     }
-    private static final Set<String> PUNCTUATIONS = new HashSet<>();
 
+    // 특수문자 사전
+    private static final Set<String> PUNCTUATIONS = new HashSet<>();
     static {
         try {
             BufferedReader br = new BufferedReader(new FileReader("src/main/resources/static/punctuations.txt"));
@@ -71,6 +76,7 @@ public class DiagramServiceImpl implements DiagramService {
     }
 
 
+    // 나의 뇌 그리기
     @Override
     public DiagramResponseDto getDiagram(int userId) {
         UserInfoResponseDto res = feginUserService.userInfoByUserPk(userId);
@@ -79,9 +85,9 @@ public class DiagramServiceImpl implements DiagramService {
         System.out.println(" = " + editorList.get(0).getContent());
         List<NodeResponseDto> nodeResponseDtos = createNodeResponseDtos(editorList);
         List<LinkResponseDto> linkResponseDtos = createLinkResponseDtos(editorList);
-        List<Node> nodes = classifyAndSaveEmptyCategoryNodes(editorList);
-        List<Link> links = linkNodesByCategoryAndConfidence(nodes);
-        List<LinkResponseDto> linkResponseDtos1 = convertLinkResponseDtos(links);
+        List<NodeDto> nodeDtos = classifyAndSaveEmptyCategoryNodes(editorList);
+        List<LinkDto> linkDtos = linkNodesByCategoryAndConfidence(nodeDtos);
+        List<LinkResponseDto> linkResponseDtos1 = convertLinkResponseDtos(linkDtos);
         linkResponseDtos.addAll(linkResponseDtos1);
         DiagramResponseDto response = createDiagramResponseDto(nodeResponseDtos, linkResponseDtos);
         diagramCache.put(userId, response);
@@ -89,6 +95,7 @@ public class DiagramServiceImpl implements DiagramService {
     }
 
 
+    // 에디터 > 노드로 만들기
     public List<NodeResponseDto> createNodeResponseDtos(List<EditorListResponseDto> editorList) {
         List<NodeResponseDto> nodeResponseDtos = new ArrayList<>();
 
@@ -104,6 +111,7 @@ public class DiagramServiceImpl implements DiagramService {
         return nodeResponseDtos;
     }
 
+    // 에디터 트리 구조 링크로 변환
     public List<LinkResponseDto> createLinkResponseDtos(List<EditorListResponseDto> editorList) {
         return editorList.stream()
                 .flatMap(editor -> createLinks(editor).stream())
@@ -111,13 +119,15 @@ public class DiagramServiceImpl implements DiagramService {
                 .collect(Collectors.toList());
     }
 
-    public List<LinkResponseDto> convertLinkResponseDtos(List<Link> links) {
-        return links.stream()
-                .map(link -> new LinkResponseDto(link.getSource(), link.getTarget(), Math.exp(link.getSimilarity()) * 1, link.getUserId()))
+    // 에디터 유사도 링크로 변환
+    public List<LinkResponseDto> convertLinkResponseDtos(List<LinkDto> linkDtos) {
+        return linkDtos.stream()
+                .map(linkDto -> new LinkResponseDto(linkDto.getSource(), linkDto.getTarget(), Math.exp(linkDto.getSimilarity()) * 1, linkDto.getUserId()))
                 .collect(Collectors.toList());
     }
 
 
+    // 링크 연결
     public List<LinkResponseDto> createLinks(EditorListResponseDto editorDto) {
         List<LinkResponseDto> links = new ArrayList<>();
 
@@ -127,19 +137,16 @@ public class DiagramServiceImpl implements DiagramService {
                 links.addAll(createLinks(child));
             }
         }
-
         return links;
     }
 
+    // 응답 형태로 변환
     public DiagramResponseDto createDiagramResponseDto(List<NodeResponseDto> nodeResponseDtos, List<LinkResponseDto> linkResponseDtos) {
         return new DiagramResponseDto(nodeResponseDtos, linkResponseDtos);
     }
 
 
-
-
-
-    // html 변환
+    // content html 변환
     public String extractTextFromHtml(String html) {
         org.jsoup.nodes.Document document = Jsoup.parse(html);
         Elements elements = document.body().children();
@@ -154,16 +161,16 @@ public class DiagramServiceImpl implements DiagramService {
     }
 
 
-    // 노드 불러오기
-    public List<Node> classifyAndSaveEmptyCategoryNodes(List<EditorListResponseDto> editorList){
-        List<Node> nodes = new ArrayList<>();
+    // 키워드 분석 병렬처리
+    public List<NodeDto> classifyAndSaveEmptyCategoryNodes(List<EditorListResponseDto> editorList){
+        List<NodeDto> nodeDtos = new ArrayList<>();
         try {
             // 인증 키 파일을 사용하여 Credentials 객체 생성
             GoogleCredentials credentials = getCredentials();
             editorList.parallelStream().forEach(node -> {
                 try {
-                    Node res = analyzeAndSetNodeCategory(node, credentials);
-                    nodes.add(res);
+                    NodeDto res = analyzeAndSetNodeCategory(node, credentials);
+                    nodeDtos.add(res);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -174,7 +181,7 @@ public class DiagramServiceImpl implements DiagramService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return nodes;
+        return nodeDtos;
     }
 
 
@@ -195,10 +202,11 @@ public class DiagramServiceImpl implements DiagramService {
 
 
     // 노드 카테고리 분석
-    private Node analyzeAndSetNodeCategory(EditorListResponseDto node, GoogleCredentials credentials) throws IOException {
+    private NodeDto analyzeAndSetNodeCategory(EditorListResponseDto node, GoogleCredentials credentials) throws IOException {
         // 텍스트 전처리
         String content = preprocessContent(node.getContent());
         System.out.println("content = " + content);
+
         // 키워드 추출
         List<String> keywords = extractKeywords(content);
         System.out.println("keywords = " + keywords);
@@ -206,32 +214,39 @@ public class DiagramServiceImpl implements DiagramService {
         // 키워드가 포함된 문장 추출
         String analysisInput = extractKeywordSentences(content, keywords);
         System.out.println("analysisInput = " + analysisInput);
+
         // 텍스트 분류
         ClassifyTextResponse response = classifyText(analysisInput, credentials);
         System.out.println("response = " + response);
+
         // 카테고리 설정
         return setNodeCategory(node, response);
 
     }
 
+    // content 텍스트 전처리
     private String preprocessContent(String content) {
         String text = extractTextFromHtml(content);
         text = text.toLowerCase(); // 대소문자 통일
         return text.replaceAll("[^a-zA-Z0-9가-힣|]", "");
     }
 
+    // content 키워드 추출
     private List<String> extractKeywords(String content) {
         return extractKeywordsWithKomoran(content, 5); // 상위 5개 키워드 추출
     }
 
+    // content 문장 추출
     private String extractKeywordSentences(String content, List<String> keywords) {
         List<String> sentences = Arrays.stream(content.split("\\|\\|\\|"))
                 .filter(sentence -> keywords.stream().anyMatch(sentence::contains))
                 .collect(Collectors.toList());
 
-        return String.join("|||", sentences);
+        return String.join(". ", sentences);
     }
 
+
+    // 구글 자연어 처리 카테고리 분류 요청
     private ClassifyTextResponse classifyText(String analysisInput, GoogleCredentials credentials) throws IOException {
         try (LanguageServiceClient language = LanguageServiceClient.create(LanguageServiceSettings.newBuilder()
                 .setCredentialsProvider(FixedCredentialsProvider.create(credentials))
@@ -247,37 +262,37 @@ public class DiagramServiceImpl implements DiagramService {
         }
     }
 
-    private Node setNodeCategory(EditorListResponseDto res, ClassifyTextResponse response) {
-        Node node = new Node();
-        node.setId(res.getId());
-        node.setTitle(res.getTitle());
-        node.setEditorId(res.getId());
-        node.setContent(res.getContent());
-        node.setUserId(res.getOwner());
+    // 노드에 카테고리 지정
+    private NodeDto setNodeCategory(EditorListResponseDto res, ClassifyTextResponse response) {
+        NodeDto nodeDto = new NodeDto();
+        nodeDto.setId(res.getId());
+        nodeDto.setTitle(res.getTitle());
+        nodeDto.setEditorId(res.getId());
+        nodeDto.setContent(res.getContent());
+        nodeDto.setUserId(res.getOwner());
 
         if (response != null && !response.getCategoriesList().isEmpty()) {
             boolean categoryFound = false;
             for (ClassificationCategory category : response.getCategoriesList()) {
                 if (category.getName().contains("Computer")) {
-                    node.setCategory(category.getName());
+                    nodeDto.setCategory(category.getName());
                     categoryFound = true;
                     break;
                 }
             }
             if (!categoryFound) {
-                node.setCategory("other");
+                nodeDto.setCategory("other");
             }
         } else {
-            node.setCategory("other");
+            nodeDto.setCategory("other");
         }
-        return node;
+        return nodeDto;
     }
 
 
-    // 키워드 추출
+    // 키워드 추출 with Komoran
     private List<String> extractKeywordsWithKomoran(String content, int topN) {
         Komoran komoran = new Komoran(DEFAULT_MODEL.FULL);
-//        komoran.setUserDic("path/to/userdic.txt");
 
         Map<String, Integer> wordCount = new HashMap<>();
 
@@ -300,78 +315,79 @@ public class DiagramServiceImpl implements DiagramService {
 
 
     // 노드와 링크 연결
-    public List<Link> linkNodesByCategoryAndConfidence(List<Node> nodes) {
+    public List<LinkDto> linkNodesByCategoryAndConfidence(List<NodeDto> nodeDtos) {
         // 노드 카테고리 분류
-        Map<String, List<Node>> categoryNodeMap = categorizeNodes(nodes);
+        Map<String, List<NodeDto>> categoryNodeMap = categorizeNodes(nodeDtos);
 
         return createLinksFromNodes(categoryNodeMap);
     }
 
+
     // 노드 카테고리 분류
-    private Map<String, List<Node>> categorizeNodes(List<Node> nodes) {
-        Map<String, List<Node>> categoryNodeMap = new HashMap<>();
-        for (Node node : nodes) {
-            String category = node.getCategory();
+    private Map<String, List<NodeDto>> categorizeNodes(List<NodeDto> nodeDtos) {
+        Map<String, List<NodeDto>> categoryNodeMap = new HashMap<>();
+        for (NodeDto nodeDto : nodeDtos) {
+            String category = nodeDto.getCategory();
             if (category != null && !category.isEmpty()) {
-                categoryNodeMap.computeIfAbsent(category, k -> new ArrayList<>()).add(node);
+                categoryNodeMap.computeIfAbsent(category, k -> new ArrayList<>()).add(nodeDto);
             }
         }
         return categoryNodeMap;
     }
 
-    // 링크 생성
-    private List<Link> createLinksFromNodes(Map<String, List<Node>> categoryNodeMap) {
-        List<Link> links = new ArrayList<>();
-        for (Map.Entry<String, List<Node>> entry : categoryNodeMap.entrySet()) {
-            List<Node> categoryNodes = entry.getValue();
 
-            for (int i = 0; i < categoryNodes.size() - 1; i++) {
-                Node sourceNode = categoryNodes.get(i);
+    // 링크 생성
+    private List<LinkDto> createLinksFromNodes(Map<String, List<NodeDto>> categoryNodeMap) {
+        List<LinkDto> linkDtos = new ArrayList<>();
+        for (Map.Entry<String, List<NodeDto>> entry : categoryNodeMap.entrySet()) {
+            List<NodeDto> categoryNodeDtos = entry.getValue();
+
+            for (int i = 0; i < categoryNodeDtos.size() - 1; i++) {
+                NodeDto sourceNodeDto = categoryNodeDtos.get(i);
                 // 가장 유사도 높은 노드 찾기
-                Pair<Node, Double> pair = findMostSimilarNode(categoryNodes, sourceNode, i + 1);
-                Node targetNode = pair.getLeft();
+                Pair<NodeDto, Double> pair = findMostSimilarNode(categoryNodeDtos, sourceNodeDto, i + 1);
+                NodeDto targetNodeDto = pair.getLeft();
                 double maxSimilarity = pair.getRight();
                 // 이미 있는 게 아니라면 저장하기
-                Link link = saveLinkIfNotExists(sourceNode, targetNode, maxSimilarity, sourceNode.getUserId());
-                System.out.println("link = " + link.getSource());
-                links.add(link);
+                LinkDto linkDto = saveLinkIfNotExists(sourceNodeDto, targetNodeDto, maxSimilarity, sourceNodeDto.getUserId());
+                System.out.println("link = " + linkDto.getSource());
+                linkDtos.add(linkDto);
             }
         }
-        return links;
+        return linkDtos;
     }
 
     // 가장 유사도 높은 노드 찾기
-    private Pair<Node, Double> findMostSimilarNode(List<Node> nodes, Node sourceNode, int startIndex) {
+    private Pair<NodeDto, Double> findMostSimilarNode(List<NodeDto> nodeDtos, NodeDto sourceNodeDto, int startIndex) {
         double maxSimilarity = Double.MIN_VALUE;
-        Node mostSimilarNode = null;
-        for (int j = startIndex; j < nodes.size(); j++) {
-            Node targetNode = nodes.get(j);
-            double similarity = calculateSimilarity(sourceNode.getContent(), targetNode.getContent());
+        NodeDto mostSimilarNodeDto = null;
+        for (int j = startIndex; j < nodeDtos.size(); j++) {
+            NodeDto targetNodeDto = nodeDtos.get(j);
+            double similarity = calculateSimilarity(sourceNodeDto.getContent(), targetNodeDto.getContent());
             System.out.println("similarity = " + similarity);
             if (similarity > maxSimilarity) {
-                mostSimilarNode = targetNode;
+                mostSimilarNodeDto = targetNodeDto;
                 maxSimilarity = similarity;
             }
         }
-        return Pair.of(mostSimilarNode, maxSimilarity);
+        return Pair.of(mostSimilarNodeDto, maxSimilarity);
     }
 
-    // 이미 있는 게 아니라면 저장하기
-    private Link saveLinkIfNotExists(Node sourceNode, Node targetNode, double maxSimilarity, int userId) {
-        Link link = new Link();
-        if (targetNode != null) {
-            String source = sourceNode.getId();
-            String target = targetNode.getId();
-            link.setSource(source);
-            link.setTarget(target);
-            link.setSimilarity(Double.parseDouble(df.format(maxSimilarity)));
-            link.setUserId(userId);
+    // 링크 저장하기
+    private LinkDto saveLinkIfNotExists(NodeDto sourceNodeDto, NodeDto targetNodeDto, double maxSimilarity, int userId) {
+        LinkDto linkDto = new LinkDto();
+        if (targetNodeDto != null) {
+            String source = sourceNodeDto.getId();
+            String target = targetNodeDto.getId();
+            linkDto.setSource(source);
+            linkDto.setTarget(target);
+            linkDto.setSimilarity(Double.parseDouble(df.format(maxSimilarity)));
+            linkDto.setUserId(userId);
             }
-        return link;
+        return linkDto;
     }
 
-
-    // 유사도 분석 코사인 유사도
+    // 유사도 분석 with 코사인 유사도
     private double calculateSimilarity(String text1, String text2) {
         Map<String, Integer> wordCount1 = getWordCount(text1);
         Map<String, Integer> wordCount2 = getWordCount(text2);
@@ -396,6 +412,7 @@ public class DiagramServiceImpl implements DiagramService {
         return dotProduct / (Math.sqrt(norm1) * Math.sqrt(norm2));
     }
 
+
     // 단어 세기
     private Map<String, Integer> getWordCount(String text) {
         Map<String, Integer> wordCount = new HashMap<>();
@@ -407,6 +424,7 @@ public class DiagramServiceImpl implements DiagramService {
         return wordCount;
     }
 
+    // 친구 뇌 받기
     public DiagramResponseDto linkNodesByShares(int userId,  List<Integer> targetUserIds) {
         UserInfoResponseDto res = feginUserService.userInfoByUserPk(userId);
 
@@ -418,112 +436,14 @@ public class DiagramServiceImpl implements DiagramService {
         editorList.addAll(shareeditorList);
         List<NodeResponseDto> nodeResponseDtos = createNodeResponseDtos(editorList);
         List<LinkResponseDto> linkResponseDtos = createLinkResponseDtos(editorList);
-        List<Node> nodes = classifyAndSaveEmptyCategoryNodes(editorList);
-        List<Link> links = linkNodesByCategoryAndConfidence(nodes);
-        List<LinkResponseDto> linkResponseDtos1 = convertLinkResponseDtos(links);
+        List<NodeDto> nodeDtos = classifyAndSaveEmptyCategoryNodes(editorList);
+        List<LinkDto> linkDtos = linkNodesByCategoryAndConfidence(nodeDtos);
+        List<LinkResponseDto> linkResponseDtos1 = convertLinkResponseDtos(linkDtos);
         linkResponseDtos.addAll(linkResponseDtos1);
         DiagramResponseDto response = createDiagramResponseDto(nodeResponseDtos, linkResponseDtos);
         diagramCache.put(userId, response);
         return response;
     }
-
-
-    // 공유 링크
-//    public DiagramResponseDto linkNodesByShare(int userId, int targetUserId) {
-//
-//        List<Node> nodes1 = nodeRepository.findByUserId(userId);
-//        List<Node> nodes2 = nodeRepository.findByUserId(targetUserId);
-//        List<Link> links1 = linkRepository.findByUserId(userId);
-//        List<Link> links2 = linkRepository.findByUserId(targetUserId);
-//
-//        List<NodeResponseDto> nodeDtoList = new ArrayList<>();
-//        List<LinkResponseDto> linkDtoList = new ArrayList<>();
-
-        // 링크들을 LinkResponseDto로 변환
-//        linkDtoList.addAll(convertLinksToDtos(links1));
-//        linkDtoList.addAll(convertLinksToDtos(links2));
-
-        // 노드들을 NodeResponseDto로 변환
-//        nodeDtoList.addAll(convertNodesToDtos(nodes1, userId));
-//        nodeDtoList.addAll(convertNodesToDtos(nodes2, targetUserId));
-
-        // 유사도가 가장 높은 노드끼리 링크를 생성
-//        linkDtoList.addAll(getBestMatchLinks(nodes1, nodes2, userId));
-//
-//        return new DiagramResponseDto(nodeDtoList, linkDtoList);
-//    }
-
-    // 유사도 높은 녀석들 링크
-//    private List<LinkResponseDto> getBestMatchLinks(List<Node> nodes1, List<Node> nodes2, int userId) {
-//        List<LinkResponseDto> linkDtoList = new ArrayList<>();
-//
-//        for (Node node1 : nodes1) {
-//            Node bestMatch = null;
-//            double maxSimilarity = 0.0;
-//
-//            for (Node node2 : nodes2) {
-//                double similarity = calculateSimilarity(node1.getTitle(), node2.getTitle());
-//                if (similarity > maxSimilarity) {
-//                    bestMatch = node2;
-//                    maxSimilarity = similarity;
-//                }
-//            }
-//
-//            if (bestMatch != null) {
-//                LinkResponseDto linkDto = new LinkResponseDto(node1.getId(), bestMatch.getId(), Math.exp(Double.parseDouble(df.format(maxSimilarity)))*1, userId);
-//                linkDtoList.add(linkDto);
-//            }
-//        }
-//
-//        return linkDtoList;
-//    }
-
-//    private NodeResponseDto convertNodeToDto(Node node, int userId) {
-//        return new NodeResponseDto(node.getId(), node.getTitle(), userId, node.getEditorId());
-//    }
-
-//    private LinkResponseDto convertLinkToDto(Link link) {
-//        return new LinkResponseDto(link.getSource(), link.getTarget(), Math.exp(link.getSimilarity()) * 1, link.getUserId());
-//    }
-
-
-//    private List<NodeResponseDto> convertNodesToDtos(List<Node> nodes, int userId) {
-//        return nodes.stream()
-//                .map(node -> convertNodeToDto(node, userId))
-//                .collect(Collectors.toList());
-//    }
-
-//    private List<LinkResponseDto> convertLinksToDtos(List<Link> links) {
-//        return links.stream()
-//                .map(this::convertLinkToDto)
-//                .collect(Collectors.toList());
-//    }
-
-
-//    public DiagramResponseDto linkNodesByShares(int userId, List<Integer> targetUserIds) {
-//        List<Node> nodes1 = nodeRepository.findByUserId(userId);
-//        List<Link> links1 = linkRepository.findByUserId(userId);
-//
-//        List<LinkResponseDto> linkDtoList = new ArrayList<>(convertLinksToDtos(links1));
-////        List<NodeResponseDto> nodeDtoList = new ArrayList<>(convertNodesToDtos(nodes1, userId));
-//
-//
-//        for (Integer targetUserId : targetUserIds) {
-//            List<Node> nodes2 = nodeRepository.findByUserId(targetUserId);
-//            List<Link> links2 = linkRepository.findByUserId(targetUserId);
-//
-//            // 링크들을 LinkResponseDto로 변환
-//            linkDtoList.addAll(convertLinksToDtos(links2));
-//
-//            // 노드들을 NodeResponseDto로 변환
-////            nodeDtoList.addAll(convertNodesToDtos(nodes2, targetUserId));
-//
-//            // 유사도가 가장 높은 노드끼리 링크를 생성
-//            linkDtoList.addAll(getBestMatchLinks(nodes1, nodes2, userId));
-//        }
-//        return null;
-////        return new DiagramResponseDto(nodeDtoList, linkDtoList);
-//    }
 
 
 // // 2-gram
