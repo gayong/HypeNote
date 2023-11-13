@@ -21,12 +21,16 @@ public class DiagramController {
     }
 
     @GetMapping("/{userPk}")
-    @Operation(summary = "내 노드와 링크 조회")
+    @Operation(summary = "내 유사도 노드와 링크 조회")
     public BaseResponse<DiagramResponseDto> getNodes(@PathVariable int userPk) {
-        System.out.println("userId = " + userPk);
-
         DiagramResponseDto response = diagramService.getDiagram(userPk);
+        return new BaseResponse<>(response);
+    }
 
+    @GetMapping("/link/{userPk}")
+    @Operation(summary = "내 기본 노드와 링크 조회")
+    public BaseResponse<DiagramResponseDto> getLinkNodes(@PathVariable int userPk) {
+        DiagramResponseDto response = diagramService.getLinkDiagram(userPk);
         return new BaseResponse<>(response);
     }
 

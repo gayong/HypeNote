@@ -435,6 +435,18 @@ public class DiagramServiceImpl implements DiagramService {
         return wordCount;
     }
 
+    @Override
+    public DiagramResponseDto getLinkDiagram(int userId) {
+        UserInfoResponseDto res = feginUserService.userInfoByUserPk(userId);
+
+        List<EditorListResponseDto> editorList = feginEditorService.editorList(new EditorListRequestDto(res.getDocumentsRoots()));
+        System.out.println(" = " + editorList.get(0).getContent());
+        List<NodeResponseDto> nodeResponseDtos = createNodeResponseDtos(editorList);
+        List<LinkResponseDto> linkResponseDtos = createLinkResponseDtos(editorList);
+
+        return createDiagramResponseDto(nodeResponseDtos, linkResponseDtos);
+    }
+
     // 친구 뇌 받기
     public DiagramResponseDto linkNodesByShares(int userId,  List<Integer> targetUserIds) {
         UserInfoResponseDto res = feginUserService.userInfoByUserPk(userId);

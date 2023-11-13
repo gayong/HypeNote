@@ -7,4 +7,5 @@ import java.util.List;
 public interface DiagramService {
     DiagramResponseDto linkNodesByShares(int userId, List<Integer> targetUserIds);
     DiagramResponseDto getDiagram(int userId);
+    DiagramResponseDto getLinkDiagram(int userId);
 }
