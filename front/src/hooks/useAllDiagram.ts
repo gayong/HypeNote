@@ -1,10 +1,18 @@
 import { fetchDiagramAll } from "@/api/service/diagram";
+import { userAtom } from "@/store/authAtom";
+import { useAtom } from "jotai";
 import { useQuery, useInfiniteQuery } from "react-query";
 
+// export const useAllDiagram = () => {
+//   const [user] = useAtom(userAtom);
+//   return useQuery(["diagrams", user.userPk], () => fetchDiagramAll(user.userPk));
+// };
 export const useAllDiagram = () => {
-  return useQuery(["diagrams"], fetchDiagramAll);
+  const [user] = useAtom(userAtom);
+  return useQuery(["diagrams", user.userPk], () => fetchDiagramAll(user.userPk), {
+    enabled: user.userPk !== 0, // user.userPk가 0이 아닐 때만 요청을 보냅니다.
+  });
 };
-
 //
 // export const useAllDiary = () => {
 //   return useQuery(["diaries"], () => fetchAllDiaries, {

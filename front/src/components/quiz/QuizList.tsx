@@ -33,7 +33,7 @@ export default function QuizList() {
   return (
     <>
       <div className="pr-[50px] p-10">
-        <h1 className="mt-4 text-3xl font-bold mb-2 text-center dark:text-dark_font text-primary">퀴즈 리스트</h1>
+        <h1 className="mt-4 text-3xl font-bold mb-2 text-center dark:text-dark_font text-primary">초대된 퀴즈 방</h1>
         {quizRooms.length > 0 ? (
           <>
             <h2 className="text-base font-PreBd text-center">초대된 퀴즈 방이에요. 얼른 들어가 보아요.</h2>

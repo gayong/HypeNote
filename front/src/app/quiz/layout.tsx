@@ -1,5 +1,5 @@
 "use client";
-
+import React, { useEffect } from "react";
 import SocketProvider from "@/context/SocketProvider";
 
 export default function QuizLayout({ children }: { children: React.ReactNode }) {

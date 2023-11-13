@@ -1,3 +1,2 @@
-import { atom } from "jotai";
-
-export const isSoloAtom = atom<boolean>(true);
+import { atomWithStorage } from "jotai/utils";
+export const isSoloAtom = atomWithStorage<boolean | null>("isSolo", null);

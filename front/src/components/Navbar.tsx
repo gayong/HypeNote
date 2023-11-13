@@ -43,7 +43,6 @@ export default function Navbar() {
     }
   };
   useEffect(() => {
-    console.log("요기요기");
     noteList.mutate({
       rootList: user.documentsRoots,
     });

@@ -1,11 +1,12 @@
 // 다이아그램 관련
 import api from "../instances/api";
+
 // 내 뇌 전체 조회
-export const fetchDiagramAll = () => api.get(`diagram/1`);
+export const fetchDiagramAll = (userPk: number) => api.get(`diagram/${userPk}`);
 
 // 친구 뇌 합치기
-export const shareDiagram = async (members: Array<number>) => {
-  const response = await api.post(`diagram/share/1`, members);
+export const shareDiagram = async (userPk: number, members: Array<number>) => {
+  const response = await api.post(`diagram/share/${userPk}`, members);
   return response.data;
 };
 
