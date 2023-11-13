@@ -15,6 +15,7 @@ import { useNoteList } from "@/hooks/useNoteList";
 import { useRouter } from "next/navigation";
 import useCreateNote from "@/hooks/useCreateNote";
 import useLinkNote from "@/hooks/useLinkNote";
+import useGetUserInfo from "@/hooks/useGetUserInfo";
 
 export default function Navbar() {
   const { createDocument } = useCreateNote();
@@ -27,6 +28,9 @@ export default function Navbar() {
   // const [myTreeNote, setMyTreeNote] = useState<childProps[]>([]);
   // const [sharedTreeNote, setsharedMyTreeNote] = useState<childProps[]>([]);
   const { LinkNote } = useLinkNote();
+
+  useGetUserInfo();
+
   const onClickHandler = async (event: React.MouseEvent) => {
     event.stopPropagation();
 

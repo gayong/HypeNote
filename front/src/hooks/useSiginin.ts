@@ -1,9 +1,8 @@
 import { signinUser } from "@/api/service/user";
-import useGetUserInfo from "./useGetUserInfo";
 import { message } from "antd";
 
 const useSignin = () => {
-  const { userInfo } = useGetUserInfo();
+  // const { userInfo } = useGetUserInfo();
   const signin = async (email: string, password: string) => {
     try {
       const response = await signinUser(email, password);
@@ -11,7 +10,7 @@ const useSignin = () => {
       localStorage.setItem("accessToken", response.data.accessToken);
       // const refreshToken = response.headers["refreshToken"];
       // console.log(refreshToken);
-      userInfo();
+      // userInfo();
 
       return "success";
     } catch (error: any) {
