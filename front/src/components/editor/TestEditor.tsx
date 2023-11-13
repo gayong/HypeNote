@@ -44,6 +44,12 @@ function TestEditor({ id }: Props) {
       if (title !== prevTitle) {
         try {
           await UpdateNote(id, title, content);
+          noteList.mutate({
+            rootList: user.documentsRoots,
+          });
+          noteList.mutate({
+            rootList: user.sharedDocumentsRoots,
+          });
           setPrevTitle(title);
         } catch (error) {
           console.log(error);
