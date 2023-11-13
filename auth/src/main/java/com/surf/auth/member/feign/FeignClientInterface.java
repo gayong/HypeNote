@@ -1,8 +1,10 @@
 package com.surf.auth.member.feign;
 
+import com.surf.auth.member.dto.ApiResponse;
 import com.surf.auth.member.dto.request.RootsDto;
 import com.surf.auth.member.dto.request.SharedDocumentsRootListDto;
 import com.surf.auth.member.dto.response.FeignClientUserListDto;
+import com.surf.auth.member.dto.response.UserPkResponseDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,5 +18,5 @@ public interface FeignClientInterface {
     HttpStatus rootDelete(@RequestBody RootsDto rootsDto);
 
     @PostMapping("/api/editor/root-owner")
-    FeignClientUserListDto rootInspect(@RequestBody SharedDocumentsRootListDto sharedDocumentsRootListDto);
+    ApiResponse<FeignClientUserListDto> rootInspect(@RequestBody SharedDocumentsRootListDto sharedDocumentsRootListDto);
 }

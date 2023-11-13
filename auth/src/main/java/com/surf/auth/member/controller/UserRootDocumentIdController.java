@@ -2,10 +2,12 @@ package com.surf.auth.member.controller;
 
 
 import com.surf.auth.member.authenticator.UserPkAuthenticator;
+import com.surf.auth.member.dto.ApiResponse;
 import com.surf.auth.member.dto.request.RootDto;
 import com.surf.auth.member.dto.request.RootsDto;
 import com.surf.auth.member.dto.request.SharedDocumentsRootListDto;
 import com.surf.auth.member.dto.response.UserInfoResponseDto;
+import com.surf.auth.member.dto.response.UserPkResponseDto;
 import com.surf.auth.member.feign.FeignClientInterface;
 import com.surf.auth.member.service.UserInformationService;
 import com.surf.auth.member.service.UserRootDocumentIdService;
@@ -35,8 +37,6 @@ public class UserRootDocumentIdController {
 
     @PutMapping("/root-save")
     public HttpStatus rootSaveController(@RequestBody RootDto rootDto) {
-        
-        log.info("컨트롤러");
 
         return userRootDocumentIdService.rootSaveService(rootDto);
     }
@@ -55,7 +55,7 @@ public class UserRootDocumentIdController {
         SharedDocumentsRootListDto sharedDocumentsRootListDto = new SharedDocumentsRootListDto();
         sharedDocumentsRootListDto.setSharedDocumentsRootList(sharedDocumentsList);
 
-        List<Integer> userList = feignClientInterface.rootInspect(sharedDocumentsRootListDto).getUserList();
+        List<Integer> userList = feignClientInterface.rootInspect(sharedDocumentsRootListDto).getData().getUserList();
 
         List<UserInfoResponseDto> userInfoList = new ArrayList<>();
 
