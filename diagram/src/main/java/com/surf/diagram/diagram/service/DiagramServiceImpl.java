@@ -85,8 +85,11 @@ public class DiagramServiceImpl implements DiagramService {
 
     // 나의 뇌 그리기
     @Override
-    public DiagramResponseDto getDiagram(int userId) {
+    public DiagramResponseDto getDiagram(String token, int userId) {
+
         UserInfoResponseDto res = feginUserService.userInfoByUserPk(userId);
+        UserInfoResponseDto res1 = feginUserService.userInfoByToken(token);
+        System.out.println("res1 = " + res1);
 
         List<EditorListResponseDto> editorList = feginEditorService.editorList(new EditorListRequestDto(res.getDocumentsRoots()));
         System.out.println(" = " + editorList.get(0).getContent());

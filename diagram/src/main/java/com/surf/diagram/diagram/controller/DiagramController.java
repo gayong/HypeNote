@@ -22,8 +22,8 @@ public class DiagramController {
 
     @GetMapping("/{userPk}")
     @Operation(summary = "내 유사도 노드와 링크 조회")
-    public BaseResponse<DiagramResponseDto> getNodes(@PathVariable int userPk) {
-        DiagramResponseDto response = diagramService.getDiagram(userPk);
+    public BaseResponse<DiagramResponseDto> getNodes(@RequestHeader("Authorization") String token, @PathVariable int userPk) {
+        DiagramResponseDto response = diagramService.getDiagram(token, userPk);
         return new BaseResponse<>(response);
     }
 
