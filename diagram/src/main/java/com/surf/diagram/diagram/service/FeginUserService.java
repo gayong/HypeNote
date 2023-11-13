@@ -10,8 +10,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class FeginUserService {
-    @Autowired
-    private MemberServiceFeignClient memberServiceFeignClient;
+    private final MemberServiceFeignClient memberServiceFeignClient;
 
     public UserInfoResponseDto userInfoByUserPk(int userPk) {
         UserInfoResponseDto response = memberServiceFeignClient.userInfoByUserPk(userPk);
@@ -19,3 +18,4 @@ public class FeginUserService {
         return response;
     }
 }
+

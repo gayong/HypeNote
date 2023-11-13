@@ -14,8 +14,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class FeginEditorService {
-    @Autowired
-    private EditorServiceFeignClient editorServiceFeignClient;
+    private final EditorServiceFeignClient editorServiceFeignClient;
 
     public List<EditorListResponseDto> editorList(EditorListRequestDto editorListRequestDto) {
         ApiResponse<List<EditorListResponseDto>> response = editorServiceFeignClient.editorList(editorListRequestDto);
