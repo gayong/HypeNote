@@ -189,12 +189,13 @@ public class DiagramServiceImpl implements DiagramService {
     // 구글 인증키 생성
     private GoogleCredentials getCredentials() throws IOException {
         // 인증 키 파일 경로 설정
-        String keyPath = "src/main/resources/static/natural-402603-1827cceef8e7.json";
+        String keyPath = "static/natural-402603-1827cceef8e7.json";
 
         // 인증 키 파일을 사용하여 Credentials 객체 생성
         try {
-            return GoogleCredentials.fromStream(new FileInputStream(keyPath));
-        } catch (FileNotFoundException e) {
+            InputStream in = ClassLoader.getSystemResourceAsStream(keyPath);
+            return GoogleCredentials.fromStream(in);
+        } catch (Exception e) {
             // 파일을 찾지 못했을 때의 에러 처리
             e.printStackTrace();
             return null;
