@@ -13,4 +13,6 @@ public interface EditorRepository extends MongoRepository<Editor,String> {
     Optional<List<String>> findByParentIdAndUserId(String parentId, int userId);
 
     Optional<Editor> findByParentId(String parentId);
+
+    Optional<List<Editor>> findAllByUserId(int userId);
 }

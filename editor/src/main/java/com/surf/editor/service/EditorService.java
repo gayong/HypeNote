@@ -401,4 +401,21 @@ public class EditorService {
             editorDelete(editorId);
         }
     }
+
+    public EditorUserListResponseDto editorUserList(int userId) {
+        List<Editor> editorList = editorRepository.findAllByUserId(userId).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
+
+        Set<Integer> set = new HashSet<>();
+        for (Editor editor : editorList) {
+            for (Integer id : editor.getSharedUser()) {
+                set.add(id);
+            }
+        }
+
+        EditorUserListResponseDto editorUserListResponseDto = EditorUserListResponseDto.builder()
+                .userList(List.copyOf(set))
+                .build();
+
+        return editorUserListResponseDto;
+    }
 }
