@@ -7,19 +7,16 @@ import com.surf.editor.common.error.exception.NotFoundException;
 import com.surf.editor.domain.Editor;
 import com.surf.editor.dto.request.*;
 import com.surf.editor.dto.response.*;
-import com.surf.editor.feign.client.MemberListOpenFeign;
 import com.surf.editor.feign.client.MemberOpenFeign;
 import com.surf.editor.feign.client.MemberShareOpenFeign;
 import com.surf.editor.feign.client.MemberUnShareOpenFeign;
 import com.surf.editor.feign.dto.MemberEditorSaveRequestDto;
-import com.surf.editor.feign.dto.MemberListOpenFeignRequestDto;
-import com.surf.editor.feign.dto.MemberListOpenFeignResponseDto;
 import com.surf.editor.feign.dto.MemberShareRequestDto;
 import com.surf.editor.repository.EditorRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.mongodb.core.aggregation.ArrayOperators;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.*;
@@ -423,9 +420,9 @@ public class EditorService {
         return editorUserListResponseDto;
     }
 
-    public EditorUploadResponseDto editorUpload(EditorUploadRequestDto editorUploadRequestDto) {
+    public EditorUploadResponseDto editorUpload(MultipartFile multipartFile) {
         try{
-            String saveFile = profileImageHandler.saveFile(editorUploadRequestDto.getMultipartFile());
+            String saveFile = profileImageHandler.saveFile(multipartFile);
 
             EditorUploadResponseDto editorUploadResponseDto = EditorUploadResponseDto.builder()
                     .url(saveFile)

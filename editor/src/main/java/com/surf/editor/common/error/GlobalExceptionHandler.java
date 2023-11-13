@@ -33,10 +33,10 @@ public class GlobalExceptionHandler{
         return handleException(e,ErrorCode.METHOD_ARGUMENT_NOT_VALID_EXCEPTION);
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleServerException(Exception e){
-        return handleException(e,ErrorCode.INTERNAL_SERVER_ERROR);
-    }
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity<ErrorResponse> handleServerException(Exception e){
+//        return handleException(e,ErrorCode.INTERNAL_SERVER_ERROR);
+//    }
 
     @ExceptionHandler(IOException.class)
     public ResponseEntity<ErrorResponse> handleIOException(Exception e){
