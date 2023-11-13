@@ -69,7 +69,7 @@ api.interceptors.response.use(
           } catch (error) {
             console.log("실패");
 
-            // return (window.location.href = `signin`);
+            return (window.location.href = `signin`);
           }
         }
         return Promise.reject(error);
