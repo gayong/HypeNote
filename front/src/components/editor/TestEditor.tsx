@@ -3,7 +3,7 @@
 import { useAtom } from "jotai";
 import { themeAtom } from "../../store/theme";
 import { isSearchOpen } from "../../store/searchOpen";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { BlockNoteView, blockNoteToMantineTheme, useBlockNote } from "@blocknote/react";
 import "@blocknote/core/style.css";
 import styles from "./Editor.module.css";
@@ -33,27 +33,29 @@ function TestEditor({ id }: Props) {
   const [user] = useAtom(userAtom);
   const { noteList } = useNoteList();
   const [prevTitle, setPrevTitle] = useState("");
+  const prevTitleRef = useRef("");
 
   // const [theme, setTheme] = useState<"light" | "dark">("light");
   const [theme, setTheme] = useAtom<any>(themeAtom);
   const [open] = useAtom(isSearchOpen);
   const onSave = () => {
+    console.log(editor.topLevelBlocks);
     const title = editor.topLevelBlocks[0].content;
     const content = editor.domElement.innerHTML;
     const update = async (title: string) => {
-      if (title !== prevTitle) {
-        try {
-          await UpdateNote(id, title, content);
+      try {
+        await UpdateNote(id, title, content);
+        if (title !== prevTitleRef.current) {
           noteList.mutate({
             rootList: user.documentsRoots,
           });
           noteList.mutate({
             rootList: user.sharedDocumentsRoots,
           });
-          setPrevTitle(title);
-        } catch (error) {
-          console.log(error);
+          prevTitleRef.current = title;
         }
+      } catch (error) {
+        console.log(error);
       }
     };
     if (title) {
@@ -98,13 +100,20 @@ function TestEditor({ id }: Props) {
     ],
     onEditorReady(editor) {
       const getBlocks = async (val: string) => {
+        noteList.mutate({
+          rootList: user.documentsRoots,
+        });
+        noteList.mutate({
+          rootList: user.sharedDocumentsRoots,
+        });
+
         const blocks = await editor.HTMLToBlocks(val);
         editor.replaceBlocks(editor.topLevelBlocks, blocks);
         if (blocks && blocks[0]) {
           const content = blocks[0].content;
           if (content) {
             // @ts-ignore
-            setPrevTitle(content[0].text);
+            prevTitleRef.current = content[0].text;
           }
         }
       };
@@ -120,12 +129,13 @@ function TestEditor({ id }: Props) {
     },
     onEditorContentChange: (editor) => {
       const blockToUpdate = editor.topLevelBlocks[0];
+      const content = editor.domElement.innerHTML;
       if (blockToUpdate.type !== "heading") {
         editor.updateBlock(blockToUpdate, {
           type: "heading",
         });
       }
-      // if (blockToUpdate.content !== prevTitle) {
+      // if (blockToUpdate.content !== prevTitleRef.current) {
       //   noteList.mutate({
       //     rootList: user.documentsRoots,
       //   });
@@ -166,18 +176,16 @@ function TestEditor({ id }: Props) {
     const title = editor.topLevelBlocks[0].content;
     const content = editor.domElement.innerHTML;
     const update = async (title: string) => {
-      if (title) {
-        try {
-          // await UpdateNote(id, title, content);
-          noteList.mutate({
-            rootList: user.documentsRoots,
-          });
-          noteList.mutate({
-            rootList: user.sharedDocumentsRoots,
-          });
-        } catch (error) {
-          console.log(error);
-        }
+      try {
+        await UpdateNote(id, title, content);
+        // noteList.mutate({
+        //   rootList: user.documentsRoots,
+        // });
+        // noteList.mutate({
+        //   rootList: user.sharedDocumentsRoots,
+        // });
+      } catch (error) {
+        console.log(error);
       }
     };
     if (title) {

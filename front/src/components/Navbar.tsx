@@ -35,6 +35,8 @@ export default function Navbar() {
 
     try {
       const documentId = await createDocument(userId);
+      // @ts-ignore
+      user.documentsRoots.push(documentId);
       router.push(`/editor/${documentId}`);
     } catch (error) {
       console.log(error);
@@ -99,7 +101,7 @@ export default function Navbar() {
         {/* 제일큰 노트 map으로 호출 */}
         {myDocuments &&
           myDocuments.map((element) => {
-            return element.parentId === "root" ? <Category childProps={element} value={1} key={element.id} /> : null;
+            return <Category childProps={element} value={2} key={element.id} depth={0} />;
           })}
 
         <div
@@ -122,7 +124,7 @@ export default function Navbar() {
         {/* 공유받은 페이지 map으로 호출 */}
         {sharedDocuments &&
           sharedDocuments.map((element) => {
-            return element.parentId === "root" ? <Category childProps={element} value={2} key={element.id} /> : null;
+            return <Category childProps={element} value={2} key={element.id} depth={0} />;
           })}
         <Link href="/signin">
           <h1 className="inline underline text-font_primary">signIn / </h1>

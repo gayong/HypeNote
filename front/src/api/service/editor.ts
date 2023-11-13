@@ -71,3 +71,10 @@ export const fetchUserRootList = () => {
 export const fetchSharedMember = (editorList: string[]) => {
   return api.post(`editor/member`, { editorList });
 };
+
+// 게시글 document 만들기
+export const fetchEditorUploadImage = (file: File) => {
+  const body = new FormData();
+  body.append("multipartFile", file);
+  return api.post(`editor/upload`, { body });
+};

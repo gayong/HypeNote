@@ -1,3 +1,5 @@
+"use client";
+
 import useLinkNote from "@/hooks/useLinkNote";
 import style from "./Category.module.css";
 import useCreateNote from "@/hooks/useCreateNote";
@@ -14,9 +16,10 @@ import { DocumentsType } from "@/types/ediotr";
 interface categoryProps {
   childProps: DocumentsType;
   value: number;
+  depth: number;
 }
 
-export default function Category({ childProps, value }: categoryProps) {
+export default function Category({ childProps, value, depth }: categoryProps) {
   const { createChildDocument } = useCreateChildNote();
   const [user] = useAtom(userAtom);
 
@@ -64,7 +67,7 @@ export default function Category({ childProps, value }: categoryProps) {
 
   return (
     <>
-      {childProps.parentId === "root" && (
+      {depth === 0 && (
         <div
           className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-hover_primary hover:bg-opacity-50 dark:hover:bg-line_primary dark:hover:bg-opacity-50"
           // onclick="dropdown()"
@@ -113,7 +116,7 @@ export default function Category({ childProps, value }: categoryProps) {
                 )}
               </div>
               <div style={{ maxHeight: !collapsed ? "100%" : "0", overflow: "hidden" }}>
-                <Category childProps={subject} value={value} key={subject.id} />
+                <Category childProps={subject} value={value} key={subject.id} depth={depth + 1} />
               </div>
             </div>
           ))}
