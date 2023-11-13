@@ -82,7 +82,7 @@ export default function Navbar() {
         <Link href="/">
           <div className="py-2 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-hover_primary hover:bg-opacity-50 dark:hover:bg-line_primary dark:hover:bg-opacity-50">
             <i className="bi bi-house-door-fill"></i>
-            <span className="text-[15px] ml-2 font-bold">나의 뇌</span>
+            <span className="text-[15px] ml-2 font-bold">노트 모아보기</span>
           </div>
         </Link>
         <Link href="/quiz">
