@@ -49,7 +49,10 @@ public class DiagramServiceImpl implements DiagramService {
     private static final Set<String> STOPWORDS = new HashSet<>();
     static {
         try {
-            InputStream in = ClassLoader.getSystemResourceAsStream("static/stopwords.txt");
+            InputStream in = DiagramServiceImpl.class.getResourceAsStream("/static/stopwords.txt");
+            if (in == null) {
+                throw new FileNotFoundException("파일 경로 오류 'static/stopwords.txt'");
+            }
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
             String line;
             while ((line = br.readLine()) != null) {
@@ -65,7 +68,10 @@ public class DiagramServiceImpl implements DiagramService {
     private static final Set<String> PUNCTUATIONS = new HashSet<>();
     static {
         try {
-            InputStream in = ClassLoader.getSystemResourceAsStream("static/punctuations.txt");
+            InputStream in = DiagramServiceImpl.class.getResourceAsStream("/static/punctuations.txt");
+            if (in == null) {
+                throw new FileNotFoundException("파일 경로 오류 'static/punctuations.txt'");
+            }
             BufferedReader br = new BufferedReader(new InputStreamReader(in));
             String line;
             while ((line = br.readLine()) != null) {
@@ -189,14 +195,17 @@ public class DiagramServiceImpl implements DiagramService {
     // 구글 인증키 생성
     private GoogleCredentials getCredentials() throws IOException {
         // 인증 키 파일 경로 설정
-        String keyPath = "static/natural-402603-1827cceef8e7.json";
+        String keyPath = "/static/natural-402603-1827cceef8e7.json";
 
         // 인증 키 파일을 사용하여 Credentials 객체 생성
         try {
-            InputStream in = ClassLoader.getSystemResourceAsStream(keyPath);
+            InputStream in = DiagramServiceImpl.class.getResourceAsStream(keyPath);
+            if (in == null) {
+                throw new FileNotFoundException("파일 경로 오류 'static/natural-402603-1827cceef8e7.json'");
+            }
             return GoogleCredentials.fromStream(in);
         } catch (Exception e) {
-            // 파일을 찾지 못했을 때의 에러 처리
+            // 파일을 찾지 못했을 때
             e.printStackTrace();
             return null;
         }
