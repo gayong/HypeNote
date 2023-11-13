@@ -180,14 +180,19 @@ export default function QuizMaker() {
               <h1
                 className="dark:text-font_primary text-dark_primary text-2xl font-preBd"
                 style={{ marginTop: "30px", marginBottom: "10px", padding: 0 }}>
-                방 정보
+                나의 각오
               </h1>
               <h1 className="dark:text-font_primary" style={{ marginBottom: "40px", padding: 0 }}>
-                방 제목과 방 내용을 작성해주세요.
+                퀴즈 풀기 위해 각오 한마디 적어주세요.
               </h1>
-              <Input type="text" text="Title" onChange={handleTitleChange} placeholder="방 제목을 입력해주세요." />
+              <Input
+                type="text"
+                text="Title"
+                onChange={handleTitleChange}
+                placeholder="나의 각오를 한마디로 적어주세요."
+              />
               <br />
-              <Input type="text" text="Title" onChange={handleContentChange} placeholder="방 내용을 입력해주세요." />
+              <Input type="text" text="Title" onChange={handleContentChange} placeholder="메모가 있다면 적어주세요." />
             </div>
           ),
         },
@@ -205,7 +210,7 @@ export default function QuizMaker() {
                 퀴즈 범위
               </h1>
               <h1 className="dark:text-font_primary" style={{ marginBottom: "60px", padding: 0 }}>
-                내 노트, 공유받은 페이지에서 퀴즈로 풀 페이지를 골라주세요.
+                내 노트에서 퀴즈로 풀 페이지를 골라주세요.
               </h1>
               <Tree onDocumentsChange={handleDocumentsChange} />
             </div>

@@ -5,8 +5,9 @@ import Providers from "./providers";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import { usePathname } from "next/navigation";
-// import { Inter } from "next/font/google";
-// const inter = Inter({ subsets: ["latin"] });
+
+import useGetUserInfo from "@/hooks/useGetUserInfo";
+import { useEffect } from "react";
 
 // metadata 에러나면 export 붙여서 따로 모듈화하기
 const metadata: Metadata = {
@@ -23,6 +24,11 @@ const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const noNavbar = pathname === "/signin" || pathname === "/signup" || pathname === "/intro";
+  const { userInfo } = useGetUserInfo();
+
+  useEffect(() => {
+    userInfo();
+  }, []);
 
   return (
     <html lang="en">
