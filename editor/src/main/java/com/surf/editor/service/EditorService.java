@@ -397,7 +397,7 @@ public class EditorService {
     }
 
     public void editorUserDelete(EditorUserDeleteRequestDto editorUserDeleteRequestDto) {
-        for (String editorId : editorUserDeleteRequestDto.getEditorIds()) {
+        for (String editorId : editorUserDeleteRequestDto.getDocumentsIdRoots()) {
             editorDelete(editorId);
         }
     }
