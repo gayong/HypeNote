@@ -3,13 +3,10 @@ package com.surf.diagram.diagram.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 @Getter
 @Setter
-public class Node {
+public class NodeDto {
 
     private String id;
     private int userId;      // group
