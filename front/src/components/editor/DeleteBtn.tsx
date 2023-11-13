@@ -1,35 +1,43 @@
-import { Button, Modal, Space } from "antd";
-import { useState } from "react";
+import useDeleteNote from "@/hooks/useDeleteNote";
+import { Button, Modal, Popconfirm, Space } from "antd";
+import { TbTrashXFilled } from "react-icons/tb";
+import { useRouter } from "next/navigation";
 
-export default function DeleteBtn() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+type Props = {
+  id: string;
+};
 
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
+export default function DeleteBtn({ id }: Props) {
+  const { DeleteNote } = useDeleteNote();
+  const router = useRouter();
   const handleDelete = () => {
-    console.log(1111);
+    if (id) {
+      try {
+        DeleteNote(id);
+        router.push("/");
+      } catch (error) {
+        console.log(error);
+      }
+    }
   };
 
   return (
     <>
-      <Button onClick={openModal}>
-        <Space>공유목록</Space>
-      </Button>
-      <Modal open={isModalOpen}>
-        정말로 삭제 하시겠습니까
-        <Button key="back" onClick={handleCancel}>
-          취소
-        </Button>
-        ,
-        <Button key="submit" onClick={handleDelete}>
-          확인
-        </Button>
-        ,
-      </Modal>
+      <Popconfirm
+        placement="bottom"
+        title={"노트 삭제"}
+        description={"정말 삭제하시겠습니까?"}
+        onConfirm={handleDelete}
+        // onCancel={}
+        okText="네"
+        okButtonProps={{ className: "bg-[#e60000]" }}
+        cancelText="아니오">
+        <TbTrashXFilled
+          className="dark:text-font_primary text-2xl
+         hover:text-[#e60000] dark:hover:text-[#e60000] absolute top-5 right-20"
+          title="문서 삭제"
+        />
+      </Popconfirm>
     </>
   );
 }

@@ -15,6 +15,7 @@ import UpdateNote from "@/hooks/useUpdateNote";
 import { useRouter } from "next/navigation";
 import { useEditorWebSocket } from "@/context/SocketEditorProvider";
 import ShardeBtn from "./SharedBtn";
+import DeleteBtn from "./DeleteBtn";
 import ToShareBtn from "./ToShareBtn";
 import { userAtom } from "@/store/authAtom";
 import { useNoteList } from "@/hooks/useNoteList";
@@ -203,6 +204,7 @@ function TestEditor({ id }: Props) {
         <BlockNoteView editor={editor} theme={theme} onKeyDown={onSave} onDragEnd={Drag} />
       </div>
       <Search />
+      <DeleteBtn id={id}/>
       <ShardeBtn id={id} />
       <ToShareBtn id={id} />
     </>
