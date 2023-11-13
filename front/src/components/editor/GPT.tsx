@@ -78,11 +78,12 @@ export default function GPT() {
             })
             .replace("data: ", "");
 
-          console.log(chunk);
+          console.log("청크청크", chunk);
 
           try {
             const parseData = JSON.parse(chunk);
-            const content = parseData.choices && parseData.choices[0].delta.content;
+            // const content = parseData.choices && parseData.choices[0].delta.content;
+            const content = parseData.choices[0].delta.content;
 
             if (content) {
               setResults((prevResults) => prevResults + content);
