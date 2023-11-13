@@ -1,5 +1,6 @@
 package com.surf.editor.service;
 
+import com.surf.editor.common.amazon.ProfileImageHandler;
 import com.surf.editor.common.error.ErrorCode;
 import com.surf.editor.common.error.exception.BaseException;
 import com.surf.editor.common.error.exception.NotFoundException;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.*;
 
 @Service
@@ -26,7 +28,7 @@ public class EditorService {
     private final MemberOpenFeign memberOpenFeign;
     private final MemberShareOpenFeign memberShareOpenFeign;
     private final MemberUnShareOpenFeign memberUnShareOpenFeign;
-//    private final ProfileImageHandler profileImageHandler;
+    private final ProfileImageHandler profileImageHandler;
 
     @Transactional
     public EditorCreateResponseDto editorCreate(int userId) {
@@ -417,17 +419,17 @@ public class EditorService {
         return editorUserListResponseDto;
     }
 
-//    public EditorUploadResponseDto editorUpload(EditorUploadRequestDto editorUploadRequestDto) {
-//        try{
-//            String saveFile = profileImageHandler.saveFile(editorUploadRequestDto.getMultipartFile());
-//
-//            EditorUploadResponseDto editorUploadResponseDto = EditorUploadResponseDto.builder()
-//                    .url(saveFile)
-//                    .build();
-//
-//            return editorUploadResponseDto;
-//        }catch (IOException e){
-//            throw new BaseException(ErrorCode.FAIL_UPLOAD);
-//        }
-//    }
+    public EditorUploadResponseDto editorUpload(EditorUploadRequestDto editorUploadRequestDto) {
+        try{
+            String saveFile = profileImageHandler.saveFile(editorUploadRequestDto.getMultipartFile());
+
+            EditorUploadResponseDto editorUploadResponseDto = EditorUploadResponseDto.builder()
+                    .url(saveFile)
+                    .build();
+
+            return editorUploadResponseDto;
+        }catch (IOException e){
+            throw new BaseException(ErrorCode.FAIL_UPLOAD);
+        }
+    }
 }

@@ -228,17 +228,17 @@ public class EditorController {
         return ResponseEntity.ok(apiResponse);
     }
 
-//    @PostMapping("/upload")
-//    public ResponseEntity<ApiResponse> editorUpload(@RequestBody EditorUploadRequestDto editorUploadRequestDto){
-//
-//        EditorUploadResponseDto editorUploadResponseDto = editorService.editorUpload(editorUploadRequestDto);
-//
-//        ApiResponse apiResponse = ApiResponse.builder()
-//                .message("s3 업로드")
-//                .status(OK.value())
-//                .data(editorUploadResponseDto)
-//                .build();
-//
-//        return ResponseEntity.ok(apiResponse);
-//    }
+    @PostMapping("/upload")
+    public ResponseEntity<ApiResponse> editorUpload(@RequestBody EditorUploadRequestDto editorUploadRequestDto){
+
+        EditorUploadResponseDto editorUploadResponseDto = editorService.editorUpload(editorUploadRequestDto);
+
+        ApiResponse apiResponse = ApiResponse.builder()
+                .message("s3 업로드")
+                .status(OK.value())
+                .data(editorUploadResponseDto)
+                .build();
+
+        return ResponseEntity.ok(apiResponse);
+    }
 }
