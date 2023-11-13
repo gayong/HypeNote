@@ -6,10 +6,13 @@ import com.surf.editor.common.error.exception.NotFoundException;
 import com.surf.editor.domain.Editor;
 import com.surf.editor.dto.request.*;
 import com.surf.editor.dto.response.*;
+import com.surf.editor.feign.client.MemberListOpenFeign;
 import com.surf.editor.feign.client.MemberOpenFeign;
 import com.surf.editor.feign.client.MemberShareOpenFeign;
 import com.surf.editor.feign.client.MemberUnShareOpenFeign;
 import com.surf.editor.feign.dto.MemberEditorSaveRequestDto;
+import com.surf.editor.feign.dto.MemberListOpenFeignRequestDto;
+import com.surf.editor.feign.dto.MemberListOpenFeignResponseDto;
 import com.surf.editor.feign.dto.MemberShareRequestDto;
 import com.surf.editor.repository.EditorRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +30,7 @@ public class EditorService {
     private final MemberOpenFeign memberOpenFeign;
     private final MemberShareOpenFeign memberShareOpenFeign;
     private final MemberUnShareOpenFeign memberUnShareOpenFeign;
-
+    private final MemberListOpenFeign memberListOpenFeign;
 
     @Transactional
     public EditorCreateResponseDto editorCreate(int userId) {
@@ -405,6 +408,8 @@ public class EditorService {
     public EditorUserListResponseDto editorUserList(int userId) {
         List<Editor> editorList = editorRepository.findAllByUserId(userId).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
 
+        List<MemberListOpenFeignResponseDto> memberListOpenFeignResponseDto = memberListFeign(userId);
+
         Set<Integer> set = new HashSet<>();
         for (Editor editor : editorList) {
             for (Integer id : editor.getSharedUser()) {
@@ -413,9 +418,25 @@ public class EditorService {
         }
 
         EditorUserListResponseDto editorUserListResponseDto = EditorUserListResponseDto.builder()
+                .nickName(memberListOpenFeignResponseDto.get(0).getNickName())
+                .profileImage(memberListOpenFeignResponseDto.get(0).getProfileImage())
                 .userList(List.copyOf(set))
                 .build();
 
         return editorUserListResponseDto;
+    }
+
+    private List<MemberListOpenFeignResponseDto> memberListFeign(int userId ) {
+        try{
+            List<Integer> userPkList = new ArrayList<>();
+            userPkList.add(userId);
+            MemberListOpenFeignRequestDto memberListOpenFeignRequestDto = MemberListOpenFeignRequestDto.builder()
+                    .userPkList(userPkList)
+                    .build();
+
+            return memberListOpenFeign.MemberList(memberListOpenFeignRequestDto);
+        }catch (Exception e){
+            throw new BaseException(ErrorCode.MEMBER_SAVE_FAIL);
+        }
     }
 }
