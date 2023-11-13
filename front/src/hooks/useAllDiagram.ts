@@ -1,8 +1,11 @@
 import { fetchDiagramAll } from "@/api/service/diagram";
+import { userAtom } from "@/store/authAtom";
+import { useAtom } from "jotai";
 import { useQuery, useInfiniteQuery } from "react-query";
 
 export const useAllDiagram = () => {
-  return useQuery(["diagrams"], fetchDiagramAll);
+  const [user] = useAtom(userAtom);
+  return useQuery(["diagrams", user.userPk], () => fetchDiagramAll(user.userPk));
 };
 
 //
