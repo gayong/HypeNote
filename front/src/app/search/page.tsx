@@ -1,7 +1,6 @@
 "use client";
+import { Suspense } from "react";
 
-// import MySearch from "@/components/MySearch";
-// import { Metadata } from "next";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -9,10 +8,10 @@ import { useGetSearchMyNote } from "@/hooks/useGetSearchMyNote";
 import { NoteType } from "@/types/ediotr";
 import MySearch from "@/components/MySearch";
 import "./search.css";
-// export const metadata: Metadata = {
-//   title: "Search",
-//   description: "Search my notes",
-// };
+
+function SearchBarFallback() {
+  return <>Loading...</>;
+}
 
 export default function SearchPage() {
   const searchParams = useSearchParams();
@@ -42,12 +41,13 @@ export default function SearchPage() {
 
   return (
     <div className="h-screen pt-16">
-      {/* <MySearch /> */}
       <h1 className="text-[25px] mx-auto text-center">
         <span className="font-bold">{search}</span>에 대한 검색 결과입니다.
       </h1>
       <div className="w-[600px] mx-auto my-10">
-        <MySearch />
+        <Suspense fallback={<SearchBarFallback />}>
+          <MySearch />
+        </Suspense>
       </div>
       {results.length > 0 &&
         results.map((item, index) => (
