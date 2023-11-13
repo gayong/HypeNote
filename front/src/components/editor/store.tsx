@@ -21,12 +21,6 @@ let pendingUpdates: { [key: number]: any[] } = {};
 
 export function connectStompClient(id: string, stompClient: CompatClient) {
   if (stompClient) {
-    // const sock = new SockJS("https://hype-note.com/api/editor/ws");
-    // const stompClient = Stomp.over(sock);
-    // const stompClient = useEditorWebSocket();
-
-    // stompClient.connect({}, () => {
-    // stompClient.subscribe(`/sub/note/${id}`, (message) => {
     stompClient.subscribe(`/sub/note/${id}`, (message) => {
       const payload = JSON.parse(message.body);
       const enter = payload.type;
