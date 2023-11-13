@@ -96,7 +96,10 @@ function TestEditor({ id }: Props) {
         editor.replaceBlocks(editor.topLevelBlocks, blocks);
         if (blocks && blocks[0]) {
           const content = blocks[0].content;
-          setPrevTitle(content[0].text);
+          if (content) {
+            // @ts-ignore
+            setPrevTitle(content[0].text);
+          }
         }
       };
 
