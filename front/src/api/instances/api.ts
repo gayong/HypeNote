@@ -58,8 +58,8 @@ api.interceptors.response.use(
         // if (error.response.status === 401 || error.response.status == 403) {
         if (error.response.status === 401) {
           try {
-            // const res = await axios.get(`${window.location.origin}/api/auth/reissue`, {
-            const res = await api.get(`auth/reissue`, {
+            const res = await axios.get(`${window.location.origin}/api/auth/reissue`, {
+              // const res = await api.get(`auth/reissue`, {
               withCredentials: true,
             });
             localStorage.setItem("accessToken", res.data.accessToken);
