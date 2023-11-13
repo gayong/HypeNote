@@ -67,9 +67,9 @@ export default function QuizResult() {
   }, []);
 
   return (
-    <section className="bg-white dark:bg-gray-900 w-full max-h-full col-span-1">
+    <section className="bg-white dark:bg-gray-900 w-full max-h-full col-span-2">
       <span
-        className="hover:text-hover_primary text-lg font-PreBd font-normal text-dark_background dark:text-font_primary absolute left-72 p-1 rounded-md outline outline-2 outline-dark_background dark:outline-font_primary "
+        className="font-bold dark:hover:text-dark_font text-lg font-PreBd  text-dark_background dark:text-font_primary absolute left-80 p-1 rounded-md "
         onClick={() => outRoom()}>
         {"< 나가기"}
       </span>
@@ -308,8 +308,6 @@ export default function QuizResult() {
                   <span className="ml-2 mt-1 text-xl font-preBd dark:text-font_primary">{quiz.question}</span>
                 </div>
 
-                {/* <h2>{quiz.myAnswer}</h2> */}
-
                 <div className="ml-7">
                   {quiz.example.map((ex, index) => (
                     <p key={ex.ex} className="w-full">
@@ -328,6 +326,7 @@ export default function QuizResult() {
                     </p>
                   ))}
                 </div>
+                <p className="text-xl font-bold font-preBd text-[#ff4a4a]">{quiz.commentary}</p>
                 <br />
               </div>
             ))}
