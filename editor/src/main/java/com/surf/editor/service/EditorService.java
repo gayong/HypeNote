@@ -420,9 +420,9 @@ public class EditorService {
         return editorUserListResponseDto;
     }
 
-    public EditorUploadResponseDto editorUpload(MultipartFile editorUploadRequestDto) {
+    public EditorUploadResponseDto editorUpload(MultipartFile multipartFile) {
         try{
-            String saveFile = profileImageHandler.saveFile(editorUploadRequestDto);
+            String saveFile = profileImageHandler.saveFile(multipartFile);
 
             EditorUploadResponseDto editorUploadResponseDto = EditorUploadResponseDto.builder()
                     .url(saveFile)

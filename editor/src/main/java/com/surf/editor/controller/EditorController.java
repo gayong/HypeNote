@@ -230,9 +230,9 @@ public class EditorController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<ApiResponse> editorUpload(@RequestParam("multipartFile")MultipartFile editorUploadRequestDto){
+    public ResponseEntity<ApiResponse> editorUpload(@RequestParam("multipartFile")MultipartFile multipartFile){
 
-        EditorUploadResponseDto editorUploadResponseDto = editorService.editorUpload(editorUploadRequestDto);
+        EditorUploadResponseDto editorUploadResponseDto = editorService.editorUpload(multipartFile);
 
         ApiResponse apiResponse = ApiResponse.builder()
                 .message("s3 업로드")
