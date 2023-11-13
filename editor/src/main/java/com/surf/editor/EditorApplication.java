@@ -8,8 +8,8 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @EnableFeignClients
-@ComponentScan(basePackages={"com.amazonaws.services.s3"})
-@EnableDiscoveryClient
+//@ComponentScan(basePackages={"com.amazonaws.services.s3"})
+//@EnableDiscoveryClient
 public class EditorApplication {
 
 	public static void main(String[] args) {
