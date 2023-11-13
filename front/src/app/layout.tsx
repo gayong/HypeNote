@@ -31,7 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <header>
             <Navbar />
           </header>
-          <div className={noNavbar ? "" : "pl-[19rem]"}>{children}</div>
+          <div className={noNavbar ? "" : "pl-[18rem]"}>{children}</div>
         </Providers>
       </body>
     </html>

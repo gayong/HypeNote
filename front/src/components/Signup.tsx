@@ -52,7 +52,7 @@ export default function Signup() {
     }
 
     // axios.post()
-    console.log(file);
+    // console.log(file);
     // const success = await signup(email, password, nickName, file);
     const formData = new FormData();
     formData.append("email", email);
@@ -61,7 +61,7 @@ export default function Signup() {
     formData.append("profileImage", file);
 
     try {
-      const response = await axios.post("https://k9e101.p.ssafy.io/api/auth/signup", formData, {
+      const response = await axios.post(process.env.NEXT_PUBLIC_SERVER_URL + "auth/signup", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -74,15 +74,6 @@ export default function Signup() {
       console.log(error);
       message.error(error.response.data);
     }
-
-    // if (success === "success") {
-    //   // 회원가입 성공 처리
-    //   message.success("회원가입에 성공했습니다. 로그인 후 사이트 이용해 주세요.");
-    //   router.push("/signin");
-    // } else {
-    //   console.log("에러");
-    //   message.error(success);
-    // }
   };
   const handleImageChange = (e: any) => {
     setFile(e.target.files[0]);
@@ -165,7 +156,7 @@ export default function Signup() {
                   alt="프로필 이미지"
                   width={70}
                   height={70}
-                  className="rounded-full object-cover mr-2"
+                  className="rounded-full object-cover mr-2 h-[40px] w-[40px]"
                 />
 
                 <div className="flex-col justify-between">

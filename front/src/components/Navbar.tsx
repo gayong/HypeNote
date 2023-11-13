@@ -35,14 +35,12 @@ export default function Navbar() {
 
     try {
       const documentId = await createDocument(userId);
-      console.log(documentId);
       router.push(`/editor/${documentId}`);
     } catch (error) {
       console.log(error);
     }
   };
   useEffect(() => {
-    console.log("요기요기");
     noteList.mutate({
       rootList: user.documentsRoots,
     });

@@ -67,9 +67,9 @@ export default function QuizResult() {
   }, []);
 
   return (
-    <section className="bg-white dark:bg-gray-900 w-full max-h-full">
+    <section className="bg-white dark:bg-gray-900 w-full max-h-full col-span-1">
       <span
-        className="hover:text-hover_primary text-lg font-PreBd font-normal text-dark_background dark:text-font_primary absolute left-56 p-1 rounded-md outline outline-2 outline-dark_background dark:outline-font_primary "
+        className="hover:text-hover_primary text-lg font-PreBd font-normal text-dark_background dark:text-font_primary absolute left-72 p-1 rounded-md outline outline-2 outline-dark_background dark:outline-font_primary "
         onClick={() => outRoom()}>
         {"< 나가기"}
       </span>
