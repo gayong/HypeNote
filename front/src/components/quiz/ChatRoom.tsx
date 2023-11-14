@@ -67,7 +67,7 @@ export default function ChatRoom(props: QuizRoomProps) {
           <Input
             className="flex-grow mr-2 dark:bg-dark_primary dark:text-font_primary dark:placeholder-font_primary"
             type="text"
-            placeholder="메세지를 입력하시오."
+            placeholder="메세지를 입력하세요."
             value={message}
             onChange={handleInputChange}
             onPressEnter={handleSendMessage}

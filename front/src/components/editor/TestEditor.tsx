@@ -223,7 +223,7 @@ function TestEditor({ id }: Props) {
 
       {user?.userPk === owner && <DeleteBtn id={id} />}
       <ShardeBtn id={id} />
-      <ToShareBtn id={id} />
+      {user?.userPk === owner && <ToShareBtn id={id} />}
     </>
   );
 }
