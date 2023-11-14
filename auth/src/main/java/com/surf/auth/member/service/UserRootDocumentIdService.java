@@ -73,14 +73,14 @@ public class UserRootDocumentIdService {
             }
         }
 
-        Map<Integer, Set<String>> map = documentDeleteDto.getSharedDocumentsList();
+        Map<Integer, Set<String>> sharedDocumentsList = documentDeleteDto.getSharedDocumentsList();
 
-        if (!map.isEmpty()) {
-            for (Integer userPk : map.keySet()) {
+        if (sharedDocumentsList != null) {
+            for (Integer userPk : sharedDocumentsList.keySet()) {
                 Optional<User> userOptional = userRepository.findByUserPk(userPk);
                 if (userOptional.isPresent()) {
                     User user = userOptional.get();
-                    for (String documentRoot : map.get(userPk)) {
+                    for (String documentRoot : sharedDocumentsList.get(userPk)) {
                         user.getDocumentsRoots().removeIf(root -> root.equals(documentRoot));
                         userRepository.save(user);
                     }
