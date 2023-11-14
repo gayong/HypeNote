@@ -75,7 +75,7 @@ export default function Category({ childProps, value, depth }: categoryProps) {
     <>
       {depth === 0 && (
         <div
-          className="p-2.5 mt-3 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-hover_primary hover:bg-opacity-50 dark:hover:bg-line_primary dark:hover:bg-opacity-50"
+          className="p-2.5 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-hover_primary hover:bg-opacity-50 dark:hover:bg-line_primary dark:hover:bg-opacity-50"
           // onclick="dropdown()"
           onClick={(event) => onClickPage(event, childProps.id)}>
           <i className="bi bi-chat-left-text-fill"></i>

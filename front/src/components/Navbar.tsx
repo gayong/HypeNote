@@ -116,7 +116,7 @@ export default function Navbar() {
         {/* 제일큰 노트 map으로 호출 */}
         {myDocuments &&
           myDocuments.map((element) => {
-            return <Category childProps={element} value={2} key={element.id} depth={0} />;
+            return <Category childProps={element} value={1} key={element.id} depth={0} />;
           })}
 
         <div
