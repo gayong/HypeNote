@@ -20,10 +20,6 @@ type userInfo = {
 export default function ShardeBtn({ id }: Props) {
   const { SharedMember } = useGetSharedMember();
   const { getUsersFindByPkList } = useUsersFindByPkList();
-  const handleMenuClick: MenuProps["onClick"] = (e) => {
-    message.info("Click on menu item.");
-    console.log("click", e);
-  };
   const [items, setItem] = useState<userInfo[]>([]);
 
   useEffect(() => {
@@ -58,7 +54,6 @@ export default function ShardeBtn({ id }: Props) {
 
   const menuProps = {
     items,
-    onClick: handleMenuClick,
   };
   return (
     <Dropdown menu={menuProps} className="absolute top-5 right-12">
