@@ -13,7 +13,6 @@ type Props = {
 
 export default function EditorPage({ params: { id } }: Props) {
   const TestEditor = dynamic(() => import("@/components/editor/TestEditor"), { ssr: false });
-  const TestEditorNotFirst = dynamic(() => import("@/components/editor/TestEditorNotFirst"), { ssr: false });
   const stompClient = useEditorWebSocket();
   const array = Array.from({ length: 100 }, (_, index) => index + 1);
   const randomValue = array[Math.floor(Math.random() * array.length)];
