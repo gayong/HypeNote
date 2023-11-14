@@ -1,5 +1,5 @@
 import ThreeScene from "@/components/brain/test";
-import loading from "../../public/assets/loading.gif";
+import loading from "../../../public/assets/loading.gif";
 import { Suspense } from "react";
 import Image from "next/image";
 
