@@ -4,6 +4,6 @@ import { fetchNoteDetail } from "../api/service/editor";
 export default async function Note(editorId: string) {
   const data = await fetchNoteDetail(editorId);
   const content = data.data.data.content;
-  console.log(content);
-  return content;
+  const owner = data.data.data.owner;
+  return { content, owner };
 }

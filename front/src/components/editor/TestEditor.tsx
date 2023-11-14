@@ -15,12 +15,13 @@ import UpdateNote from "@/hooks/useUpdateNote";
 import { useRouter } from "next/navigation";
 import { useEditorWebSocket } from "@/context/SocketEditorProvider";
 import ShardeBtn from "./SharedBtn";
+import DeleteBtn from "./DeleteBtn";
 import ToShareBtn from "./ToShareBtn";
 import { userAtom } from "@/store/authAtom";
 import { useNoteList } from "@/hooks/useNoteList";
 import HorizontalRule from "@tiptap/extension-horizontal-rule";
 import CodeBlock from "@tiptap/extension-code-block";
-
+import useImageUpload from "@/hooks/useImageUpload";
 type WindowWithProseMirror = Window & typeof globalThis & { ProseMirror: any };
 
 type Props = {
@@ -28,12 +29,14 @@ type Props = {
 };
 
 function TestEditor({ id }: Props) {
+  const { ImageUpload } = useImageUpload();
   const router = useRouter();
   const stompClient = useEditorWebSocket();
   const [user] = useAtom(userAtom);
   const { noteList } = useNoteList();
   const [prevTitle, setPrevTitle] = useState("");
   const prevTitleRef = useRef("");
+  const [owner, setOwner] = useState(0);
 
   // const [theme, setTheme] = useState<"light" | "dark">("light");
   const [theme, setTheme] = useAtom<any>(themeAtom);
@@ -120,8 +123,8 @@ function TestEditor({ id }: Props) {
 
       Note(id)
         .then((content) => {
-          console.log(content);
-          getBlocks(content);
+          getBlocks(content.content);
+          setOwner(content.owner);
         })
         .catch((error) => {
           // router.push("/404");
@@ -152,6 +155,7 @@ function TestEditor({ id }: Props) {
       blockContent: {},
     },
     uploadFile: uploadToTmpFilesDotOrg_DEV_ONLY,
+    // uploadFile: ImageUpload,
     collaboration: {
       // The Yjs Provider responsible for transporting updates:
       provider: {
@@ -201,8 +205,11 @@ function TestEditor({ id }: Props) {
     <>
       <div style={{ width: open ? "calc(100% - 380px)" : "100%" }}>
         <BlockNoteView editor={editor} theme={theme} onKeyDown={onSave} onDragEnd={Drag} />
+        {/* <BlockNoteView editor={editor} theme={theme}/> */}
       </div>
       <Search />
+
+      {user.userPk === owner && <DeleteBtn id={id} />}
       <ShardeBtn id={id} />
       <ToShareBtn id={id} />
     </>
