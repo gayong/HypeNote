@@ -11,10 +11,11 @@ export default function SelectShare({ onReceive }: { onReceive: (sharedData: any
   const [selectedFriends, setSelectedFriends] = useState([]);
   const { shareDiagmram, shareInfo } = useShareDiagram();
   const { data: response, isLoading, error } = useShareMemberList();
+  console.log(response, 111);
 
   const userOptions = useMemo(() => {
     if (response?.data) {
-      console.log(response.data);
+      console.log(response.data, 111);
       return response.data.map((user: ShareMember) => ({
         value: user.userPk,
         label: user.nickName,
@@ -45,15 +46,17 @@ export default function SelectShare({ onReceive }: { onReceive: (sharedData: any
 
   return (
     <div className="relative mt-4 ml-8">
-      <Select
-        mode="tags"
-        size="middle"
-        placeholder="내 노트와 친구 노트를 합쳐보세요!"
-        style={{ width: 230, marginTop: "10px", zIndex: 9999 }}
-        options={userOptions}
-        value={selectedFriends}
-        onChange={handleSelectChange}
-      />
+      {userOptions && (
+        <Select
+          mode="tags"
+          size="middle"
+          placeholder="내 노트와 친구 노트를 합쳐보세요!"
+          style={{ width: 230, marginTop: "10px", zIndex: 9999 }}
+          options={userOptions}
+          value={selectedFriends}
+          onChange={handleSelectChange}
+        />
+      )}
       <Button
         className="dark:border dark:border-font_primary h-[30px] w-[53px] ml-2 font-preBd hover:bg-dark_font bg-primary z-50 scrollbar-hide"
         type="primary"
