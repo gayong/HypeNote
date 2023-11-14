@@ -1,0 +1,13 @@
+p.typing-txt {
+  display: none;
+}
+
+.typing {
+  display: inline-block;
+}
+
+.typing::after {
+  content: "";
+  display: inline-block;
+  border-right: 1px solid #fff;
+}

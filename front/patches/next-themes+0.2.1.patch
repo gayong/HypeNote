@@ -1,0 +1,13 @@
+diff --git a/node_modules/next-themes/dist/types.d.ts b/node_modules/next-themes/dist/types.d.ts
+index 32781ff..dc86cb1 100644
+--- a/node_modules/next-themes/dist/types.d.ts
++++ b/node_modules/next-themes/dist/types.d.ts
+@@ -14,7 +14,7 @@ export interface UseThemeProps {
+     /** If `enableSystem` is true and the active theme is "system", this returns whether the system preference resolved to "dark" or "light". Otherwise, identical to `theme` */
+     resolvedTheme?: string;
+     /** If enableSystem is true, returns the System theme preference ("dark" or "light"), regardless what the active theme is */
+-    systemTheme?: 'dark' | 'light';
++    systemTheme?: 'light' | 'dark';
+ }
+ export interface ThemeProviderProps {
+     /** List of all available theme names */
