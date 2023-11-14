@@ -15,16 +15,15 @@ export default function SelectShare({ onReceive }: { onReceive: (sharedData: any
 
   const userOptions = useMemo(() => {
     if (response) {
-      console.log(response[0], 111);
+      console.log(response, 111);
       return response.map((user: ShareMember) => ({
-        value: user.nickName,
+        value: user.userPk,
         label: user.nickName,
-        title: { userPk: user.userPk, nickName: user.nickName, userImg: user.profileImage },
       }));
     } else {
       return [];
     }
-  }, [response?.data]);
+  }, [response]);
 
   const handleReceive = async () => {
     console.log(selectedFriends, "버튼클릭");
