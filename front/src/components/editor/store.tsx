@@ -1,8 +1,5 @@
 "use client";
 
-import { syncedStore, getYjsDoc } from "@syncedstore/core";
-import SockJS from "sockjs-client";
-import { Stomp, Frame } from "@stomp/stompjs";
 import * as Y from "yjs";
 import type { CompatClient } from "@stomp/stompjs";
 
@@ -11,15 +8,12 @@ type Payload = {
   type: string;
 };
 type Todo = { completed: boolean; title: string };
-type update = { content: (number | number[])[]; type: string };
 
-export const store = syncedStore({ todos: [] as Todo[], fragment: "xml" });
-const yDoc = getYjsDoc(store);
 export let firstConnected = 1;
 let messageId = 0;
 let pendingUpdates: { [key: number]: any[] } = {};
 
-export function connectStompClient(id: string, stompClient: CompatClient) {
+export function connectStompClient(id: string, stompClient: CompatClient, yDoc: Y.Doc) {
   if (stompClient) {
     stompClient.subscribe(`/sub/note/${id}`, (message) => {
       const payload = JSON.parse(message.body);
@@ -93,5 +87,3 @@ export function connectStompClient(id: string, stompClient: CompatClient) {
     }
   }
 }
-
-export { yDoc };
