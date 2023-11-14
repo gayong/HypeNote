@@ -125,13 +125,14 @@ export default function QuizMaker() {
   };
 
   const handleChangeNickName = (value: Array<Click2Type>) => {
-    if (value.length > 8) {
+    if (value.length > 6) {
       message.warning("최대 7명까지 초대 가능 합니다.");
       return;
     }
 
     const selectedUsers = value.map((v) => v.title);
     setSelectedUser(selectedUsers);
+    console.log();
   };
 
   const steps = useMemo(() => {

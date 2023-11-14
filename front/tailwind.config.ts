@@ -47,6 +47,10 @@ const config: Config = {
         ".no-drag": {
           userSelect: "none",
           "-webkit-user-drag": "none",
+          "-khtml-user-drag": "none",
+          "-moz-user-drag": "none",
+          "-o-user-drag": "none",
+          "user-drag": "none",
         },
       };
       addUtilities(newUtilities);
