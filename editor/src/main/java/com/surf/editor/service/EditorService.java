@@ -111,10 +111,10 @@ public class EditorService {
         try{
             Editor byId = editorRepository.findById(editorId).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
             Map<Integer,Set<String>> sharedDocumentsList = new HashMap<>();
-            String rootDocumentId = null;
+            Map<Integer,String> rootDocumentId = new HashMap<>();
 
             if(byId.getParentId().equals("root")){
-                rootDocumentId = byId.getId();
+                rootDocumentId.put(byId.getUserId(), byId.getId());
             }
 
             //부모 연관 관계 나 제거
@@ -135,10 +135,10 @@ public class EditorService {
         }
     }
 
-    private void memberDeleteFeign(String rootDocumentId, Map<Integer,Set<String>> sharedDocumentsList) {
+    private void memberDeleteFeign(Map<Integer,String> rootDocumentId, Map<Integer,Set<String>> sharedDocumentsList) {
         try{
             MemberDeleteRequestDto memberDeleteRequestDto = MemberDeleteRequestDto.builder()
-                    .rootDocumentId(rootDocumentId)
+                    .rootDocument(rootDocumentId)
                     .sharedDocumentsList(sharedDocumentsList)
                     .build();
 
