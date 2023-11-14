@@ -97,6 +97,7 @@ export default function ToShareBtn({ id }: Props) {
         title="유저 검색"
         open={isModalOpen}
         onCancel={handleCancel}
+        centered
         footer={[
           <Button key="back" onClick={handleCancel}>
             취소
