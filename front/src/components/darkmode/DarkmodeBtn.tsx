@@ -20,7 +20,7 @@ export default function DarkModeBtn() {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const localTheme = window.localStorage.getItem("theme");
-      setCurrentTheme(localTheme === "light" ? "light" : "dark");
+      setCurrentTheme(localTheme === "dark" ? "dark" : "light");
     }
   }, []);
 
