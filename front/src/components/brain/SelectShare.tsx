@@ -16,9 +16,8 @@ export default function SelectShare({ onReceive }: { onReceive: (sharedData: any
     if (response?.data) {
       console.log(response.data);
       return response.data.map((user: ShareMember) => ({
-        value: user.nickName,
+        value: user.userPk,
         label: user.nickName,
-        title: { userPk: user.userPk, userName: user.nickName, userImg: user.profileImage },
       }));
     } else {
       return [];
