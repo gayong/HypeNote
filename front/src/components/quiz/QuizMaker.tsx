@@ -8,10 +8,11 @@ import { isSoloAtom } from "../../store/isSolo";
 import { useCreateRoom } from "@/hooks/useCreateRoom";
 import Loading from "@/app/loading";
 import { useRouter } from "next/navigation";
-import { userAtom } from "@/store/authAtom";
+// import { userAtom } from "@/store/authAtom";
 import Tree from "./Tree";
 import { QuizUser } from "@/types/quiz";
 import { useCreateSingleRoom } from "@/hooks/useCreateSingleRoom";
+import useGetUserInfo from "@/hooks/useGetUserInfo";
 
 interface Click2Type {
   disabled: undefined;
@@ -51,7 +52,8 @@ export default function QuizMaker() {
   const handleTitleChange = (e: any) => setTitle(e.target.value);
   const handleContentChange = (e: any) => setContent(e.target.value);
   const [documentsValue, setDocumentsValue] = useState<Array<ClickType>>([]);
-  const [user] = useAtom(userAtom);
+  // const [user] = useAtom(userAtom);
+  const { data: user, isLoading, isError, error } = useGetUserInfo();
 
   const router = useRouter();
 
@@ -82,12 +84,16 @@ export default function QuizMaker() {
 
   // 퀴즈 방 만들기 STEP 2
   const handleSumbitCreateRoom = () => {
+    if (!user) {
+      return;
+    }
+
     const users = [{ userPk: user.userPk, userName: user.nickName, userImg: user.profileImage }, ...selectedUser];
 
     if (roomInfo) {
       // const { inviteUsers, ...rest } = roomInfo;
       inviteUserMutation.mutate({ ...roomInfo, users: users });
-    } else if (isSolo) {
+    } else if (isSolo && user) {
       inviteUserMutation.mutate({
         roomName: title,
         pages: documentsValue.map((doc) => doc.value),

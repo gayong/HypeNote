@@ -6,15 +6,18 @@ import { useState } from "react";
 import { BsFillShareFill } from "react-icons/bs";
 import { getOtherUserPkByNickName } from "@/api/service/user";
 import { useSharedNote } from "@/hooks/useSharedNote";
-import { userAtom } from "@/store/authAtom";
+// import { userAtom } from "@/store/authAtom";
 import { useAtom } from "jotai";
+import useGetUserInfo from "@/hooks/useGetUserInfo";
 type Props = {
   id: string;
 };
 
 type userList = { userPk: number; nickName: string };
 export default function ToShareBtn({ id }: Props) {
-  const [user] = useAtom(userAtom);
+  const { data: user, isLoading, isError, error } = useGetUserInfo();
+
+  // const [user] = useAtom(userAtom);
   const { shareDocument } = useSharedNote();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userList, setUserList] = useState<userList[]>([]);
@@ -32,6 +35,10 @@ export default function ToShareBtn({ id }: Props) {
   };
 
   const handleOk = async () => {
+    if (!user) {
+      return;
+    }
+
     try {
       await shareDocument(user.userPk, userPkList, id);
       setIsModalOpen(false);

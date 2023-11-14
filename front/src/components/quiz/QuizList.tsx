@@ -6,28 +6,30 @@ import { useWebSocket } from "@/context/SocketProvider";
 import { QuizRoomInfo } from "@/types/quiz";
 import Loading from "@/components/Loading";
 import { useAtom } from "jotai";
-import { userAtom } from "@/store/authAtom";
+import useGetUserInfo from "@/hooks/useGetUserInfo";
+// import { userAtom } from "@/store/authAtom";
 
 export default function QuizList() {
   // const { quizRooms } = useContext(SocketContext);
   const [quizRooms, setQuizRooms] = useState<Array<QuizRoomInfo>>([]);
   const stompClient = useWebSocket();
-  const [user] = useAtom(userAtom);
+  // const [user] = useAtom(userAtom);
+  const { data: user, isLoading, isError, error } = useGetUserInfo();
 
   useEffect(() => {
-    const accessToken = localStorage.getItem("accessToken");
+    // const accessToken = localStorage.getItem("accessToken");
 
     if (stompClient) {
       const roomListSubscription = stompClient.subscribe(
-        `/sub/quizroom/roomList/${user.userPk}`,
+        `/sub/quizroom/roomList/${user?.userPk}`,
         (roomList) => {
           setQuizRooms(JSON.parse(roomList.body));
-        },
-        { Authorization: `Bearer ${accessToken}` }
+        }
+        // { Authorization: `Bearer ${accessToken}` }
       );
-      stompClient.send(`/pub/quizroom/roomList/${user.userPk}`, { Authorization: `Bearer ${accessToken}` });
+      stompClient.send(`/pub/quizroom/roomList/${user?.userPk}`, {});
     }
-    return stompClient?.unsubscribe(`/sub/quizroom/roomList/${user.userPk}`);
+    return stompClient?.unsubscribe(`/sub/quizroom/roomList/${user?.userPk}`);
   }, [stompClient]);
 
   return (

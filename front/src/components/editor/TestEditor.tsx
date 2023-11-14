@@ -16,10 +16,11 @@ import { useRouter } from "next/navigation";
 import { useEditorWebSocket } from "@/context/SocketEditorProvider";
 import ShardeBtn from "./SharedBtn";
 import ToShareBtn from "./ToShareBtn";
-import { userAtom } from "@/store/authAtom";
+// import { userAtom } from "@/store/authAtom";
 import { useNoteList } from "@/hooks/useNoteList";
 import HorizontalRule from "@tiptap/extension-horizontal-rule";
 import CodeBlock from "@tiptap/extension-code-block";
+import useGetUserInfo from "@/hooks/useGetUserInfo";
 
 type WindowWithProseMirror = Window & typeof globalThis & { ProseMirror: any };
 
@@ -30,7 +31,9 @@ type Props = {
 function TestEditor({ id }: Props) {
   const router = useRouter();
   const stompClient = useEditorWebSocket();
-  const [user] = useAtom(userAtom);
+  const { data: user, isLoading, isError, error } = useGetUserInfo();
+
+  // const [user] = useAtom(userAtom);
   const { noteList } = useNoteList();
   const [prevTitle, setPrevTitle] = useState("");
   const prevTitleRef = useRef("");
@@ -43,6 +46,10 @@ function TestEditor({ id }: Props) {
     const title = editor.topLevelBlocks[0].content;
     const content = editor.domElement.innerHTML;
     const update = async (title: string) => {
+      if (!user) {
+        return;
+      }
+
       try {
         await UpdateNote(id, title, content);
         if (title !== prevTitleRef.current) {
@@ -99,6 +106,10 @@ function TestEditor({ id }: Props) {
       },
     ],
     onEditorReady(editor) {
+      if (!user) {
+        return;
+      }
+
       const getBlocks = async (val: string) => {
         noteList.mutate({
           rootList: user.documentsRoots,

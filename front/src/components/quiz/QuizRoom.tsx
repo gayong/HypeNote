@@ -10,9 +10,10 @@ import ChatRoom from "./ChatRoom";
 import QuizStart from "./QuizStart";
 import Card2 from "../ui/Card2";
 import { useAtom } from "jotai";
-import { userAtom } from "@/store/authAtom";
+// import { userAtom } from "@/store/authAtom";
 import QuizResult from "./QuizResult";
 import Loading from "@/components/Loading";
+import useGetUserInfo from "@/hooks/useGetUserInfo";
 
 interface QuizRoomProps {
   roomId: number;
@@ -31,11 +32,15 @@ export default function QuizRoom(props: QuizRoomProps) {
   const [submit, setSubmit] = useState<boolean>(false);
 
   const stompClient = useWebSocket();
-  const [user] = useAtom(userAtom);
+  // const [user] = useAtom(userAtom);
+  const { data: user, isLoading, isError, error } = useGetUserInfo();
 
   const router = useRouter();
 
   useEffect(() => {
+    if (!user) {
+      return;
+    }
     const data = {
       userPk: user.userPk,
       userName: user.nickName,
@@ -49,6 +54,10 @@ export default function QuizRoom(props: QuizRoomProps) {
   useEffect(() => {}, [room]);
 
   useEffect(() => {
+    if (!user) {
+      return;
+    }
+
     const data = {
       userPk: user.userPk,
       action: ready === "ready" ? "ready" : "unready",
@@ -153,7 +162,7 @@ export default function QuizRoom(props: QuizRoomProps) {
               <div className="flex-col justify-between">
                 <ChatRoom roomId={props.roomId} height={60} />
                 <br />
-                {room?.host === user.userPk ? (
+                {user && room?.host === user.userPk ? (
                   // 방장일 경우
                   // 시작 가능
                   room.roomCnt === room.readyCnt ? (

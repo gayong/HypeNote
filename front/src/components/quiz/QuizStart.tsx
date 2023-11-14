@@ -3,11 +3,12 @@ import { SocketContext } from "@/context/SubscribeProvider";
 import { useContext, useEffect, useState } from "react";
 import { TreeSelect, Select, Button, message, Steps, theme } from "antd";
 import { useSendQuizAnswer } from "@/hooks/useSendQuizAnswer";
-import { userAtom } from "@/store/authAtom";
+// import { userAtom } from "@/store/authAtom";
 import { useAtom } from "jotai";
 
 import Timer from "../ui/Timer";
 import Quiz from "../ui/Quiz";
+import useGetUserInfo from "@/hooks/useGetUserInfo";
 
 interface QuizRoomProps {
   roomId: number;
@@ -20,8 +21,9 @@ export default function QuizStart(props: QuizRoomProps) {
 
   const { sendQuizAnswer } = useSendQuizAnswer();
   const { quizs } = useContext(SocketContext);
+  const { data: user, isLoading, isError, error } = useGetUserInfo();
 
-  const [user] = useAtom(userAtom);
+  // const [user] = useAtom(userAtom);
 
   const handleAnswerChange = (questionId: string, answer: string) => {
     setAnswers({
@@ -41,6 +43,10 @@ export default function QuizStart(props: QuizRoomProps) {
 
   const submitAnswer = () => {
     console.log("답제출");
+
+    if (!user) {
+      return;
+    }
     sendQuizAnswer.mutate({
       roomId: props.roomId,
       userId: user.userPk,

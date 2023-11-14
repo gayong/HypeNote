@@ -1,5 +1,4 @@
 import type { Config } from "tailwindcss";
-
 const config: Config = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -41,7 +40,18 @@ const config: Config = {
       my: ["my"],
     },
   },
-  plugins: [require("tailwind-scrollbar-hide")],
+  plugins: [
+    require("tailwind-scrollbar-hide"),
+    function ({ addUtilities }: { addUtilities: (utils: { [key: string]: any }) => void }) {
+      const newUtilities = {
+        ".no-drag": {
+          userSelect: "none",
+          "-webkit-user-drag": "none",
+        },
+      };
+      addUtilities(newUtilities);
+    },
+  ],
 };
 
 export default config;

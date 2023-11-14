@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import DarkModeBtn from "./darkmode/DarkmodeBtn";
 import Category from "./category/Category";
 import { useAtom } from "jotai";
-import { userAtom } from "@/store/authAtom";
+// import { userAtom } from "@/store/authAtom";
 import { MyDocumentsAtom, SharedDocumentsAtom } from "@/store/documentsAtom";
 import MySearch from "@/components/MySearch";
 import { useNoteList } from "@/hooks/useNoteList";
@@ -16,10 +16,11 @@ import { useRouter } from "next/navigation";
 import useCreateNote from "@/hooks/useCreateNote";
 import useLinkNote from "@/hooks/useLinkNote";
 import useGetUserInfo from "@/hooks/useGetUserInfo";
+// import useGetUserInfo from "@/hooks/useGetUserInfo";
 
 export default function Navbar() {
   const { createDocument } = useCreateNote();
-  const [user] = useAtom(userAtom);
+  // const [user] = useAtom(userAtom);
   const [myDocuments] = useAtom(MyDocumentsAtom);
   const [sharedDocuments] = useAtom(SharedDocumentsAtom);
   const pathname = usePathname();
@@ -28,11 +29,15 @@ export default function Navbar() {
   // const [myTreeNote, setMyTreeNote] = useState<childProps[]>([]);
   // const [sharedTreeNote, setsharedMyTreeNote] = useState<childProps[]>([]);
   const { LinkNote } = useLinkNote();
-
-  useGetUserInfo();
+  const { data: user, isLoading, isError, error } = useGetUserInfo();
+  // useGetUserInfo();
 
   const onClickHandler = async (event: React.MouseEvent) => {
     event.stopPropagation();
+    if (!user) {
+      console.log("유저정보없다");
+      return;
+    }
 
     const userId = user.userPk;
     // const userId = 9;
@@ -46,7 +51,13 @@ export default function Navbar() {
       console.log(error);
     }
   };
+
   useEffect(() => {
+    if (!user) {
+      console.log("유저정보없다");
+      return;
+    }
+
     noteList.mutate({
       rootList: user.documentsRoots,
     });
@@ -70,7 +81,7 @@ export default function Navbar() {
             </Link>
             <DarkModeBtn />
           </div>
-          <h1 className="text-start text-font_primary text-[15px] ml-3">{`${user.nickName}님, 안녕하세요`}</h1>
+          <h1 className="text-start text-font_primary text-[15px] ml-3">{`${user?.nickName}님, 안녕하세요`}</h1>
           {/* <div className="my-2 bg-gray-600 h-[1px]"></div> */}
           <br />
         </div>

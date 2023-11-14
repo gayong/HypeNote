@@ -10,7 +10,7 @@ import { useRouter } from "next/navigation";
 import { useAllDiagram } from "@/hooks/useAllDiagram";
 
 import SelectShare from "./SelectShare";
-import useGetUserInfo from "@/hooks/useGetUserInfo";
+// import useGetUserInfo from "@/hooks/useGetUserInfo";
 
 const ThreeScene = () => {
   const router = useRouter();
@@ -23,7 +23,7 @@ const ThreeScene = () => {
   const [shareNodes, setShareNodes] = useState([]);
   const [shareLinks, setShareLinks] = useState([]);
 
-  useGetUserInfo();
+  // useGetUserInfo();
 
   useEffect(() => {
     if (response) {

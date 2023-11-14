@@ -6,7 +6,8 @@ import { useContext, useEffect } from "react";
 import { useWebSocket } from "@/context/SocketProvider";
 import SubscribeProvider from "@/context/SubscribeProvider";
 import { useAtom } from "jotai";
-import { userAtom } from "@/store/authAtom";
+import useGetUserInfo from "@/hooks/useGetUserInfo";
+// import { userAtom } from "@/store/authAtom";
 
 type Props = {
   params: {
@@ -16,11 +17,13 @@ type Props = {
 
 export default function QuizRoomPage({ params: { id } }: Props) {
   const stompClient = useWebSocket();
-  const [user] = useAtom(userAtom);
+  const { data: user, isLoading, isError, error } = useGetUserInfo();
+
+  // const [user] = useAtom(userAtom);
   const accessToken = localStorage.getItem("accessToken");
 
   useEffect(() => {
-    if (stompClient) {
+    if (stompClient && user) {
       // stompClient.subscribe(`/sub/quiz/${id}`, (response) => {});
 
       const data = {

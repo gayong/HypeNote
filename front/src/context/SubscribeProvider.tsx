@@ -7,8 +7,9 @@ import React, { ReactNode } from "react";
 import { useWebSocket } from "./SocketProvider";
 import { QuizRanking, QuizRoomInfo, QuizInfo, QuizResultInfo, chatUser } from "@/types/quiz";
 import { useAtom } from "jotai";
-import { userAtom } from "@/store/authAtom";
+// import { userAtom } from "@/store/authAtom";
 import { message } from "antd";
+import useGetUserInfo from "@/hooks/useGetUserInfo";
 
 interface Props {
   roomId: number;
@@ -35,6 +36,7 @@ export const SocketContext = createContext<{
 
 export default function SubscribeProvider({ roomId, children }: { roomId: number; children: React.ReactNode }) {
   const stompClient = useWebSocket();
+  const { data: user, isLoading, isError, error } = useGetUserInfo();
 
   const [quizRooms, setQuizRooms] = useState([]);
   const [room, setRoom] = useState<QuizRoomInfo | null>(null);
@@ -43,7 +45,7 @@ export default function SubscribeProvider({ roomId, children }: { roomId: number
   const [quizRanking, setQuizRanking] = useState<Array<QuizRanking>>([]);
   const [chatMessages, setChatMessages] = useState<Array<chatUser>>([]);
   const [quizReady, setQuizReady] = useState<boolean>(false);
-  const [user] = useAtom(userAtom);
+  // const [user] = useAtom(userAtom);
 
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
@@ -71,7 +73,7 @@ export default function SubscribeProvider({ roomId, children }: { roomId: number
           }
           // 퀴즈 결과
           else if (responseBody.type == "result") {
-            setQuizResults(responseBody.result[user.userPk]);
+            setQuizResults(responseBody.result[user?.userPk as number]);
             setQuizRanking(responseBody.ranking);
           }
         },
@@ -92,7 +94,7 @@ export default function SubscribeProvider({ roomId, children }: { roomId: number
     return () => {
       // 방나가기
       const data = {
-        userPk: user.userPk,
+        userPk: user?.userPk,
       };
       if (stompClient) {
         stompClient.send(

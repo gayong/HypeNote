@@ -8,7 +8,8 @@ import { SocketContext } from "@/context/SubscribeProvider";
 import { useWebSocket } from "@/context/SocketProvider";
 
 import { useAtom } from "jotai";
-import { userAtom } from "@/store/authAtom";
+import useGetUserInfo from "@/hooks/useGetUserInfo";
+// import { userAtom } from "@/store/authAtom";
 
 interface QuizRoomProps {
   roomId: number;
@@ -20,8 +21,9 @@ export default function ChatRoom(props: QuizRoomProps) {
   const { chatMessages } = useContext(SocketContext);
   const chatEndRef = useRef<null | HTMLDivElement>(null);
   const stompClient = useWebSocket();
+  const { data: user, isLoading, isError, error } = useGetUserInfo();
 
-  const [user] = useAtom(userAtom);
+  // const [user] = useAtom(userAtom);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMessage(e.target.value);
@@ -29,11 +31,11 @@ export default function ChatRoom(props: QuizRoomProps) {
 
   const handleSendMessage = () => {
     const messageInput = {
-      userPk: user.userPk,
-      userName: user.nickName,
+      userPk: user?.userPk,
+      userName: user?.nickName,
       content: message,
       chatTime: new Date().toLocaleString(),
-      userImg: user.profileImage,
+      userImg: user?.profileImage,
     };
     if (stompClient) {
       stompClient.send(`/pub/chat/${props.roomId}`, {}, JSON.stringify(messageInput));
@@ -56,7 +58,7 @@ export default function ChatRoom(props: QuizRoomProps) {
         className="flex flex-col flex-grow w-full rounded-lg overflow-hidden bg-font_primary bg-opacity-50">
         <div className="flex flex-col flex-grow h-0 p-4 overflow-auto min-h-min">
           {chatMessages.map((chat, index) =>
-            chat.userPk === user.userPk ? <MyChat key={index} {...chat} /> : <YourChat key={index} {...chat} />
+            chat.userPk === user?.userPk ? <MyChat key={index} {...chat} /> : <YourChat key={index} {...chat} />
           )}
           <div ref={chatEndRef} />
         </div>
