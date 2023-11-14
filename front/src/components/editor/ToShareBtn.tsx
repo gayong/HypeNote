@@ -93,6 +93,7 @@ export default function ToShareBtn({ id }: Props) {
         onClick={showModal}
       />
       <Modal
+        className="bg-font_primary dark:bg-line_primary"
         title="유저 검색"
         open={isModalOpen}
         onCancel={handleCancel}
@@ -110,8 +111,8 @@ export default function ToShareBtn({ id }: Props) {
             <Button
               key={item.userPk}
               onClick={() => clickNickName(item)}
-              style={{ backgroundColor: randColor(), color: "white" }}>
-              {item.nickName}
+              style={{ backgroundColor: "#a5b3e2", color: "white", marginTop: "10px", marginRight: "5px" }}>
+              {item.nickName} x
             </Button>
           ))}
         </Flex>
