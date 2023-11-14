@@ -63,7 +63,7 @@ public class UserRootDocumentIdService {
 
         Map<Integer, String> rootDocument = documentDeleteDto.getRootDocument();
 
-        if (!rootDocument.isEmpty()) {
+        if (rootDocument != null) {
             int userPk = rootDocument.keySet().iterator().next();
             Optional<User> userOptional = userRepository.findByUserPk(userPk);
             if (userOptional.isPresent()) {
