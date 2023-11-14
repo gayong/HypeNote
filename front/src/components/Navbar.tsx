@@ -66,7 +66,7 @@ export default function Navbar() {
     });
   }, [user]);
 
-  if (pathname === "/signin" || pathname == "/signup" || pathname == "/intro") {
+  if (pathname === "/signin" || pathname == "/signup" || pathname == "/") {
     return null;
   }
 
@@ -141,12 +141,12 @@ export default function Navbar() {
           sharedDocuments.map((element) => {
             return <Category childProps={element} value={2} key={element.id} depth={0} />;
           })}
-        <Link href="/signin">
+        {/* <Link href="/signin">
           <h1 className="inline underline text-font_primary">signIn / </h1>
         </Link>
         <Link href="/signup">
           <h1 className="inline underline text-font_primary">signUp</h1>
-        </Link>
+        </Link> */}
       </div>
     </>
   );
