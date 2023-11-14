@@ -148,7 +148,7 @@ const ThreeScene = () => {
         .attr("fill", (d) => color(d.group))
         .attr("stroke-width", nodeStrokeWidth)
         .on("click", function (d) {
-          router.push(`/editor/${d.editorId}`);
+          router.push(`/editor/${d.id}`);
           // router.push("/editor/1");
         });
 
