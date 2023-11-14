@@ -35,7 +35,7 @@ export default function ShardeBtn({ id, owner }: Props) {
         res.forEach((element: any) => {
           if (element.userPk === owner) {
             const userinfo = {
-              label: "주인",
+              label: element.nickName,
               key: element.userPk,
               icon: (
                 <Image
@@ -45,6 +45,7 @@ export default function ShardeBtn({ id, owner }: Props) {
                   height={20}
                   className="w-[20px] h-[20px] rounded-full"></Image>
               ),
+              style: { backgroundColor: "RGB(204,224,255)" },
             };
             userList.push(userinfo);
           }
