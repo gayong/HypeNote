@@ -17,7 +17,6 @@ import { useEditorWebSocket } from "@/context/SocketEditorProvider";
 import ShardeBtn from "./SharedBtn";
 import DeleteBtn from "./DeleteBtn";
 import ToShareBtn from "./ToShareBtn";
-// import { userAtom } from "@/store/authAtom";
 import { useNoteList } from "@/hooks/useNoteList";
 import HorizontalRule from "@tiptap/extension-horizontal-rule";
 import CodeBlock from "@tiptap/extension-code-block";
@@ -166,8 +165,8 @@ function TestEditor({ id }: Props) {
       },
       blockContent: {},
     },
-    uploadFile: uploadToTmpFilesDotOrg_DEV_ONLY,
-    // uploadFile: ImageUpload,
+    // uploadFile: uploadToTmpFilesDotOrg_DEV_ONLY,
+    uploadFile: ImageUpload,
     collaboration: {
       // The Yjs Provider responsible for transporting updates:
       provider: {
