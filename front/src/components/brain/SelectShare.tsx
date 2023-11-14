@@ -22,7 +22,7 @@ export default function SelectShare({ onReceive }: { onReceive: (sharedData: any
       }));
       setUserOptions(newOptions);
     }
-  }, [response?.data]);
+  }, [userOptions]);
 
   const handleReceive = async () => {
     console.log(selectedFriends, "버튼클릭");
