@@ -75,21 +75,21 @@ export default function Category({ childProps, value, depth }: categoryProps) {
     <>
       {depth === 0 && (
         <div
-          className="p-2.5 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-hover_primary hover:bg-opacity-50 dark:hover:bg-line_primary dark:hover:bg-opacity-50"
+          className="no-drag p-2.5 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-hover_primary hover:bg-opacity-50 dark:hover:bg-line_primary dark:hover:bg-opacity-50"
           // onclick="dropdown()"
           onClick={(event) => onClickPage(event, childProps.id)}>
           <i className="bi bi-chat-left-text-fill"></i>
-          <div className="group flex justify-between w-full items-center">
-            <div className="text-[15px] ml-2 text-white font-bold flex items-center truncate ...">
+          <div className="no-drag group flex justify-between w-full items-center">
+            <div className="no-drag text-[15px] ml-2 text-white font-bold flex items-center truncate ...">
               {childProps.title}
-              <div className="ml-3" style={{ fontSize: "20px" }} onClick={(event) => toggleRootCollapse(event)}>
+              <div className="no-drag ml-3" style={{ fontSize: "20px" }} onClick={(event) => toggleRootCollapse(event)}>
                 {childProps.children && Rooticon}
               </div>
             </div>
 
             {value === 1 && (
               <h1
-                className="pb-[3px] m-0 text-right invisible group-hover:visible text-2xl leading-3"
+                className="no-drag pb-[3px] m-0 text-right invisible group-hover:visible text-2xl leading-3"
                 onClick={(event) => onClickHandler(event, childProps)}>
                 +
               </h1>
@@ -102,20 +102,20 @@ export default function Category({ childProps, value, depth }: categoryProps) {
           childProps.children.map((subject) => (
             <div
               key={subject.id}
-              className="text-[14px] mx-6 text-white"
+              className="no-drag text-[14px] mx-6 text-white"
               id="submenu"
               onClick={(event) => onClickPage(event, subject.id)}>
               {/* 책 카테고리 */}
-              <div className="group flex justify-between items-center cursor-pointer p-2 hover:bg-hover_primary hover:bg-opacity-50 dark:hover:bg-line_primary dark:hover:bg-opacity-50 rounded-md">
-                <h1 className="text-left flex items-center truncate ...">
+              <div className="no-drag group flex justify-between items-center cursor-pointer p-2 hover:bg-hover_primary hover:bg-opacity-50 dark:hover:bg-line_primary dark:hover:bg-opacity-50 rounded-md">
+                <h1 className="no-drag text-left flex items-center truncate ...">
                   {subject.title}
-                  <div className="ml-3" style={{ fontSize: "20px" }} onClick={(event) => toggleCollapse(event)}>
+                  <div className="no-drag ml-3" style={{ fontSize: "20px" }} onClick={(event) => toggleCollapse(event)}>
                     {subject.children && icon}
                   </div>
                 </h1>
                 {value === 1 && (
                   <h1
-                    className="pb-[3px] m-0 text-right invisible group-hover:visible text-2xl leading-3"
+                    className="no-drag pb-[3px] m-0 text-right invisible group-hover:visible text-2xl leading-3"
                     onClick={(event) => onClickHandler(event, subject)}>
                     +
                   </h1>
