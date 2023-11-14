@@ -96,7 +96,7 @@ export default function QuizResult() {
       </div>
 
       {tab === "rank" ? (
-        <div className="mr-2 mt-4 h-[620px] max-h-[620px] overflow-scroll scrollbar-hide">
+        <div className="mr-5 mt-4 h-[620px] max-h-[620px] overflow-scroll scrollbar-hide">
           <h1 className="mt-2 font-extrabold text-2xl text-primary text-center dark:text-font_primary">
             퀴즈 결과입니다!
           </h1>
@@ -145,7 +145,7 @@ export default function QuizResult() {
                               width={100}
                               height={100}
                               priority
-                              className="rounded-full object-cover h-[100px] w-[100px]"></Image>
+                              className="rounded-full object-cover h-[100px] w-[100px] mb-3"></Image>
                           </div>
                           {/* <div className="mb-2 ml-2 mr-2 rounded-full w-16 h-16 bg-cover bg-[url('/assets/profile.jpg')]" /> */}
                           <div className=" flex justify-center">{item.userName}</div>
@@ -199,7 +199,7 @@ export default function QuizResult() {
                               width={100}
                               height={100}
                               priority
-                              className="rounded-full object-cover h-[100px] w-[100px]"></Image>
+                              className="rounded-full object-cover h-[100px] w-[100px] mb-3"></Image>
                           </div>
                           {/* <div className="mb-2 ml-2 mr-2 rounded-full w-16 h-16 bg-cover bg-[url('/assets/profile.jpg')]" /> */}
                           <div className="flex justify-center">{item.userName}</div>
@@ -251,7 +251,7 @@ export default function QuizResult() {
                             width={100}
                             height={100}
                             priority
-                            className="rounded-full object-cover h-[100px] w-[100px]"></Image>
+                            className="rounded-full object-cover h-[100px] w-[100px] mb-3"></Image>
                         </div>
                         {/* <div className="mb-2 ml-2 mr-2 rounded-full w-16 h-16 bg-cover bg-[url('/assets/profile.jpg')]" /> */}
                         <div className="flex justify-center dark:text-font_primary">{item.userName}</div>
@@ -272,7 +272,7 @@ export default function QuizResult() {
                     {user.ranking}
                   </h1>
                   {/* <div className="mr-2 rounded-full w-10 h-10 bg-cover bg-[url('/assets/profile.jpg')]" /> */}
-                  <div className="h-[100px] w-[10px] flex items-center justify-center dark:text-dark_primary">
+                  <div className="h-[40px] w-[40px] flex items-center justify-center dark:text-dark_primary">
                     <Image
                       src={user.userImg}
                       alt="프로필 이미지"
