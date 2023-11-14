@@ -8,7 +8,7 @@ import { BlockNoteView, blockNoteToMantineTheme, useBlockNote } from "@blocknote
 import "@blocknote/core/style.css";
 import styles from "./Editor.module.css";
 import { uploadToTmpFilesDotOrg_DEV_ONLY, Block, PartialBlock } from "@blocknote/core";
-import * as store from "./store";
+import * as storeS from "./store";
 import Search from "@/components/editor/Search";
 import Note from "@/hooks/useGetNote";
 import UpdateNote from "@/hooks/useUpdateNote";
@@ -24,11 +24,14 @@ import CodeBlock from "@tiptap/extension-code-block";
 import useGetUserInfo from "@/hooks/useGetUserInfo";
 
 import useImageUpload from "@/hooks/useImageUpload";
+import syncedStore, { getYjsDoc } from "@syncedstore/core";
 type WindowWithProseMirror = Window & typeof globalThis & { ProseMirror: any };
 
 type Props = {
   id: string;
 };
+
+type Todo = { completed: boolean; title: string };
 
 function TestEditor({ id }: Props) {
   const { ImageUpload } = useImageUpload();
@@ -45,6 +48,9 @@ function TestEditor({ id }: Props) {
   // const [theme, setTheme] = useState<"light" | "dark">("light");
   const [theme, setTheme] = useAtom<any>(themeAtom);
   const [open] = useAtom(isSearchOpen);
+  const store = syncedStore({ todos: [] as Todo[], fragment: "xml" });
+  const yDoc = getYjsDoc(store);
+
   const onSave = () => {
     console.log(editor.topLevelBlocks);
     const title = editor.topLevelBlocks[0].content;
@@ -75,7 +81,9 @@ function TestEditor({ id }: Props) {
   };
   useEffect(() => {
     if (stompClient) {
-      store.connectStompClient(id, stompClient);
+      // if (yDoc) {
+      storeS.connectStompClient(id, stompClient, yDoc);
+      // }
     }
 
     // 컴포넌트가 언마운트될 때 실행되는 함수를 반환합니다.
@@ -83,7 +91,9 @@ function TestEditor({ id }: Props) {
       if (stompClient) {
         stompClient.unsubscribe(`/sub/note/${id}`);
       }
-      store.yDoc.destroy();
+      if (yDoc) {
+        yDoc.destroy();
+      }
     };
   }, [id, stompClient]); // editor가 변경될 때마다 이 훅을 실행합니다.
 
@@ -180,7 +190,7 @@ function TestEditor({ id }: Props) {
         },
       },
       // Where to store BlockNote data in the Y-Doc:
-      fragment: store.store.fragment,
+      fragment: store.fragment,
       // Information (name and color) for this user:
       user: {
         name: "store.getRandomName()",
