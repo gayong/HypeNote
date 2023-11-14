@@ -18,11 +18,10 @@ export default function SelectShare({ onReceive }: { onReceive: (sharedData: any
       const newOptions = response.data.map((user: ShareMember) => ({
         value: user.userPk,
         label: user.nickName,
-        title: { userPk: user.userPk, userName: user.nickName, userImg: user.profileImage },
       }));
       setUserOptions(newOptions);
     }
-  }, [userOptions]);
+  }, [response?.data]);
 
   const handleReceive = async () => {
     console.log(selectedFriends, "버튼클릭");
