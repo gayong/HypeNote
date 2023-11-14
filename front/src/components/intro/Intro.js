@@ -151,7 +151,7 @@ export default function Intro() {
   }, []);
 
   return (
-    <div className="overflow-hidden p-0 m-0 w-full text-center items-center justify-center">
+    <div className="overflow-hidden p-0 m-0 w-full text-center items-center justify-center scrollbar-hide">
       <div className="mx-auto relative w-[100vw]">
         <div className="mt-[-100px] origin-[25%_50%] animate-spin-slow">
           <Image className="ml-[-150px] w-[68vw] no-drag" src={plate} alt="plate" />
@@ -337,7 +337,7 @@ export default function Intro() {
           </h1>
           <div
             onClick={toTop}
-            className="border-2 border-yellow rounded-md text-yellow font-preBd text-[18px] h-[2.5rem] w-[8rem] text-center mt-2 pt-[5px] absolute top-[89.5%] left-[62.1%] z-20">
+            className="hover:bg-yellow hover:text-font_primary cursor-pointer border-2 border-yellow rounded-md text-yellow font-preBd text-[18px] h-[2.5rem] w-[8rem] text-center mt-2 pt-[5px] absolute top-[89.5%] left-[62.1%] z-20">
             처음으로
           </div>
         </div>
