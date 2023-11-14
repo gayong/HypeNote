@@ -110,7 +110,7 @@ public class EditorService {
     public void editorDelete(String editorId) {
         try{
             Editor byId = editorRepository.findById(editorId).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
-            Set<String> sharedDocumentsList = new HashSet<>(); //문서 집합
+            Map<Integer,Set<String>> sharedDocumentsList = new HashMap<>();
             String rootDocumentId = null;
 
             if(byId.getParentId().equals("root")){
@@ -128,14 +128,14 @@ public class EditorService {
             deleteChildEditor(byId,sharedDocumentsList);
 
             //member 서버로
-            memberDeleteFeign(rootDocumentId, List.copyOf(sharedDocumentsList));
+            memberDeleteFeign(rootDocumentId, sharedDocumentsList);
         }
         catch (Exception e){
             throw new BaseException(ErrorCode.FAIL_DELETE_EDITOR);
         }
     }
 
-    private void memberDeleteFeign(String rootDocumentId, List<String> sharedDocumentsList) {
+    private void memberDeleteFeign(String rootDocumentId, Map<Integer,Set<String>> sharedDocumentsList) {
         try{
             MemberDeleteRequestDto memberDeleteRequestDto = MemberDeleteRequestDto.builder()
                     .rootDocumentId(rootDocumentId)
@@ -149,27 +149,39 @@ public class EditorService {
     }
 
 
-    private void deleteChildEditor(Editor editor,Set<String> set) {
+    private void deleteChildEditor(Editor editor,Map<Integer,Set<String>> sharedDocumentsList) {
+
         List<String> childIds = editor.getChildId();
         if(childIds !=null && !childIds.isEmpty()){
             for (String childId : childIds) {
                 Editor childEditor = editorRepository.findById(childId).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
-                deleteChildEditor(childEditor,set);
+                deleteChildEditor(childEditor,sharedDocumentsList);
 
                 if(childEditor.getSharedUser().size()>1){ //shared값에 나 자신은 무조건 있음 나를 제외한 공유한 사람이 있으면
-                    set.add(childEditor.getId());
+                    shareSave(childId,childEditor.getSharedUser(),sharedDocumentsList);
                 }
                 editorRepository.delete(childEditor);
             }
         }
 
-        if(editor.getSharedUser().size()>1){
-            set.add(editor.getId());
-        }
+        shareSave(editor.getId(),editor.getSharedUser(),sharedDocumentsList);
         editorRepository.delete(editor);
     }
 
-    
+    private void shareSave(String editorId, List<Integer> sharedUser, Map<Integer, Set<String>> sharedDocumentsList) {
+        for (Integer userId : sharedUser) {
+            if(sharedDocumentsList.containsKey(userId)){
+                sharedDocumentsList.get(userId).add(editorId);
+            }
+            else {
+                Set<String> set = new HashSet<>();
+                set.add(editorId);
+                sharedDocumentsList.put(userId, set);
+            }
+        }
+    }
+
+
     public EditorCheckResponseDto editorCheck(String editorId) {
         Editor byId = editorRepository.findById(editorId).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
 
