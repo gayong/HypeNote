@@ -156,7 +156,7 @@ export default function Signup() {
                   alt="프로필 이미지"
                   width={70}
                   height={70}
-                  className="rounded-full object-cover mr-2 h-[40px] w-[40px]"
+                  className="rounded-full object-cover mr-2 h-[50px] w-[50px] mt-1"
                 />
 
                 <div className="flex-col justify-between">
@@ -173,7 +173,7 @@ export default function Signup() {
                     <div
                       className="block w-16 text-center text-[13px] text-slate-500
                     border-[1px] rounded-md bg-primary hover:bg-hover_primary
-                    border-transparent text-font_primary pt-[1px] mt-1">
+                    border-transparent text-font_primary pt-[1px]">
                       파일 선택
                     </div>
                   </label>
