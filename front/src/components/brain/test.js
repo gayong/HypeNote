@@ -25,7 +25,7 @@ const ThreeScene = () => {
 
   useEffect(() => {
     if (response && user) {
-      // console.log("날 뇌에 담아줘!", response.data.result);
+      console.log("날 뇌에 담아줘!", response.data.result);
       // console.log("노드", response.data.result.nodes);
       setNodes(response.data.result.nodes);
       setMyNodes(response.data.result.nodes);

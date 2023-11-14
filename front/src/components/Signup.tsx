@@ -190,7 +190,7 @@ export default function Signup() {
         </div>
       </div>
       <Image src={object_bottom} className="absolute bottom-0 -left-20 w-[600px]" alt="bottom" />
-      <Image src={dd} className="absolute bottom-0 left-0 w-[600px] z-50 overflow-hidden" alt="bottom" />
+      <Image src={dd} className="absolute bottom-0 -left-20 w-[600px] z-50 overflow-hidden no-drag " alt="bottom" />
       <Image src={object_top} className="absolute top-0 right-0 w-[550px]" alt="top" />
     </>
   );

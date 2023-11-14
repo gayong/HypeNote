@@ -102,13 +102,13 @@ export default function Signin() {
         </div>
       </div>
 
-      {/* <Image
+      <Image
         src={object_bottom}
         className="absolute bottom-0 -left-20 w-[600px] overflow-hidden no-drag"
         alt="bottom"
       />
-      <Image src={dd} className="absolute bottom-0 left-0 w-[600px] z-50 overflow-hidden no-drag " alt="bottom" />
-      <Image src={object_top} className="absolute top-0 right-0 w-[550px] select-none no-drag" alt="top" /> */}
+      <Image src={dd} className="absolute bottom-0 -left-20 w-[600px] z-50 overflow-hidden no-drag " alt="bottom" />
+      <Image src={object_top} className="absolute top-0 right-0 w-[550px] select-none no-drag" alt="top" />
     </>
   );
 }
