@@ -24,12 +24,7 @@ export default function ToShareBtn({ id }: Props) {
   const [userPkList, setUserPkList] = useState<number[]>([]);
 
   const [serchList, setSerchList] = useState<userList[]>([]);
-  const colors = ["magenta", "red", "volcano", "orange", "gold", "lime", "green", "cyan", "blue", "geekblue", "purple"];
-  const randColor = () => {
-    const randomIndex = Math.floor(Math.random() * colors.length);
-    const randomColor = colors[randomIndex];
-    return randomColor;
-  };
+
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -93,9 +88,11 @@ export default function ToShareBtn({ id }: Props) {
         onClick={showModal}
       />
       <Modal
+        className="bg-font_primary dark:bg-line_primary"
         title="유저 검색"
         open={isModalOpen}
         onCancel={handleCancel}
+        centered
         footer={[
           <Button key="back" onClick={handleCancel}>
             취소
@@ -110,8 +107,8 @@ export default function ToShareBtn({ id }: Props) {
             <Button
               key={item.userPk}
               onClick={() => clickNickName(item)}
-              style={{ backgroundColor: randColor(), color: "white" }}>
-              {item.nickName}
+              style={{ backgroundColor: "#a5b3e2", color: "white", marginTop: "10px", marginRight: "5px" }}>
+              {item.nickName} x
             </Button>
           ))}
         </Flex>
