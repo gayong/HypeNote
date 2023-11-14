@@ -38,11 +38,13 @@ export const getOtherUserPkByNickName = (nickName: string) => {
 };
 
 // userPk 로 user info 반환
-export const getUsersInfo = (userPkList: number[]) => {
-  return api.post(`auth/user-info/pk-list`, { userPkList: userPkList });
+export const getUsersInfo = async (userPkList: number[]) => {
+  const response = await api.post(`auth/user-info/pk-list`, { userPkList: userPkList });
+  return response.data;
 };
 
 // userPk 로 user root info 반환
-export const getShareUserList = (userPk: number) => {
-  return api.get(`auth/root-user-info/${userPk}`);
+export const getShareUserList = async (userPk: number) => {
+  const responese = await api.get(`auth/root-user-info/${userPk}`);
+  return responese.data;
 };

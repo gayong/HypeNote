@@ -3,14 +3,13 @@
 import * as d3 from "d3";
 import { select, selectAll } from "d3";
 import { mean, median } from "d3-array";
-// import { howto } from "@d3/example-components";
-// import { Swatches } from "@d3/color-legend";
+
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAllDiagram } from "@/hooks/useAllDiagram";
 
 import SelectShare from "./SelectShare";
-// import useGetUserInfo from "@/hooks/useGetUserInfo";
+import useGetUserInfo from "@/hooks/useGetUserInfo";
 
 const ThreeScene = () => {
   const router = useRouter();
@@ -22,11 +21,10 @@ const ThreeScene = () => {
   const [myLinks, setMyLinks] = useState([]);
   const [shareNodes, setShareNodes] = useState([]);
   const [shareLinks, setShareLinks] = useState([]);
-
-  // useGetUserInfo();
+  const { data: user } = useGetUserInfo();
 
   useEffect(() => {
-    if (response) {
+    if (response && user) {
       // console.log("날 뇌에 담아줘!", response.data.result);
       // console.log("노드", response.data.result.nodes);
       setNodes(response.data.result.nodes);

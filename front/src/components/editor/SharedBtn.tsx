@@ -8,6 +8,7 @@ import useUsersFindByPkList from "@/hooks/useUsersFindByPkList";
 import { userInfo } from "os";
 import { ReactNode } from "react";
 import { FaUserFriends } from "react-icons/fa";
+import Image from "next/image";
 type Props = {
   id: string;
 };
@@ -18,37 +19,38 @@ type userInfo = {
   icon: ReactNode;
 };
 export default function ShardeBtn({ id }: Props) {
-  const { SharedMember } = useGetSharedMember();
-  const { getUsersFindByPkList } = useUsersFindByPkList();
+  // const { SharedMember } = useGetSharedMember();
+  const getUsersFindByPkList = useUsersFindByPkList();
   const [items, setItem] = useState<userInfo[]>([]);
+  const SharedMember = useGetSharedMember();
 
   useEffect(() => {
     const getSharedMember = async () => {
-      try {
-        const response = await SharedMember([id]);
-        if (response) {
-          const member = response.data.data.userList;
-          // const member = [9];
-          const res = await getUsersFindByPkList(member);
-          if (res) {
-            const userList: userInfo[] = [];
-            res.data.forEach((element: any) => {
-              console.log(element);
-              const userinfo = {
-                label: element.nickName,
-                key: element.userPk,
-                icon: <UserOutlined />,
-              };
-              console.log(userinfo);
-              userList.push(userinfo);
-            });
-            setItem(userList);
-          }
-        }
-      } catch (error) {
-        console.log(error);
+      const response = await SharedMember.mutateAsync([id]);
+      const member = response.data.data.userList;
+      const res = await getUsersFindByPkList.mutateAsync(member);
+      if (res) {
+        const userList: userInfo[] = [];
+        res.forEach((element: any) => {
+          console.log(element);
+          const userinfo = {
+            label: element.nickName,
+            key: element.userPk,
+            icon: (
+              <Image
+                src={element.profileImage}
+                alt="유저 이미지"
+                width={20}
+                height={20}
+                className="w-[20px] h-[20px] rounded-full"></Image>
+            ),
+          };
+          userList.push(userinfo);
+        });
+        setItem(userList);
       }
     };
+
     getSharedMember();
   }, [id]);
 
