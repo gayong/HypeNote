@@ -284,7 +284,12 @@ public class EditorService {
 
         List<EditorListResponseDto> editorListResponseDtoList = new ArrayList<>();
         for (String root : rootList) {
-            Editor editor = editorRepository.findById(root).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
+            Editor editor = editorRepository.findById(root).orElse(null);
+
+            if(editor==null){
+                continue;
+            }
+
             EditorListResponseDto treeDto = convertEditorToTreeDto(editor);
             editorListResponseDtoList.add(treeDto);
         }
