@@ -6,16 +6,20 @@ import { useShareDiagram } from "@/hooks/useShareDiagram";
 import { TreeSelect, Select, Button, message, Steps, theme } from "antd";
 import { useShareMemberList } from "@/hooks/useGetShareUserList";
 import { ShareMember } from "@/types/diagram";
+import Pendulum from "../../../public/assets/pen.gif";
+import Image from "next/image";
 
 export default function SelectShare({ onReceive }: { onReceive: (sharedData: any) => void }) {
   const [selectedFriends, setSelectedFriends] = useState([]);
   const { shareDiagmram, shareInfo } = useShareDiagram();
   const { data: response, isLoading, error } = useShareMemberList();
+  const [responseReady, setResponseReady] = useState(true);
   console.log(response, 111);
 
   const userOptions = useMemo(() => {
     if (response) {
       console.log(response, 111);
+      setResponseReady(true);
       return response.map((user: ShareMember) => ({
         value: user.userPk,
         label: user.nickName,
@@ -33,7 +37,9 @@ export default function SelectShare({ onReceive }: { onReceive: (sharedData: any
     }
 
     if (onReceive && shareDiagmram) {
+      setResponseReady(false);
       const info = await shareDiagmram.mutateAsync({ members: selectedFriends });
+      setResponseReady(true);
       console.log(1111, info);
       onReceive(info);
     }
@@ -59,7 +65,7 @@ export default function SelectShare({ onReceive }: { onReceive: (sharedData: any
         className="dark:border dark:border-font_primary h-[30px] w-[53px] ml-2 font-preBd hover:bg-dark_font bg-primary z-50 scrollbar-hide"
         type="primary"
         onClick={handleReceive}>
-        GO
+        {responseReady ? "GO" : <Image src={Pendulum} alt="Loading..." width={53} height={30} />}
       </Button>
     </div>
   );
