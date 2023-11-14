@@ -33,7 +33,7 @@ export default function Signin() {
 
     if (success === "success") {
       message.success("로그인 성공!");
-      router.push("/");
+      router.push("/main");
     } else {
       message.error(success);
     }

@@ -322,7 +322,7 @@ export default function Intro() {
           <div className="text-yellow font-preLt text-[17px] w-[30rem] text-start absolute top-[70%] left-[62.1%] z-20">
             Chat-GPT가 생성한 사지선다 문제들을 풀며 복습해보세요. 혼자 풀기, 같이 풀기가 가능합니다. 친구들을 초대해
             대결해보세요! 퀴즈가 끝난 후 채팅을 통해 의견을 나눌 수도 있어요.
-          </div>{" "}
+          </div>
         </div>
 
         {/* 마무리 멘트 */}
