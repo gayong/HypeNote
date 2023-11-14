@@ -2,8 +2,9 @@ import useDeleteNote from "@/hooks/useDeleteNote";
 import { Button, Modal, Popconfirm, Space } from "antd";
 import { TbTrashXFilled } from "react-icons/tb";
 import { useRouter } from "next/navigation";
-import { userAtom } from "@/store/authAtom";
+// import { userAtom } from "@/store/authAtom";
 import { useAtom } from "jotai";
+import useGetUserInfo from "@/hooks/useGetUserInfo";
 
 type Props = {
   id: string;
@@ -11,7 +12,9 @@ type Props = {
 
 export default function DeleteBtn({ id }: Props) {
   const { DeleteNote } = useDeleteNote();
-  const [user] = useAtom(userAtom);
+  const { data: user, isLoading, isError, error } = useGetUserInfo();
+
+  // const [user] = useAtom(userAtom);
 
   const router = useRouter();
   const handleDelete = () => {
@@ -21,7 +24,7 @@ export default function DeleteBtn({ id }: Props) {
         // @ts-ignore
         const index = user.documentsRoots.indexOf(id);
         if (index > -1) {
-          user.documentsRoots.splice(index, 1);
+          user?.documentsRoots.splice(index, 1);
         }
         router.push("/");
       } catch (error) {
