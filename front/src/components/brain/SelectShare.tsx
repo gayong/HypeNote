@@ -11,16 +11,16 @@ export default function SelectShare({ onReceive }: { onReceive: (sharedData: any
   const [selectedFriends, setSelectedFriends] = useState([]);
   const { shareDiagmram, shareInfo } = useShareDiagram();
   const { data: response, isLoading, error } = useShareMemberList();
+  const [userOptions, setUserOptions] = useState([]);
 
-  const userOptions = useMemo(() => {
+  useEffect(() => {
     if (response?.data) {
-      console.log(response.data);
-      return response.data.map((user: ShareMember) => ({
+      const newOptions = response.data.map((user: ShareMember) => ({
         value: user.userPk,
         label: user.nickName,
+        title: { userPk: user.userPk, userName: user.nickName, userImg: user.profileImage },
       }));
-    } else {
-      return [];
+      setUserOptions(newOptions);
     }
   }, [response?.data]);
 
