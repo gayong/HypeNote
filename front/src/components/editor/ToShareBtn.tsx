@@ -24,12 +24,7 @@ export default function ToShareBtn({ id }: Props) {
   const [userPkList, setUserPkList] = useState<number[]>([]);
 
   const [serchList, setSerchList] = useState<userList[]>([]);
-  const colors = ["magenta", "red", "volcano", "orange", "gold", "lime", "green", "cyan", "blue", "geekblue", "purple"];
-  const randColor = () => {
-    const randomIndex = Math.floor(Math.random() * colors.length);
-    const randomColor = colors[randomIndex];
-    return randomColor;
-  };
+
   const showModal = () => {
     setIsModalOpen(true);
   };
