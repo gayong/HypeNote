@@ -17,7 +17,9 @@ export const signinUser = (email: string, password: string) =>
 // api.post(`auth/login`, { email, password });
 
 // 유저 정보 조회
-export const getUserInfo = () => api.get(`auth/user-info`);
+export const getUserInfo = () => {
+  return api.get(`auth/user-info`);
+};
 
 // 토큰 재발급
 export const reissueToken = () =>
@@ -37,4 +39,9 @@ export const getOtherUserPkByNickName = (nickName: string) => {
 // userPk 로 user info 반환
 export const getUsersInfo = (userPkList: number[]) => {
   return api.post(`auth/user-info/pk-list`, { userPkList: userPkList });
+};
+
+// userPk 로 user root info 반환
+export const getShareUserList = (userPk: number) => {
+  return api.get(`auth/root-user-info/${userPk}`);
 };

@@ -1,13 +1,29 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { useShareDiagram } from "@/hooks/useShareDiagram";
 import { TreeSelect, Select, Button, message, Steps, theme } from "antd";
+import { useShareMemberList } from "@/hooks/useGetShareUserList";
+import { ShareMember } from "@/types/diagram";
 
 export default function SelectShare({ onReceive }: { onReceive: (sharedData: any) => void }) {
   const [selectedFriends, setSelectedFriends] = useState([]);
   const { shareDiagmram, shareInfo } = useShareDiagram();
+  const { data: response, isLoading, error } = useShareMemberList();
+
+  const userOptions = useMemo(() => {
+    if (response?.data) {
+      console.log(response.data);
+      return response.data.map((user: ShareMember) => ({
+        value: user.nickName,
+        label: user.nickName,
+        title: { userPk: user.userPk, userName: user.nickName, userImg: user.profileImage },
+      }));
+    } else {
+      return [];
+    }
+  }, [response?.data]);
 
   const handleReceive = async () => {
     console.log(selectedFriends, "버튼클릭");
@@ -35,10 +51,8 @@ export default function SelectShare({ onReceive }: { onReceive: (sharedData: any
         size="middle"
         placeholder="내 노트와 친구 노트를 합쳐보세요!"
         style={{ width: 230, marginTop: "10px", zIndex: 9999 }}
-        options={[
-          { value: 2, label: "2번" },
-          { value: 3, label: "3번" },
-        ]}
+        options={userOptions}
+        value={selectedFriends}
         onChange={handleSelectChange}
       />
       <Button

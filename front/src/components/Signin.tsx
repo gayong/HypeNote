@@ -18,6 +18,7 @@ import { useRouter } from "next/navigation";
 import object_bottom from "../../public/assets/object_bottom.png";
 import object_top from "../../public/assets/object_top.png";
 import dd from "../../public/assets/dd.png";
+import useGetUserInfo from "@/hooks/useGetUserInfo";
 
 export default function Signin() {
   const [email, setEmail] = useState<string>("");

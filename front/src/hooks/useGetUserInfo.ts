@@ -2,15 +2,17 @@ import { getUserInfo } from "@/api/service/user";
 import { useAtom } from "jotai";
 
 import { userAtom } from "@/store/authAtom";
+import { useEffect } from "react";
 
 const useGetUserInfo = () => {
   const [, setUser] = useAtom(userAtom);
 
-  const userInfo = async () => {
-    try {
+  useEffect(() => {
+    const asyncFunc = async () => {
+      const token = localStorage.getItem("accessToken");
+      // if (token) {
       const response = await getUserInfo();
-      // data 저장하기
-      console.log(response.data);
+
       setUser({
         userPk: response.data.userPk,
         nickName: response.data.nickName,
@@ -20,14 +22,11 @@ const useGetUserInfo = () => {
         sharedDocumentsRoots: response.data.sharedDocumentsRoots,
         role: response.data.documentsRoots,
       });
-      return true;
-      //   return "success";
-    } catch (error) {
-      console.log(error);
-      return "error";
-    }
-  };
-  return { userInfo };
-};
 
+      // }
+    };
+
+    asyncFunc();
+  }, []);
+};
 export default useGetUserInfo;
