@@ -50,7 +50,7 @@ export default function SubscribeProvider({ roomId, children }: { roomId: number
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
 
-    if (stompClient) {
+    if (stompClient && user) {
       // 방 구독
       stompClient.subscribe(
         `/sub/quiz/${roomId}`,
@@ -68,18 +68,18 @@ export default function SubscribeProvider({ roomId, children }: { roomId: number
           // 퀴즈
           else if (responseBody.type == "quiz") {
             message.warning(`퀴즈가 시작됩니다! ${responseBody.result.question.length * 30}초 이내에 푸십시오`);
-            console.log("퀴즈", responseBody.result.question);
             setQuizs(responseBody.result.question);
           }
           // 퀴즈 결과
           else if (responseBody.type == "result") {
-            setQuizResults(responseBody.result[user?.userPk as number]);
+            message.info("퀴즈가 끝났어요! 복습을 하신 후에 방을 나가주세요.");
+            setQuizReady(true);
+            setQuizResults(responseBody.result[user.userPk as number]);
             setQuizRanking(responseBody.ranking);
           }
         },
-        { Authorization: `Bearer ${accessToken}` }
+        {}
       );
-
       // 채팅방 구독
       stompClient.subscribe(
         `/sub/chat/${roomId}`,
@@ -87,7 +87,7 @@ export default function SubscribeProvider({ roomId, children }: { roomId: number
           const message = JSON.parse(mes.body);
           setChatMessages((prevChatMessages) => [...prevChatMessages, message]);
         },
-        { Authorization: `Bearer ${accessToken}` }
+        {}
       );
     }
 
@@ -97,11 +97,7 @@ export default function SubscribeProvider({ roomId, children }: { roomId: number
         userPk: user?.userPk,
       };
       if (stompClient) {
-        stompClient.send(
-          `/pub/quizroom/out/${roomId}`,
-          { Authorization: `Bearer ${accessToken}` },
-          JSON.stringify(data)
-        );
+        stompClient.send(`/pub/quizroom/out/${roomId}`, {}, JSON.stringify(data));
         stompClient.unsubscribe(`/sub/quiz/${roomId}`);
       }
     };
