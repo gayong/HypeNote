@@ -10,6 +10,6 @@ import java.util.Set;
 @Getter
 @Builder(toBuilder = true)
 public class MemberDeleteRequestDto {
-    private String rootDocumentId;
+    private Map<Integer, String> rootDocument;
     private Map<Integer, Set<String>> sharedDocumentsList;
 }
