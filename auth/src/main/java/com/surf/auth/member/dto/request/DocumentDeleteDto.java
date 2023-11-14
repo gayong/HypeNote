@@ -15,6 +15,6 @@ import java.util.Set;
 @AllArgsConstructor
 public class DocumentDeleteDto {
 
-    private String rootDocumentId;
+    private Map<Integer, String> rootDocument;
     private Map<Integer, Set<String>> sharedDocumentsList;
 }

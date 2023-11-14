@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -60,21 +61,31 @@ public class UserRootDocumentIdService {
 
     public HttpStatus sharedRootDeleteService(DocumentDeleteDto documentDeleteDto) {
 
-        List<Integer> userPkSet = documentDeleteDto.getSharedDocumentsList().keySet().stream().toList();
+        Map<Integer, String> rootDocument = documentDeleteDto.getRootDocument();
 
-        int userPk = userPkSet.get(0);
-
-        Optional<User> userOptional = userRepository.findByUserPk(userPk);
-
-        if (userOptional.isPresent()) {
-            User user = userOptional.get();
-
-            for (String documentRoot : documentDeleteDto.getSharedDocumentsList().get(userPk)) {
-                user.getDocumentsRoots().removeIf(root -> root.equals(documentRoot));
+        if (!rootDocument.isEmpty()) {
+            int userPk = rootDocument.keySet().iterator().next();
+            Optional<User> userOptional = userRepository.findByUserPk(userPk);
+            if (userOptional.isPresent()) {
+                User user = userOptional.get();
+                user.getDocumentsRoots().removeIf(root -> root.equals(rootDocument.get(userPk)));
                 userRepository.save(user);
             }
-        } else {
-            return HttpStatus.NOT_FOUND;
+        }
+
+        Map<Integer, Set<String>> map = documentDeleteDto.getSharedDocumentsList();
+
+        if (!map.isEmpty()) {
+            for (Integer userPk : map.keySet()) {
+                Optional<User> userOptional = userRepository.findByUserPk(userPk);
+                if (userOptional.isPresent()) {
+                    User user = userOptional.get();
+                    for (String documentRoot : map.get(userPk)) {
+                        user.getDocumentsRoots().removeIf(root -> root.equals(documentRoot));
+                        userRepository.save(user);
+                    }
+                }
+            }
         }
         return HttpStatus.OK;
     }
