@@ -62,7 +62,10 @@ export default function ShardeBtn({ id }: Props) {
   };
   return (
     <Dropdown menu={menuProps} className="absolute top-5 right-12">
-      <FaUserFriends className="dark:text-font_primary text-2xl hover:text-dark_font" title="공유한 친구목록" />
+      <FaUserFriends
+        className="dark:text-font_primary dark:hover:text-dark_font text-2xl hover:text-dark_font"
+        title="공유한 친구목록"
+      />
     </Dropdown>
   );
 }
