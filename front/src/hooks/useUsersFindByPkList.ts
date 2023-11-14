@@ -1,17 +1,8 @@
 import { getUsersInfo } from "@/api/service/user";
+import { useMutation } from "react-query";
 
-export const useUsersFindByPkList = () => {
-  const getUsersFindByPkList = async (userList: number[]) => {
-    try {
-      const response = await getUsersInfo(userList);
-      console.log(response.data);
-      return response;
-    } catch (error) {
-      console.log(error);
-    }
-  };
-  return {
-    getUsersFindByPkList,
-  };
+const useUsersFindByPkList = () => {
+  const getUsersFindByPkList = useMutation((userList: number[]) => getUsersInfo(userList));
+  return getUsersFindByPkList;
 };
 export default useUsersFindByPkList;

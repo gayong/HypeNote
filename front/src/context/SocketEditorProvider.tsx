@@ -23,6 +23,8 @@ export default function SocketEditorProvider({ children }: WebSocketProviderProp
     const socketFactory = () => new SockJS(process.env.NEXT_PUBLIC_SERVER_URL + "editor/ws");
     const client = Stomp.over(socketFactory);
 
+    client.debug = () => {};
+
     function connect() {
       client.connect({}, function connection() {
         setStompClient(client);

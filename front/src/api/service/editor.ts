@@ -69,7 +69,8 @@ export const fetchUserRootList = () => {
 
 // 공유 맴버 조회
 export const fetchSharedMember = (editorList: string[]) => {
-  return api.post(`editor/member`, { editorList });
+  const response = api.post(`editor/member`, { editorList });
+  return response;
 };
 
 // 게시글 이미지 업로드

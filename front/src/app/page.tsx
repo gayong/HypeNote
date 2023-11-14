@@ -18,7 +18,7 @@ export default function Home() {
             <Image src={loading} alt="로딩" priority />
           </div>
         }>
-        {/* <ThreeScene /> */}
+        <ThreeScene />
       </Suspense>
     </div>
   );
