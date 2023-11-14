@@ -7,9 +7,11 @@ import com.surf.editor.common.error.exception.NotFoundException;
 import com.surf.editor.domain.Editor;
 import com.surf.editor.dto.request.*;
 import com.surf.editor.dto.response.*;
+import com.surf.editor.feign.client.MemberDeleteOpenFeign;
 import com.surf.editor.feign.client.MemberOpenFeign;
 import com.surf.editor.feign.client.MemberShareOpenFeign;
 import com.surf.editor.feign.client.MemberUnShareOpenFeign;
+import com.surf.editor.feign.dto.MemberDeleteRequestDto;
 import com.surf.editor.feign.dto.MemberEditorSaveRequestDto;
 import com.surf.editor.feign.dto.MemberShareRequestDto;
 import com.surf.editor.repository.EditorRepository;
@@ -30,6 +32,7 @@ public class EditorService {
     private final MemberShareOpenFeign memberShareOpenFeign;
     private final MemberUnShareOpenFeign memberUnShareOpenFeign;
     private final ProfileImageHandler profileImageHandler;
+    private final MemberDeleteOpenFeign memberDeleteOpenFeign;
 
     @Transactional
     public EditorCreateResponseDto editorCreate(int userId) {
@@ -105,9 +108,14 @@ public class EditorService {
     }
 
     public void editorDelete(String editorId) {
-
         try{
             Editor byId = editorRepository.findById(editorId).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
+            Set<String> sharedDocumentsList = new HashSet<>(); //문서 집합
+            String rootDocumentId = null;
+
+            if(byId.getParentId().equals("root")){
+                rootDocumentId = byId.getId();
+            }
 
             //부모 연관 관계 나 제거
             if(!byId.getParentId().equals("root")){
@@ -117,22 +125,46 @@ public class EditorService {
             }
 
             //연관 자녀 모두 제거
-            deleteChildEditor(byId);
+            deleteChildEditor(byId,sharedDocumentsList);
+
+            //member 서버로
+            memberDeleteFeign(rootDocumentId, List.copyOf(sharedDocumentsList));
         }
         catch (Exception e){
             throw new BaseException(ErrorCode.FAIL_DELETE_EDITOR);
         }
     }
 
-    private void deleteChildEditor(Editor editor) {
+    private void memberDeleteFeign(String rootDocumentId, List<String> sharedDocumentsList) {
+        try{
+            MemberDeleteRequestDto memberDeleteRequestDto = MemberDeleteRequestDto.builder()
+                    .rootDocumentId(rootDocumentId)
+                    .sharedDocumentsList(sharedDocumentsList)
+                    .build();
 
+            memberDeleteOpenFeign.memberDelete(memberDeleteRequestDto);
+        }catch (Exception e){
+            throw new BaseException(ErrorCode.DOCUMENT_DELETE_FAIL);
+        }
+    }
+
+
+    private void deleteChildEditor(Editor editor,Set<String> set) {
         List<String> childIds = editor.getChildId();
         if(childIds !=null && !childIds.isEmpty()){
             for (String childId : childIds) {
                 Editor childEditor = editorRepository.findById(childId).orElseThrow(() -> new NotFoundException(ErrorCode.EDITOR_NOT_FOUND));
-                deleteChildEditor(childEditor);
+                deleteChildEditor(childEditor,set);
+
+                if(childEditor.getSharedUser().size()>1){ //shared값에 나 자신은 무조건 있음 나를 제외한 공유한 사람이 있으면
+                    set.add(childEditor.getId());
+                }
                 editorRepository.delete(childEditor);
             }
+        }
+
+        if(editor.getSharedUser().size()>1){
+            set.add(editor.getId());
         }
         editorRepository.delete(editor);
     }
