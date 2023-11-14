@@ -18,6 +18,7 @@ export default function DeleteBtn({ id }: Props) {
     if (id) {
       try {
         DeleteNote(id);
+        // @ts-ignore
         const index = user.documentsRoots.indexOf(id);
         if (index > -1) {
           user.documentsRoots.splice(index, 1);
