@@ -17,19 +17,21 @@ export default function DeleteBtn({ id }: Props) {
   // const [user] = useAtom(userAtom);
 
   const router = useRouter();
+
   const handleDelete = () => {
     if (id) {
-      try {
-        DeleteNote(id);
-        // @ts-ignore
-        const index = user.documentsRoots.indexOf(id);
-        if (index > -1) {
-          user?.documentsRoots.splice(index, 1);
-        }
-        router.push("/main");
-      } catch (error) {
-        console.log(error);
-      }
+      DeleteNote(id)
+        .then(() => {
+          // @ts-ignore
+          const index = user.documentsRoots.indexOf(id);
+          if (index > -1) {
+            user?.documentsRoots.splice(index, 1);
+          }
+          router.push("/main");
+        })
+        .catch((error) => {
+          console.log(error);
+        });
     }
   };
 
