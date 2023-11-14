@@ -9,8 +9,7 @@ import { useRouter } from "next/navigation";
 import ChatRoom from "./ChatRoom";
 import QuizStart from "./QuizStart";
 import Card2 from "../ui/Card2";
-import { useAtom } from "jotai";
-// import { userAtom } from "@/store/authAtom";
+import Timer from "../ui/Timer";
 import QuizResult from "./QuizResult";
 import Loading from "@/components/Loading";
 import useGetUserInfo from "@/hooks/useGetUserInfo";
@@ -108,10 +107,14 @@ export default function QuizRoom(props: QuizRoomProps) {
         <div>
           <Loading />
           <h1>다른 친구들이 다 풀 때까지 잠시만 기다려 주세요.</h1>
+          <h1>퀴즈 맞힌 개수가 같다면, 더 빨리 푼 사람이 이겨요!</h1>
         </div>
       ) : quizs.length > 0 ? (
         // 퀴즈 게임 중
-        <QuizStart roomId={props.roomId} setSubmit={setSubmit} />
+        <>
+          <QuizStart roomId={props.roomId} setSubmit={setSubmit} />
+          <Timer time={quizs.length} />
+        </>
       ) : (
         // 퀴즈 게임 전
         <>
