@@ -20,25 +20,26 @@ public class DiagramController {
         this.diagramService = diagramService;
     }
 
-    @GetMapping("/{userPk}")
+
+    @GetMapping("/link")
     @Operation(summary = "내 유사도 노드와 링크 조회")
-    public BaseResponse<DiagramResponseDto> getNodes(@RequestHeader("Authorization") String token, @PathVariable int userPk) {
-        DiagramResponseDto response = diagramService.getDiagram(token, userPk);
+    public BaseResponse<DiagramResponseDto> getNodes(@RequestHeader("Authorization") String token) {
+        DiagramResponseDto response = diagramService.getDiagram(token);
         return new BaseResponse<>(response);
     }
 
-    @GetMapping("/link/{userPk}")
+    @GetMapping("")
     @Operation(summary = "내 기본 노드와 링크 조회")
-    public BaseResponse<DiagramResponseDto> getLinkNodes(@PathVariable int userPk) {
-        DiagramResponseDto response = diagramService.getLinkDiagram(userPk);
+    public BaseResponse<DiagramResponseDto> getLinkNodes(@RequestHeader("Authorization") String token) {
+        DiagramResponseDto response = diagramService.getLinkDiagram(token);
         return new BaseResponse<>(response);
     }
 
 
-    @PostMapping("/share/{userPk}")
+    @PostMapping("/share")
     @Operation(summary = "다인 쉐어")
-    public BaseResponse<DiagramResponseDto> linkNodesByShares(@PathVariable int userPk, @RequestBody List<Integer> targetIds ) throws Exception {
-        DiagramResponseDto responseDto = diagramService.linkNodesByShares(userPk, targetIds);
+    public BaseResponse<DiagramResponseDto> linkNodesByShares(@RequestHeader("Authorization") String token, @RequestBody List<Integer> targetIds ) throws Exception {
+        DiagramResponseDto responseDto = diagramService.linkNodesByShares(token, targetIds);
         return new BaseResponse<>(responseDto);
     }
 }

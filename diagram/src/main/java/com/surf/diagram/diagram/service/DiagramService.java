@@ -5,7 +5,7 @@ import com.surf.diagram.diagram.dto.response.DiagramResponseDto;
 import java.util.List;
 
 public interface DiagramService {
-    DiagramResponseDto linkNodesByShares(int userId, List<Integer> targetUserIds);
-    DiagramResponseDto getDiagram(String token, int userId);
-    DiagramResponseDto getLinkDiagram(int userId);
+    DiagramResponseDto linkNodesByShares(String token, List<Integer> targetUserIds);
+    DiagramResponseDto getDiagram(String token);
+    DiagramResponseDto getLinkDiagram(String token);
 }

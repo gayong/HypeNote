@@ -85,11 +85,12 @@ public class DiagramServiceImpl implements DiagramService {
 
     // 나의 뇌 그리기
     @Override
-    public DiagramResponseDto getDiagram(String token, int userId) {
+    public DiagramResponseDto getDiagram(String token) {
 
-        UserInfoResponseDto res = feginUserService.userInfoByUserPk(userId);
-        UserInfoResponseDto res1 = feginUserService.userInfoByToken(token);
-        System.out.println("res1 = " + res1);
+//        UserInfoResponseDto res = feginUserService.userInfoByUserPk(userId);
+        UserInfoResponseDto res = feginUserService.userInfoByToken(token);
+        System.out.println("res1 = " + token);
+        System.out.println("res1 = " + res.getNickName());
 
         List<EditorListResponseDto> editorList = feginEditorService.editorList(new EditorListRequestDto(res.getDocumentsRoots()));
         System.out.println(" = " + editorList.get(0).getContent());
@@ -100,7 +101,7 @@ public class DiagramServiceImpl implements DiagramService {
         List<LinkResponseDto> linkResponseDtos1 = convertLinkResponseDtos(linkDtos);
         linkResponseDtos.addAll(linkResponseDtos1);
         DiagramResponseDto response = createDiagramResponseDto(nodeResponseDtos, linkResponseDtos);
-        diagramCache.put(userId, response);
+        diagramCache.put(res.getUserPk(), response);
         return response;
     }
 
@@ -439,8 +440,9 @@ public class DiagramServiceImpl implements DiagramService {
     }
 
     @Override
-    public DiagramResponseDto getLinkDiagram(int userId) {
-        UserInfoResponseDto res = feginUserService.userInfoByUserPk(userId);
+    public DiagramResponseDto getLinkDiagram(String token) {
+        UserInfoResponseDto res = feginUserService.userInfoByToken(token);
+//        UserInfoResponseDto res = feginUserService.userInfoByUserPk(userId);
 
         List<EditorListResponseDto> editorList = feginEditorService.editorList(new EditorListRequestDto(res.getDocumentsRoots()));
         System.out.println(" = " + editorList.get(0).getContent());
@@ -451,8 +453,8 @@ public class DiagramServiceImpl implements DiagramService {
     }
 
     // 친구 뇌 받기
-    public DiagramResponseDto linkNodesByShares(int userId,  List<Integer> targetUserIds) {
-        UserInfoResponseDto res = feginUserService.userInfoByUserPk(userId);
+    public DiagramResponseDto linkNodesByShares(String token,  List<Integer> targetUserIds) {
+        UserInfoResponseDto res = feginUserService.userInfoByToken(token);
 
         List<EditorListResponseDto> editorList = feginEditorService.editorList(new EditorListRequestDto(res.getDocumentsRoots()));
         List<EditorListResponseDto> shareeditorList = feginEditorService.editorList(new EditorListRequestDto(res.getSharedDocumentsRoots()));
@@ -467,7 +469,7 @@ public class DiagramServiceImpl implements DiagramService {
         List<LinkResponseDto> linkResponseDtos1 = convertLinkResponseDtos(linkDtos);
         linkResponseDtos.addAll(linkResponseDtos1);
         DiagramResponseDto response = createDiagramResponseDto(nodeResponseDtos, linkResponseDtos);
-        diagramCache.put(userId, response);
+        diagramCache.put(res.getUserPk(), response);
         return response;
     }
 
