@@ -99,6 +99,7 @@ export default function SubscribeProvider({ roomId, children }: { roomId: number
       if (stompClient) {
         stompClient.send(`/pub/quizroom/out/${roomId}`, {}, JSON.stringify(data));
         stompClient.unsubscribe(`/sub/quiz/${roomId}`);
+        stompClient.unsubscribe(`/sub/chat/${roomId}`);
       }
     };
   }, [stompClient]);

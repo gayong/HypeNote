@@ -6,9 +6,10 @@ import { Statistic, message } from "antd";
 
 interface TimerProps {
   time: number;
+  setSubmit: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function Timer({ time }: TimerProps) {
+export default function Timer({ time, setSubmit }: TimerProps) {
   const { Countdown } = Statistic;
 
   const deadline = Date.now() + 30 * time * 1000;
@@ -16,6 +17,7 @@ export default function Timer({ time }: TimerProps) {
   const onFinish: CountdownProps["onFinish"] = () => {
     console.log("finished!");
     message.info("퀴즈가 끝났습니다!");
+    setSubmit(true);
   };
 
   return (

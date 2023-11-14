@@ -113,7 +113,7 @@ export default function QuizRoom(props: QuizRoomProps) {
         // 퀴즈 게임 중
         <>
           <QuizStart roomId={props.roomId} setSubmit={setSubmit} />
-          <Timer time={quizs.length} />
+          <Timer time={quizs.length} setSubmit={setSubmit} />
         </>
       ) : (
         // 퀴즈 게임 전
