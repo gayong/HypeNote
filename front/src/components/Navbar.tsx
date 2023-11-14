@@ -76,7 +76,7 @@ export default function Navbar() {
       <div className="z-50 sidebar fixed top-0 bottom-0 lg:left-0 p-2 w-[290px] overflow-y-auto text-center bg-primary text-secondary dark:bg-dark_primary scrollbar-hide">
         <div className="text-secondary text-xl">
           <div className="px-2.5 pt-2.5 pb-1 mt-1 flex items-start justify-between">
-            <Link href="/">
+            <Link href="/main">
               <Image src={LogoImg} alt="우리로고" className="h-16 w-auto"></Image>
             </Link>
             <DarkModeBtn />
@@ -94,7 +94,7 @@ export default function Navbar() {
           />
         </div> */}
         <MySearch />
-        <Link href="/">
+        <Link href="/main">
           <div className="py-2 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-hover_primary hover:bg-opacity-50 dark:hover:bg-line_primary dark:hover:bg-opacity-50">
             <i className="bi bi-house-door-fill"></i>
             <span className="text-[15px] ml-2 font-bold">노트 모아보기</span>
