@@ -11,6 +11,7 @@ import { FaUserFriends } from "react-icons/fa";
 import Image from "next/image";
 type Props = {
   id: string;
+  owner: number;
 };
 
 type userInfo = {
@@ -18,7 +19,7 @@ type userInfo = {
   key: number;
   icon: ReactNode;
 };
-export default function ShardeBtn({ id }: Props) {
+export default function ShardeBtn({ id, owner }: Props) {
   // const { SharedMember } = useGetSharedMember();
   const getUsersFindByPkList = useUsersFindByPkList();
   const [items, setItem] = useState<userInfo[]>([]);
@@ -32,27 +33,47 @@ export default function ShardeBtn({ id }: Props) {
       if (res) {
         const userList: userInfo[] = [];
         res.forEach((element: any) => {
-          console.log(element);
-          const userinfo = {
-            label: element.nickName,
-            key: element.userPk,
-            icon: (
-              <Image
-                src={element.profileImage}
-                alt="유저 이미지"
-                width={20}
-                height={20}
-                className="w-[20px] h-[20px] rounded-full"></Image>
-            ),
-          };
-          userList.push(userinfo);
+          if (element.userPk === owner) {
+            const userinfo = {
+              label: element.nickName,
+              key: element.userPk,
+              icon: (
+                <Image
+                  src={element.profileImage}
+                  alt="유저 이미지"
+                  width={20}
+                  height={20}
+                  className="w-[20px] h-[20px] rounded-full"></Image>
+              ),
+              style: { backgroundColor: "RGB(204,224,255)" },
+            };
+            userList.push(userinfo);
+          }
         });
+        res.forEach((element: any) => {
+          if (element.userPk !== owner) {
+            const userinfo = {
+              label: element.nickName,
+              key: element.userPk,
+              icon: (
+                <Image
+                  src={element.profileImage}
+                  alt="유저 이미지"
+                  width={20}
+                  height={20}
+                  className="w-[20px] h-[20px] rounded-full"></Image>
+              ),
+            };
+            userList.push(userinfo);
+          }
+        });
+
         setItem(userList);
       }
     };
 
     getSharedMember();
-  }, [id]);
+  }, [id, owner]);
 
   const menuProps = {
     items,
