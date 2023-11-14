@@ -26,7 +26,7 @@ export default function DeleteBtn({ id }: Props) {
         if (index > -1) {
           user?.documentsRoots.splice(index, 1);
         }
-        router.push("/");
+        router.push("/main");
       } catch (error) {
         console.log(error);
       }
