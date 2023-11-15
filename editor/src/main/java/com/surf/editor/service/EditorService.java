@@ -205,15 +205,16 @@ public class EditorService {
         List<EditorSearchResponseDto.Editors> editors = new ArrayList<>();
 
         for (Editor editor : byTitleContainingOrContentContaining) {
+            String content = editor.getContent();
 
-            editor.setContent(editor.getContent().replaceAll("(&lt;(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?&gt;)|(<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>)", ""));
-            editor.setContent(removeHtmlEntities(editor.getContent()));
+            content = (content.replaceAll("(&lt;(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?&gt;)|(<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>)", ""));
+            content = (removeHtmlEntities(content));
 
             editors.add(
                     EditorSearchResponseDto.Editors.builder()
                     .id(editor.getId())
                     .title(editor.getTitle())
-                    .content(editor.getContent())
+                    .content(content)
                     .build());
         }
         EditorSearchResponseDto editorList = EditorSearchResponseDto.builder()
