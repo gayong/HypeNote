@@ -224,7 +224,7 @@ public class EditorService {
         return editorList;
     }
 
-    public static String removeHtmlTags(String html) {
+    public String removeHtmlTags(String html) {
         Document doc = Jsoup.parse(html);
         Elements elements = doc.select("*");
 
@@ -234,10 +234,7 @@ public class EditorService {
 
         return doc.text();
     }
-
-
-
-
+    
     public void editorRelation(int userId, EditorRelationRequestDto editorRelationRequestDto) {
         // db의 child 리스트에 추가
         Editor findParentEditor = editorRepository.findById(editorRelationRequestDto.getParentId())
