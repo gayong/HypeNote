@@ -224,17 +224,16 @@ public class EditorService {
         return editorList;
     }
 
-    public String removeHtmlTags(String html) {
-        Document doc = Jsoup.parse(html);
-        Elements elements = doc.select("*");
+    public static String removeHtmlTags(String html) {
+        // HTML 태그를 제거하는 정규식 패턴
+        String regex = "<[^>]+>";
 
-        for (Element element : elements) {
-            element.remove();
-        }
+        // 정규식을 사용하여 HTML 태그를 제거
+        String text = html.replaceAll(regex, "");
 
-        return doc.text();
+        return text;
     }
-    
+
     public void editorRelation(int userId, EditorRelationRequestDto editorRelationRequestDto) {
         // db의 child 리스트에 추가
         Editor findParentEditor = editorRepository.findById(editorRelationRequestDto.getParentId())
