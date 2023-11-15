@@ -9,13 +9,14 @@ import { userInfo } from "os";
 import { ReactNode } from "react";
 import { FaUserFriends } from "react-icons/fa";
 import Image from "next/image";
+import crown from "../../../public/assets/crown.png";
 type Props = {
   id: string;
   owner: number;
 };
 
 type userInfo = {
-  label: string;
+  label: any;
   key: number;
   icon: ReactNode;
 };
@@ -35,7 +36,10 @@ export default function ShardeBtn({ id, owner }: Props) {
         res.forEach((element: any) => {
           if (element.userPk === owner) {
             const userinfo = {
-              label: element.nickName,
+              label:
+                // prettier-ignore
+                <a className="flex">{element.nickName}  <Image src={crown} alt="crown" width={20} height={20} /></a>,
+
               key: element.userPk,
               icon: (
                 <Image
@@ -45,7 +49,6 @@ export default function ShardeBtn({ id, owner }: Props) {
                   height={20}
                   className="w-[20px] h-[20px] rounded-full"></Image>
               ),
-              style: { backgroundColor: "RGB(204,224,255)" },
             };
             userList.push(userinfo);
           }
@@ -80,6 +83,7 @@ export default function ShardeBtn({ id, owner }: Props) {
   };
   return (
     <Dropdown menu={menuProps} className="absolute top-5 right-12">
+      {/* <Image src={crown} alt="유저 이미지" width={20} height={20} className="w-[20px] h-[20px] rounded-full"></Image> */}
       <FaUserFriends
         className="dark:text-font_primary dark:hover:text-dark_font text-2xl hover:text-dark_font"
         title="공유한 친구목록"
