@@ -71,7 +71,7 @@ const ThreeScene = () => {
       nodeStrokeWidth = 2.5, // 노드 테두리 굵기
       nodeStrokeOpacity = 1, // node stroke opacity
       nodeRadius = 10, // node radius, in pixels
-      nodeStrength = -60, // 노드끼리 밀어내는 힘, 절댓값 클수록 많이 밀어냄
+      nodeStrength = -100, // 노드끼리 밀어내는 힘, 절댓값 클수록 많이 밀어냄
       linkSource = ({ source }) => source, // given d in links, returns a node identifier string
       linkTarget = ({ target }) => target, // given d in links, returns a node identifier string
       linkStroke = "#999", // link stroke color
@@ -108,7 +108,7 @@ const ThreeScene = () => {
     const color = d3.scaleOrdinal(d3.schemeCategory10);
 
     // Construct the forces.
-    const forceNode = d3.forceManyBody().strength(-60).distanceMax(100);
+    const forceNode = d3.forceManyBody().strength(-100).distanceMax(100);
     const forceLink = d3
       .forceLink(links)
       .id((d) => d.id)
