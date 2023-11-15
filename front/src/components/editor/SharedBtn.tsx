@@ -9,7 +9,7 @@ import { userInfo } from "os";
 import { ReactNode } from "react";
 import { FaUserFriends } from "react-icons/fa";
 import Image from "next/image";
-import crown from "../../../public/assets/crown.png";
+// import crown from "../../../public/assets/crown.png";
 type Props = {
   id: string;
   owner: number;
@@ -38,7 +38,7 @@ export default function ShardeBtn({ id, owner }: Props) {
             const userinfo = {
               label:
                 // prettier-ignore
-                <a className="flex">{element.nickName}  <Image src={crown} alt="crown" width={20} height={20} /></a>,
+                <a className="flex">{element.nickName}  <Image src="/assets/crown.png" alt="crown" width={18} height={18}  className="ml-2"/></a>,
 
               key: element.userPk,
               icon: (

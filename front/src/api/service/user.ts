@@ -13,8 +13,8 @@ export const createUser = (email: string, password: string, nickName: string, pr
 
 // 로그인
 export const signinUser = (email: string, password: string) =>
-  axios.post(`${window.location.origin}/api/auth/login`, { email, password });
-// api.post(`auth/login`, { email, password });
+  // axios.post(`${window.location.origin}/api/auth/login`, { email, password });
+  api.post(`auth/login`, { email, password });
 
 // 유저 정보 조회
 export const getUserInfo = async () => {
@@ -34,7 +34,8 @@ export const shareNote = (userId: number, userList: number[], editorId: string) 
 };
 // 인물 검색
 export const getOtherUserPkByNickName = (nickName: string) => {
-  return api.get(`auth/user-info/${nickName}`);
+  const response = api.get(`auth/user-info/${nickName}`);
+  return response;
 };
 
 // userPk 로 user info 반환

@@ -221,7 +221,7 @@ export default function Search() {
   return (
     <div>
       <Button
-        className="bg-primary absolute top-8 -right-8 rounded-b-none rotate-[270deg]"
+        className="bg-primary absolute top-8 -right-8 rounded-b-none rotate-[270deg] font-preRg"
         type="primary"
         onClick={showDrawer}>
         한입 도우미

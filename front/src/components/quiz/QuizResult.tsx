@@ -74,7 +74,7 @@ export default function QuizResult() {
         {"< 나가기"}
       </span>
       <div className="-mt-7 flex justify-center">
-        <Radio.Group defaultValue="rank" buttonStyle="solid">
+        <Radio.Group defaultValue="rank" buttonStyle="solid" className="font-preRg">
           <Radio.Button
             value="rank"
             onClick={() => {
