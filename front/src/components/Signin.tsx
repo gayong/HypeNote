@@ -29,6 +29,7 @@ export default function Signin() {
 
   const handleSignin = async (event: any) => {
     event.preventDefault();
+    localStorage.clear();
     const success = await signin(email, password);
 
     if (success === "success") {

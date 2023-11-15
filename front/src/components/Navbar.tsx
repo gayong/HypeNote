@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import DarkModeBtn from "./darkmode/DarkmodeBtn";
 import Category from "./category/Category";
 import { useAtom } from "jotai";
-// import { userAtom } from "@/store/authAtom";
 import { MyDocumentsAtom, SharedDocumentsAtom } from "@/store/documentsAtom";
 import MySearch from "@/components/MySearch";
 import { useNoteList } from "@/hooks/useNoteList";
@@ -16,7 +15,7 @@ import { useRouter } from "next/navigation";
 import useCreateNote from "@/hooks/useCreateNote";
 import useLinkNote from "@/hooks/useLinkNote";
 import useGetUserInfo from "@/hooks/useGetUserInfo";
-// import useGetUserInfo from "@/hooks/useGetUserInfo";
+import Logout from "./ui/logout";
 
 export default function Navbar() {
   const { createDocument } = useCreateNote();
@@ -140,13 +139,13 @@ export default function Navbar() {
           sharedDocuments.map((element) => {
             return <Category childProps={element} value={2} key={element.id} depth={0} />;
           })}
+        <br />
         <div className="no-drag w-full">
-          <span className="no-drag text-left text-[13px] absolute px-3 text-gray-300 -translate-x-1/2 bg-[#2946A2] left-1/2  dark:bg-dark_primary">
-            로그아웃
+          <span className="no-drag dark:text-font_primary text-xl absolute px-3 right-2 dark:bg-dark_primary cursor-pointer">
+            <Logout />
           </span>
-          <br />
-          <br />
         </div>
+        <br />
 
         {/* <Link href="/signin">
           <h1 className="inline underline text-font_primary">signIn / </h1>

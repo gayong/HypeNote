@@ -39,16 +39,20 @@ export default function DeleteBtn({ id }: Props) {
     <>
       <Popconfirm
         placement="bottom"
-        title={"노트 삭제"}
-        description={"정말 삭제하시겠습니까?"}
+        title={<div className="font-preBd">DELETE</div>}
+        description={<div className="font-preRg">정말 해당 노트를 삭제하시겠습니까?</div>}
         onConfirm={handleDelete}
         // onCancel={}
         okText="네"
-        okButtonProps={{ className: "bg-[#e60000]" }}
+        okButtonProps={{
+          danger: true,
+          className: "hover:none bg-red font-preRg",
+        }}
+        cancelButtonProps={{ danger: true }}
         cancelText="아니오">
         <TbTrashXFilled
           className="dark:text-font_primary text-2xl
-         hover:text-[#e60000] dark:hover:text-[#e60000] absolute top-5 right-20"
+         hover:text-red dark:hover:text-red absolute top-5 right-20"
           title="문서 삭제"
         />
       </Popconfirm>
