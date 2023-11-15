@@ -54,7 +54,7 @@ export default function QuizMaker() {
 
   const [quizCnt, setQuizCnt] = useState<number>(1);
   const [selectedUser, setSelectedUser] = useState<Array<QuizUser>>([]);
-  const [value, setValue] = useState<Array<Click2Type>>([]);
+  const [selecValue, setSelecValue] = useState<Array<Click2Type>>([]);
 
   const handleTitleChange = (e: any) => setTitle(e.target.value);
   const handleContentChange = (e: any) => setContent(e.target.value);
@@ -141,14 +141,20 @@ export default function QuizMaker() {
 
   const handleChangeNickName = (value: Array<Click2Type>) => {
     if (value.length <= 7) {
+      console.log(value);
       const selectedUsers = value.map((v) => v.title);
       setSelectedUser(selectedUsers);
+      setSelecValue(value);
       console.log(selectedUsers);
-      setValue(value);
+      console.log("123", selecValue);
     } else {
       message.warning("최대 7명까지 초대 가능 합니다.");
+      return;
     }
   };
+  useEffect(() => {
+    console.log("2222", selecValue);
+  }, [selecValue]);
 
   const steps = useMemo(() => {
     if (isSolo) {
@@ -299,9 +305,9 @@ export default function QuizMaker() {
                 size="middle"
                 placeholder="닉네임을 검색하세요"
                 onChange={handleChangeNickName}
-                value={value}
                 style={{ width: "400px" }}
                 options={userOptions}
+                defaultValue={selecValue}
               />
             </div>
           ),
