@@ -21,18 +21,24 @@ interface Click2Type {
   title: QuizUser;
   value: string;
 }
-interface TreeType {
-  title: string;
-  value: string;
-  key: string;
-  children?: TreeType[];
-}
 
 interface ClickType {
   disabled: undefined;
   halfChecked: undefined;
   label: string;
   value: string;
+}
+
+interface User {
+  userPk: number;
+  userName: string;
+  userImg: string;
+}
+
+interface Option {
+  value: string;
+  label: string;
+  title: User;
 }
 
 export default function QuizMaker() {
@@ -48,11 +54,12 @@ export default function QuizMaker() {
 
   const [quizCnt, setQuizCnt] = useState<number>(1);
   const [selectedUser, setSelectedUser] = useState<Array<QuizUser>>([]);
+  const [value, setValue] = useState<Array<Click2Type>>([]);
 
   const handleTitleChange = (e: any) => setTitle(e.target.value);
   const handleContentChange = (e: any) => setContent(e.target.value);
   const [documentsValue, setDocumentsValue] = useState<Array<ClickType>>([]);
-  // const [user] = useAtom(userAtom);
+
   const { data: user, isLoading, isError, error } = useGetUserInfo();
 
   const router = useRouter();
@@ -70,16 +77,24 @@ export default function QuizMaker() {
   };
 
   const userOptions = useMemo(() => {
-    if (inviteUserInfo) {
+    const options: Option[] = [];
+    if (inviteUserInfo && user) {
       console.log(inviteUserInfo);
-      return inviteUserInfo.slice(1).map((user) => ({
-        value: user.userName,
-        label: user.userName,
-        title: { userPk: user.userPk, userName: user.userName, userImg: user.userImg },
-      }));
-    } else {
-      return [];
+      inviteUserInfo.forEach((inviteUser) => {
+        if (inviteUser.userPk !== user.userPk) {
+          options.push({
+            value: inviteUser.userName,
+            label: inviteUser.userName,
+            title: {
+              userPk: inviteUser.userPk,
+              userName: inviteUser.userName,
+              userImg: inviteUser.userImg,
+            },
+          });
+        }
+      });
     }
+    return options;
   }, [inviteUserInfo]);
 
   // 퀴즈 방 만들기 STEP 2
@@ -125,14 +140,14 @@ export default function QuizMaker() {
   };
 
   const handleChangeNickName = (value: Array<Click2Type>) => {
-    if (value.length > 6) {
+    if (value.length <= 7) {
+      const selectedUsers = value.map((v) => v.title);
+      setSelectedUser(selectedUsers);
+      console.log(selectedUsers);
+      setValue(value);
+    } else {
       message.warning("최대 7명까지 초대 가능 합니다.");
-      return;
     }
-
-    const selectedUsers = value.map((v) => v.title);
-    setSelectedUser(selectedUsers);
-    console.log();
   };
 
   const steps = useMemo(() => {
@@ -284,6 +299,7 @@ export default function QuizMaker() {
                 size="middle"
                 placeholder="닉네임을 검색하세요"
                 onChange={handleChangeNickName}
+                value={value}
                 style={{ width: "400px" }}
                 options={userOptions}
               />
