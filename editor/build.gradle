@@ -50,6 +50,8 @@ dependencies {
 
 	// S3 Upload
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+	implementation 'org.jsoup:jsoup:1.14.2'
 }
 
 // For MSA -인식문의

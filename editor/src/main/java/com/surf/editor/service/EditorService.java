@@ -16,14 +16,17 @@ import com.surf.editor.feign.dto.MemberEditorSaveRequestDto;
 import com.surf.editor.feign.dto.MemberShareRequestDto;
 import com.surf.editor.repository.EditorRepository;
 import lombok.RequiredArgsConstructor;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+
 import java.io.IOException;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Service
 @Transactional
@@ -207,14 +210,11 @@ public class EditorService {
         for (Editor editor : byTitleContainingOrContentContaining) {
             String content = editor.getContent();
 
-            content = (content.replaceAll("(&lt;(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?&gt;)|(<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>)", ""));
-            content = (removeHtmlEntities(content));
-
             editors.add(
                     EditorSearchResponseDto.Editors.builder()
                     .id(editor.getId())
                     .title(editor.getTitle())
-                    .content(content)
+                    .content(removeHtmlTags(content))
                     .build());
         }
         EditorSearchResponseDto editorList = EditorSearchResponseDto.builder()
@@ -224,23 +224,18 @@ public class EditorService {
         return editorList;
     }
 
-    //HTML 엔티티 제거
-    public static String removeHtmlEntities(String input) {
-        // HTML 엔터티를 찾을 정규식
-        String regex = "&#[0-9]+;|&[a-zA-Z]+;";
+    public static String removeHtmlTags(String html) {
+        Document doc = Jsoup.parse(html);
+        Elements elements = doc.select("*");
 
-        // 정규식을 사용하여 매치된 엔터티 제거
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(input);
-        StringBuffer buffer = new StringBuffer();
-
-        while (matcher.find()) {
-            matcher.appendReplacement(buffer, "");
+        for (Element element : elements) {
+            element.remove();
         }
-        matcher.appendTail(buffer);
 
-        return buffer.toString();
+        return doc.text();
     }
+
+
 
 
     public void editorRelation(int userId, EditorRelationRequestDto editorRelationRequestDto) {
