@@ -225,7 +225,7 @@ function TestEditor({ id }: Props) {
   return (
     <>
       <div style={{ width: open ? "calc(100% - 380px)" : "100%" }}>
-        <BlockNoteView editor={editor} theme={theme} onKeyDown={onSave} onDragEnd={Drag} />
+        <BlockNoteView editor={editor} theme={theme} onKeyUp={onSave} onDragEnd={Drag} />
         {/* <BlockNoteView editor={editor} theme={theme}/> */}
       </div>
       <Search />
