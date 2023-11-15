@@ -140,6 +140,14 @@ export default function Navbar() {
           sharedDocuments.map((element) => {
             return <Category childProps={element} value={2} key={element.id} depth={0} />;
           })}
+        <div className="no-drag w-full">
+          <span className="no-drag text-left text-[13px] absolute px-3 text-gray-300 -translate-x-1/2 bg-[#2946A2] left-1/2  dark:bg-dark_primary">
+            로그아웃
+          </span>
+          <br />
+          <br />
+        </div>
+
         {/* <Link href="/signin">
           <h1 className="inline underline text-font_primary">signIn / </h1>
         </Link>
