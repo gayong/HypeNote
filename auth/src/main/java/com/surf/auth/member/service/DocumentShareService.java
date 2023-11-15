@@ -23,9 +23,9 @@ public class DocumentShareService {
 
         User user = userOptional.orElseThrow();
 
-        user.getSharedDocumentsRoots().add(documentShareRequestDto.getDocumentId());
-
-        userRepository.save(user);
-
+        if (!user.getSharedDocumentsRoots().contains(documentShareRequestDto.getDocumentId())) {
+            user.getSharedDocumentsRoots().add(documentShareRequestDto.getDocumentId());
+            userRepository.save(user);
+        }
     }
 }
