@@ -108,7 +108,7 @@ const ThreeScene = () => {
     const color = d3.scaleOrdinal(d3.schemeCategory10);
 
     // Construct the forces.
-    const forceNode = d3.forceManyBody().strength(-30).distanceMax(100);
+    const forceNode = d3.forceManyBody().strength(-50).distanceMax(100);
     const forceLink = d3
       .forceLink(links)
       .id((d) => d.id)
