@@ -23,7 +23,9 @@ public class UserInformationNickNameService {
             return UserPkResponseDto.builder()
                     .message("유저 PK를 성공적으로 반환했습니다.")
                     .data(UserPkResponseDto.Data.builder()
-                            .userPk(userInfo.getUserPk()).build())
+                            .userPk(userInfo.getUserPk())
+                            .nickName(userInfo.getNickName())
+                            .profileImage(userInfo.getProfileImage()).build())
                     .build();
         } else {
             return UserPkResponseDto.builder()

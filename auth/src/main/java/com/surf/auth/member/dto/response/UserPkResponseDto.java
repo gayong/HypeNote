@@ -19,6 +19,9 @@ public class UserPkResponseDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class Data {
+
         private int userPk;
+        private String nickName;
+        private String profileImage;
     }
 }
