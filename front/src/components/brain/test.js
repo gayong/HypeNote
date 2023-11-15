@@ -22,6 +22,8 @@ const ThreeScene = () => {
   const [shareNodes, setShareNodes] = useState([]);
   const [shareLinks, setShareLinks] = useState([]);
   const { data: user } = useGetUserInfo();
+  const [innerWidth, setInnerWidth] = useState(window.innerWidth - 350);
+  const [innerHeight, setInnerHeight] = useState(window.innerHeight - 90);
 
   useEffect(() => {
     if (response && user) {
@@ -78,8 +80,8 @@ const ThreeScene = () => {
       linkStrokeLinecap = "round", // link stroke linecap
       linkStrength,
       // colors = d3.schemeTableau10, // an array of color strings, for the node groups
-      width = window.innerWidth - 350, // outer width, in pixels
-      height = window.innerHeight - 90, // outer height, in pixels
+      width = 1440, // outer width, in pixels
+      height = 800, // outer height, in pixels
       invalidation, // when this promise resolves, stop the simulation
     } = {}
   ) {
@@ -246,7 +248,7 @@ const ThreeScene = () => {
     } else if (nodes.length > 0) {
       ForceGraph({ nodes: [...nodes], links: [...links] });
     }
-  }, [ForceGraph, shareNodes, shareLinks, nodes, links]);
+  }, [shareNodes, shareLinks, nodes, links]);
 
   return (
     <div ref={ref} style={{ width: "100%", height: "100%" }} className="scrollbar-hide">

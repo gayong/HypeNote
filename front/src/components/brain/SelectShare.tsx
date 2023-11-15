@@ -48,8 +48,10 @@ export default function SelectShare({ onReceive }: { onReceive: (sharedData: any
   };
 
   const handleSelectChange = (value: any) => {
-    setSelectedFriends(value);
-    console.log(selectedFriends, "친구 선택");
+    if (value.length <= 3) {
+      setSelectedFriends(value);
+      console.log(selectedFriends, "친구 선택");
+    }
   };
 
   return (
