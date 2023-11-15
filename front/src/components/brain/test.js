@@ -22,6 +22,8 @@ const ThreeScene = () => {
   const [shareNodes, setShareNodes] = useState([]);
   const [shareLinks, setShareLinks] = useState([]);
   const { data: user } = useGetUserInfo();
+  // const [innerWidth, setInnerWidth] = useState(window.innerWidth - 350);
+  // const [innerHeight, setInnerHeight] = useState(window.innerHeight - 90);
 
   useEffect(() => {
     if (response && user) {
@@ -106,12 +108,12 @@ const ThreeScene = () => {
     const color = d3.scaleOrdinal(d3.schemeCategory10);
 
     // Construct the forces.
-    const forceNode = d3.forceManyBody();
+    const forceNode = d3.forceManyBody().strength(-50).distanceMax(100);
     const forceLink = d3
       .forceLink(links)
       .id((d) => d.id)
       .distance(100);
-    if (nodeStrength !== undefined) forceNode.strength(nodeStrength);
+    // if (nodeStrength !== undefined) forceNode.strength(nodeStrength);
     if (linkStrength !== undefined) forceLink.strength(linkStrength);
 
     const simulation = d3
@@ -154,9 +156,12 @@ const ThreeScene = () => {
       .attr("r", nodeRadius)
       .attr("fill", (d) => color(d.group))
       .attr("stroke-width", nodeStrokeWidth)
-      .on("click", function (d) {
-        router.push(`/editor/${d.id}`);
-        // router.push("/editor/1");
+      .on("click", function (ev) {
+        if (ev.target.__data__) {
+          const data = ev.target.__data__;
+          console.log(data);
+          router.push(`/editor/${data.editorId}`);
+        }
       });
 
     node
@@ -189,7 +194,7 @@ const ThreeScene = () => {
 
     function drag(simulation) {
       function dragstarted(event) {
-        if (!event.active) simulation.alphaTarget(0.3).restart();
+        if (!event.active) simulation.alphaTarget(0.1).restart();
         event.subject.fx = event.subject.x;
         event.subject.fy = event.subject.y;
       }
@@ -246,7 +251,7 @@ const ThreeScene = () => {
     } else if (nodes.length > 0) {
       ForceGraph({ nodes: [...nodes], links: [...links] });
     }
-  }, [ForceGraph, shareNodes, shareLinks, nodes, links]);
+  }, [shareNodes, shareLinks, nodes, links]);
 
   return (
     <div ref={ref} style={{ width: "100%", height: "100%" }} className="scrollbar-hide">
