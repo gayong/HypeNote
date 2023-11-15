@@ -22,6 +22,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 @Transactional
@@ -204,6 +206,9 @@ public class EditorService {
 
         for (Editor editor : byTitleContainingOrContentContaining) {
 
+            editor.setContent(editor.getContent().replaceAll("(&lt;(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?&gt;)|(<(/)?([a-zA-Z]*)(\\s[a-zA-Z]*=[^>]*)?(\\s)*(/)?>)", ""));
+            editor.setContent(removeHtmlEntities(editor.getContent()));
+
             editors.add(
                     EditorSearchResponseDto.Editors.builder()
                     .id(editor.getId())
@@ -216,6 +221,24 @@ public class EditorService {
                 .build();
 
         return editorList;
+    }
+
+    //HTML 엔티티 제거
+    public static String removeHtmlEntities(String input) {
+        // HTML 엔터티를 찾을 정규식
+        String regex = "&#[0-9]+;|&[a-zA-Z]+;";
+
+        // 정규식을 사용하여 매치된 엔터티 제거
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(input);
+        StringBuffer buffer = new StringBuffer();
+
+        while (matcher.find()) {
+            matcher.appendReplacement(buffer, "");
+        }
+        matcher.appendTail(buffer);
+
+        return buffer.toString();
     }
 
 
