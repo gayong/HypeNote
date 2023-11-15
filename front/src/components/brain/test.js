@@ -71,7 +71,7 @@ const ThreeScene = () => {
       nodeStrokeWidth = 2.5, // 노드 테두리 굵기
       nodeStrokeOpacity = 1, // node stroke opacity
       nodeRadius = 10, // node radius, in pixels
-      nodeStrength = -60, // 노드끼리 밀어내는 힘, 절댓값 클수록 많이 밀어냄
+      nodeStrength = -100, // 노드끼리 밀어내는 힘, 절댓값 클수록 많이 밀어냄
       linkSource = ({ source }) => source, // given d in links, returns a node identifier string
       linkTarget = ({ target }) => target, // given d in links, returns a node identifier string
       linkStroke = "#999", // link stroke color
@@ -108,11 +108,11 @@ const ThreeScene = () => {
     const color = d3.scaleOrdinal(d3.schemeCategory10);
 
     // Construct the forces.
-    const forceNode = d3.forceManyBody().strength(-60).distanceMax(100);
+    const forceNode = d3.forceManyBody().strength(-150).distanceMax(130);
     const forceLink = d3
       .forceLink(links)
       .id((d) => d.id)
-      .distance(100);
+      .distance(150);
     // if (nodeStrength !== undefined) forceNode.strength(nodeStrength);
     if (linkStrength !== undefined) forceLink.strength(linkStrength);
 
@@ -120,7 +120,7 @@ const ThreeScene = () => {
       .forceSimulation(nodes)
       .force("link", forceLink)
       .force("charge", forceNode)
-      .force("center", d3.forceCenter().strength(0.02))
+      .force("center", d3.forceCenter().strength(0.015))
       .on("tick", ticked);
 
     const svg = d3
@@ -244,7 +244,18 @@ const ThreeScene = () => {
   useEffect(() => {
     // 기존 그래프 삭제
     d3.select(ref.current).selectAll("svg").remove();
-
+    // 새로운 force simulation 생성
+    const simulation = d3
+      .forceSimulation(nodes)
+      .force(
+        "link",
+        d3
+          .forceLink(links)
+          .id((d) => d.id)
+          .distance(150)
+      )
+      .force("charge", d3.forceManyBody().strength(-150).distanceMax(130))
+      .force("center", d3.forceCenter().strength(0.02));
     // 그래프 그리기
     if (shareNodes.length > 0) {
       ForceGraph({ nodes: [...shareNodes], links: [...shareLinks] });
