@@ -192,8 +192,13 @@ public class DiagramServiceImpl implements DiagramService {
     private void processNodes(List<EditorListResponseDto> nodeList, List<NodeDto> nodeDtos, GoogleCredentials credentials) {
         nodeList.parallelStream().forEach(node -> {
             try {
-                NodeDto res = analyzeAndSetNodeCategory(node, credentials);
-                nodeDtos.add(res);
+                Optional<NodeDto> resOpt = analyzeAndSetNodeCategory(node, credentials);
+
+                // Optional.isPresent()를 사용하여 NodeDto 객체가 존재하는지 확인
+                if(resOpt.isPresent()) {
+                    NodeDto res = resOpt.get();
+                    nodeDtos.add(res);
+                }
 
                 // 자식 노드가 있다면 재귀적으로 처리
                 if(node.getChildren() != null && !node.getChildren().isEmpty()) {
@@ -227,7 +232,7 @@ public class DiagramServiceImpl implements DiagramService {
 
 
     // 노드 카테고리 분석
-    private NodeDto analyzeAndSetNodeCategory(EditorListResponseDto node, GoogleCredentials credentials) throws IOException {
+    private Optional<NodeDto> analyzeAndSetNodeCategory(EditorListResponseDto node, GoogleCredentials credentials) throws IOException {
         // 텍스트 전처리
         String content = preprocessContent(node.getContent());
         System.out.println("content = " + content);
@@ -288,7 +293,7 @@ public class DiagramServiceImpl implements DiagramService {
     }
 
     // 노드에 카테고리 지정
-    private NodeDto setNodeCategory(EditorListResponseDto res, ClassifyTextResponse response) {
+    private Optional<NodeDto> setNodeCategory(EditorListResponseDto res, ClassifyTextResponse response) {
         NodeDto nodeDto = new NodeDto();
         nodeDto.setId(res.getId());
         nodeDto.setTitle(res.getTitle());
@@ -307,11 +312,13 @@ public class DiagramServiceImpl implements DiagramService {
             }
             if (!categoryFound) {
                 nodeDto.setCategory("other");
+                return Optional.empty();
             }
         } else {
             nodeDto.setCategory("other");
+            return Optional.empty();
         }
-        return nodeDto;
+        return Optional.of(nodeDto);
     }
 
 
@@ -374,10 +381,12 @@ public class DiagramServiceImpl implements DiagramService {
                 Pair<NodeDto, Double> pair = findMostSimilarNode(categoryNodeDtos, sourceNodeDto, i + 1);
                 NodeDto targetNodeDto = pair.getLeft();
                 double maxSimilarity = pair.getRight();
-                // 이미 있는 게 아니라면 저장하기
-                LinkDto linkDto = saveLinkIfNotExists(sourceNodeDto, targetNodeDto, maxSimilarity, sourceNodeDto.getUserId());
-                System.out.println("link = " + linkDto.getSource());
-                linkDtos.add(linkDto);
+                if (maxSimilarity >= 0.5) {
+                    // 이미 있는 게 아니라면 저장하기
+                    LinkDto linkDto = saveLinkIfNotExists(sourceNodeDto, targetNodeDto, maxSimilarity, sourceNodeDto.getUserId());
+                    System.out.println("link = " + linkDto.getSource());
+                    linkDtos.add(linkDto);
+                }
             }
 
         }
