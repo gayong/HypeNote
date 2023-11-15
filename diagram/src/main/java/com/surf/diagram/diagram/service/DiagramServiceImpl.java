@@ -381,7 +381,7 @@ public class DiagramServiceImpl implements DiagramService {
                 Pair<NodeDto, Double> pair = findMostSimilarNode(categoryNodeDtos, sourceNodeDto, i + 1);
                 NodeDto targetNodeDto = pair.getLeft();
                 double maxSimilarity = pair.getRight();
-                if (maxSimilarity >= 0.5) {
+                if (maxSimilarity >= 0.6) {
                     // 이미 있는 게 아니라면 저장하기
                     LinkDto linkDto = saveLinkIfNotExists(sourceNodeDto, targetNodeDto, maxSimilarity, sourceNodeDto.getUserId());
                     System.out.println("link = " + linkDto.getSource());
