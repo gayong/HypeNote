@@ -108,11 +108,11 @@ const ThreeScene = () => {
     const color = d3.scaleOrdinal(d3.schemeCategory10);
 
     // Construct the forces.
-    const forceNode = d3.forceManyBody().strength(-100).distanceMax(100);
+    const forceNode = d3.forceManyBody().strength(-150).distanceMax(130);
     const forceLink = d3
       .forceLink(links)
       .id((d) => d.id)
-      .distance(200);
+      .distance(150);
     // if (nodeStrength !== undefined) forceNode.strength(nodeStrength);
     if (linkStrength !== undefined) forceLink.strength(linkStrength);
 
@@ -120,7 +120,7 @@ const ThreeScene = () => {
       .forceSimulation(nodes)
       .force("link", forceLink)
       .force("charge", forceNode)
-      .force("center", d3.forceCenter().strength(0.02))
+      .force("center", d3.forceCenter().strength(0.015))
       .on("tick", ticked);
 
     const svg = d3
@@ -252,9 +252,9 @@ const ThreeScene = () => {
         d3
           .forceLink(links)
           .id((d) => d.id)
-          .distance(200)
+          .distance(150)
       )
-      .force("charge", d3.forceManyBody().strength(-100).distanceMax(100))
+      .force("charge", d3.forceManyBody().strength(-150).distanceMax(130))
       .force("center", d3.forceCenter().strength(0.02));
     // 그래프 그리기
     if (shareNodes.length > 0) {
