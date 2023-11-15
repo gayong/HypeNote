@@ -178,14 +178,7 @@ public class DiagramServiceImpl implements DiagramService {
         try {
             // 인증 키 파일을 사용하여 Credentials 객체 생성
             GoogleCredentials credentials = getCredentials();
-            editorList.parallelStream().forEach(node -> {
-                try {
-                    NodeDto res = analyzeAndSetNodeCategory(node, credentials);
-                    nodeDtos.add(res);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
+            processNodes(editorList, nodeDtos, credentials);
         } catch (IOException e) {
             // 파일 읽기 에러, API 호출 에러
             e.printStackTrace();
@@ -193,6 +186,23 @@ public class DiagramServiceImpl implements DiagramService {
             e.printStackTrace();
         }
         return nodeDtos;
+    }
+
+    // 키워드분석
+    private void processNodes(List<EditorListResponseDto> nodeList, List<NodeDto> nodeDtos, GoogleCredentials credentials) {
+        nodeList.parallelStream().forEach(node -> {
+            try {
+                NodeDto res = analyzeAndSetNodeCategory(node, credentials);
+                nodeDtos.add(res);
+
+                // 자식 노드가 있다면 재귀적으로 처리
+                if(node.getChildren() != null && !node.getChildren().isEmpty()) {
+                    processNodes(node.getChildren(), nodeDtos, credentials);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
 
@@ -331,6 +341,7 @@ public class DiagramServiceImpl implements DiagramService {
 
     // 노드와 링크 연결
     public List<LinkDto> linkNodesByCategoryAndConfidence(List<NodeDto> nodeDtos) {
+        System.out.println("nodeDtos = " + nodeDtos);
         // 노드 카테고리 분류
         Map<String, List<NodeDto>> categoryNodeMap = categorizeNodes(nodeDtos);
 
@@ -368,8 +379,10 @@ public class DiagramServiceImpl implements DiagramService {
                 System.out.println("link = " + linkDto.getSource());
                 linkDtos.add(linkDto);
             }
+
         }
-        return linkDtos;
+        // 중복 링크 제거
+        return linkDtos.stream().distinct().collect(Collectors.toList());
     }
 
     // 가장 유사도 높은 노드 찾기
