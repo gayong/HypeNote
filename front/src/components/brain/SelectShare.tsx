@@ -8,6 +8,8 @@ import { useShareMemberList } from "@/hooks/useGetShareUserList";
 import { ShareMember } from "@/types/diagram";
 import Pendulum from "../../../public/assets/pen.gif";
 import Image from "next/image";
+import { Spin } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
 
 export default function SelectShare({ onReceive }: { onReceive: (sharedData: any) => void }) {
   const [selectedFriends, setSelectedFriends] = useState([]);
@@ -65,7 +67,7 @@ export default function SelectShare({ onReceive }: { onReceive: (sharedData: any
         className="dark:border dark:border-font_primary h-[30px] w-[53px] ml-2 font-preBd hover:bg-dark_font bg-primary z-50 scrollbar-hide"
         type="primary"
         onClick={handleReceive}>
-        {responseReady ? "GO" : <Image src={Pendulum} alt="Loading..." width={53} height={30} />}
+        {responseReady ? "GO" : <Spin indicator={<LoadingOutlined style={{ fontSize: 16, color: "white" }} spin />} />}
       </Button>
     </div>
   );
