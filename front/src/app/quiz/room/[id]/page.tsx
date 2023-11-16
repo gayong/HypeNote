@@ -38,7 +38,7 @@ export default function QuizRoomPage({ params: { id } }: Props) {
 
   return (
     <SubscribeProvider roomId={id}>
-      <section className="h-[100vh] flex items-center justify-center">
+      <section className="h-[100vh] w-full flex items-center justify-center">
         <QuizRoom roomId={id} />
       </section>
     </SubscribeProvider>

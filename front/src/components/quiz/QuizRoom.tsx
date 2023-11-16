@@ -104,8 +104,8 @@ export default function QuizRoom(props: QuizRoomProps) {
         </>
       ) : submit && !quizResults ? (
         // 제출했지만 결과가 아직 없는 경우 => 로딩 화면
-        <div className="flex justify-around items-center">
-          <div>
+        <div className="flex justify-around items-center w-full min-w-full">
+          <div className="w-full min-w-full">
             <Loading />
             <h1>다른 친구들이 다 풀 때까지 잠시만 기다려 주세요.</h1>
             <h1>퀴즈 맞힌 개수가 같다면, 더 빨리 푼 사람이 이겨요!</h1>
