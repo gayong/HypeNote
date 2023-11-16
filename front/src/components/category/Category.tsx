@@ -82,7 +82,7 @@ export default function Category({ childProps, value, depth }: categoryProps) {
           <div className="no-drag group flex justify-between w-full items-center">
             <div className="no-drag text-[15px] ml-2 text-white font-bold flex items-center truncate ...">
               {childProps.title}
-              <div className="no-drag ml-3" style={{ fontSize: "20px" }} onClick={(event) => toggleRootCollapse(event)}>
+              <div className="no-drag ml-3" style={{ fontSize: "20px" }} onClick={(event) => toggleCollapse(event)}>
                 {childProps.children && Rooticon}
               </div>
             </div>
@@ -97,36 +97,39 @@ export default function Category({ childProps, value, depth }: categoryProps) {
           </div>
         </div>
       )}
-      <div style={{ maxHeight: !rootCollapsed ? "100%" : "0", overflow: "hidden" }}>
-        {childProps.children &&
-          childProps.children.map((subject) => (
-            <div
-              key={subject.id}
-              className="no-drag text-[14px] mx-6 text-white"
-              id="submenu"
-              onClick={(event) => onClickPage(event, subject.id)}>
-              {/* 책 카테고리 */}
-              <div className="no-drag group flex justify-between items-center cursor-pointer p-2 hover:bg-hover_primary hover:bg-opacity-50 dark:hover:bg-line_primary dark:hover:bg-opacity-50 rounded-md">
-                <h1 className="no-drag text-left flex items-center truncate ...">
-                  {subject.title}
-                  <div className="no-drag ml-3" style={{ fontSize: "20px" }} onClick={(event) => toggleCollapse(event)}>
-                    {subject.children && icon}
-                  </div>
-                </h1>
-                {value === 1 && (
-                  <h1
-                    className="no-drag pb-[3px] m-0 text-right invisible group-hover:visible text-2xl leading-3"
-                    onClick={(event) => onClickHandler(event, subject)}>
-                    +
-                  </h1>
-                )}
+
+      {depth !== 0 && (
+        <div
+          key={childProps.id}
+          className="no-drag text-[14px] mx-6 text-white"
+          id="submenu"
+          onClick={(event) => onClickPage(event, childProps.id)}>
+          {/* 책 카테고리 */}
+          <div className="no-drag group flex justify-between items-center cursor-pointer p-2 hover:bg-hover_primary hover:bg-opacity-50 dark:hover:bg-line_primary dark:hover:bg-opacity-50 rounded-md">
+            <h1 className="no-drag text-left flex items-center truncate ...">
+              {childProps.title}
+              <div className="no-drag ml-3" style={{ fontSize: "20px" }} onClick={(event) => toggleCollapse(event)}>
+                {childProps.children && icon}
               </div>
-              <div style={{ maxHeight: !collapsed ? "100%" : "0", overflow: "hidden" }}>
-                <Category childProps={subject} value={value} key={subject.id} depth={depth + 1} />
-              </div>
+            </h1>
+            {value === 1 && (
+              <h1
+                className="no-drag pb-[3px] m-0 text-right invisible group-hover:visible text-2xl leading-3"
+                onClick={(event) => onClickHandler(event, childProps)}>
+                +
+              </h1>
+            )}
+          </div>
+        </div>
+      )}
+      {childProps.children &&
+        childProps.children.map((subject) => (
+          <div key={subject.id} className="no-drag text-[14px] ml-6 text-white" id="submenu">
+            <div style={{ maxHeight: !collapsed ? "100%" : "0", overflow: "hidden" }}>
+              <Category childProps={subject} value={value} key={subject.id} depth={depth + 1} />
             </div>
-          ))}
-      </div>
+          </div>
+        ))}
     </>
   );
 }

@@ -24,8 +24,8 @@ export const getUserInfo = async () => {
 
 // 토큰 재발급
 export const reissueToken = () =>
-  // axios.post(`${window.location.origin}/api/auth/reissue`, {}, { withCredentials: true });
-  api.post(`auth/reissue`, {}, { withCredentials: true });
+  axios.post(`${window.location.origin}/api/auth/reissue`, {}, { withCredentials: true });
+// api.post(`auth/reissue`, {}, { withCredentials: true });
 
 // 게시글 공유
 export const shareNote = (userId: number, userList: number[], editorId: string) => {

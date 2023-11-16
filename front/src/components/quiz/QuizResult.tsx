@@ -15,6 +15,19 @@ export default function QuizResult() {
   const [tab, setTab] = useState("rank");
   const router = useRouter();
 
+  // wheel 이벤트 제거
+  useEffect(() => {
+    const handleWheel = (e: WheelEvent) => {
+      e.preventDefault();
+    };
+
+    window.removeEventListener("wheel", handleWheel);
+
+    return () => {
+      window.removeEventListener("wheel", handleWheel);
+    };
+  }, []);
+
   const handleGetQuiz = () => {
     console.log("틀린문제를 공개해");
   };
@@ -96,7 +109,7 @@ export default function QuizResult() {
       </div>
 
       {tab === "rank" ? (
-        <div className="mr-5 mt-4 h-[600px] max-h-[600px] overflow-scroll scrollbar-hide">
+        <div className="mr-5 mt-4 h-[600px] max-h-[600px] overflow-scroll">
           <h1 className="mt-2 font-extrabold text-2xl text-primary text-center dark:text-font_primary">
             퀴즈 결과입니다!
           </h1>

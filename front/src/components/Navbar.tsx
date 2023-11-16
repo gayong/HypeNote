@@ -31,6 +31,19 @@ export default function Navbar() {
   const { data: user, isLoading, isError, error } = useGetUserInfo();
   // useGetUserInfo();
 
+  // wheel 이벤트 제거
+  useEffect(() => {
+    const handleWheel = (e: WheelEvent) => {
+      e.preventDefault();
+    };
+
+    window.removeEventListener("wheel", handleWheel);
+
+    return () => {
+      window.removeEventListener("wheel", handleWheel);
+    };
+  }, []);
+
   const onClickHandler = async (event: React.MouseEvent) => {
     event.stopPropagation();
     if (!user) {

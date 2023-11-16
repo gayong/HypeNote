@@ -274,7 +274,7 @@ const ThreeScene = () => {
   }, [shareNodes, shareLinks, nodes, links]);
 
   return (
-    <div ref={ref} style={{ width: "100%", height: "100%" }} className="scrollbar-hide">
+    <div ref={ref} style={{ width: "100%", height: "100%" }}>
       <SelectShare onReceive={handleReceive} />
     </div>
   );
