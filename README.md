@@ -74,8 +74,6 @@
 
 - Next : 13.5.6
 
-- recoil : ^0.7.7
-
 - axios : ^1.6.0
 
 - Node.js : 18.16.1
@@ -98,15 +96,15 @@
 
 - Spring Web
 
-- Oauth2
-
 - SERVER : AWS EC2 Ubuntu 20.04.6 LTS
 
-- DB : MySQL 8.0.33, Redis, Mongo DB
+- DB : MySQL 8.0.33, Redis - sentinal, Mongo DB
 
 - websocket
 
 - openfeign
+
+- S3
 
 ## 🔃 DevOPS
 
@@ -121,8 +119,6 @@
 <a id="item-four"></a>
 
 ![image.png](README_assets/73d0eb2c4e0f672b49e231b2767145e6c75e0960.png)
-
-
 
 ## 프로젝트 구조도
 
@@ -310,18 +306,15 @@
 <summary>back-end</summary>
 
 ```
-config
-gateway
-discovery
-
-
-auth
-diagram
-editor
-gpt
-member
-quiz
-search
+📂config
+📂gateway
+📂discovery
+ 📂auth
+  📂diagram
+  📂editor
+  📂gpt
+  📂quiz
+  📂search
 ```
 
 </details>
