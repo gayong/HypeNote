@@ -13,7 +13,7 @@ import Timer from "../ui/Timer";
 import QuizResult from "./QuizResult";
 import Loading from "@/components/Loading";
 import useGetUserInfo from "@/hooks/useGetUserInfo";
-import "QuizRoom.css";
+import "./QuizRoom.css";
 
 interface QuizRoomProps {
   roomId: number;
