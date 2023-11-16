@@ -1,0 +1,23 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: server-config
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://lab.ssafy.com/kwon2566/final_config_for_msa.git
+          username: kwon2566@naver.com
+          password: mNLnKJVUxkiZSraUrzvB
+
+eureka:
+  instance:
+    instance-id: config-service-${server.port}
+
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://discovery:8761/eureka
