@@ -71,7 +71,7 @@ const ThreeScene = () => {
       nodeStrokeWidth = 2.5, // 노드 테두리 굵기
       nodeStrokeOpacity = 1, // node stroke opacity
       nodeRadius = 10, // node radius, in pixels
-      nodeStrength = -100, // 노드끼리 밀어내는 힘, 절댓값 클수록 많이 밀어냄
+      nodeStrength = -120, // 노드끼리 밀어내는 힘, 절댓값 클수록 많이 밀어냄
       linkSource = ({ source }) => source, // given d in links, returns a node identifier string
       linkTarget = ({ target }) => target, // given d in links, returns a node identifier string
       linkStroke = "#999", // link stroke color
@@ -80,8 +80,10 @@ const ThreeScene = () => {
       linkStrokeLinecap = "round", // link stroke linecap
       linkStrength,
       // colors = d3.schemeTableau10, // an array of color strings, for the node groups
-      width = window.innerWidth - 350, // outer width, in pixels
-      height = window.innerHeight - 90, // outer height, in pixels
+      // width = window.innerWidth - 350, // outer width, in pixels
+      // height = window.innerHeight - 90, // outer height, in pixels
+      width = 1200, // outer width, in pixels
+      height = 700, // outer height, in pixels
       invalidation, // when this promise resolves, stop the simulation
     } = {}
   ) {
@@ -108,7 +110,7 @@ const ThreeScene = () => {
     const color = d3.scaleOrdinal(d3.schemeCategory10);
 
     // Construct the forces.
-    const forceNode = d3.forceManyBody().strength(-150).distanceMax(130);
+    const forceNode = d3.forceManyBody().strength(-120).distanceMax(100);
     const forceLink = d3
       .forceLink(links)
       .id((d) => d.id)
@@ -254,8 +256,8 @@ const ThreeScene = () => {
           .id((d) => d.id)
           .distance(150)
       )
-      .force("charge", d3.forceManyBody().strength(-150).distanceMax(130))
-      .force("center", d3.forceCenter().strength(0.02));
+      .force("charge", d3.forceManyBody().strength(-120).distanceMax(140))
+      .force("center", d3.forceCenter().strength(0.015));
     // 그래프 그리기
     if (shareNodes.length > 0) {
       ForceGraph({ nodes: [...shareNodes], links: [...shareLinks] });
