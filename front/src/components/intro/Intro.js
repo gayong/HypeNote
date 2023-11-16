@@ -24,6 +24,7 @@ import line3 from "./line3.png";
 import bite from "./bite.png";
 import "./Intro.css";
 import confetti from "canvas-confetti";
+import { usePathname } from "next/navigation";
 
 export default function Intro() {
   const [hover, setHover] = useState(false);
@@ -31,6 +32,7 @@ export default function Intro() {
   const [outHover, setoutHover] = useState(false);
   const sectionRef = [useRef(), useRef(), useRef(), useRef(), useRef()];
   const [currentSection, setCurrentSection] = useState(0);
+  const pathname = usePathname();
 
   const toNext = () => {
     if (currentSection < sectionRef.length - 1) {
@@ -103,55 +105,58 @@ export default function Intro() {
   };
 
   useEffect(() => {
-    // 스크롤 막기
-    window.addEventListener(
-      "wheel",
-      function (e) {
-        e.preventDefault();
-      },
-      { passive: false }
-    );
-
-    let lastScrollY = 0;
-    let currentScrollY = window.scrollY;
-
-    let observer = new IntersectionObserver(
-      (e) => {
-        e.forEach((박스) => {
-          if (박스.isIntersecting) {
-            박스.target.style.opacity = 1;
-            document.querySelectorAll(".patty").style.opacity = 1;
-          } else {
-            박스.target.style.opacity = 0;
-            if (lastScrollY > currentScrollY) {
-              console.log("스크롤 위로");
-              document.querySelector(".patty").style.opacity = 0;
-            }
-          }
-          // }
-          lastScrollY = currentScrollY;
-        });
-      },
-      { threshold: 0.4 }
-    );
-
-    document.querySelectorAll(".page").forEach((page) => {
-      observer.observe(page);
-    });
-
-    const onScroll = () => {
-      setLastScrollTop(window.scrollY);
+    const handleWheel = (e) => {
+      e.preventDefault();
     };
-
-    window.addEventListener("scroll", onScroll);
+    // 스크롤 막기
+    if (pathname === "/") {
+      window.addEventListener("wheel", handleWheel, { passive: false });
+    }
 
     return () => {
-      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("wheel", handleWheel);
     };
+
+    // let lastScrollY = 0;
+    // let currentScrollY = window.scrollY;
+
+    // let observer = new IntersectionObserver(
+    //   (e) => {
+    //     e.forEach((박스) => {
+    //       if (박스.isIntersecting) {
+    //         박스.target.style.opacity = 1;
+    //         document.querySelectorAll(".patty").style.opacity = 1;
+    //       } else {
+    //         박스.target.style.opacity = 0;
+    //         if (lastScrollY > currentScrollY) {
+    //           console.log("스크롤 위로");
+    //           document.querySelector(".patty").style.opacity = 0;
+    //         }
+    //       }
+    //       // }
+    //       lastScrollY = currentScrollY;
+    //     });
+    //   },
+    //   { threshold: 0.4 }
+    // );
+
+    // document.querySelectorAll(".page").forEach((page) => {
+    //   observer.observe(page);
+    // });
+
+    // const onScroll = () => {
+    //   setLastScrollTop(window.scrollY);
+    // };
+
+    // window.addEventListener("scroll", onScroll);
+
+    // return () => {
+    //   window.removeEventListener("scroll", onScroll);
+    // };
   }, []);
 
   return (
-    <div className="overflow-hidden p-0 m-0 w-full text-center items-center justify-center scrollbar-hide">
+    <div className="overflow-hidden p-0 m-0 w-full text-center items-center justify-center">
       <div className="mx-auto relative w-[100vw]">
         <div className="mt-[-100px] origin-[25%_50%] animate-spin-slow">
           <Image className="ml-[-150px] w-[68vw] no-drag" src={plate} alt="plate" />
@@ -223,10 +228,10 @@ export default function Intro() {
           <Image className="top-[28.5%] right-[39%] w-[23vw] absolute no-drag" src={line} alt="first1" />
           {/* <Image className="top-[26%] left-[39%] w-[25vw] absolute" src={linesha} alt="first1" /> */}
           <h1 className="text-yellow italic font-preBd text-[120px] absolute top-[25.9%] left-[57%] z-20">1</h1>
-          <h1 className="text-yellow font-preBd text-[40px] absolute top-[28%] left-[62%] z-20 " ref={sectionRef[1]}>
+          <h1 className="text-yellow font-preBd text-[40px] absolute top-[28%] left-[62%] z-20" ref={sectionRef[1]}>
             더욱 똑똑해진 노트를 이용해요!
           </h1>
-          <div className="text-yellow font-preLt text-[17px] w-[30.5rem] text-start absolute top-[29%] left-[62.1%] z-20">
+          <div className="text-font_primary font-preLt text-[17px] w-[30.5rem] text-start absolute top-[29%] left-[62.1%] z-20">
             마크다운 형식을 지원해 간편한 노트 정리가 가능해요. 오른쪽 웹 검색 탭을 이용해 정보를 찾고, 내장된
             Chat-GPT를 활용해보세요.
           </div>
@@ -278,7 +283,7 @@ export default function Intro() {
           <h1 className="text-yellow font-preBd text-[40px] absolute top-[48%] left-[62%] z-20 " ref={sectionRef[2]}>
             노트를 한눈에 보기쉽게
           </h1>
-          <div className="text-yellow font-preLt text-[17px] w-[25rem] text-start absolute top-[49%] left-[62.1%] z-20 ">
+          <div className="text-font_primary font-preLt text-[17px] w-[25rem] text-start absolute top-[49%] left-[62.1%] z-20 ">
             노트를 노드 형태로 모아뒀어요. 노드를 누르면 해당 노트로 바로 이동한답니다. 친구에게 공유받은 노트도
             합쳐보세요!
           </div>
@@ -319,7 +324,7 @@ export default function Intro() {
           <h1 className="text-yellow font-preBd text-[40px] absolute top-[69%] left-[62%] z-20" ref={sectionRef[3]}>
             공부한 내용을 퀴즈로 풀어요
           </h1>
-          <div className="text-yellow font-preLt text-[17px] w-[30rem] text-start absolute top-[70%] left-[62.1%] z-20">
+          <div className="text-font_primary font-preLt text-[17px] w-[30rem] text-start absolute top-[70%] left-[62.1%] z-20">
             Chat-GPT가 생성한 사지선다 문제들을 풀며 복습해보세요. 혼자 풀기, 같이 풀기가 가능합니다. 친구들을 초대해
             대결해보세요! 퀴즈가 끝난 후 채팅을 통해 의견을 나눌 수도 있어요.
           </div>

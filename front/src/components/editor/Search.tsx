@@ -14,6 +14,7 @@ import type { DraggableData, DraggableEvent } from "react-draggable";
 import Draggable from "react-draggable";
 import "../../app/search/search.css";
 import GPT from "./GPT";
+import { usePathname } from "next/navigation";
 
 // 이건 서랍 속 검색!!!!!!
 export default function Search() {
@@ -28,21 +29,25 @@ export default function Search() {
   const [disabled, setDisabled] = useState(true);
   const [bounds, setBounds] = useState({ left: 0, top: 0, bottom: 0, right: 0 });
   const draggleRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
 
   // 모달 시 스크롤 방지
   useEffect(() => {
-    const preventScroll = (e: WheelEvent) => {
-      e.preventDefault();
-    };
-    if (modalOpen) {
-      window.addEventListener("wheel", preventScroll, { passive: false });
-    } else {
-      window.removeEventListener("wheel", preventScroll);
+    if (pathname === "/") {
+      const handleWheel = (e: WheelEvent) => {
+        e.preventDefault();
+      };
+      if (modalOpen) {
+        window.addEventListener("wheel", handleWheel, { passive: false });
+      } else {
+        window.removeEventListener("wheel", handleWheel);
+      }
     }
-
     return () => {
       if (modalOpen) {
-        window.removeEventListener("wheel", preventScroll);
+        window.removeEventListener("wheel", function (e) {
+          e.preventDefault();
+        });
       }
     };
   }, [modalOpen]);
@@ -116,7 +121,7 @@ export default function Search() {
         </div>
       ),
       children: (
-        <div className="scrollbar-hide">
+        <div>
           <Search
             placeholder="검색어를 입력해주세요"
             value={keyword}
@@ -128,7 +133,7 @@ export default function Search() {
           />
           {results ? (
             results.map((item, index) => (
-              <div key={index} className="max-w-full scrollbar-hide">
+              <div key={index} className="max-w-full">
                 <div
                   className="flex justify-start items-center"
                   onClick={() => {
@@ -238,7 +243,7 @@ export default function Search() {
         maskClosable={false}
         width={380}
         className="relative">
-        <Collapse defaultActiveKey={[""]} ghost items={items} className="scrollbar-hide" />
+        <Collapse defaultActiveKey={[""]} ghost items={items} />
       </Drawer>
     </div>
   );
