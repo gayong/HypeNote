@@ -209,7 +209,7 @@ public class EditorService {
 
         for (Editor editor : byTitleContainingOrContentContaining) {
 
-            if(editor.getUserId() == userId){
+            if((editor.getUserId() == userId) || (editor.getSharedUser().contains(userId))){
                 String content = editor.getContent();
 
                 editors.add(
