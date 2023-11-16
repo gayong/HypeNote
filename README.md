@@ -116,10 +116,19 @@
 
 ## Architecture
 
-## 프로젝트 구조도
-
 ![infra1080.png](README_assets/76387433c50da989e1a7c0d3701541e455e90728.png)
 
+<<<<<<< HEAD
+=======
+
+
+## 프로젝트 구조도
+
+
+
+
+
+>>>>>>> f6c8ca7462063f3ece0b049d2568b9ea4eae8405
 <details>
 <summary>FrontEnd</summary>
 
