@@ -13,13 +13,14 @@ import Image from "next/image";
 
 type Props = {
   id: string;
+  setForceUpdate: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 interface ImgUser extends BasicUser {
   profileImage: string;
 }
 
-export default function ToShareBtn({ id }: Props) {
+export default function ToShareBtn({ id, setForceUpdate }: Props) {
   const { data: user } = useGetUserInfo();
   const { shareDocument } = useSharedNote();
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -57,6 +58,7 @@ export default function ToShareBtn({ id }: Props) {
       setIsModalOpen(false);
       setUserList([]);
       setUserPkList([]);
+      setForceUpdate((forceUpdate) => !forceUpdate);
     } catch (error) {
       console.log(error);
     }
@@ -71,8 +73,6 @@ export default function ToShareBtn({ id }: Props) {
   };
 
   const clickNickName = (item: ImgUser) => {
-    console.log(item, "##############################");
-    console.log(item.userPk in userPkList);
     if (userPkList.includes(item.userPk)) {
       // 특정 item과 userPk를 제거
       setUserList((userList) => userList.filter((user) => user.userPk !== item.userPk));
