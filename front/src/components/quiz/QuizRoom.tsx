@@ -13,6 +13,7 @@ import Timer from "../ui/Timer";
 import QuizResult from "./QuizResult";
 import Loading from "@/components/Loading";
 import useGetUserInfo from "@/hooks/useGetUserInfo";
+import "QuizRoom.css";
 
 interface QuizRoomProps {
   roomId: number;
@@ -107,8 +108,8 @@ export default function QuizRoom(props: QuizRoomProps) {
         <div className="px-10 pr-6 grid grid-cols-12 h-screen w-full max-w-full items-center">
           <div className="col-span-7">
             <Loading />
-            <h1>다른 친구들이 다 풀 때까지 잠시만 기다려 주세요.</h1>
-            <h1>퀴즈 맞힌 개수가 같다면, 더 빨리 푼 사람이 이겨요!</h1>
+            <h1 className="text-center tong">다른 친구들이 다 풀 때까지 잠시만 기다려 주세요.</h1>
+            <h1 className="text-center tong">맞힌 개수가 같다면, 더 빨리 푼 사람이 이겨요!</h1>
           </div>
           <div className="pr-6 col-span-5">
             <ChatRoom roomId={props.roomId} height={80} />
