@@ -46,6 +46,11 @@ export default function SubscribeProvider({ roomId, children }: { roomId: number
   const [chatMessages, setChatMessages] = useState<Array<chatUser>>([]);
   const [quizReady, setQuizReady] = useState<boolean>(false);
   // const [user] = useAtom(userAtom);
+  const quizReadyRef = useRef(quizReady); // useRef를 생성합니다.
+
+  useEffect(() => {
+    quizReadyRef.current = quizReady; // quizReady 상태가 업데이트될 때마다 useRef를 업데이트합니다.
+  }, [quizReady]);
 
   useEffect(() => {
     const accessToken = localStorage.getItem("accessToken");
@@ -56,11 +61,14 @@ export default function SubscribeProvider({ roomId, children }: { roomId: number
         `/sub/quiz/${roomId}`,
         (response) => {
           const responseBody = JSON.parse(response.body);
+          console.log(responseBody, "@@@@@@@@@@@@");
+          console.log(quizReady, "@@@@@");
+          console.log(quizReadyRef.current, "@@@@@"); // quiz
           // 방 정보
           if (responseBody.type === "detail") {
             setRoom(responseBody.result);
             // 퀴즈가 다 준비됐다면
-            if (responseBody.quizReady && responseBody.reslut.roomStatus && !quizReady) {
+            if (responseBody.quizReady && !quizReadyRef.current && quizs.length === 0) {
               setQuizReady(true);
               message.info("퀴즈가 다 준비됐어요. READY버튼을 누르고 퀴즈를 시작해주세요.");
             }
@@ -102,7 +110,7 @@ export default function SubscribeProvider({ roomId, children }: { roomId: number
         stompClient.unsubscribe(`/sub/chat/${roomId}`);
       }
     };
-  }, [stompClient]);
+  }, [roomId]);
 
   return (
     <SocketContext.Provider
