@@ -15,6 +15,19 @@ export default function QuizResult() {
   const [tab, setTab] = useState("rank");
   const router = useRouter();
 
+  // wheel 이벤트 제거
+  useEffect(() => {
+    const handleWheel = (e: WheelEvent) => {
+      e.preventDefault();
+    };
+
+    window.removeEventListener("wheel", handleWheel);
+
+    return () => {
+      window.removeEventListener("wheel", handleWheel);
+    };
+  }, []);
+
   const handleGetQuiz = () => {
     console.log("틀린문제를 공개해");
   };

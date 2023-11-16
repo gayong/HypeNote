@@ -34,13 +34,13 @@ export default function Search() {
   // 모달 시 스크롤 방지
   useEffect(() => {
     if (pathname === "/") {
-      const preventScroll = (e: WheelEvent) => {
+      const handleWheel = (e: WheelEvent) => {
         e.preventDefault();
       };
       if (modalOpen) {
-        window.addEventListener("wheel", preventScroll, { passive: false });
+        window.addEventListener("wheel", handleWheel, { passive: false });
       } else {
-        window.removeEventListener("wheel", preventScroll);
+        window.removeEventListener("wheel", handleWheel);
       }
     }
     return () => {

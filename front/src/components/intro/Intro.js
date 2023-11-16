@@ -105,21 +105,16 @@ export default function Intro() {
   };
 
   useEffect(() => {
+    const handleWheel = (e) => {
+      e.preventDefault();
+    };
     // 스크롤 막기
     if (pathname === "/") {
-      window.addEventListener(
-        "wheel",
-        function (e) {
-          e.preventDefault();
-        },
-        { passive: false }
-      );
+      window.addEventListener("wheel", handleWheel, { passive: false });
     }
 
     return () => {
-      window.removeEventListener("wheel", function (e) {
-        e.preventDefault();
-      });
+      window.removeEventListener("wheel", handleWheel);
     };
 
     // let lastScrollY = 0;
