@@ -112,7 +112,7 @@ public class EditorController {
         return ResponseEntity.ok(apiResponse);
     }
 
-    @GetMapping("/{userId}")
+    @GetMapping("/search/{userId}")
     public ResponseEntity<ApiResponse> editorSearch(@RequestParam(value = "query")String search, @PathVariable int userId){
         EditorSearchResponseDto editorSearchResponse = editorService.editorSearch(search,userId);
 
