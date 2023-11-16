@@ -1,0 +1,66 @@
+plugins {
+	id 'java'
+	id 'org.springframework.boot' version '3.1.5'
+	id 'io.spring.dependency-management' version '1.1.3'
+}
+
+group = 'com.surf'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	sourceCompatibility = '17'
+}
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+// For MSA -인식문의
+ ext {
+ 	set('springCloudVersion', "2022.0.4")
+ }
+
+dependencies {
+	// For MSA -인식문의
+	 implementation 'org.springframework.cloud:spring-cloud-starter'
+	 implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+	 implementation 'org.springframework.cloud:spring-cloud-starter-config'
+
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
+	implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+	//websocket
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+	//open feign
+	implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
+	//redis
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	// S3 Upload
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+	implementation 'org.jsoup:jsoup:1.14.2'
+}
+
+// For MSA -인식문의
+ dependencyManagement {
+ 	imports {
+ 		mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+ 	}
+ }
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
