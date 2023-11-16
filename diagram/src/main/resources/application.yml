@@ -1,0 +1,38 @@
+spring:
+ application:
+   name: server-diagram
+ config:
+   import: optional:configserver:http://config:8888
+ cloud:
+   openfeign:
+     client:
+       config:
+         default:
+           connectTimeout: 5000
+           readTimeout: 5000
+           loggerLevel: basic
+
+### For Local -인식 문의
+#server:
+#  port: 8087
+#
+#spring:
+#  application:
+#    name: server-diagram
+#  data:
+#    mongodb:
+#      uri: mongodb://lesser:!esser101Panda@www.hype-note.com
+#      port: 27017
+#      database: diagram
+#      username: lesser
+#      password: \!esser101Panda
+#  cloud:
+#   openfeign:
+#     client:
+#       config:
+#         default:
+#           connectTimeout: 5000
+#           readTimeout: 5000
+#           loggerLevel: basic
+#springdoc.swagger-ui.path: /swagger-ui.html
+
