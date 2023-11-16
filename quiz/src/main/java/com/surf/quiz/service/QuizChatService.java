@@ -19,7 +19,7 @@ public class QuizChatService {
     }
 
     public ChatResponseDto convertAndSetChatTime(ChatRequestDto body) {
-        if (body.getContent()==null) {
+        if (body.getContent() == null || body.getContent().trim().isEmpty()) {
             return null;
         }
         ChatResponseDto chatDto = new ChatResponseDto();
