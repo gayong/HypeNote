@@ -55,7 +55,7 @@ export default function ChatRoom(props: QuizRoomProps) {
     <>
       <div
         style={{ height: `${props.height}vh` }}
-        className="flex flex-col flex-grow w-full rounded-lg overflow-hidden bg-font_primary bg-opacity-50">
+        className="flex flex-col flex-grow w-full rounded-lg overflow-scroll bg-font_primary bg-opacity-50">
         <div className="flex flex-col flex-grow h-0 p-4 overflow-auto min-h-min">
           {chatMessages.map((chat, index) =>
             chat.userPk === user?.userPk ? <MyChat key={index} {...chat} /> : <YourChat key={index} {...chat} />
