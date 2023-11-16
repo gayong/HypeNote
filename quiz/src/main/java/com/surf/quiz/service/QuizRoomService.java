@@ -373,6 +373,11 @@ public class QuizRoomService {
 
 
     public DetailResponseDto detailConvert(QuizRoom quizRoom) {
+        MemberDto hostUser = quizRoom.getUsers().stream()
+                .filter(MemberDto::isHost)
+                .findFirst()
+                .orElse(null);
+
         return DetailResponseDto.builder()
                 .id(quizRoom.getId())
                 .roomName(quizRoom.getRoomName())
@@ -388,7 +393,7 @@ public class QuizRoomService {
                 .single(quizRoom.isSingle())
                 .pages(quizRoom.getPages())
                 .sharePages(quizRoom.getSharePages())
-                .host(quizRoom.getInviteUsers().get(0).getUserPk())
+                .host(hostUser != null ? hostUser.getUserPk() : null)
                 .build();
     }
 
