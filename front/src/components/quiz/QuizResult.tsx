@@ -309,7 +309,7 @@ export default function QuizResult() {
         <div className="mr-2 h-[600px] max-h-[600px] flex items-center justify-center mt-5 ">
           <div className="overflow-y-scroll overflow-x-hidden mt-5 h-full">
             {quizResults?.questionResult.map((quiz, index) => (
-              <div key={index} className="pt-16">
+              <div key={index} className="pt-8 pb-8">
                 <div className="flex items-center relative px-10">
                   {quiz.myAnswer === quiz.answer ? (
                     <Image src="/assets/cor.png" alt="맞음" width={110} height={110} className="absolute left-0.5" />

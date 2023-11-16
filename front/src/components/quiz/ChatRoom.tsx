@@ -65,7 +65,7 @@ export default function ChatRoom(props: QuizRoomProps) {
 
         <div className="flex justify-between items-center p-2">
           <Input
-            className="flex-grow mr-2 dark:bg-dark_primary dark:text-font_primary dark:placeholder-font_primary"
+            className="flex-grow mr-2 dark:bg-dark_primary dark:text-font_primary dark:placeholder-font_primary font-preRg"
             type="text"
             placeholder="메세지를 입력하세요."
             value={message}

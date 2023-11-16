@@ -104,10 +104,13 @@ export default function QuizRoom(props: QuizRoomProps) {
         </>
       ) : submit && !quizResults ? (
         // 제출했지만 결과가 아직 없는 경우 => 로딩 화면
-        <div>
-          <Loading />
-          <h1>다른 친구들이 다 풀 때까지 잠시만 기다려 주세요.</h1>
-          <h1>퀴즈 맞힌 개수가 같다면, 더 빨리 푼 사람이 이겨요!</h1>
+        <div className="flex justify-around items-center">
+          <div>
+            <Loading />
+            <h1>다른 친구들이 다 풀 때까지 잠시만 기다려 주세요.</h1>
+            <h1>퀴즈 맞힌 개수가 같다면, 더 빨리 푼 사람이 이겨요!</h1>
+          </div>
+          <ChatRoom roomId={props.roomId} height={80} />
         </div>
       ) : quizs.length > 0 ? (
         // 퀴즈 게임 중

@@ -53,12 +53,11 @@ export default function QuizMaker() {
   const [content, setContent] = useState("");
 
   const [quizCnt, setQuizCnt] = useState<number>(1);
-  const [selectedUser, setSelectedUser] = useState<Array<QuizUser>>([]);
-  const [selecValue, setSelecValue] = useState<Array<Click2Type>>([]);
 
   const handleTitleChange = (e: any) => setTitle(e.target.value);
   const handleContentChange = (e: any) => setContent(e.target.value);
   const [documentsValue, setDocumentsValue] = useState<Array<ClickType>>([]);
+  const [selectedUser, setSelectedUser] = useState<Array<QuizUser>>([]);
 
   const { data: user, isLoading, isError, error } = useGetUserInfo();
 
@@ -103,6 +102,11 @@ export default function QuizMaker() {
       return;
     }
 
+    if (selectedUser.length >= 8) {
+      message.error("최대 7명까지만 선택가능합니다.");
+      return;
+    }
+
     const users = [{ userPk: user.userPk, userName: user.nickName, userImg: user.profileImage }, ...selectedUser];
 
     if (roomInfo) {
@@ -140,21 +144,12 @@ export default function QuizMaker() {
   };
 
   const handleChangeNickName = (value: Array<Click2Type>) => {
-    if (value.length <= 7) {
-      console.log(value);
-      const selectedUsers = value.map((v) => v.title);
-      setSelectedUser(selectedUsers);
-      setSelecValue(value);
-      console.log(selectedUsers);
-      console.log("123", selecValue);
-    } else {
-      message.warning("최대 7명까지 초대 가능 합니다.");
-      return;
+    if (value.length == 7) {
+      message.warning("최대 7명까지 초대 가능 합니다. ", 1);
     }
+    const selectedUsers = value.map((v) => v.title);
+    setSelectedUser(selectedUsers);
   };
-  useEffect(() => {
-    console.log("2222", selecValue);
-  }, [selecValue]);
 
   const steps = useMemo(() => {
     if (isSolo) {
@@ -302,7 +297,7 @@ export default function QuizMaker() {
               <h1
                 className="dark:text-font_primary"
                 style={{ color: "#1677ff", fontSize: "14px", marginBottom: "50px", padding: 0, fontFamily: "preBd" }}>
-                * 범위로 설정한 노트를 공유한 친구만 초대할 수 있어요!
+                * 범위로 설정한 노트를 공유한 친구 최대 7명까지만 초대할 수 있어요!
               </h1>
               <Select
                 labelInValue={true}
@@ -312,7 +307,6 @@ export default function QuizMaker() {
                 onChange={handleChangeNickName}
                 style={{ width: "400px" }}
                 options={userOptions}
-                defaultValue={selecValue}
               />
             </div>
           ),
@@ -322,6 +316,10 @@ export default function QuizMaker() {
   }, [isSolo, userOptions]);
 
   const next = () => {
+    if (current === 0 && documentsValue.length === 0) {
+      message.error("페이지는 1개 이상 선택해야 합니다.");
+      return;
+    }
     setCurrent(current + 1);
 
     if (current === 2) {
@@ -344,7 +342,6 @@ export default function QuizMaker() {
     justifyContent: "center",
     color: token.colorTextTertiary,
     backgroundColor: token.colorFillAlter,
-    // borderRadius: token.borderRadiusLG,
     border: `1px dashed ${token.colorBorder}`,
     marginTop: 16,
     fontFamily: "preRg",

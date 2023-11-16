@@ -57,7 +57,7 @@ export default function GPT() {
         setTypingIdx(typingIdx + 1);
       }
     };
-    const typingInterval = setInterval(typing, 100);
+    const typingInterval = setInterval(typing, 50);
     return () => {
       clearInterval(typingInterval);
     };

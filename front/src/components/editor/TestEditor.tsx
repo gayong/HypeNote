@@ -289,7 +289,7 @@ function TestEditor({ id }: Props) {
   //Test
   // Give tests a way to get prosemirror instance
   (window as WindowWithProseMirror).ProseMirror = editor?._tiptapEditor;
-
+  const [forceUpdate, setForceUpdate] = useState(false);
   return (
     <>
       <div style={{ width: open ? "calc(100% - 380px)" : "100%" }}>
@@ -299,8 +299,8 @@ function TestEditor({ id }: Props) {
       <Search />
 
       {user?.userPk === owner && <DeleteBtn id={id} />}
-      <ShardeBtn owner={owner} id={id} />
-      {user?.userPk === owner && <ToShareBtn id={id} />}
+      <ShardeBtn owner={owner} id={id} forceUpdate={forceUpdate} />
+      {user?.userPk === owner && <ToShareBtn id={id} setForceUpdate={setForceUpdate} />}
     </>
   );
 }
