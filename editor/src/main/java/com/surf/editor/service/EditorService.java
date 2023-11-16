@@ -200,7 +200,7 @@ public class EditorService {
         return editorCheckResponse;
     }
 
-    public EditorSearchResponseDto editorSearch(String search) {
+    public EditorSearchResponseDto editorSearch(String search, int userId) {
         List<Editor> byTitleContainingOrContentContaining =
                 editorRepository.findByTitleContainingOrContentContaining(search, search)
                         .orElse(null);
@@ -208,14 +208,18 @@ public class EditorService {
         List<EditorSearchResponseDto.Editors> editors = new ArrayList<>();
 
         for (Editor editor : byTitleContainingOrContentContaining) {
-            String content = editor.getContent();
 
-            editors.add(
-                    EditorSearchResponseDto.Editors.builder()
-                    .id(editor.getId())
-                    .title(editor.getTitle())
-                    .content(removeHtmlTags(content))
-                    .build());
+            if(editor.getUserId() == userId){
+                String content = editor.getContent();
+
+                editors.add(
+                        EditorSearchResponseDto.Editors.builder()
+                                .id(editor.getId())
+                                .title(editor.getTitle())
+                                .content(removeHtmlTags(content))
+                                .build());
+            }
+
         }
         EditorSearchResponseDto editorList = EditorSearchResponseDto.builder()
                 .notes(editors)

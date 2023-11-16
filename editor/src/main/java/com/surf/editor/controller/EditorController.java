@@ -112,9 +112,9 @@ public class EditorController {
         return ResponseEntity.ok(apiResponse);
     }
 
-    @GetMapping()
-    public ResponseEntity<ApiResponse> editorSearch(@RequestParam(value = "query")String search){
-        EditorSearchResponseDto editorSearchResponse = editorService.editorSearch(search);
+    @GetMapping("/{userId}")
+    public ResponseEntity<ApiResponse> editorSearch(@RequestParam(value = "query")String search, @PathVariable int userId){
+        EditorSearchResponseDto editorSearchResponse = editorService.editorSearch(search,userId);
 
         ApiResponse apiResponse = ApiResponse.builder()
                 .message("문서 검색")
