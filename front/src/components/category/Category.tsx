@@ -124,7 +124,7 @@ export default function Category({ childProps, value, depth }: categoryProps) {
       )}
       {childProps.children &&
         childProps.children.map((subject) => (
-          <div key={subject.id} className="no-drag text-[14px] mx-6 text-white" id="submenu">
+          <div key={subject.id} className="no-drag text-[14px] ml-6 text-white" id="submenu">
             <div style={{ maxHeight: !collapsed ? "100%" : "0", overflow: "hidden" }}>
               <Category childProps={subject} value={value} key={subject.id} depth={depth + 1} />
             </div>
