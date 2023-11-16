@@ -11,7 +11,7 @@ export function YourChat(props: chatUser) {
         </div>
       </div>
       <div>
-        <p className="text-xs text-right">{props.userName}</p>
+        <p className="text-xs text-left">{props.userName}</p>
         <div className="bg-primary text-font_primary p-2 rounded-r-lg rounded-bl-lg">
           <p className="text-sm">{props.content}</p>
         </div>
