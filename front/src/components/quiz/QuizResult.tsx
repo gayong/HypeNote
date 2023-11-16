@@ -306,7 +306,7 @@ export default function QuizResult() {
           ))}
         </div>
       ) : (
-        <div className="mr-2 h-[620px] max-h-[620px] flex items-center justify-center mt-5 ">
+        <div className="mr-2 h-[600px] max-h-[600px] flex items-center justify-center mt-5 ">
           <div className="overflow-y-scroll overflow-x-hidden mt-5 h-full">
             {quizResults?.questionResult.map((quiz, index) => (
               <div key={index} className="pt-16">
@@ -317,15 +317,15 @@ export default function QuizResult() {
                     <Image src="/assets/wr.png" alt="틀림" width={70} height={70} className="absolute left-6 -top-10" />
                   )}
 
-                  <h1 className="text-4xl font-preBd text-dark_font">{quiz.id}.</h1>
-                  <span className="ml-2 mt-1 text-xl font-preBd dark:text-font_primary">{quiz.question}</span>
+                  <h1 className="text-3xl font-preBd text-dark_font">{quiz.id}.</h1>
+                  <span className="ml-2 mt-1 text-lg font-preBd dark:text-font_primary">{quiz.question}</span>
                 </div>
 
                 <div className="ml-7">
                   {quiz.example.map((ex, index) => (
                     <p key={ex.ex} className="w-full">
                       <p
-                        className={`pr-3 w-full py-3 mx-2 text-lg ${
+                        className={`pr-3 w-full pt-2 mx-2 text-md ${
                           // 퀴즈 정답인 것
                           quiz.answer === ex.ex ? "font-bold text-dark_font" : ""
                         }
@@ -339,7 +339,7 @@ export default function QuizResult() {
                     </p>
                   ))}
                 </div>
-                <p className="text-lg font-bold font-preBd ml-7 mr-5 text-[#ff4a4a]">{quiz.commentary}</p>
+                <p className="text-md mt-2 font-bold font-preBd ml-7 mr-5 text-[#ff4a4a]">해설 : {quiz.commentary}</p>
                 <br />
               </div>
             ))}

@@ -296,8 +296,13 @@ export default function QuizMaker() {
                 style={{ marginTop: "30px", marginBottom: "10px", padding: 0 }}>
                 친구 초대
               </h1>
-              <h1 className="dark:text-font_primary" style={{ marginBottom: "60px", padding: 0 }}>
+              <h1 className="dark:text-font_primary" style={{ marginBottom: "3px", padding: 0 }}>
                 닉네임 검색을 통해 친구를 초대해보세요.
+              </h1>
+              <h1
+                className="dark:text-font_primary"
+                style={{ color: "#1677ff", fontSize: "14px", marginBottom: "50px", padding: 0, fontFamily: "preBd" }}>
+                * 범위로 설정한 노트를 공유한 친구만 초대할 수 있어요!
               </h1>
               <Select
                 labelInValue={true}
