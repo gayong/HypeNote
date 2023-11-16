@@ -5,7 +5,6 @@ const useCreateChildNote = () => {
     console.log(userId);
     try {
       const response = await fetchCreateCihldDocument(userId, editorId);
-      console.log(response);
       return response.data.data.id;
     } catch (err) {
       console.log(err);

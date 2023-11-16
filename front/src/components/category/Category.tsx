@@ -1,18 +1,11 @@
 "use client";
 
-import useLinkNote from "@/hooks/useLinkNote";
-import style from "./Category.module.css";
-import useCreateNote from "@/hooks/useCreateNote";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { HiChevronDown, HiChevronRight } from "react-icons/hi";
 import useCreateChildNote from "@/hooks/useCreateChildNote";
-import { useAtom } from "jotai";
-// import { userAtom } from "@/store/authAtom";
 import { DocumentsType } from "@/types/ediotr";
 import useGetUserInfo from "@/hooks/useGetUserInfo";
-
-// type childProps = { id: string; title: string; parentId: string; children: childProps[] };
 
 interface categoryProps {
   childProps: DocumentsType;
@@ -22,10 +15,8 @@ interface categoryProps {
 
 export default function Category({ childProps, value, depth }: categoryProps) {
   const { createChildDocument } = useCreateChildNote();
-  // const [user] = useAtom(userAtom);
-  const { data: user, isLoading, isError, error } = useGetUserInfo();
+  const { data: user } = useGetUserInfo();
 
-  const { LinkNote } = useLinkNote();
   const router = useRouter();
   const [collapsed, setCollapsed] = useState(true);
   const [rootCollapsed, setRootCollapsed] = useState(false);
@@ -49,7 +40,6 @@ export default function Category({ childProps, value, depth }: categoryProps) {
   }
   const onClickHandler = async (event: React.MouseEvent, id: DocumentsType) => {
     event.stopPropagation();
-    console.log(id.id, "여기는 + 핸들러");
 
     if (!user) {
       return;
@@ -58,7 +48,6 @@ export default function Category({ childProps, value, depth }: categoryProps) {
 
     try {
       const documentId = await createChildDocument(user.userPk, id.id);
-      console.log(documentId);
       router.push(`/editor/${documentId}`);
     } catch (error) {
       console.log(error);
@@ -83,7 +72,7 @@ export default function Category({ childProps, value, depth }: categoryProps) {
             <div className="no-drag text-[15px] ml-2 text-white font-bold flex items-center truncate ...">
               {childProps.title}
               <div className="no-drag ml-3" style={{ fontSize: "20px" }} onClick={(event) => toggleCollapse(event)}>
-                {childProps.children && Rooticon}
+                {childProps.children && icon}
               </div>
             </div>
 

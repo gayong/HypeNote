@@ -8,7 +8,7 @@ export default function Logout() {
   const router = useRouter();
   const confirm = () => {
     localStorage.clear();
-    router.push("/");
+    router.replace("/");
   };
 
   const cancel = () => {

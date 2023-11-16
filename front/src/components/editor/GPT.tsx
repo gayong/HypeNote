@@ -23,7 +23,6 @@ export default function GPT() {
   };
 
   const handleEnter = async () => {
-    console.log("지피티 질문", keyword);
     try {
       setIsLoading(true);
       setTypingText([]);
@@ -32,14 +31,11 @@ export default function GPT() {
       }
       const response = await getGPT(keyword);
       setKeyword("");
-      console.log("GPT 응답", response);
-      console.log(response[0].message.content);
       setResults(response[0].message.content);
       setTypingText(response[0].message.content.split(""));
       setTypingIdx(0);
       setIsLoading(false);
     } catch (err) {
-      console.log(err);
       setIsLoading(false);
       error();
     }
@@ -47,7 +43,6 @@ export default function GPT() {
 
   const onChange = (e: any) => {
     setKeyword(e.target.value);
-    console.log(e.target.value);
   };
 
   useEffect(() => {
@@ -77,7 +72,7 @@ export default function GPT() {
 
       <div className="flex">
         <Input
-          className="z-50 rounded-none rounded-l-md"
+          className="z-50 rounded-none rounded-l-md font-preRg"
           placeholder="Chat-GPT에게 질문하세요"
           value={keyword}
           onChange={onChange}

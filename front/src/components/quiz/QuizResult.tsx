@@ -101,7 +101,6 @@ export default function QuizResult() {
             onClick={() => {
               handleGetQuiz();
               setTab("quiz");
-              console.log("랭킹으로 바꿈");
             }}>
             문제 다시보기
           </Radio.Button>

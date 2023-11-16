@@ -1,7 +1,5 @@
 "use client";
 
-import axios from "axios";
-import Link from "next/link";
 import Image from "next/image";
 import React, { useEffect, useState, useRef } from "react";
 import { Button, Drawer, Input, Collapse, Modal } from "antd";
@@ -60,7 +58,6 @@ export default function Search() {
   };
 
   const handleCancel = (e: React.MouseEvent<HTMLElement>) => {
-    console.log(e);
     setModalOpen(false);
   };
 
@@ -87,7 +84,6 @@ export default function Search() {
   };
 
   const handleEnter = () => {
-    console.log("value", keyword);
     setEnabled(true);
   };
 
@@ -100,13 +96,11 @@ export default function Search() {
 
   const onChange = (e: any) => {
     setKeyword(e.target.value);
-    console.log(e.target.value);
     setEnabled(false);
   };
 
   useEffect(() => {
     if (response) {
-      console.log("검색결과다", response.data.data.documents);
       setResults(response.data.data.documents);
     }
   }, [response]);
@@ -116,13 +110,16 @@ export default function Search() {
       key: "1",
       label: (
         <div className="flex justify-start items-end">
-          <h1 className="text-[15px] mr-2">웹 검색</h1>
-          <p className="text-[13px] text-line_primary opacity-50">CS와 연관성이 높은 검색 결과를 알려줘요.</p>
+          <h1 className="text-[15px] mr-2 font-preBd">웹 검색</h1>
+          <p className="text-[13px] text-line_primary opacity-50 font-preRg">
+            CS와 연관성이 높은 검색 결과를 알려줘요.
+          </p>
         </div>
       ),
       children: (
         <div>
           <Search
+            className="font-preRg"
             placeholder="검색어를 입력해주세요"
             value={keyword}
             enterButton
@@ -131,7 +128,7 @@ export default function Search() {
             onSearch={handleEnter}
             style={{ width: "100%", display: "flex", margin: "auto", marginBottom: "7px" }}
           />
-          {results ? (
+          {!response || results.length > 0 ? (
             results.map((item, index) => (
               <div key={index} className="max-w-full">
                 <div
@@ -155,7 +152,9 @@ export default function Search() {
                         | {formatDate(item.datetime)}
                       </p>
                     </div>
-                    <p className="search_content text-line_primary hover:text-dark_font opacity-70">{item.contents}</p>
+                    <p className="search_content font-preRg text-line_primary hover:text-dark_font opacity-70">
+                      {item.contents}
+                    </p>
                   </div>
                 </div>
                 <hr className="p-1 opacity-20" />
@@ -163,7 +162,7 @@ export default function Search() {
             ))
           ) : (
             <div>
-              <h1 className="text-center">검색결과가 없습니다.</h1>
+              <h1 className="text-center font-preRg">검색결과가 없습니다.</h1>
             </div>
           )}
           <Modal
@@ -217,24 +216,28 @@ export default function Search() {
       key: "2",
       label: (
         <div className="flex justify-start items-end">
-          <h1 className="text-[15px] mr-2">Chat-GPT</h1>
-          <p className="text-[13px] text-line_primary opacity-50">프롬프트를 이용한 대답을 들려줘요.</p>
+          <h1 className="text-[15px] mr-2 font-preBd">Chat-GPT</h1>
+          <p className="text-[13px] text-line_primary opacity-50 font-preRg">프롬프트를 이용한 대답을 들려줘요.</p>
         </div>
       ),
       children: <GPT />,
     },
   ];
-
   return (
     <div>
       <Button
-        className="bg-primary absolute top-8 -right-8 rounded-b-none rotate-[270deg] font-preRg"
+        className=" bg-primary absolute top-8 -right-8 rounded-b-none rotate-[270deg] font-preRg"
         type="primary"
         onClick={showDrawer}>
         한입 도우미
       </Button>
       <Drawer
-        title="한입 도우미"
+        title={
+          <div className="font-preBd flex">
+            한입 도우미
+            <Image src="/assets/packman.png" alt="팩맨" width={24} height={20} className="object-cover ml-2" />
+          </div>
+        }
         placement="right"
         onClose={onClose}
         open={open}

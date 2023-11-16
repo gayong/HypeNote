@@ -46,8 +46,8 @@ export const fetchSearchResult = (query: string) => {
 };
 
 // 내 문서 검색결과 조회
-export const fetchSearchMyNote = (query: string | undefined) => {
-  const response = api.get("editor", { params: { query } });
+export const fetchSearchMyNote = (userPk: number, query: string | undefined) => {
+  const response = api.get(`editor/search/${userPk}`, { params: { query } });
   return response;
 };
 

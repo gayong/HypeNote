@@ -6,12 +6,10 @@ import Input from "../ui/Input";
 import { useAtom } from "jotai";
 import { isSoloAtom } from "../../store/isSolo";
 import { useCreateRoom } from "@/hooks/useCreateRoom";
-import Loading from "@/app/loading";
+import Loading from "@/components/Loading";
 import { useRouter } from "next/navigation";
-// import { userAtom } from "@/store/authAtom";
 import Tree from "./Tree";
 import { QuizUser } from "@/types/quiz";
-import { useCreateSingleRoom } from "@/hooks/useCreateSingleRoom";
 import useGetUserInfo from "@/hooks/useGetUserInfo";
 
 interface Click2Type {
@@ -47,7 +45,6 @@ export default function QuizMaker() {
   // const { SHOW_PARENT, SHOW_ALL } = TreeSelect;
   const [isSolo] = useAtom(isSoloAtom);
   const { createRoomMutation, inviteUserInfo, inviteUserMutation, roomInfo, roomId } = useCreateRoom();
-  const { createSingleRoomMutation } = useCreateSingleRoom();
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");

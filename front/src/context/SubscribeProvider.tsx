@@ -1,13 +1,10 @@
 "use client";
 
-import SockJS from "sockjs-client";
 import { useEffect, useState, createContext, useRef } from "react";
 
 import React, { ReactNode } from "react";
 import { useWebSocket } from "./SocketProvider";
 import { QuizRanking, QuizRoomInfo, QuizInfo, QuizResultInfo, chatUser } from "@/types/quiz";
-import { useAtom } from "jotai";
-// import { userAtom } from "@/store/authAtom";
 import { message } from "antd";
 import useGetUserInfo from "@/hooks/useGetUserInfo";
 
@@ -61,9 +58,6 @@ export default function SubscribeProvider({ roomId, children }: { roomId: number
         `/sub/quiz/${roomId}`,
         (response) => {
           const responseBody = JSON.parse(response.body);
-          console.log(responseBody, "@@@@@@@@@@@@");
-          console.log(quizReady, "@@@@@");
-          console.log(quizReadyRef.current, "@@@@@"); // quiz
           // 방 정보
           if (responseBody.type === "detail") {
             setRoom(responseBody.result);

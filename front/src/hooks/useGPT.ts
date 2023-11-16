@@ -5,7 +5,6 @@ const useGPT = () => {
     console.log("보내는 질문", question);
     try {
       const response = await fetchGPT(question);
-      console.log(response.data.choices);
       return response.data.choices;
     } catch (err) {
       console.log(err);

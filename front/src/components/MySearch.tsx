@@ -21,43 +21,9 @@ export default function MySearch() {
 
   const { data: response, isLoading, refetch } = useGetSearchMyNote(keyword, enabled);
 
-  // const getResult = async (keyword: string) => {
-  //   try {
-  //     const response = await axios.get("https://k9e101.p.ssafy.io/api/editor", {
-  //       params: { query: keyword },
-  //     });
-  //     console.log("오니?", response.data.data.notes);
-  //     if (response.data.data) {
-  //       setResults(response.data.data.notes);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error:", error);
-  //   }
-  // };
-
   const handleEnter = () => {
-    console.log("value", keyword);
-    // api get 요청
-    // getResult(keyword);
-    // setEnabled(true);
-
-    // router.push("/search");
     router.push(`/search?keyword=${encodeURIComponent(keyword)}`);
   };
-
-  // useEffect(() => {
-  //   if (enabled) {
-  //     refetch();
-  //   }
-  // }, [enabled]);
-
-  // useEffect(() => {
-  //   if (response) {
-  //     console.log("여기", response.data.data.notes);
-  //     // console.log("응답", response.data);
-  //     setResults(response.data.data.notes);
-  //   }
-  // }, [response]);
 
   const onChange = (e: any) => {
     setKeyword(e.target.value);

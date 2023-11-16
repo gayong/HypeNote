@@ -106,10 +106,10 @@ export default function ToShareBtn({ id, setForceUpdate }: Props) {
         onCancel={handleCancel}
         centered
         footer={[
-          <Button key="back" onClick={handleCancel}>
+          <Button key="back" onClick={handleCancel} className="font-preBd">
             취소
           </Button>,
-          <Button key="submit" onClick={handleOk}>
+          <Button key="submit" onClick={handleOk} className="font-preBd" danger>
             확인
           </Button>,
         ]}>

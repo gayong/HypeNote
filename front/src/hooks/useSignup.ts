@@ -3,7 +3,6 @@ import { message } from "antd";
 
 const useSignup = () => {
   const signup = async (email: string, password: string, nickName: string, profileImage: any) => {
-    console.log("회원가입!!!!!!!!");
     try {
       const response = await createUser(email, password, nickName, profileImage);
       return "success";

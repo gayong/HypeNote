@@ -110,7 +110,7 @@ function TestEditor({ id }: Props) {
       },
       shadow: "none",
       border: "#323232",
-      sideMenu: "#bababa",
+      sideMenu: nowtheme === "light" ? "#424242" : "#ffffff",
       highlightColors:
         nowtheme === "light" ? lightDefaultTheme.colors.highlightColors : darkDefaultTheme.colors.highlightColors,
     },
@@ -119,7 +119,6 @@ function TestEditor({ id }: Props) {
   } satisfies Theme;
 
   const onSave = () => {
-    console.log(editor.topLevelBlocks);
     const title = editor.topLevelBlocks[0].content;
     const content = editor.domElement.innerHTML;
     const update = async (title: string) => {

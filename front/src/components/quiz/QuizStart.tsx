@@ -39,8 +39,6 @@ export default function QuizStart(props: QuizRoomProps) {
   };
 
   const submitAnswer = () => {
-    console.log("답제출");
-
     if (!user) {
       return;
     }

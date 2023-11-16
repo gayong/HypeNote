@@ -8,9 +8,10 @@ import { useGetSearchMyNote } from "@/hooks/useGetSearchMyNote";
 import { NoteType } from "@/types/ediotr";
 import MySearch from "@/components/MySearch";
 import "./search.css";
+import Loading from "@/components/Loading";
 
 function SearchBarFallback() {
-  return <>Loading...</>;
+  return <Loading />;
 }
 
 export default function SearchPage() {
@@ -34,7 +35,6 @@ export default function SearchPage() {
 
   useEffect(() => {
     if (response) {
-      console.log("여기", response.data.data.notes);
       setResults(response.data.data.notes);
     }
   }, [response]);
@@ -49,18 +49,21 @@ export default function SearchPage() {
           <MySearch />
         </Suspense>
       </div>
-      {results.length > 0 &&
+      {results.length > 0 ? (
         results.map((item, index) => (
           <div key={index} className="px-40">
             <Link href={`/editor/${item.id}`}>
-              <h1 className="underline hover:text-dark_font text-[16px] mb-1">제목 : {item.title}</h1>
+              <h1 className="font-preBd hover:text-dark_font text-[18px] mb-1"> {item.title}</h1>
             </Link>
             <h1 className="search_content">{item.content}</h1>
             <br />
             <hr className="opacity-20" />
             <br />
           </div>
-        ))}
+        ))
+      ) : (
+        <div className="font-preBd text-lg text-center">검색 결과가 없습니다.</div>
+      )}
     </div>
   );
 }

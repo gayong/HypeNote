@@ -35,7 +35,6 @@ export default function DarkModeBtn() {
     setCurrentTheme((current) => (current === "dark" ? "light" : "dark"));
     setEditorTheme((editorTheme) => (editorTheme === "dark" ? "light" : "dark"));
   };
-
   // 클라이언트 측에서만 버튼을 렌더링
   return mounted ? (
     <div>
@@ -44,7 +43,7 @@ export default function DarkModeBtn() {
           <button
             title="다크모드로 변경"
             onClick={changeTheme}
-            className="hover:bg-font_primary hover:bg-opacity-30 justify-start items-center flex bg-transparent w-[45px] h-[25px] border-[1.6px] hover:bg-gray-300 text-secondary rounded-3xl">
+            className="font-preBd hover:bg-font_primary hover:bg-opacity-30 justify-start items-center flex bg-transparent w-[45px] h-[25px] border-[1.6px] hover:bg-gray-300 text-secondary rounded-3xl">
             <BiSolidSun className="ml-1.5 text-[18px]" />
           </button>
         </div>
@@ -53,7 +52,7 @@ export default function DarkModeBtn() {
           <button
             title="라이트모드로 변경"
             onClick={changeTheme}
-            className="hover:bg-font_primary hover:bg-opacity-30 justify-end items-center flex bg-transparent w-[45px] h-[25px] border-[1.6px] hover:bg-gray-300 text-secondary rounded-3xl">
+            className="font-preBd hover:bg-font_primary hover:bg-opacity-30 justify-end items-center flex bg-transparent w-[45px] h-[25px] border-[1.6px] hover:bg-gray-300 text-secondary rounded-3xl">
             <BsFillMoonFill className="mr-1.5 mb-[1px] text-[12px]" />
           </button>
         </div>

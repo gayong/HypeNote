@@ -40,7 +40,7 @@ export default function ShardeBtn({ id, owner, forceUpdate }: Props) {
             const userinfo = {
               label:
                 // prettier-ignore
-                <a className="flex">{element.nickName}  <Image src="/assets/crown.png" alt="crown" width={18} height={18}  className="ml-2"/></a>,
+                <a className="flex font-preRg">{element.nickName}  <Image src="/assets/crown.png" alt="crown" width={15} height={15}  className="ml-2 w-[15px] h-[15px]"/></a>,
 
               key: element.userPk,
               icon: (
@@ -58,7 +58,7 @@ export default function ShardeBtn({ id, owner, forceUpdate }: Props) {
         res.forEach((element: any) => {
           if (element.userPk !== owner) {
             const userinfo = {
-              label: element.nickName,
+              label: <div className="font-preRg">{element.nickName}</div>,
               key: element.userPk,
               icon: (
                 <Image
@@ -86,7 +86,7 @@ export default function ShardeBtn({ id, owner, forceUpdate }: Props) {
     <Dropdown menu={menuProps} className="absolute top-5 right-12">
       {/* <Image src={crown} alt="유저 이미지" width={20} height={20} className="w-[20px] h-[20px] rounded-full"></Image> */}
       <FaUserFriends
-        className="dark:text-font_primary dark:hover:text-dark_font text-2xl hover:text-dark_font"
+        className=" dark:text-font_primary dark:hover:text-dark_font text-2xl hover:text-dark_font"
         title="공유한 친구목록"
       />
     </Dropdown>

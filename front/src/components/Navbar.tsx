@@ -13,7 +13,6 @@ import MySearch from "@/components/MySearch";
 import { useNoteList } from "@/hooks/useNoteList";
 import { useRouter } from "next/navigation";
 import useCreateNote from "@/hooks/useCreateNote";
-import useLinkNote from "@/hooks/useLinkNote";
 import useGetUserInfo from "@/hooks/useGetUserInfo";
 import Logout from "./ui/logout";
 
@@ -25,10 +24,7 @@ export default function Navbar() {
   const pathname = usePathname();
   const { noteList } = useNoteList();
   const router = useRouter();
-  // const [myTreeNote, setMyTreeNote] = useState<childProps[]>([]);
-  // const [sharedTreeNote, setsharedMyTreeNote] = useState<childProps[]>([]);
-  const { LinkNote } = useLinkNote();
-  const { data: user, isLoading, isError, error } = useGetUserInfo();
+  const { data: user } = useGetUserInfo();
   // useGetUserInfo();
 
   // wheel 이벤트 제거
@@ -47,7 +43,6 @@ export default function Navbar() {
   const onClickHandler = async (event: React.MouseEvent) => {
     event.stopPropagation();
     if (!user) {
-      console.log("유저정보없다");
       return;
     }
 
@@ -66,7 +61,6 @@ export default function Navbar() {
 
   useEffect(() => {
     if (!user) {
-      console.log("유저정보없다");
       return;
     }
 
@@ -97,14 +91,7 @@ export default function Navbar() {
           {/* <div className="my-2 bg-gray-600 h-[1px]"></div> */}
           <br />
         </div>
-        {/* <div className="w-[97%] mx-auto py-1.5 flex items-center rounded-lg duration-300 bg-[#FFFFFF] bg-opacity-75 text-dark_primary">
-          <i className="bi bi-search text-sm"></i>
-          <input
-            type="text"
-            placeholder="🔎 게시글을 검색하세요"
-            className="w-full bg-transparent text-[15px] mx-3 focus:outline-none placeholder-gray-600"
-          />
-        </div> */}
+
         <MySearch />
         <Link href="/main">
           <div className="no-drag py-2 mt-2 flex items-center rounded-md px-4 duration-300 cursor-pointer hover:bg-hover_primary hover:bg-opacity-50 dark:hover:bg-line_primary dark:hover:bg-opacity-50">
@@ -159,13 +146,6 @@ export default function Navbar() {
           </span>
         </div>
         <br />
-
-        {/* <Link href="/signin">
-          <h1 className="inline underline text-font_primary">signIn / </h1>
-        </Link>
-        <Link href="/signup">
-          <h1 className="inline underline text-font_primary">signUp</h1>
-        </Link> */}
       </div>
     </>
   );

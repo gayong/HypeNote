@@ -20,7 +20,6 @@ export const useShareDiagram = () => {
         return;
       }
       const response = await shareDiagram(user.userPk, members);
-      console.log(response, "1234");
       return response.result;
     },
     {

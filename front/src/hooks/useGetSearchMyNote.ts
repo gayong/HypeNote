@@ -1,9 +1,9 @@
 import { fetchSearchMyNote } from "@/api/service/editor";
 import { useQuery, useInfiniteQuery } from "react-query";
+import useGetUserInfo from "./useGetUserInfo";
 
-// export const useGetSearchMyNote = (query: string | undefined) => {
-//   return useQuery(["fetchSearchMyNote", query], () => fetchSearchMyNote(query));
-// };
 export const useGetSearchMyNote = (query: string, enabled = false) => {
-  return useQuery(["fetchSearchMyNote", query], () => fetchSearchMyNote(query), { enabled });
+  const { data: user } = useGetUserInfo();
+
+  return useQuery(["fetchSearchMyNote", query], () => fetchSearchMyNote(user?.userPk as number, query), { enabled });
 };
