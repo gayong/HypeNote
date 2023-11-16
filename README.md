@@ -14,10 +14,6 @@
 
 [느낀 점](#item-end)
 
-
-
-
-
 ## 프로젝트 개요
 
 <a id="item-one"></a>
@@ -34,10 +30,6 @@
   
   - 내가 정리한 문서를 AI가 퀴즈로 만들어줘 복습을 간편하게 할 수 있도록 편의성 제공
 
-
-
-
-
 ## 역할 분담
 
 <a id="item-two"></a> 
@@ -53,10 +45,6 @@
 #### <strong>이가영</strong> - FE : Interactive, Diagram, GPT, Search, UX/UI
 
 #### <strong>이세울</strong> - FE : Editor, Tip Tab, WebSocket, UX/UI
-
-
-
-
 
 ## 기술 스택
 
@@ -128,19 +116,11 @@
 
 - Jenkins
 
-
-
-
-
-
-
 ## Architecture
 
 <a id="item-four"></a>
 
-![infra1080.png](README_assets/76387433c50da989e1a7c0d3701541e455e90728.png)
-
-
+![image.png](README_assets/73d0eb2c4e0f672b49e231b2767145e6c75e0960.png)
 
 
 
@@ -330,12 +310,21 @@
 <summary>back-end</summary>
 
 ```
+config
+gateway
+discovery
 
+
+auth
+diagram
+editor
+gpt
+member
+quiz
+search
 ```
 
 </details>
-
- 
 
 ## 서비스 구현 화면
 
@@ -404,9 +393,5 @@
 6.1.3  퀴즈 풀기
 
 6.1.4 퀴즈 결과 : 랭킹 및 오답노트
-
-
-
-
 
 ## 느낀 점
