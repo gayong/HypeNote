@@ -41,7 +41,9 @@ export default function Search() {
     }
 
     return () => {
-      window.removeEventListener("wheel", preventScroll);
+      if (modalOpen) {
+        window.removeEventListener("wheel", preventScroll);
+      }
     };
   }, [modalOpen]);
 
