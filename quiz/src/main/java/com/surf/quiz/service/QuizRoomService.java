@@ -320,6 +320,7 @@ public class QuizRoomService {
         } else {
             if (memberDto.isHost()) {
                 quizRoom.getUsers().get(0).setHost(true);
+                quizRoom.getUsers().get(0).setReady(true);
                 System.out.println("quizRoom = " + quizRoom.getUsers());
             }
             System.out.println("quizRoom = " + quizRoom.getUsers());
