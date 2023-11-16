@@ -13,6 +13,7 @@ import Image from "next/image";
 type Props = {
   id: string;
   owner: number;
+  forceUpdate: boolean;
 };
 
 type userInfo = {
@@ -20,9 +21,10 @@ type userInfo = {
   key: number;
   icon: ReactNode;
 };
-export default function ShardeBtn({ id, owner }: Props) {
+export default function ShardeBtn({ id, owner, forceUpdate }: Props) {
   // const { SharedMember } = useGetSharedMember();
   const getUsersFindByPkList = useUsersFindByPkList();
+
   const [items, setItem] = useState<userInfo[]>([]);
   const SharedMember = useGetSharedMember();
 
@@ -74,9 +76,8 @@ export default function ShardeBtn({ id, owner }: Props) {
         setItem(userList);
       }
     };
-
     getSharedMember();
-  }, [id, owner]);
+  }, [id, owner, forceUpdate]);
 
   const menuProps = {
     items,
