@@ -80,14 +80,14 @@ public class QuizRoomService {
 
     public void findAllSend() {
         List<QuizRoom> roomList = this.findAll().stream()
-                .filter(room -> !room.isSingle())
+                .filter(room -> !room.isSingle() && !room.isRoomStatus())
                 .collect(Collectors.toList());
         scheduler.schedule(() -> messageTemplate.convertAndSend("/sub/quizroom/roomList", roomList), 1, TimeUnit.SECONDS);
     }
 
     public void findAllMySend(Long userPk) {
         List<QuizRoom> roomList = this.findByInviteUser(userPk).stream()
-                .filter(room -> !room.isSingle())
+                .filter(room -> !room.isSingle() && !room.isRoomStatus())
                 .collect(Collectors.toList());
         scheduler.schedule(() -> messageTemplate.convertAndSend("/sub/quizroom/roomList/"+userPk, roomList), 1, TimeUnit.SECONDS);
     }
@@ -96,7 +96,7 @@ public class QuizRoomService {
     public void findAllAndSend(QuizRoom quizRoom) {
         for (UserDto user : quizRoom.getInviteUsers()) {
             List<QuizRoom> roomList = this.findByInviteUser(user.getUserPk()).stream()
-                    .filter(room -> !room.isSingle())
+                    .filter(room -> !room.isSingle() && !room.isRoomStatus())
                     .toList();
             scheduler.schedule(() -> messageTemplate.convertAndSend("/sub/quizroom/roomList/" + user.getUserPk(), roomList), 1, TimeUnit.SECONDS);
         }
