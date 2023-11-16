@@ -15,7 +15,7 @@ export function YourChat(props: chatUser) {
         <div className="bg-primary text-font_primary p-2 rounded-r-lg rounded-bl-lg">
           <p className="text-sm">{props.content}</p>
         </div>
-        <span className="w-full text-xs leading-none text-right block mt-1">{formatTime(props.chatTime)}</span>
+        <span className="w-full text-xs leading-none text-left block mt-1">{formatTime(props.chatTime)}</span>
       </div>
     </div>
   );
