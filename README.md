@@ -120,12 +120,6 @@
 
 ![infra1080.png](README_assets/76387433c50da989e1a7c0d3701541e455e90728.png)
 
-
-
-
-
-
-
 <details>
 <summary>FrontEnd</summary>
 
@@ -317,34 +311,129 @@
 
 #### 1. 랜딩 페이지 로그인
 
+1.1 랜딩 페이지
+
+![랜딩.gif](README_assets/606c926c99e82a793949199ec966036e2312bde1.gif)
+
+
+
+1.2 로그인
+
+![로그인.gif](README_assets/97bcc24be31a7582257c927eaaf128ce099e6561.gif)
+
+
+
+
+
+
+
 #### 2. 다이어그램
 
 2.1 내 뇌 보기
 
+![내 뇌.gif](README_assets/4ecfa2f085ed5f632b2c71fcfa3b10673c2c4f9b.gif)
+
+
+
+
+
 2.2 공유 뇌 보기
+
+![친구 뇌 받기.gif](README_assets/cfedeefc7d4f196f755d61b1319a8a64958f01e9.gif)
+
+
+
+
+
+
 
 #### 3. Editor
 
-3.1 작성, 수정, 삭제
+3.1 작성
 
-3.2 공유, 동시 작성
+![글쓰기.gif](README_assets/5eec8b7c9e30327cbb808ad77f397dcf9a121521.gif)
+
+
+
+3.2 , 수정, 삭제
+
+
+
+3.2 공유
+
+
+![문서공유.gif](README_assets/e18139ecd3d25aa22339331d639a4b61e8f31324.gif)
+
+
+
+3.4 동시 작성
+
+
 
 #### 4.GPT
 
+![](README_assets/17f23ccef01b3500d763b7810499913e1ebb12f1.gif)
+
+
+
 #### 5.Search
+
+![서치.gif](README_assets/2560d984591cc983e927fd36fc2322e8de457280.gif)
+
+
+
+
 
 #### 6. Quiz
 
 6.1 혼자풀기
 
+
+
+
+
+
+
 6.2 같이풀기
+
+
+
+
+
+
 
 6.1.1 방만들기
 
+
+
+
+
+
+
 6.1.2 대기실 : 레디 및 채팅
+
+
+
+
+
+
 
 6.1.3  퀴즈 풀기
 
+
+
+
+
+
+
 6.1.4 퀴즈 결과 : 랭킹 및 오답노트
+
+
+
+
+
+
+
+
 
 ## 느낀 점
