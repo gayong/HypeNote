@@ -25,17 +25,22 @@ const ThreeScene = () => {
   // const [innerWidth, setInnerWidth] = useState(window.innerWidth - 350);
   // const [innerHeight, setInnerHeight] = useState(window.innerHeight - 90);
 
+  const [prevResponse, setPrevResponse] = useState(null);
+
   useEffect(() => {
     if (response && user) {
-      console.log("날 뇌에 담아줘!", response.data.result);
-      // console.log("노드", response.data.result.nodes);
-      setNodes(response.data.result.nodes);
-      setMyNodes(response.data.result.nodes);
-      // console.log("링크", response.data.result.links);
-      setMyLinks(response.data.result.links);
-      setLinks(response.data.result.links);
+      if (!prevResponse || JSON.stringify(prevResponse) !== JSON.stringify(response)) {
+        console.log("날 뇌에 담아줘!", response.data.result);
+        setNodes(response.data.result.nodes);
+        setMyNodes(response.data.result.nodes);
+        setMyLinks(response.data.result.links);
+        setLinks(response.data.result.links);
+        setPrevResponse(response);
+      }
     }
   }, [response]);
+
+  const [prevSharedData, setPrevSharedData] = useState(null);
 
   const handleReceive = (sharedData) => {
     if (!sharedData) {
@@ -48,13 +53,15 @@ const ThreeScene = () => {
       }
     } else {
       if (
-        JSON.stringify(sharedData.nodes) !== JSON.stringify(shareNodes) ||
-        JSON.stringify(sharedData.links) !== JSON.stringify(shareLinks)
+        !prevSharedData ||
+        JSON.stringify(sharedData.nodes) !== JSON.stringify(prevSharedData.nodes) ||
+        JSON.stringify(sharedData.links) !== JSON.stringify(prevSharedData.links)
       ) {
         setShareNodes([...sharedData.nodes]);
         setShareLinks([...sharedData.links]);
         setNodes([...sharedData.nodes]);
         setLinks([...sharedData.links]);
+        setPrevSharedData(sharedData);
       }
     }
   };

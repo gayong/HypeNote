@@ -1,11 +1,16 @@
 import { fetchDiagramAll } from "@/api/service/diagram";
+import { useState } from "react";
 import { useQuery } from "react-query";
 import useGetUserInfo from "./useGetUserInfo";
 
 export const useAllDiagram = () => {
   const { data: user, isLoading, isError, error } = useGetUserInfo();
+  const [diagramReady, setDiagramReady] = useState(false);
 
   return useQuery(["diagrams", user?.userPk], () => fetchDiagramAll(user?.userPk as number), {
-    enabled: user?.userPk !== 0, // user.userPk가 0이 아닐 때만 요청을 보냅니다.
+    enabled: !diagramReady && user?.userPk !== 0,
+    onSuccess: () => {
+      setDiagramReady(true);
+    },
   });
 };
