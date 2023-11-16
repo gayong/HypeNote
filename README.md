@@ -14,21 +14,33 @@
 
 [느낀 점](#item-end)
 
+
+
+
+
 ## 프로젝트 개요
+
+<a id="item-one"></a>
 
 - <strong>진행 기간</strong>: 2023.10.09 ~ 2023.11.17
 
 - <strong>목표</strong>
   
-  - 개발자의 편의를 제공하는 채팅 서비스를 제공합니다.
+  - 문서 정리 + 웹 겁색 + GPT 서비스를 한 페이지에서 한번에 사용할 수 있도록 편의성 제공
   
-  - 여러가지 툴을 사용하지 않고 하나의 채팅 서비스로 프로젝트를 원활하게 수행합니다.
+  - 트리 구조로 문서를 한 눈에 확인
   
-  - 프로젝트 팀원들의 기여도를 확인하고 프로젝트와 관련된 통계 데이터를 제공합니다.
+  - 그래프 구조를 통해 문서 간 유사도를 연결 + 공유 받은 문서와 내 문서를 연결
+  
+  - 내가 정리한 문서를 AI가 퀴즈로 만들어줘 복습을 간편하게 할 수 있도록 편의성 제공
 
-# 프로젝트 확인하기
+
+
+
 
 ## 역할 분담
+
+<a id="item-two"></a> 
 
 #### <strong>권인식</strong> - 팀장, BE : MSA 설계 ,Auth Server, Gpt Server
 
@@ -42,11 +54,13 @@
 
 #### <strong>이세울</strong> - FE : Editor, Tip Tab, WebSocket, UX/UI
 
-<a id="item-three"></a> 
+
+
+
 
 ## 기술 스택
 
-<a id="item-four"></a>
+<a id="item-three"></a>
 
 ## **⚙** Management Tool
 
@@ -114,14 +128,25 @@
 
 - Jenkins
 
+
+
+
+
+
+
 ## Architecture
+
+<a id="item-four"></a>
 
 ![infra1080.png](README_assets/76387433c50da989e1a7c0d3701541e455e90728.png)
 
 
-=======
+
+
 
 ## 프로젝트 구조도
+
+<a id="item-five"></a>
 
 <details>
 <summary>FrontEnd</summary>
@@ -310,7 +335,11 @@
 
 </details>
 
+ 
+
 ## 서비스 구현 화면
+
+<a id="item-six"></a>
 
 #### 1. 랜딩 페이지 로그인
 
@@ -362,19 +391,9 @@
 
 ![혼자풀기1.gif](README_assets/a211a40a133c0a1d80d72587aa1d083eca24f1ab.gif)
 
-
-
-
-
 6.1.2 퀴즈풀기 + 퀴즈 결과
 
 ![혼자풀기2.gif](README_assets/82b1ffdc0001c6a21ce028f51e02ec5cd75618ca.gif)
-
-
-
-
-
-
 
 6.2 같이풀기
 
@@ -385,5 +404,9 @@
 6.1.3  퀴즈 풀기
 
 6.1.4 퀴즈 결과 : 랭킹 및 오답노트
+
+
+
+
 
 ## 느낀 점
