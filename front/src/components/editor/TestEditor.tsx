@@ -4,7 +4,14 @@ import { useAtom } from "jotai";
 import { themeAtom } from "../../store/theme";
 import { isSearchOpen } from "../../store/searchOpen";
 import { useEffect, useRef, useState } from "react";
-import { BlockNoteView, blockNoteToMantineTheme, useBlockNote } from "@blocknote/react";
+import {
+  BlockNoteView,
+  Theme,
+  blockNoteToMantineTheme,
+  darkDefaultTheme,
+  lightDefaultTheme,
+  useBlockNote,
+} from "@blocknote/react";
 import "@blocknote/core/style.css";
 import styles from "./Editor.module.css";
 import { uploadToTmpFilesDotOrg_DEV_ONLY, Block, PartialBlock } from "@blocknote/core";
@@ -45,10 +52,34 @@ function TestEditor({ id }: Props) {
   const [owner, setOwner] = useState(0);
 
   // const [theme, setTheme] = useState<"light" | "dark">("light");
-  const [theme, setTheme] = useAtom<any>(themeAtom);
+  const [nowtheme, setTheme] = useAtom<any>(themeAtom);
   const [open] = useAtom(isSearchOpen);
   const store = syncedStore({ todos: [] as Todo[], fragment: "xml" });
   const yDoc = getYjsDoc(store);
+
+  // 폰트 설정
+  const componentStyles = (theme: Theme) => ({
+    Editor: {
+      '[data-node-type="blockContainer"] *': {
+        fontFamily: "PreRg",
+        color: nowtheme === "light" ? "#424242" : "#ffffff",
+      },
+    },
+  });
+
+  const themeWithFont = {
+    light: {
+      ...lightDefaultTheme,
+      componentStyles,
+    },
+    dark: {
+      ...darkDefaultTheme,
+      componentStyles,
+    },
+  } satisfies {
+    light: Theme;
+    dark: Theme;
+  };
 
   const onSave = () => {
     console.log(editor.topLevelBlocks);
@@ -225,7 +256,7 @@ function TestEditor({ id }: Props) {
   return (
     <>
       <div style={{ width: open ? "calc(100% - 380px)" : "100%" }}>
-        <BlockNoteView editor={editor} theme={theme} onKeyUp={onSave} onDragEnd={Drag} />
+        <BlockNoteView editor={editor} theme={themeWithFont} onKeyUp={onSave} onDragEnd={Drag} />
         {/* <BlockNoteView editor={editor} theme={theme}/> */}
       </div>
       <Search />
