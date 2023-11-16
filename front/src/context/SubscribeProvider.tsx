@@ -57,7 +57,7 @@ export default function SubscribeProvider({ roomId, children }: { roomId: number
 
     if (stompClient && user) {
       // 방 구독
-      stompClient.subscribe(
+      const subscription = stompClient.subscribe(
         `/sub/quiz/${roomId}`,
         (response) => {
           const responseBody = JSON.parse(response.body);
@@ -89,7 +89,7 @@ export default function SubscribeProvider({ roomId, children }: { roomId: number
         {}
       );
       // 채팅방 구독
-      stompClient.subscribe(
+      const subscription2 = stompClient.subscribe(
         `/sub/chat/${roomId}`,
         (mes) => {
           const message = JSON.parse(mes.body);
@@ -97,19 +97,19 @@ export default function SubscribeProvider({ roomId, children }: { roomId: number
         },
         {}
       );
-    }
 
-    return () => {
-      // 방나가기
-      const data = {
-        userPk: user?.userPk,
+      return () => {
+        // 방나가기
+        const data = {
+          userPk: user?.userPk,
+        };
+        if (stompClient) {
+          stompClient.send(`/pub/quizroom/out/${roomId}`, {}, JSON.stringify(data));
+          subscription.unsubscribe();
+          subscription2.unsubscribe();
+        }
       };
-      if (stompClient) {
-        stompClient.send(`/pub/quizroom/out/${roomId}`, {}, JSON.stringify(data));
-        stompClient.unsubscribe(`/sub/quiz/${roomId}`);
-        stompClient.unsubscribe(`/sub/chat/${roomId}`);
-      }
-    };
+    }
   }, [roomId]);
 
   return (

@@ -28,8 +28,10 @@ export default function QuizList() {
         // { Authorization: `Bearer ${accessToken}` }
       );
       stompClient.send(`/pub/quizroom/roomList/${user?.userPk}`, {});
+      return () => {
+        roomListSubscription.unsubscribe();
+      };
     }
-    return stompClient?.unsubscribe(`/sub/quizroom/roomList/${user?.userPk}`);
   }, [stompClient]);
 
   return (
