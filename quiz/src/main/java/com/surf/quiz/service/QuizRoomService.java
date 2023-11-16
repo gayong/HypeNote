@@ -323,6 +323,7 @@ public class QuizRoomService {
                 quizRoom.getUsers().get(0).setReady(true);
                 System.out.println("quizRoom = " + quizRoom.getUsers());
             }
+            quizRoom.setReadyCnt(quizRoom.getReadyCnt()+1);
             System.out.println("quizRoom = " + quizRoom.getUsers());
             saveAndSendQuizRoom(roomId, quizRoom);
             this.save(quizRoom);
