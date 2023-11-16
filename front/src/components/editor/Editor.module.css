@@ -1,0 +1,52 @@
+/* Editor 컴포넌트 스타일링 */
+.editor {
+  margin: 40px 0;
+  height: 100%;
+  background-color: transparent !important;
+  font-family: "preRg";
+}
+
+.editor-container {
+  position: relative;
+  width: 100%;
+  margin-bottom: calc(20vh);
+  font-family: "preRg";
+}
+
+.editor-container p {
+  margin: 0;
+  font-family: "preRg";
+}
+
+.editor-container h1,
+.editor-container h2,
+.editor-container h3,
+.editor-container h4,
+.editor-container h5,
+.editor-container h6 {
+  font-family: "PreBd"; /* 모든 제목 태그의 폰트 설정 */
+  margin-top: 10px; /* 위쪽 마진을 10px로 설정 */
+  margin-bottom: 10px; /* 아래쪽 마진을 10px로 설정 */
+}
+
+.editor-container ul,
+.editor-container ol {
+  font-family: "PreRg"; /* 모든 목록 태그의 폰트 설정 */
+}
+
+.editor-container .ProseMirror-selectednode {
+  outline: none !important;
+  border-radius: 0.2rem;
+  background-color: red !important;
+  transition: background-color 0.2s;
+  box-shadow: none;
+  font-family: "preRg";
+}
+
+.ProseMirror:not(.dragging) .ProseMirror-selectednode {
+  outline: none !important;
+  border-radius: 0.2rem;
+  background-color: var(--novel-highlight-blue);
+  transition: background-color 0.2s;
+  box-shadow: none;
+}

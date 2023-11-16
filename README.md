@@ -1,291 +1,412 @@
-## 📅 기간
+<h1 align="center"> E101 자율 프로젝트 </h1>
 
-- **2023.10.09 ~ 2023.11.17(7주)**
+## 📝 목차
 
-Hyper Web Editor Service
+[프로젝트 개요](#item-one)
 
-<a name="tableContents">COM SURF</a>
+[역할 분담](#item-two)
 
-<br/>
+[기술 스택](#item-three)
 
-## 🔎 목차
+[서버 아키텍처](#item-four)
 
-1. <a href="#subject">🎯 기획 배경</a>
-2. <a href="#mainContents">⭐️ 주요 기능</a>
-3. <a href="#systemArchitecture">⚙️ 시스템 아키텍쳐</a>
-4. <a href="#skills">🛠️ 기술 스택</a>
-5. <a href="#directories">🗂️ 파일 구조</a>
-6. <a href="#erd">💾 ERD</a>
-7. <a href="#contents">🖥️ 화면 소개</a>
-8. <a href="#developers">👥 팀원 소개</a>
-9. <a href="#divisionOfDuties">💡 업무 분장</a>
+[서비스 구현 화면](#item-five)
 
-<br>
+[느낀 점](#item-end)
 
-| Tag Name         | Description                                                    |
-| ---------------- | -------------------------------------------------------------- |
-| Feat             | 새로운 기능을 추가                                                     |
-| Fix              | 버그 수정                                                          |
-| Design           | CSS 등 사용자 UI 디자인 변경                                            |
-| !BREAKING CHANGE | 커다란 API 변경의 경우                                                 |
-| !HOTFIX          | 급하게 치명적인 버그를 고쳐야하는 경우                                          |
-| Style            | 코드 포맷 변경, 세미 콜론 누락, 코드 수정이 없는 경우                               |
-| Refactor         | 프로덕션 코드 리팩토링                                                   |
-| Comment          | 필요한 주석 추가 및 변경                                                 |
-| Docs             | 문서 수정                                                          |
-| Test             | 테스트 코드, 리펙토링 테스트 코드 추가, Production Code(실제로 사용하는 코드) 변경 없음     |
-| Chore            | 빌드 업무 수정, 패키지 매니저 수정, 패키지 관리자 구성 등 업데이트, Production Code 변경 없음 |
-| Rename           | 파일 혹은 폴더명을 수정하거나 옮기는 작업만인 경우                                   |
-| Remove           | 파일을 삭제하는 작업만 수행한 경우                                            |
 
-<!------- 주제 시작 -------->
 
-<br>
 
-# Git Convention
 
-<br>
+## 프로젝트 개요
 
-## [Git] 커밋 메시지 컨벤션 Commit Message Convention
+<a id="item-one"></a>
 
-Git을 협업에 알맞게, 커뮤니케이션에 유용하게, 깔끔한 가독성을 가지도록 사용하기 위해서 좋은 커밋 메시지를 사용하는 것이 중요하다. 그러기 위해서 커밋 컨벤션을 정리하였다.
+- <strong>진행 기간</strong>: 2023.10.09 ~ 2023.11.17
 
-<br>
-
-### 1. Commit Message Structure
-
-- 기본적인 커밋 메시지 구조 (각 파트는 빈줄로 구분한다.)
+- <strong>목표</strong>
   
-  > 제목 (Type: Subject)  
-  > (한줄 띄어 분리)  
-  > 본문 (Body)  
-  > (한줄 띄어 분리)  
-  > 꼬리말 (Footer)
-
-<br>
-
-### 2. Commit Type
-
-- 커밋의 타입 구성
+  - 문서 정리 + 웹 겁색 + GPT 서비스를 한 페이지에서 한번에 사용할 수 있도록 편의성 제공
   
-  > 태그: 제목  
-  > :(space)제목 으로 :뒤에만 space를 넣는다.
+  - 트리 구조로 문서를 한 눈에 확인
   
-  | Tag Name         | Description                                                    |
-  | ---------------- | -------------------------------------------------------------- |
-  | Feat             | 새로운 기능을 추가                                                     |
-  | Fix              | 버그 수정                                                          |
-  | Design           | CSS 등 사용자 UI 디자인 변경                                            |
-  | !BREAKING CHANGE | 커다란 API 변경의 경우                                                 |
-  | !HOTFIX          | 급하게 치명적인 버그를 고쳐야하는 경우                                          |
-  | Style            | 코드 포맷 변경, 세미 콜론 누락, 코드 수정이 없는 경우                               |
-  | Refactor         | 프로덕션 코드 리팩토링                                                   |
-  | Comment          | 필요한 주석 추가 및 변경                                                 |
-  | Docs             | 문서 수정                                                          |
-  | Test             | 테스트 코드, 리펙토링 테스트 코드 추가, Production Code(실제로 사용하는 코드) 변경 없음     |
-  | Chore            | 빌드 업무 수정, 패키지 매니저 수정, 패키지 관리자 구성 등 업데이트, Production Code 변경 없음 |
-  | Rename           | 파일 혹은 폴더명을 수정하거나 옮기는 작업만인 경우                                   |
-  | Remove           | 파일을 삭제하는 작업만 수행한 경우                                            |
+  - 그래프 구조를 통해 문서 간 유사도를 연결 + 공유 받은 문서와 내 문서를 연결
   
-  추가적인 문맥 정보를 제공하기 위한 목적으로 괄호 안에 적을 수도 있다.
-  
-  ```null
-  ex)
-   Feat(navigation)
-   Fix(db)
-  ```
+  - 내가 정리한 문서를 AI가 퀴즈로 만들어줘 복습을 간편하게 할 수 있도록 편의성 제공
 
-<br>
 
-### 3. Subject
 
-- 제목은 50글자 이내로 작성한다.
 
-- 첫글자는 대문자로 작성한다.
 
-- 마침표 및 특수기호는 사용하지 않는다.
+## 역할 분담
 
-- 영문으로 작성하는 경우 동사(원형)을 가장 앞에 명령어로 작성한다.
+<a id="item-two"></a> 
 
-- 과거시제는 사용하지 않는다.
+#### <strong>권인식</strong> - 팀장, BE : MSA 설계 ,Auth Server, Gpt Server
 
-- 간결하고 요점적으로 즉, 개조식 구문으로 작성한다.
-  
-  ```null
-  ex)
-  Fixed --> Fix
-  Added --> Add
-  Modified --> Modify
-  ```
+#### <strong>심규렬</strong> - BE : Editor Server, Search Server
 
-<br>
+#### <strong>최상익</strong> - BE : Diagram Server, Quiz Server
 
-### 4. Body
+#### <strong>윤자현</strong> - FE : Auth, Quiz, WebSocket, UX/UI
 
-- 72이내로 작성한다.
-- 최대한 상세히 작성한다. (코드 변경의 이유를 명확히 작성할수록 좋다)
-- 어떻게 변경했는지보다 무엇을, 왜 변경했는지 작성한다.
+#### <strong>이가영</strong> - FE : Interactive, Diagram, GPT, Search, UX/UI
 
-<br>
+#### <strong>이세울</strong> - FE : Editor, Tip Tab, WebSocket, UX/UI
 
-### 5. Footer
 
-- 선택사항
 
-- issue tracker ID 명시하고 싶은 경우에 작성한다.
 
-- 유형: #이슈 번호 형식으로 작성한다.
 
-- 여러 개의 이슈번호는 쉼표(,)로 구분한다.
+## 기술 스택
 
-- 이슈 트래커 유형은 다음 중 하나를 사용한다.  
-  Fixes: 이슈 수정중 (아직 해결되지 않은 경우)  
-  Resolves: 이슈를 해결했을 때 사용  
-  Ref: 참고할 이슈가 있을 때 사용  
-  Related to: 해당 커밋에 관련된 이슈번호 (아직 해결되지 않은 경우)  
-  
-  ```null
-  ex) 
-  Fixes: #45 Related to: #34, #23
-  ```
+<a id="item-three"></a>
 
-<br>
+## **⚙** Management Tool
 
-### 6. Example
+- 이슈관리 : JIRA
 
-**예시 1**
+- 형상관리 : Gitlab
 
-```null
-Feat: 회원 가입 기능 구현
+- 코드리뷰 : Gerrit
 
-SMS, 이메일 중복확인 API 개발
+- 커뮤니케이션 : Notion, Mattermost
 
-Resolves: #123
-Ref: #456
-Related to: #48, #45
+- 디자인 : Figma
+
+- UCC : 모바비
+
+## 💻 IDE
+
+- VS Code : 1.18.1
+
+- IntelliJ : 11.0.19
+
+## 📱 Frontend
+
+- Next : 13.5.6
+
+- recoil : ^0.7.7
+
+- axios : ^1.6.0
+
+- Node.js : 18.16.1
+
+- stompjs:7.0.0
+
+- react-query: ^3.39.3
+
+- jotai:^2.5.1
+
+## 💾 Backend
+
+- Springboot : 3.1.5
+
+- Lombok
+
+- Spring Data JPA
+
+- Spring Data Redis(lecttuce)
+
+- Spring Web
+
+- Oauth2
+
+- SERVER : AWS EC2 Ubuntu 20.04.6 LTS
+
+- DB : MySQL 8.0.33, Redis, Mongo DB
+
+- websocket
+
+- openfeign
+
+## 🔃 DevOPS
+
+- Nginx
+
+- Docker
+
+- Jenkins
+
+
+
+
+
+
+
+## Architecture
+
+<a id="item-four"></a>
+
+![infra1080.png](README_assets/76387433c50da989e1a7c0d3701541e455e90728.png)
+
+
+
+
+
+## 프로젝트 구조도
+
+<a id="item-five"></a>
+
+<details>
+<summary>FrontEnd</summary>
+
+```
+📦src
+ ┣ 📂api
+ ┃ ┣ 📂instances
+ ┃ ┃ ┗ 📜api.ts
+ ┃ ┗ 📂service
+ ┃ ┃ ┣ 📜diagram.ts
+ ┃ ┃ ┣ 📜editor.ts
+ ┃ ┃ ┣ 📜quiz.ts
+ ┃ ┃ ┗ 📜user.ts
+ ┣ 📂app
+ ┃ ┣ 📂editor
+ ┃ ┃ ┣ 📂[id]
+ ┃ ┃ ┃ ┗ 📜page.tsx
+ ┃ ┃ ┗ 📜layout.tsx
+ ┃ ┣ 📂main
+ ┃ ┃ ┗ 📜page.tsx
+ ┃ ┣ 📂quiz
+ ┃ ┃ ┣ 📂maker
+ ┃ ┃ ┃ ┗ 📜page.tsx
+ ┃ ┃ ┣ 📂room
+ ┃ ┃ ┃ ┣ 📂[id]
+ ┃ ┃ ┃ ┃ ┗ 📜page.tsx
+ ┃ ┃ ┃ ┗ 📜page.tsx
+ ┃ ┃ ┣ 📜layout.tsx
+ ┃ ┃ ┗ 📜page.tsx
+ ┃ ┣ 📂search
+ ┃ ┃ ┣ 📜page.tsx
+ ┃ ┃ ┗ 📜search.css
+ ┃ ┣ 📂signin
+ ┃ ┃ ┗ 📜page.tsx
+ ┃ ┣ 📂signup
+ ┃ ┃ ┗ 📜page.tsx
+ ┃ ┣ 📜favicon.ico
+ ┃ ┣ 📜globals.css
+ ┃ ┣ 📜layout.tsx
+ ┃ ┣ 📜loading.tsx
+ ┃ ┣ 📜not-found.tsx
+ ┃ ┣ 📜page.tsx
+ ┃ ┗ 📜providers.tsx
+ ┣ 📂assets
+ ┃ ┗ 📜alone.gif
+ ┣ 📂components
+ ┃ ┣ 📂brain
+ ┃ ┃ ┣ 📜backup.js
+ ┃ ┃ ┣ 📜back_brain.js
+ ┃ ┃ ┣ 📜back_outlines.js
+ ┃ ┃ ┣ 📜Brain.js
+ ┃ ┃ ┣ 📜Outlines.js
+ ┃ ┃ ┣ 📜SelectShare.tsx
+ ┃ ┃ ┗ 📜test.js
+ ┃ ┣ 📂category
+ ┃ ┃ ┗ 📜Category.tsx
+ ┃ ┣ 📂darkmode
+ ┃ ┃ ┗ 📜DarkmodeBtn.tsx
+ ┃ ┣ 📂editor
+ ┃ ┃ ┣ 📜DeleteBtn.tsx
+ ┃ ┃ ┣ 📜Editor.module.css
+ ┃ ┃ ┣ 📜GPT.css
+ ┃ ┃ ┣ 📜GPT.tsx
+ ┃ ┃ ┣ 📜Search.tsx
+ ┃ ┃ ┣ 📜Search_iFrame.tsx
+ ┃ ┃ ┣ 📜Search_noGPTver.tsx
+ ┃ ┃ ┣ 📜SharedBtn.tsx
+ ┃ ┃ ┣ 📜store.tsx
+ ┃ ┃ ┣ 📜TestEditor.tsx
+ ┃ ┃ ┗ 📜ToShareBtn.tsx
+ ┃ ┣ 📂intro
+ ┃ ┃ ┣ 📜arrow.png
+ ┃ ┃ ┣ 📜backup.js
+ ┃ ┃ ┣ 📜bite.png
+ ┃ ┃ ┣ 📜bun_bottom.png
+ ┃ ┃ ┣ 📜bun_top.png
+ ┃ ┃ ┣ 📜cheese.png
+ ┃ ┃ ┣ 📜css backup.css
+ ┃ ┃ ┣ 📜download.svg
+ ┃ ┃ ┣ 📜first_note.png
+ ┃ ┃ ┣ 📜glowparticle.js
+ ┃ ┃ ┣ 📜Intro.css
+ ┃ ┃ ┣ 📜Intro.js
+ ┃ ┃ ┣ 📜intro_logo.png
+ ┃ ┃ ┣ 📜krlogo.png
+ ┃ ┃ ┣ 📜left.png
+ ┃ ┃ ┣ 📜left_hover.png
+ ┃ ┃ ┣ 📜lettuce.png
+ ┃ ┃ ┣ 📜line.png
+ ┃ ┃ ┣ 📜line2.png
+ ┃ ┃ ┣ 📜line3.png
+ ┃ ┃ ┣ 📜line_shadow.png
+ ┃ ┃ ┣ 📜logo.png
+ ┃ ┃ ┣ 📜logo_blue.png
+ ┃ ┃ ┣ 📜patty.png
+ ┃ ┃ ┣ 📜plate.png
+ ┃ ┃ ┣ 📜signin.png
+ ┃ ┃ ┣ 📜signin_hover.png
+ ┃ ┃ ┣ 📜signup.png
+ ┃ ┃ ┗ 📜signup_hover.png
+ ┃ ┣ 📂quiz
+ ┃ ┃ ┣ 📜ChatRoom.tsx
+ ┃ ┃ ┣ 📜QuizList.tsx
+ ┃ ┃ ┣ 📜QuizMain.tsx
+ ┃ ┃ ┣ 📜QuizMaker.tsx
+ ┃ ┃ ┣ 📜QuizResult.tsx
+ ┃ ┃ ┣ 📜QuizRoom.tsx
+ ┃ ┃ ┣ 📜QuizStart.tsx
+ ┃ ┃ ┗ 📜Tree.tsx
+ ┃ ┣ 📂ui
+ ┃ ┃ ┣ 📜Button.tsx
+ ┃ ┃ ┣ 📜Card.tsx
+ ┃ ┃ ┣ 📜Card2.tsx
+ ┃ ┃ ┣ 📜Card3.tsx
+ ┃ ┃ ┣ 📜chat.tsx
+ ┃ ┃ ┣ 📜Input.tsx
+ ┃ ┃ ┣ 📜Label.tsx
+ ┃ ┃ ┣ 📜logout.tsx
+ ┃ ┃ ┣ 📜Modal.tsx
+ ┃ ┃ ┣ 📜Quiz.tsx
+ ┃ ┃ ┣ 📜Rank.tsx
+ ┃ ┃ ┗ 📜Timer.tsx
+ ┃ ┣ 📜Loading.tsx
+ ┃ ┣ 📜MySearch.tsx
+ ┃ ┣ 📜MySearch_back.tsx
+ ┃ ┣ 📜Navbar.tsx
+ ┃ ┣ 📜Signin.tsx
+ ┃ ┣ 📜Signup.tsx
+ ┃ ┗ 📜ThreeScene.tsx
+ ┣ 📂context
+ ┃ ┣ 📜SocketEditorProvider.tsx
+ ┃ ┣ 📜SocketProvider.tsx
+ ┃ ┗ 📜SubscribeProvider.tsx
+ ┣ 📂hooks
+ ┃ ┣ 📜useAllDiagram.ts
+ ┃ ┣ 📜useConnectSocket.ts
+ ┃ ┣ 📜useCreateChildNote.ts
+ ┃ ┣ 📜useCreateNote.ts
+ ┃ ┣ 📜useCreateRoom.ts
+ ┃ ┣ 📜useCreateSingleRoom.ts
+ ┃ ┣ 📜useDeleteNote.ts
+ ┃ ┣ 📜useGetNote.ts
+ ┃ ┣ 📜useGetQuizHistory.ts
+ ┃ ┣ 📜useGetSearchMyNote.ts
+ ┃ ┣ 📜useGetSearchResult.ts
+ ┃ ┣ 📜useGetSharedMember.ts
+ ┃ ┣ 📜useGetShareUserList.ts
+ ┃ ┣ 📜useGetUserInfo.ts
+ ┃ ┣ 📜useGetUserInfoByNickName.ts
+ ┃ ┣ 📜useGetUserNoteList.ts
+ ┃ ┣ 📜useGPT.ts
+ ┃ ┣ 📜useImageUpload.ts
+ ┃ ┣ 📜useLinkNote.ts
+ ┃ ┣ 📜useLoading.ts
+ ┃ ┣ 📜useNoteList.ts
+ ┃ ┣ 📜useReissue.ts
+ ┃ ┣ 📜useSendQuizAnswer.ts
+ ┃ ┣ 📜useShareDiagram.ts
+ ┃ ┣ 📜useSharedNote.ts
+ ┃ ┣ 📜useSiginin.ts
+ ┃ ┣ 📜useSignup.ts
+ ┃ ┣ 📜useUpdateNote.ts
+ ┃ ┗ 📜useUsersFindByPkList.ts
+ ┣ 📂store
+ ┃ ┣ 📜documentsAtom.ts
+ ┃ ┣ 📜isSolo.ts
+ ┃ ┣ 📜mynoteResults.ts
+ ┃ ┣ 📜searchOpen.ts
+ ┃ ┗ 📜theme.ts
+ ┗ 📂types
+ ┃ ┣ 📜diagram.ts
+ ┃ ┣ 📜ediotr.ts
+ ┃ ┣ 📜quiz.ts
+ ┃ ┗ 📜user.ts
 ```
 
-**예시 2**
+</details>
 
-```null
-feat: Summarize changes in around 50 characters or less
+<details>
+<summary>back-end</summary>
 
-More detailed explanatory text, if necessary. Wrap it to about 72
-characters or so. In some contexts, the first line is treated as the
-subject of the commit and the rest of the text as the body. The
-blank line separating the summary from the body is critical (unless
-you omit the body entirely); various tools like `log`, `shortlog`
-and `rebase` can get confused if you run the two together.
-
-Explain the problem that this commit is solving. Focus on why you
-are making this change as opposed to how (the code explains that).
-Are there side effects or other unintuitive consequences of this
-change? Here's the place to explain them.
-
-Further paragraphs come after blank lines.
-
-- Bullet points are okay, too
-
-- Typically a hyphen or asterisk is used for the bullet, preceded
-by a single space, with blank lines in between, but conventions
-vary here
-
-If you use an issue tracker, put references to them at the bottom,
-like this:
-
-Resolves: #123
-See also: #456, #789
 ```
 
-**그 외 자주 쓰이는**
-
-```null
-  Fix : 버그 수정
-  Fix my test
-  Fix typo in style.css
-  Fix my test to return undefined
-  Fix error when using my function
-
-  Update : Fix와 달리 원래 정상적으로 동작했지만 보완의 개념
-  Update harry-server.js to use HTTPS
-
-  Add
-  Add documentation for the defaultPort option
-  Add example for setting Vary: Accept-Encoding header in zlib.md
-
-  Remove(Clean이나 Eliminate) : ‘unnecessary’, ‘useless’, ‘unneeded’, ‘unused’, ‘duplicated’가 붙는 경우가 많음
-  Remove fallback cache
-  Remove unnecessary italics from child_process.md
-
-  Refactor : 리팩토링
-
-  Simplify : Refactor와 유사하지만 약한 수정, 코드 단순화
-
-  Improve : 호환성, 테스트 커버리지, 성능, 검증 기능, 접근성 등의 향상
-  Improve iOS's accessibilityLabel performance by up to 20%
-
-  Implement : 코드 추가보다 큰 단위의 구현
-  Implement bundle sync status
-
-  Correct : 주로 문법의 오류나 타입의 변경, 이름 변경 등에 사용
-  Correct grammatical error in BUILDING.md
-
-  Prevent
-  Prevent hello handler from saying Hi in hi.js
-
-  Avoid : Prevent는 못하게 막지만, Avoid는 회피(if 등)
-  Avoid flusing uninitialized traces
-
-  Move : 코드나 파일의 이동
-  Move function from header to source file
-
-  Rename : 이름 변경
-  Rename node-report to report
 ```
 
-<br>
+</details>
 
-### 7. Commit Message Emoji ([gitmoji](https://gitmoji.dev/))
+ 
 
-| Emoji | Description                                |
-| ----- | ------------------------------------------ |
-| 🎨    | 코드의 형식 / 구조를 개선 할 때                        |
-| 📰    | 새 파일을 만들 때                                 |
-| 📝    | 사소한 코드 또는 언어를 변경할 때                        |
-| 🐎    | 성능을 향상시킬 때                                 |
-| 📚    | 문서를 쓸 때                                    |
-| 🐛    | 버그 reporting할 때, @FIXME 주석 태그 삽입           |
-| 🚑    | 버그를 고칠 때                                   |
-| 🐧    | 리눅스에서 무언가를 고칠 때                            |
-| 🍎    | Mac OS에서 무언가를 고칠 때                         |
-| 🏁    | Windows에서 무언가를 고칠 때                        |
-| 🔥    | 코드 또는 파일 제거할 때 , @CHANGED주석 태그와 함께         |
-| 🚜    | 파일 구조를 변경할 때 . 🎨과 함께 사용                   |
-| 🔨    | 코드를 리팩토링 할 때                               |
-| ☔️    | 테스트를 추가 할 때                                |
-| 🔬    | 코드 범위를 추가 할 때                              |
-| 💚    | CI 빌드를 고칠 때                                |
-| 🔒    | 보안을 다룰 때                                   |
-| ⬆️    | 종속성을 업그레이드 할 때                             |
-| ⬇️    | 종속성을 다운 그레이드 할 때                           |
-| ⏩     | 이전 버전 / 지점에서 기능을 전달할 때                     |
-| ⏪     | 최신 버전 / 지점에서 기능을 백 포트 할 때                  |
-| 👕    | linter / strict / deprecation 경고를 제거 할 때   |
-| 💄    | UI / style 개선시                             |
-| ♿️    | 접근성을 향상시킬 때                                |
-| 🚧    | WIP (진행중인 작업)에 커밋, @REVIEW주석 태그와 함께 사용     |
-| 💎    | New Release                                |
-| 🔖    | 버전 태그                                      |
-| 🎉    | Initial Commit                             |
-| 🔈    | 로깅을 추가 할 때                                 |
-| 🔇    | 로깅을 줄일 때                                   |
-| ✨     | 새로운 기능을 소개 할 때                             |
-| ⚡️    | 도입 할 때 이전 버전과 호환되지 않는 특징, @CHANGED주석 태그 사용 |
-| 💡    | 새로운 아이디어, @IDEA주석 태그                       |
-| 🚀    | 배포 / 개발 작업 과 관련된 모든 것                      |
-| 🐘    | PostgreSQL 데이터베이스 별 (마이그레이션, 스크립트, 확장 등)   |
-| 🐬    | MySQL 데이터베이스 특정 (마이그레이션, 스크립트, 확장 등)       |
-| 🍃    | MongoDB 데이터베이스 특정 (마이그레이션, 스크립트, 확장 등)     |
-| 🏦    | 일반 데이터베이스 별 (마이그레이션, 스크립트, 확장명 등)          |
-| 🐳    | 도커 구성                                      |
-| 🤝    | 파일을 병합 할 때                                 |
+## 서비스 구현 화면
+
+<a id="item-six"></a>
+
+#### 1. 랜딩 페이지 로그인
+
+1.1 랜딩 페이지
+
+![랜딩.gif](README_assets/606c926c99e82a793949199ec966036e2312bde1.gif)
+
+1.2 로그인
+
+![로그인.gif](README_assets/97bcc24be31a7582257c927eaaf128ce099e6561.gif)
+
+#### 2. 다이어그램
+
+2.1 내 뇌 보기
+
+![내 뇌.gif](README_assets/4ecfa2f085ed5f632b2c71fcfa3b10673c2c4f9b.gif)
+
+2.2 공유 뇌 보기
+
+![친구 뇌 받기.gif](README_assets/cfedeefc7d4f196f755d61b1319a8a64958f01e9.gif)
+
+#### 3. Editor
+
+3.1 작성
+
+![글쓰기.gif](README_assets/5eec8b7c9e30327cbb808ad77f397dcf9a121521.gif)
+
+3.2 , 수정, 삭제
+
+3.2 공유
+
+![문서공유.gif](README_assets/e18139ecd3d25aa22339331d639a4b61e8f31324.gif)
+
+3.4 동시 작성
+
+#### 4.GPT
+
+![](README_assets/17f23ccef01b3500d763b7810499913e1ebb12f1.gif)
+
+#### 5.Search
+
+![서치.gif](README_assets/2560d984591cc983e927fd36fc2322e8de457280.gif)
+
+#### 6. Quiz
+
+6.1 혼자풀기
+
+6.1.1 방만들기
+
+![혼자풀기1.gif](README_assets/a211a40a133c0a1d80d72587aa1d083eca24f1ab.gif)
+
+6.1.2 퀴즈풀기 + 퀴즈 결과
+
+![혼자풀기2.gif](README_assets/82b1ffdc0001c6a21ce028f51e02ec5cd75618ca.gif)
+
+6.2 같이풀기
+
+6.1.1 방만들기
+
+6.1.2 대기실 : 레디 및 채팅
+
+6.1.3  퀴즈 풀기
+
+6.1.4 퀴즈 결과 : 랭킹 및 오답노트
+
+
+
+
+
+## 느낀 점
