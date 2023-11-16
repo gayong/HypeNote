@@ -59,6 +59,7 @@ function TestEditor({ id }: Props) {
 
   // 폰트 설정
   const componentStyles = (theme: Theme) => ({
+    highlightColors: lightDefaultTheme.colors.highlightColors,
     Editor: {
       '[data-node-type="blockContainer"] *': {
         fontFamily: "PreRg",
@@ -80,6 +81,42 @@ function TestEditor({ id }: Props) {
     light: Theme;
     dark: Theme;
   };
+
+  const myTheme = {
+    colors: {
+      editor: {
+        text: nowtheme === "light" ? "#424242" : "#ffffff",
+        background: nowtheme === "light" ? "#ffffff" : "#4f4f4f",
+      },
+      menu: {
+        text: "#424242",
+        background: "#FFDF7C",
+      },
+      tooltip: {
+        text: "#ffffff",
+        background: "#FFDF7C",
+      },
+      hovered: {
+        text: "#000000",
+        background: "#FFDF7C",
+      },
+      selected: {
+        text: "#ffffff",
+        background: "#FEC106",
+      },
+      disabled: {
+        text: "#000000",
+        background: "#FFDF7C",
+      },
+      shadow: "none",
+      border: "#323232",
+      sideMenu: "#bababa",
+      highlightColors:
+        nowtheme === "light" ? lightDefaultTheme.colors.highlightColors : darkDefaultTheme.colors.highlightColors,
+    },
+    borderRadius: 4,
+    fontFamily: "PreRg, sans-serif",
+  } satisfies Theme;
 
   const onSave = () => {
     console.log(editor.topLevelBlocks);
@@ -256,7 +293,7 @@ function TestEditor({ id }: Props) {
   return (
     <>
       <div style={{ width: open ? "calc(100% - 380px)" : "100%" }}>
-        <BlockNoteView editor={editor} theme={themeWithFont} onKeyUp={onSave} onDragEnd={Drag} />
+        <BlockNoteView editor={editor} theme={myTheme} onKeyUp={onSave} onDragEnd={Drag} />
         {/* <BlockNoteView editor={editor} theme={theme}/> */}
       </div>
       <Search />
