@@ -81,7 +81,7 @@ public class UserRootDocumentIdService {
                 if (userOptional.isPresent()) {
                     User user = userOptional.get();
                     for (String documentRoot : sharedDocumentsList.get(userPk)) {
-                        user.getDocumentsRoots().removeIf(root -> root.equals(documentRoot));
+                        user.getSharedDocumentsRoots().removeIf(root -> root.equals(documentRoot));
                         userRepository.save(user);
                     }
                 }
