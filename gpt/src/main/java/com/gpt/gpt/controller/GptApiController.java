@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.concurrent.CompletableFuture;
+
 @Slf4j
 @RestController
 @RequiredArgsConstructor
@@ -15,7 +17,7 @@ public class GptApiController {
     private final GptApiService gptApiService;
 
     @PostMapping("/chat")
-    public String getChatGptResponse(@RequestBody GptClientRequestDto gptClientRequestDto) {
+    public CompletableFuture<String> getChatGptResponse(@RequestBody GptClientRequestDto gptClientRequestDto) {
         return gptApiService.getChatGptResponse(gptClientRequestDto);
     }
 }
