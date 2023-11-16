@@ -297,12 +297,12 @@ public class QuizRoomService {
         if (member.isReady()) {
             quizRoom.setReadyCnt(quizRoom.getReadyCnt() - 1);
         }
-
+        System.out.println("member = " + member.isHost() + member.getUserPk());
         quizRoom.memberOut(memberDto);
         quizRoom.setRoomCnt(quizRoom.getRoomCnt() - 1);
 
         // 빈 방이면 삭제, 빈 방 아니면 다른 녀석에 방장 주기
-        handleEmptyQuizRoom(roomId, quizRoom, memberDto);
+        handleEmptyQuizRoom(roomId, quizRoom, member);
     }
 
     private Optional<MemberDto> findMemberInQuizRoom(QuizRoom quizRoom, MemberDto memberDto) {
@@ -312,13 +312,17 @@ public class QuizRoomService {
     }
 
     private void handleEmptyQuizRoom(Long roomId, QuizRoom quizRoom, MemberDto memberDto) {
+        System.out.println("memberDto = " + memberDto);
+        System.out.println("quizRoom = " + quizRoom.getUsers());
         if (quizRoom.getRoomCnt()==0) {
             delete(quizRoom);
             deleteQuiz(roomId.intValue());
         } else {
             if (memberDto.isHost()) {
                 quizRoom.getUsers().get(0).setHost(true);
+                System.out.println("quizRoom = " + quizRoom.getUsers());
             }
+            System.out.println("quizRoom = " + quizRoom.getUsers());
             saveAndSendQuizRoom(roomId, quizRoom);
             this.save(quizRoom);
             this.findAllAndSend(quizRoom);
@@ -425,7 +429,7 @@ public class QuizRoomService {
         try {
             List<CompletableFuture<BaseResponse<List<QuestionDto>>>> futures = res.stream()
                     .flatMap(r -> IntStream.range(0, createdQuizroom.getQuizCnt())
-                            .mapToObj(i -> getGptWithRetry(2, i, r)))
+                            .mapToObj(i -> getGptWithRetry( 3, i, r)))
                     .toList();
 
             CompletableFuture.allOf(futures.toArray(new CompletableFuture[0])).join();
