@@ -121,7 +121,7 @@ export default function Search() {
         </div>
       ),
       children: (
-        <div className="scrollbar-hide">
+        <div>
           <Search
             placeholder="검색어를 입력해주세요"
             value={keyword}
@@ -133,7 +133,7 @@ export default function Search() {
           />
           {results ? (
             results.map((item, index) => (
-              <div key={index} className="max-w-full scrollbar-hide">
+              <div key={index} className="max-w-full">
                 <div
                   className="flex justify-start items-center"
                   onClick={() => {
@@ -243,7 +243,7 @@ export default function Search() {
         maskClosable={false}
         width={380}
         className="relative">
-        <Collapse defaultActiveKey={[""]} ghost items={items} className="scrollbar-hide" />
+        <Collapse defaultActiveKey={[""]} ghost items={items} />
       </Drawer>
     </div>
   );

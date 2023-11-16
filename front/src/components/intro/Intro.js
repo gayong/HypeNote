@@ -161,7 +161,7 @@ export default function Intro() {
   }, []);
 
   return (
-    <div className="overflow-hidden p-0 m-0 w-full text-center items-center justify-center scrollbar-hide">
+    <div className="overflow-hidden p-0 m-0 w-full text-center items-center justify-center">
       <div className="mx-auto relative w-[100vw]">
         <div className="mt-[-100px] origin-[25%_50%] animate-spin-slow">
           <Image className="ml-[-150px] w-[68vw] no-drag" src={plate} alt="plate" />

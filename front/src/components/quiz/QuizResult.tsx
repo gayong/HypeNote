@@ -96,7 +96,7 @@ export default function QuizResult() {
       </div>
 
       {tab === "rank" ? (
-        <div className="mr-5 mt-4 h-[600px] max-h-[600px] overflow-scroll scrollbar-hide">
+        <div className="mr-5 mt-4 h-[600px] max-h-[600px] overflow-scroll">
           <h1 className="mt-2 font-extrabold text-2xl text-primary text-center dark:text-font_primary">
             퀴즈 결과입니다!
           </h1>
