@@ -56,30 +56,40 @@
 ## 📱 Frontend
 
 ![NEXT.JS](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=Next.js&logoColor=white)
-![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
-![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white) ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
-![JavaScript](https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=white)
 ![React](https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=white)
 ![React-Query](https://img.shields.io/badge/reactquery-FF4154?style=for-the-badge&logo=reactquery&logoColor=white)
-![Axios](https://img.shields.io/badge/axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white)
-![Jotai](https://img.shields.io/badge/Jotai-000000.svg?style=for-the-badge&logoColor=white)
-![D3](https://img.shields.io/badge/d3.js-F9A03C?style=for-the-badge&logo=d3.js&logoColor=white)
+![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
+
+![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white) 
+![JavaScript](https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
 ![Tailwind](https://img.shields.io/badge/TailwindCSS-06B6D4?style=for-the-badge&logo=TailwindCSS&logoColor=white)
-![Stompjs](https://img.shields.io/badge/stompjs-%3FE8D9.svg?style=for-the-badge&logoColor=white)
+![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
 ![ANTD](https://img.shields.io/badge/antdesign-0170FE?style=for-the-badge&logo=antdesign&logoColor=white)
+
+
+![D3](https://img.shields.io/badge/d3.js-F9A03C?style=for-the-badge&logo=d3.js&logoColor=white)
+![Stompjs](https://img.shields.io/badge/stompjs-%3FE8D9.svg?style=for-the-badge&logoColor=white)
+![Axios](https://img.shields.io/badge/axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white)
 ![eslint](https://img.shields.io/badge/eslint-4B32C3?style=for-the-badge&logo=eslint&logoColor=white)
+![Jotai](https://img.shields.io/badge/Jotai-000000.svg?style=for-the-badge&logoColor=white)
 
 <br/>
 
 ## 💾 Backend
 
-![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white) ![SpringBoot](https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white) ![SpringBoot](https://img.shields.io/badge/springsecurity-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white) ![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens)
+![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white) 
+
+![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens)
 ![ChatGPT](https://img.shields.io/badge/chatGPT-74aa9c?style=for-the-badge&logo=openai&logoColor=white)
-![amazonec2](https://img.shields.io/badge/amazonec2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white)
-![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white) ![mysql](https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+
+![SpringBoot](https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white) 
+![SpringBoot](https://img.shields.io/badge/springsecurity-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white) 
+
+![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white) 
 ![MongoDB](https://img.shields.io/badge/mongoDB-47A248?style=for-the-badge&logo=MongoDB&logoColor=white)
 ![AmazonS3](https://img.shields.io/badge/AmazonS3-569A31?style=for-the-badge&logo=AmazonS3&logoColor=white)
+![mysql](https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
 ![AmazonRDS](https://img.shields.io/badge/AmazonRDS-527FFF?style=for-the-badge&logo=AmazonRDS&logoColor=white)
 
 <br/>
@@ -89,6 +99,7 @@
 ![docker](https://img.shields.io/badge/docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 ![Jenkins](https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=Jenkins&logoColor=white)
 ![nginx](https://img.shields.io/badge/nginx-009639?style=for-the-badge&logo=nginx&logoColor=white)
+![amazonec2](https://img.shields.io/badge/amazonec2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white)
 
 <br/>
 
@@ -175,34 +186,15 @@
  ┃ ┃ ┣ 📜TestEditor.tsx
  ┃ ┃ ┗ 📜ToShareBtn.tsx
  ┃ ┣ 📂intro
- ┃ ┃ ┣ 📜arrow.png
  ┃ ┃ ┣ 📜backup.js
- ┃ ┃ ┣ 📜bite.png
- ┃ ┃ ┣ 📜bun_bottom.png
- ┃ ┃ ┣ 📜bun_top.png
- ┃ ┃ ┣ 📜cheese.png
  ┃ ┃ ┣ 📜css backup.css
  ┃ ┃ ┣ 📜download.svg
  ┃ ┃ ┣ 📜first_note.png
- ┃ ┃ ┣ 📜glowparticle.js
  ┃ ┃ ┣ 📜Intro.css
  ┃ ┃ ┣ 📜Intro.js
  ┃ ┃ ┣ 📜intro_logo.png
- ┃ ┃ ┣ 📜krlogo.png
- ┃ ┃ ┣ 📜left.png
- ┃ ┃ ┣ 📜left_hover.png
- ┃ ┃ ┣ 📜lettuce.png
- ┃ ┃ ┣ 📜line.png
- ┃ ┃ ┣ 📜line2.png
- ┃ ┃ ┣ 📜line3.png
  ┃ ┃ ┣ 📜line_shadow.png
- ┃ ┃ ┣ 📜logo.png
- ┃ ┃ ┣ 📜logo_blue.png
- ┃ ┃ ┣ 📜patty.png
- ┃ ┃ ┣ 📜plate.png
  ┃ ┃ ┣ 📜signin.png
- ┃ ┃ ┣ 📜signin_hover.png
- ┃ ┃ ┣ 📜signup.png
  ┃ ┃ ┗ 📜signup_hover.png
  ┃ ┣ 📂quiz
  ┃ ┃ ┣ 📜ChatRoom.tsx
@@ -457,8 +449,5 @@
 <br/>
 
 ## 영상
-
-<br/>
-**SSAFY 9기 2학기 자율 프로젝트 - 한입 노트 (Hype Note)**
- [UCC 보러가기](https://www.youtube.com/watch?v=UKqX69leV5k)  
+SSAFY 9기 2학기 자율 프로젝트 - 한입 노트 (Hype Note) [UCC 보러가기](https://www.youtube.com/watch?v=UKqX69leV5k)  
 <br/>
