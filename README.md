@@ -73,22 +73,23 @@
 
 ## 💻 IDE
 
-- VS Code : 1.18.1
+![VSCode](https://img.shields.io/badge/VisualStudioCode-007ACC?tyle=flat-square&logo=VisualStudioCode&logoColor=white)
 
 - IntelliJ : 11.0.19
 
 ## 📱 Frontend
 
-![NEXT.JS](https://img.shields.io/badge/next.js-%2946A2.svg?style=for-the-badge&logo=next.js&logoColor=white) ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
+![NEXT.JS](https://img.shields.io/badge/Next.js-000000?style=flat-square&logo=Next.js&logoColor=white) ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
 ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white) ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white) ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) ![React-Query](https://img.shields.io/badge/reactquery-FF4154?style=for-the-badge&logo=reactquery&logoColor=white)
 ![Axios](https://img.shields.io/badge/axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white)
 ![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white)
+![Jotai](https://img.shields.io/badge/Jotai-000000.svg?style=for-the-badge&logoColor=white)
+![D3](https://img.shields.io/badge/d3-F9A03C?style=for-the-badge&logo=d3&logoColor=white)
+![Tailwind](https://img.shields.io/badge/TailwindCSS-06B6D4?style=flat-square&logo=TailwindCSS&logoColor=white)
 
 - stompjs:7.0.0
-
-- jotai:^2.5.1
 
 ## 💾 Backend
 
@@ -96,28 +97,11 @@
 ![ChatGPT](https://img.shields.io/badge/chatGPT-74aa9c?style=for-the-badge&logo=openai&logoColor=white)
 ![docker](https://img.shields.io/badge/docker-2496ED?style=for-the-badge&logo=docker&logoColor=white) ![amazonec2](https://img.shields.io/badge/amazonec2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white) ![Jenkins](https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=Jenkins&logoColor=white)
 ![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white) ![mysql](https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
+![MongoDB](https://img.shields.io/badge/mongoDB-47A248?style=for-the-badge&logo=MongoDB&logoColor=white)
+![AmazonS3](https://img.shields.io/badge/AmazonS3-569A31?style=flat-square&logo=AmazonS3&logoColor=white)
+![AmazonRDS](https://img.shields.io/badge/AmazonRDS-527FFF?style=flat-square&logo=AmazonRDS&logoColor=white)
 
-- Springboot : 3.1.5
-
-- SpringCloud(MSA - API Gateway, Eureka, Config)
-
-- Lombok
-
-- Spring Data JPA
-
-- Spring Data Redis(lecttuce)
-
-- Spring Web
-
-- SERVER : AWS EC2 Ubuntu 20.04.6 LTS
-
-- DB : MySQL 8.0.33(RDS Aurora), Redis - sentinal, Mongo DB
-
-- Websocket
-
-- Openfeign(Spring Cloud)
-
-- AWS S3
+<br/>
 
 ## 🔃 DevOPS
 
@@ -127,7 +111,9 @@
 
 - Jenkins
 
-## Architecture
+<br/>
+
+## ⚙️ Architecture
 
 <a id="item-four"></a>
 
@@ -347,7 +333,7 @@
 ![랜딩.gif](README_assets/606c926c99e82a793949199ec966036e2312bde1.gif)
 
 - 전체적인 서비스 내용을 한 눈에 보는 랜딩페이지
-  
+
   1.2 로그인
 
 ![로그인.gif](README_assets/97bcc24be31a7582257c927eaaf128ce099e6561.gif)
@@ -361,7 +347,7 @@
 - 나의 문서들을 한눈에 볼 수 있는 페이지
 
 - 노드들을 직접 움직이면서 사용자와 상호작용 및 인터랙티브한 경험 제공
-  
+
   2.2 공유 뇌 보기
 
 ![친구 뇌 받기.gif](README_assets/cfedeefc7d4f196f755d61b1319a8a64958f01e9.gif)
@@ -378,7 +364,7 @@
 - 마크다운 문법 사용 가능
 
 - 글 작성시 바로 navbar에 연결
-  
+
   3.2 공유
 
 ![문서공유.gif](README_assets/e18139ecd3d25aa22339331d639a4b61e8f31324.gif)
@@ -386,8 +372,10 @@
 - 문서를 공유하고 싶은 사람들 선택 후 공유 가능
 
 - 문서 하나 공유 시, 해당 자식 노드들 다 공유
-  
+
   3.3 동시 작성
+
+![동시작업.gif](README_assets/2aac3b7f9b1602ce77a10ae1177a38973970fa99.gif)
 
 - 공유받은 사람들 간의 동시 작성 가능
 
@@ -413,25 +401,25 @@
 ![혼자풀기1.gif](README_assets/a211a40a133c0a1d80d72587aa1d083eca24f1ab.gif)
 
 - 나의 문서들을 선택하여 퀴즈 범위 설정
-  
+
   6.1.2 퀴즈풀기 + 퀴즈 결과
 
 ![혼자풀기2.gif](README_assets/82b1ffdc0001c6a21ce028f51e02ec5cd75618ca.gif)
 
 - 퀴즈 결과와 오답과 해설을 한번에 제공
-  
+
   6.2 같이풀기
-  
+
   6.1.1 방만들기
-  
-  ![다크모드.gif](README_assets/e0720bdce31a79d240756ffaf6ca301806cdd0dd.gif)
-  
-  ![동시작업.gif](README_assets/2aac3b7f9b1602ce77a10ae1177a38973970fa99.gif)
-  
+
   6.1.2 대기실 : 레디 및 채팅
-  
+
   6.1.3 퀴즈 풀기
-  
+
   6.1.4 퀴즈 결과 : 랭킹 및 오답노트
+
+#### 7. 다크모드 구현
+
+![다크모드.gif](README_assets/e0720bdce31a79d240756ffaf6ca301806cdd0dd.gif)
 
 ## 느낀 점
