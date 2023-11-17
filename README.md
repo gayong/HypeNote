@@ -10,17 +10,17 @@
 
 [서비스 구현 화면](#item-five)
 
-[역할 분담](#item-two)
+[팀원 소개](#item-two)
 
 [느낀 점](#item-end)
 
-## 프로젝트 개요
+## 📖 프로젝트 개요
 
 <a id="item-one"></a>
 
 <div>
 
-<strong>진행 기간</strong>: 2023.10.09 ~ 2023.11.17
+<strong>진행 기간 </strong>: 2023.10.09 ~ 2023.11.17
 
 <strong>목표</strong>
 
@@ -40,9 +40,9 @@
 
 <a id="item-three"></a>
 
-|          | 이슈관리                                                                                                    | 형상관리                                                                                                  | 코드리뷰                                                                                                  | 커뮤니케이션                                                                                                | 디자인                                                                                                       | UCC                                                                                                   |     |
-|:--------:|:-------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------:|:---:|
-| **TOOL** | ![JIRA](https://img.shields.io/badge/jira-0052CC?style=for-the-badge&logo=jirasoftware&logoColor=white) | ![GITLAB](https://img.shields.io/badge/gitlab-FC6D26?style=for-the-badge&logo=gitlab&logoColor=white) | ![GERRIT](https://img.shields.io/badge/gerrit-EEEEEE?style=for-the-badge&logo=gerrit&logoColor=white) | ![NOTION](https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white) | ![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white) | ![Movavi](https://img.shields.io/badge/movavi-0034f5?style=for-the-badge&logo=movavi&logoColor=white) |     |
+|          |                                                이슈관리                                                 |                                               형상관리                                                |                                               코드리뷰                                                |                                             커뮤니케이션                                              |                                                  디자인                                                   |                                                  UCC                                                  |
+| :------: | :-----------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------: |
+| **TOOL** | ![JIRA](https://img.shields.io/badge/jira-0052CC?style=for-the-badge&logo=jirasoftware&logoColor=white) | ![GITLAB](https://img.shields.io/badge/gitlab-FC6D26?style=for-the-badge&logo=gitlab&logoColor=white) | ![GERRIT](https://img.shields.io/badge/gerrit-EEEEEE?style=for-the-badge&logo=gerrit&logoColor=white) | ![NOTION](https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white) | ![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white) | ![Movavi](https://img.shields.io/badge/movavi-0034f5?style=for-the-badge&logo=movavi&logoColor=white) |
 
 <br/>
 
@@ -64,7 +64,7 @@
 ![React-Query](https://img.shields.io/badge/reactquery-FF4154?style=for-the-badge&logo=reactquery&logoColor=white)
 ![Axios](https://img.shields.io/badge/axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white)
 ![Jotai](https://img.shields.io/badge/Jotai-000000.svg?style=for-the-badge&logoColor=white)
-![D3](https://img.shields.io/badge/d3-F9A03C?style=for-the-badge&logo=d3&logoColor=white)
+![D3](https://img.shields.io/badge/d3.js-F9A03C?style=for-the-badge&logo=d3.js&logoColor=white)
 ![Tailwind](https://img.shields.io/badge/TailwindCSS-06B6D4?style=for-the-badge&logo=TailwindCSS&logoColor=white)
 ![Stompjs](https://img.shields.io/badge/stompjs-%3FE8D9.svg?style=for-the-badge&logoColor=white)
 ![ANTD](https://img.shields.io/badge/antdesign-0170FE?style=for-the-badge&logo=antdesign&logoColor=white)
@@ -447,9 +447,18 @@
 
 <a id="item-two"></a>
 
-| **Name**     | 권인식                                                                  | 심규렬                                                                  | 윤자현                                                                  | 이가영                                                                  | 이세울                                                                  | 최상익                                                                  |
-|:------------:|:--------------------------------------------------------------------:|:--------------------------------------------------------------------:|:--------------------------------------------------------------------:|:--------------------------------------------------------------------:|:--------------------------------------------------------------------:|:--------------------------------------------------------------------:|
-| **Profile**  | ![image](README_assets/f65f5d8bd865d7f04665a9b9543e20678bab5c98.png) | ![image](README_assets/0bf5567340ddd34cce979fe68eaae5afb7f099e9.png) | ![image](README_assets/574a9853524a1c09979522648b08aeb3c75c6550.png) | ![image](README_assets/a6da0004f104251d29cc622b009c690989a16e48.png) | ![image](README_assets/09e0882a1abc8d86a9a2b10400f8905939742563.png) | ![image](README_assets/94c38d579e2f0e819618befae3c655d293fe982d.png) |
-| **Position** | Leader <br/> Backend                                                 | Backend                                                              | Frontend                                                             | Frontend                                                             | Frontend                                                             | Backend                                                              |
-| **Position** | Infra <br/> MSA 설계 <br/> Auth Server <br/> Gpt Server                | Editor Server <br/> Search Server                                    | Auth <br/> Quiz <br/> WebSocket <br/> UX/UI                          | Interactive <br/> Diagram <br/> GPT <br/> Search <br/> UX/UI         | Editor <br/> Tip Tab <br/> WebSocket <br/> UX/UI                     | Diagram Server <br/> Quiz Server                                     |
-| **Git**      | [GitHub](https://github.com/PassionSoftIan)                          | [GitHub](https://github.com/simgyuryeol)                             | [GitHub](https://github.com/YOONJAHYUN)                              | [GitHub](https://github.com/dfsdf5645)                               | [GitHub](https://github.com/sl39)                                    | [GitHub](https://github.com/csi9876)                                 |
+|   **Name**   |                                권인식                                |                                심규렬                                |                                윤자현                                |                                이가영                                |                                이세울                                |                                최상익                                |
+| :----------: | :------------------------------------------------------------------: | :------------------------------------------------------------------: | :------------------------------------------------------------------: | :------------------------------------------------------------------: | :------------------------------------------------------------------: | :------------------------------------------------------------------: |
+| **Profile**  | ![image](README_assets/72fe08f90c6edb9454a46019d8ac1003abc1a2cf.png) | ![image](README_assets/0bf5567340ddd34cce979fe68eaae5afb7f099e9.png) | ![image](README_assets/574a9853524a1c09979522648b08aeb3c75c6550.png) | ![image](README_assets/a6da0004f104251d29cc622b009c690989a16e48.png) | ![image](README_assets/09e0882a1abc8d86a9a2b10400f8905939742563.png) | ![image](README_assets/94c38d579e2f0e819618befae3c655d293fe982d.png) |
+| **Position** |                       Leader(PM) <br/> Backend                       |                               Backend                                |                               Frontend                               |                               Frontend                               |                               Frontend                               |                               Backend                                |
+| **Position** |    Infra <br/> MSA 설계 <br/> Auth/Member Server <br/> Gpt Server    |                  Editor Server <br/> Search Server                   |             Auth <br/> Quiz <br/> WebSocket <br/> UX/UI              |     Interactive <br/> Diagram <br/> GPT <br/> Search <br/> UX/UI     |           Editor <br/> Tip Tab <br/> WebSocket <br/> UX/UI           |                   Diagram Server <br/> Quiz Server                   |
+|   **Git**    |             [GitHub](https://github.com/PassionSoftIan)              |               [GitHub](https://github.com/simgyuryeol)               |               [GitHub](https://github.com/YOONJAHYUN)                |                [GitHub](https://github.com/dfsdf5645)                |                  [GitHub](https://github.com/sl39)                   |                 [GitHub](https://github.com/csi9876)                 |
+
+<br/>
+
+## 영상
+
+<br/>
+**SSAFY 9기 2학기 자율 프로젝트 - 한입 노트 (Hype Note)**
+ [UCC 보러가기](https://www.youtube.com/watch?v=UKqX69leV5k)  
+<br/>
