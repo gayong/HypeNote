@@ -4,13 +4,13 @@
 
 [프로젝트 개요](#item-one)
 
-[역할 분담](#item-two)
-
 [기술 스택](#item-three)
 
 [서버 아키텍처](#item-four)
 
 [서비스 구현 화면](#item-five)
+
+[역할 분담](#item-two)
 
 [느낀 점](#item-end)
 
@@ -33,23 +33,6 @@
 - 내가 정리한 문서를 AI가 퀴즈로 만들어줘 복습을 간편하게 할 수 있도록 편의성 제공
 
 </div>
-<br/>
-
-## 역할 분담
-
-<a id="item-two"></a>
-
-#### <strong>권인식</strong> - 팀장, PM, BE : Infra, MSA 설계 ,Auth Server, Gpt Server
-
-#### <strong>심규렬</strong> - BE : Editor Server, Search Server
-
-#### <strong>최상익</strong> - BE : Diagram Server, Quiz Server
-
-#### <strong>윤자현</strong> - FE : Auth, Quiz, WebSocket, UX/UI
-
-#### <strong>이가영</strong> - FE : Interactive, Diagram, GPT, Search, UX/UI
-
-#### <strong>이세울</strong> - FE : Editor, Tip Tab, WebSocket, UX/UI
 
 <br/>
 
@@ -57,59 +40,55 @@
 
 <a id="item-three"></a>
 
-## **⚙** Management Tool
+|          | 이슈관리                                                                                                    | 형상관리                                                                                                  | 코드리뷰                                                                                                  | 커뮤니케이션                                                                                                | 디자인                                                                                                       | UCC                                                                                                   |     |
+|:--------:|:-------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------:|:---:|
+| **TOOL** | ![JIRA](https://img.shields.io/badge/jira-0052CC?style=for-the-badge&logo=jirasoftware&logoColor=white) | ![GITLAB](https://img.shields.io/badge/gitlab-FC6D26?style=for-the-badge&logo=gitlab&logoColor=white) | ![GERRIT](https://img.shields.io/badge/gerrit-EEEEEE?style=for-the-badge&logo=gerrit&logoColor=white) | ![NOTION](https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white) | ![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white) | ![Movavi](https://img.shields.io/badge/movavi-0034f5?style=for-the-badge&logo=movavi&logoColor=white) |     |
 
-- 이슈관리 : JIRA
-
-- 형상관리 : Gitlab
-
-- 코드리뷰 : Gerrit
-
-- 커뮤니케이션 : Notion, Mattermost
-
-- 디자인 : Figma
-
-- UCC : 모바비
+<br/>
 
 ## 💻 IDE
 
-![VSCode](https://img.shields.io/badge/VisualStudioCode-007ACC?tyle=flat-square&logo=VisualStudioCode&logoColor=white)
+![VSCode](https://img.shields.io/badge/VisualStudioCode-007ACC?style=for-the-badge&logo=VisualStudioCode&logoColor=white)
+![IntelliJ](https://img.shields.io/badge/intellijidea-000000?style=for-the-badge&logo=intellijidea&logoColor=white)
 
-- IntelliJ : 11.0.19
+<br/>
 
 ## 📱 Frontend
 
-![NEXT.JS](https://img.shields.io/badge/Next.js-000000?style=flat-square&logo=Next.js&logoColor=white) ![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
+![NEXT.JS](https://img.shields.io/badge/Next.js-000000?style=for-the-badge&logo=Next.js&logoColor=white)
+![NodeJS](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
 ![HTML5](https://img.shields.io/badge/html5-%23E34F26.svg?style=for-the-badge&logo=html5&logoColor=white) ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
-![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white) ![JavaScript](https://img.shields.io/badge/javascript-%23323330.svg?style=for-the-badge&logo=javascript&logoColor=%23F7DF1E)
-![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) ![React-Query](https://img.shields.io/badge/reactquery-FF4154?style=for-the-badge&logo=reactquery&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![JavaScript](https://img.shields.io/badge/javascript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=white)
+![React](https://img.shields.io/badge/react-61DAFB?style=for-the-badge&logo=react&logoColor=white)
+![React-Query](https://img.shields.io/badge/reactquery-FF4154?style=for-the-badge&logo=reactquery&logoColor=white)
 ![Axios](https://img.shields.io/badge/axios-5A29E4?style=for-the-badge&logo=axios&logoColor=white)
-![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white)
 ![Jotai](https://img.shields.io/badge/Jotai-000000.svg?style=for-the-badge&logoColor=white)
 ![D3](https://img.shields.io/badge/d3-F9A03C?style=for-the-badge&logo=d3&logoColor=white)
-![Tailwind](https://img.shields.io/badge/TailwindCSS-06B6D4?style=flat-square&logo=TailwindCSS&logoColor=white)
+![Tailwind](https://img.shields.io/badge/TailwindCSS-06B6D4?style=for-the-badge&logo=TailwindCSS&logoColor=white)
+![Stompjs](https://img.shields.io/badge/stompjs-%3FE8D9.svg?style=for-the-badge&logoColor=white)
+![ANTD](https://img.shields.io/badge/antdesign-0170FE?style=for-the-badge&logo=antdesign&logoColor=white)
+![eslint](https://img.shields.io/badge/eslint-4B32C3?style=for-the-badge&logo=eslint&logoColor=white)
 
-- stompjs:7.0.0
+<br/>
 
 ## 💾 Backend
 
 ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white) ![SpringBoot](https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white) ![SpringBoot](https://img.shields.io/badge/springsecurity-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white) ![JWT](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens)
 ![ChatGPT](https://img.shields.io/badge/chatGPT-74aa9c?style=for-the-badge&logo=openai&logoColor=white)
-![docker](https://img.shields.io/badge/docker-2496ED?style=for-the-badge&logo=docker&logoColor=white) ![amazonec2](https://img.shields.io/badge/amazonec2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white) ![Jenkins](https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=Jenkins&logoColor=white)
+![amazonec2](https://img.shields.io/badge/amazonec2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white)
 ![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white) ![mysql](https://img.shields.io/badge/mysql-4479A1?style=for-the-badge&logo=mysql&logoColor=white)
 ![MongoDB](https://img.shields.io/badge/mongoDB-47A248?style=for-the-badge&logo=MongoDB&logoColor=white)
-![AmazonS3](https://img.shields.io/badge/AmazonS3-569A31?style=flat-square&logo=AmazonS3&logoColor=white)
-![AmazonRDS](https://img.shields.io/badge/AmazonRDS-527FFF?style=flat-square&logo=AmazonRDS&logoColor=white)
+![AmazonS3](https://img.shields.io/badge/AmazonS3-569A31?style=for-the-badge&logo=AmazonS3&logoColor=white)
+![AmazonRDS](https://img.shields.io/badge/AmazonRDS-527FFF?style=for-the-badge&logo=AmazonRDS&logoColor=white)
 
 <br/>
 
 ## 🔃 DevOPS
 
-- Nginx
-
-- Docker
-
-- Jenkins
+![docker](https://img.shields.io/badge/docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![Jenkins](https://img.shields.io/badge/Jenkins-D24939?style=for-the-badge&logo=Jenkins&logoColor=white)
+![nginx](https://img.shields.io/badge/nginx-009639?style=for-the-badge&logo=nginx&logoColor=white)
 
 <br/>
 
@@ -304,7 +283,7 @@
 </details>
 
 <details>
-<summary>back-end</summary>
+<summary>Backend</summary>
 
 ```
 📂config
@@ -326,7 +305,7 @@
 
 <a id="item-six"></a>
 
-#### 1. 랜딩 페이지 로그인
+### 1. 랜딩 페이지 로그인
 
 1.1 랜딩 페이지
 
@@ -334,13 +313,17 @@
 
 - 전체적인 서비스 내용을 한 눈에 보는 랜딩페이지
 
-  1.2 로그인
+<br/>
+
+1.2 로그인
 
 ![로그인.gif](README_assets/97bcc24be31a7582257c927eaaf128ce099e6561.gif)
 
-#### 2. 다이어그램
+<br/>
 
-2.1 내 뇌 보기
+### 2. 다이어그램
+
+#### 2.1 내 뇌 보기
 
 ![내 뇌.gif](README_assets/4ecfa2f085ed5f632b2c71fcfa3b10673c2c4f9b.gif)
 
@@ -348,16 +331,20 @@
 
 - 노드들을 직접 움직이면서 사용자와 상호작용 및 인터랙티브한 경험 제공
 
-  2.2 공유 뇌 보기
+<br/>
+
+#### 2.2 공유 뇌 보기
 
 ![친구 뇌 받기.gif](README_assets/cfedeefc7d4f196f755d61b1319a8a64958f01e9.gif)
 
 - 공유 받은 문서들과 내 문서들의 유사도를 통해 노드들이 연결
 - 한 눈에 연관된 문서들을 확인
 
-#### 3. Editor
+<br/>
 
-3.1 작성, 수정, 삭제
+### 3. Editor
+
+#### 3.1 작성, 수정, 삭제
 
 ![글쓰기.gif](README_assets/5eec8b7c9e30327cbb808ad77f397dcf9a121521.gif)
 
@@ -365,7 +352,9 @@
 
 - 글 작성시 바로 navbar에 연결
 
-  3.2 공유
+<br/>
+
+#### 3.2 공유
 
 ![문서공유.gif](README_assets/e18139ecd3d25aa22339331d639a4b61e8f31324.gif)
 
@@ -373,53 +362,94 @@
 
 - 문서 하나 공유 시, 해당 자식 노드들 다 공유
 
-  3.3 동시 작성
+<br/>
+
+#### 3.3 동시 작성
 
 ![동시작업.gif](README_assets/2aac3b7f9b1602ce77a10ae1177a38973970fa99.gif)
 
 - 공유받은 사람들 간의 동시 작성 가능
 
-#### 4.GPT
+<br/>
 
-![](README_assets/17f23ccef01b3500d763b7810499913e1ebb12f1.gif)
+### 4. GPT
+
+![GPT.gif](README_assets/17f23ccef01b3500d763b7810499913e1ebb12f1.gif)
 
 - 문서 작성 페이지 내에서 GPT 검색 가능
 - 탭 전환 필요 없이 사용 가능하여 사용자의 편의성 향상
 
-#### 5.Search
+<br/>
+
+### 5. Search
 
 ![서치.gif](README_assets/2560d984591cc983e927fd36fc2322e8de457280.gif)
 
 - CS와 관련된 검색 결과 제공
 
-#### 6. Quiz
+<br/>
 
-6.1 혼자풀기
+### 6. Quiz
 
-6.1.1 방만들기
+#### 6.1 혼자풀기
+
+#### 6.1.1 방만들기
 
 ![혼자풀기1.gif](README_assets/a211a40a133c0a1d80d72587aa1d083eca24f1ab.gif)
 
 - 나의 문서들을 선택하여 퀴즈 범위 설정
 
-  6.1.2 퀴즈풀기 + 퀴즈 결과
+<br/>
+
+#### 6.1.2 퀴즈풀기 + 퀴즈 결과
 
 ![혼자풀기2.gif](README_assets/82b1ffdc0001c6a21ce028f51e02ec5cd75618ca.gif)
 
 - 퀴즈 결과와 오답과 해설을 한번에 제공
 
-  6.2 같이풀기
+<br/>
 
-  6.1.1 방만들기
+#### 6.2 같이풀기
 
-  6.1.2 대기실 : 레디 및 채팅
+6.2.1 방만들기
 
-  6.1.3 퀴즈 풀기
+![둘이풀기 방만들기.gif](README_assets/f49694058a3a82a9b1d9ec3ce3b57da350cc3b05.gif)
 
-  6.1.4 퀴즈 결과 : 랭킹 및 오답노트
+<br/>
 
-#### 7. 다크모드 구현
+6.2.2 대기실 : 레디 및 채팅
+
+![퀴즈 대기방.gif](README_assets/b6ea0188b395b324072a9611a8c6d3472dc19665.gif)
+
+<br/>
+
+6.2.3 퀴즈 풀기
+
+![퀴즈결과&오답노트 (1).gif](README_assets/a0a30d170db1dbb0a5461a05b1d55ba41bf40dd4.gif)
+
+<br/>
+
+6.2.4 퀴즈 결과 : 랭킹 및 오답노트
+
+![퀴즈결과&오답노트 (1).gif](README_assets/a0a30d170db1dbb0a5461a05b1d55ba41bf40dd4.gif)
+
+<br/>
+
+### 7. 다크모드 구현
 
 ![다크모드.gif](README_assets/e0720bdce31a79d240756ffaf6ca301806cdd0dd.gif)
 
-## 느낀 점
+- tailwind를 활용해 한번에 다크모드 전환
+
+<br/>
+
+## 👥 팀원 소개
+
+<a id="item-two"></a>
+
+| **Name**     | 권인식                                                                  | 심규렬                                                                  | 윤자현                                                                  | 이가영                                                                  | 이세울                                                                  | 최상익                                                                  |
+|:------------:|:--------------------------------------------------------------------:|:--------------------------------------------------------------------:|:--------------------------------------------------------------------:|:--------------------------------------------------------------------:|:--------------------------------------------------------------------:|:--------------------------------------------------------------------:|
+| **Profile**  | ![image](README_assets/f65f5d8bd865d7f04665a9b9543e20678bab5c98.png) | ![image](README_assets/0bf5567340ddd34cce979fe68eaae5afb7f099e9.png) | ![image](README_assets/574a9853524a1c09979522648b08aeb3c75c6550.png) | ![image](README_assets/a6da0004f104251d29cc622b009c690989a16e48.png) | ![image](README_assets/09e0882a1abc8d86a9a2b10400f8905939742563.png) | ![image](README_assets/94c38d579e2f0e819618befae3c655d293fe982d.png) |
+| **Position** | Leader <br/> Backend                                                 | Backend                                                              | Frontend                                                             | Frontend                                                             | Frontend                                                             | Backend                                                              |
+| **Position** | Infra <br/> MSA 설계 <br/> Auth Server <br/> Gpt Server                | Editor Server <br/> Search Server                                    | Auth <br/> Quiz <br/> WebSocket <br/> UX/UI                          | Interactive <br/> Diagram <br/> GPT <br/> Search <br/> UX/UI         | Editor <br/> Tip Tab <br/> WebSocket <br/> UX/UI                     | Diagram Server <br/> Quiz Server                                     |
+| **Git**      | [GitHub](https://github.com/PassionSoftIan)                          | [GitHub](https://github.com/simgyuryeol)                             | [GitHub](https://github.com/YOONJAHYUN)                              | [GitHub](https://github.com/dfsdf5645)                               | [GitHub](https://github.com/sl39)                                    | [GitHub](https://github.com/csi9876)                                 |
