@@ -43,11 +43,10 @@ function TestEditor({ id }: Props) {
   const { ImageUpload } = useImageUpload();
   const router = useRouter();
   const stompClient = useEditorWebSocket();
-  const { data: user, isLoading, isError, error } = useGetUserInfo();
+  const { data: user } = useGetUserInfo();
 
   // const [user] = useAtom(userAtom);
   const { noteList } = useNoteList();
-  const [prevTitle, setPrevTitle] = useState("");
   const prevTitleRef = useRef("");
   const [owner, setOwner] = useState(0);
 
@@ -226,14 +225,6 @@ function TestEditor({ id }: Props) {
           type: "heading",
         });
       }
-      // if (blockToUpdate.content !== prevTitleRef.current) {
-      //   noteList.mutate({
-      //     rootList: user.documentsRoots,
-      //   });
-      //   noteList.mutate({
-      //     rootList: user.sharedDocumentsRoots,
-      //   });
-      // }
     },
     domAttributes: {
       editor: {
@@ -242,8 +233,11 @@ function TestEditor({ id }: Props) {
       },
       blockContent: {},
     },
-    // uploadFile: uploadToTmpFilesDotOrg_DEV_ONLY,
-    uploadFile: ImageUpload,
+    uploadFile: uploadToTmpFilesDotOrg_DEV_ONLY,
+
+    //우리  S3 서버 로 하려면 아래 주석 풀어야 됨
+    // uploadFile: ImageUpload,
+
     collaboration: {
       // The Yjs Provider responsible for transporting updates:
       provider: {
