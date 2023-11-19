@@ -40,8 +40,8 @@
 
 <a name="item-three"></a>
 
-|          |                                                이슈관리                                                 |                                               형상관리                                                |                                               코드리뷰                                                |                                             커뮤니케이션                                              |                                                  디자인                                                   |                                                  UCC                                                  |
-| :------: | :-----------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------: |
+|          | 이슈관리                                                                                                    | 형상관리                                                                                                  | 코드리뷰                                                                                                  | 커뮤니케이션                                                                                                | 디자인                                                                                                       | UCC                                                                                                   |
+|:--------:|:-------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------:|
 | **TOOL** | ![JIRA](https://img.shields.io/badge/jira-0052CC?style=for-the-badge&logo=jirasoftware&logoColor=white) | ![GITLAB](https://img.shields.io/badge/gitlab-FC6D26?style=for-the-badge&logo=gitlab&logoColor=white) | ![GERRIT](https://img.shields.io/badge/gerrit-EEEEEE?style=for-the-badge&logo=gerrit&logoColor=white) | ![NOTION](https://img.shields.io/badge/notion-000000?style=for-the-badge&logo=notion&logoColor=white) | ![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white) | ![Movavi](https://img.shields.io/badge/movavi-0034f5?style=for-the-badge&logo=movavi&logoColor=white) |
 
 <br/>
@@ -66,7 +66,6 @@
 ![Tailwind](https://img.shields.io/badge/TailwindCSS-06B6D4?style=for-the-badge&logo=TailwindCSS&logoColor=white)
 ![CSS3](https://img.shields.io/badge/css3-%231572B6.svg?style=for-the-badge&logo=css3&logoColor=white)
 ![ANTD](https://img.shields.io/badge/antdesign-0170FE?style=for-the-badge&logo=antdesign&logoColor=white)
-
 
 ![D3](https://img.shields.io/badge/d3.js-F9A03C?style=for-the-badge&logo=d3.js&logoColor=white)
 ![Stompjs](https://img.shields.io/badge/stompjs-%3FE8D9.svg?style=for-the-badge&logoColor=white)
@@ -417,7 +416,7 @@
 
 6.2.3 퀴즈 풀기
 
-![퀴즈결과&오답노트 (1).gif](README_assets/a0a30d170db1dbb0a5461a05b1d55ba41bf40dd4.gif)
+![퀴즈결과&오답노트 (1).gif](README_assets/cd8d90bf6fddfade1378b476137701e02c4e5b1d.gif)
 
 <br/>
 
@@ -439,15 +438,16 @@
 
 <a name="item-two"></a>
 
-|   **Name**   |                                권인식                                |                                심규렬                                |                                윤자현                                |                                이가영                                |                                이세울                                |                                최상익                                |
-| :----------: | :------------------------------------------------------------------: | :------------------------------------------------------------------: | :------------------------------------------------------------------: | :------------------------------------------------------------------: | :------------------------------------------------------------------: | :------------------------------------------------------------------: |
+| **Name**     | 권인식                                                                  | 심규렬                                                                  | 윤자현                                                                  | 이가영                                                                  | 이세울                                                                  | 최상익                                                                  |
+|:------------:|:--------------------------------------------------------------------:|:--------------------------------------------------------------------:|:--------------------------------------------------------------------:|:--------------------------------------------------------------------:|:--------------------------------------------------------------------:|:--------------------------------------------------------------------:|
 | **Profile**  | ![image](README_assets/72fe08f90c6edb9454a46019d8ac1003abc1a2cf.png) | ![image](README_assets/0bf5567340ddd34cce979fe68eaae5afb7f099e9.png) | ![image](README_assets/574a9853524a1c09979522648b08aeb3c75c6550.png) | ![image](README_assets/a6da0004f104251d29cc622b009c690989a16e48.png) | ![image](README_assets/09e0882a1abc8d86a9a2b10400f8905939742563.png) | ![image](README_assets/94c38d579e2f0e819618befae3c655d293fe982d.png) |
-| **Position** |                       Leader(PM) <br/> Backend                       |                               Backend                                |                               Frontend                               |                               Frontend                               |                               Frontend                               |                               Backend                                |
-| **Position** |    Infra <br/> MSA 설계 <br/> Auth/Member Server <br/> Gpt Server    |                  Editor Server <br/> Search Server                   |             Auth <br/> Quiz <br/> WebSocket <br/> UX/UI              |     Interactive Web <br/> Diagram <br/> GPT <br/> Search <br/> UX/UI     |           Editor <br/> Tip Tab <br/> WebSocket <br/> UX/UI           |                   Diagram Server <br/> Quiz Server                   |
-|   **Git**    |             [GitHub](https://github.com/PassionSoftIan)              |               [GitHub](https://github.com/simgyuryeol)               |               [GitHub](https://github.com/YOONJAHYUN)                |                [GitHub](https://github.com/dfsdf5645)                |                  [GitHub](https://github.com/sl39)                   |                 [GitHub](https://github.com/csi9876)                 |
+| **Position** | Leader(PM) <br/> Backend                                             | Backend                                                              | Frontend                                                             | Frontend                                                             | Frontend                                                             | Backend                                                              |
+| **Position** | Infra <br/> MSA 설계 <br/> Auth/Member Server <br/> Gpt Server         | Editor Server <br/> Search Server                                    | Auth <br/> Quiz <br/> WebSocket <br/> UX/UI                          | Interactive Web <br/> Diagram <br/> GPT <br/> Search <br/> UX/UI     | Editor <br/> Tip Tab <br/> WebSocket <br/> UX/UI                     | Diagram Server <br/> Quiz Server                                     |
+| **Git**      | [GitHub](https://github.com/PassionSoftIan)                          | [GitHub](https://github.com/simgyuryeol)                             | [GitHub](https://github.com/YOONJAHYUN)                              | [GitHub](https://github.com/dfsdf5645)                               | [GitHub](https://github.com/sl39)                                    | [GitHub](https://github.com/csi9876)                                 |
 
 <br/>
 
 ## 영상
+
 SSAFY 9기 2학기 자율 프로젝트 - 한입 노트 (Hype Note) [UCC 보러가기](https://www.youtube.com/watch?v=UKqX69leV5k)  
 <br/>
