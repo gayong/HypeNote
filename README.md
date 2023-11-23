@@ -1,5 +1,9 @@
 <h1 align="center"> E101 레서판다 팀 자율 프로젝트 </h1>
 
+ [🎞 UCC 보러가기](https://youtu.be/UKqX69leV5k)  
+ [📝 노션 보러가기](https://phrygian-sheet-619.notion.site/a4fffb5618984e91b68ba746d9b01ea3?v=250f78528b91490794516e1c2d9c9ec0&pvs=4)
+</br>
+
 ## 📝 목차
 
 [프로젝트 개요](#item-one)
