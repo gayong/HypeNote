@@ -16,8 +16,6 @@
 
 [팀원 소개](#item-two)
 
-[느낀 점](#item-end)
-
 ## 📖 프로젝트 개요
 
 <a name="item-one"></a>
