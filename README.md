@@ -1,4 +1,4 @@
-<h1 align="center"> E101 자율 프로젝트 - 🥇우수상 수상작🥇 (1등, 전국 결선 진출) </h1>
+<h1 align="center"> E101 자율 프로젝트 - 🥇최우수 수상작🥇 (1등, 전국 결선 진출) </h1>
 
  [🎞 UCC 보러가기](https://youtu.be/UKqX69leV5k)  
  [📝 노션 보러가기](https://phrygian-sheet-619.notion.site/a4fffb5618984e91b68ba746d9b01ea3?v=250f78528b91490794516e1c2d9c9ec0&pvs=4)
